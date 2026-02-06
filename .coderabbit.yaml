@@ -1,8 +1,9 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
+language: ko-KR # 리뷰 언어
+tone_instructions: "각 코드 라인을 세심하게 검토하고, 개선점이 있는 라인에 직접 인라인 코멘트를 달아주세요. 정확한 피드백을 제공해주세요."
+
 reviews:
-  language: ko-KR # 리뷰 언어
-  tone_instructions: "각 코드 라인을 세심하게 검토하고, 개선점이 있는 라인에 직접 인라인 코멘트를 달아주세요. 정확한 피드백을 제공해주세요."
   profile: assertive # 리뷰 강도 설정
   high_level_summary: true # PR 전체 요약
   high_level_summary_placeholder: "" # PR 본문에 요약 삽입할 플레이스홀더
