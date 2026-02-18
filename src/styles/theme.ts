@@ -61,4 +61,25 @@ export const theme = {
       letterSpacing: "-0.02em",
     },
   },
+  colors: {
+    main: {
+      purple: "#6247FF",
+      purple50: "#8974FF",
+      purple100: "#DAD4FF",
+    },
+    gray: {
+      white: "#FFFFFF",
+      gray50: "#EFF1F4",
+      gray100: "#E0E2E6",
+      gray200: "#C2C8CF",
+      gray300: "#A1A9B2",
+      gray400: "#6D7684",
+      gray500: "#414855",
+      gray600: "#252930",
+      gray700: "#1B1D1F",
+    },
+    semantic: {
+      alertRed: "#FF4B4B",
+    },
+  },
 } as const;
