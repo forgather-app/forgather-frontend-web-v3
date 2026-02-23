@@ -1,5 +1,8 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
 language: ko-KR # 리뷰 언어
 tone_instructions: "각 코드 라인을 세심하게 검토하고, 개선점이 있는 라인에 직접 인라인 코멘트를 달아주세요. 정확한 피드백을 제공해주세요."
+
 reviews:
   profile: assertive # 리뷰 강도 설정
   high_level_summary: true # PR 전체 요약
@@ -13,13 +16,17 @@ reviews:
   suggested_labels: false # 라벨 제안
   suggested_reviewers: false # 리뷰어 제안
   assess_linked_issues: false # 관련 이슈 기반 평가
+
   auto_review: # 자동 리뷰 설정
     enabled: true # 자동 리뷰 활성화
-    on_open: true # PR 생성 시 자동 리뷰
-    on_comment: true # 수동 요청 가능 ("@coderabbit-ai review")
     drafts: false # 드래프트 PR 리뷰
     base_branches: ["develop"] # 리뷰할 기본 브랜치
     ignore_usernames: ["MinSungJe", "ykmxxi", "kjyyjk"] # 리뷰에서 제외할 사용자
+
+  path_instructions:
+    - path: "**/*.{ts,tsx,js,jsx}"
+      instructions: "모든 변경 라인에서 개선 가능성이 보이면 반드시 인라인 코멘트를 남기세요."
+
   finishing_touches: # 마무리 작업
     docstrings: # 문서 문자열 생성
       enabled: false # docstring 자동 생성
@@ -35,12 +42,6 @@ reviews:
       mode: "off"
     issue_assessment: # 이슈 평가
       mode: "off"
-
-tools: # 추가 분석 도구
-  eslint: # JavaScript/TypeScript
-    enabled: true
-  gitleaks: # 민감정보 체크
-    enabled: true
 
 knowledge_base: # 지식 베이스 설정
   code_guidelines: # 코딩 가이드라인 설정
