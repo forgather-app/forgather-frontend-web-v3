@@ -1,6 +1,6 @@
 ---
 name: suggest-commits
-description: 스테이지된 변경사항을 분석하여 커밋 단위와 메시지를 step by step으로 함께 작성합니다. 커밋은 직접 실행하지 않습니다.
+description: 스테이지된 변경사항을 분석하여 커밋 단위와 메시지를 step by step으로 함께 작성하고, 사용자 확인 후 커밋까지 실행합니다. 단, push는 절대 하지 않습니다.
 allowed-tools:
   - Bash(git:*)
   - Read
@@ -8,15 +8,14 @@ allowed-tools:
 user-invocable: true
 ---
 
-# 커밋 추천 스킬 (Suggest Commits Skill)
+# 커밋 스킬 (Commit Skill)
 
-스테이지된 변경사항을 분석하여 **커밋 단위와 메시지를 step by step으로 함께 작성**합니다.
-커밋은 사용자가 직접 실행합니다.
+스테이지된 변경사항을 분석하여 **커밋 단위와 메시지를 step by step으로 함께 작성**하고, 사용자 확인 후 **커밋까지 실행**합니다.
 
 ## 주의사항
 
-- **절대 스스로 커밋하지 않습니다.**
-- 추천만 제공하고, 실행은 항상 사용자에게 맡깁니다.
+- **절대 `git push`를 실행하지 않습니다.** push는 어떤 상황에서도 금지입니다.
+- 커밋 실행 전 반드시 사용자의 최종 확인을 받습니다.
 
 ## 작동 방식
 
@@ -119,28 +118,45 @@ feat: 사용자 프로필 수정 기능 추가
 - 설명을 입력하면 해당 내용을 본문에 추가합니다.
 - 없다고 하면 본문 없이 제목만으로 커밋 메시지를 확정합니다.
 
-### Step 4. 커밋 메시지 최종 출력
+### Step 4. 최종 확인 및 커밋 실행
 
-모든 커밋의 제목과 본문이 확정되면 전체 결과를 출력합니다.
+모든 커밋의 제목과 본문이 확정되면 전체 결과를 보여주고 실행 여부를 확인합니다.
 ```
-
-:white_check_mark: 커밋 메시지 작성이 완료되었습니다!
 
 :package: 최종 커밋 목록:
 
-[1/3]
-git add src/components/ProductFilter.tsx src/utils/filterHelpers.ts
-git commit -m "feat: 상품 목록 필터 기능 추가" -m "- 카테고리 및 가격 범위 필터 UI 추가\n- 필터 상태 초기화 버튼 추가"
+[1/3] feat: 상품 목록 필터 기능 추가
+  파일: src/components/ProductFilter.tsx, src/utils/filterHelpers.ts
+  본문: - 카테고리 및 가격 범위 필터 UI 추가 / - 필터 상태 초기화 버튼 추가
 
-[2/3]
-git add src/components/CartItem.tsx
-git commit -m "fix: 장바구니 수량 변경 시 합계 미반영 수정"
+[2/3] fix: 장바구니 수량 변경 시 합계 미반영 수정
+  파일: src/components/CartItem.tsx
 
-[3/3]
-git add src/hooks/useFetch.ts
-git commit -m "refactor: 공통 API 호출 로직 훅으로 분리" -m "- 중복된 fetch 로직을 useFetch로 통합\n- 로딩/에러 상태 공통 처리"
+[3/3] refactor: 공통 API 호출 로직 훅으로 분리
+  파일: src/hooks/useFetch.ts
+  본문: - 중복된 fetch 로직을 useFetch로 통합 / - 로딩/에러 상태 공통 처리
+
+→ AskUserQuestion: "위 내용으로 커밋을 실행할까요?"
 
 ```
+
+사용자가 확인하면 각 커밋을 순서대로 실행합니다:
+
+1. `git add`로 해당 커밋에 포함될 파일을 스테이지
+2. `git commit`으로 커밋 실행
+3. 모든 커밋 완료 후 결과를 출력
+
+```
+
+:white_check_mark: 모든 커밋이 완료되었습니다!
+
+[1/3] feat: 상품 목록 필터 기능 추가 ✓
+[2/3] fix: 장바구니 수량 변경 시 합계 미반영 수정 ✓
+[3/3] refactor: 공통 API 호출 로직 훅으로 분리 ✓
+
+```
+
+**⚠️ `git push`는 절대 실행하지 않습니다. push가 필요하면 사용자가 직접 실행하세요.**
 
 ## 에러 처리
 
