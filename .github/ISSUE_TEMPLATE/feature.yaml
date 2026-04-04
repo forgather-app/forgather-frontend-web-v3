@@ -1,0 +1,78 @@
+name: "✨ 기능 구현"
+description: "새로운 기능 개발"
+labels: ["feature", "claude"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 기능 설명
+      placeholder: 어떤 기능인지에 대한 설명을 적어주세요.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ai_level
+    attributes:
+      label: AI 작업 범위
+      options:
+        - 코드 생성만
+        - 코드 + 테스트
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: 상세 내용
+      placeholder: 구체적인 구현 아이디어를 적어주세요.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: state_management
+    attributes:
+      label: 상태 관리 방식
+      description: 해당 기능에서 사용할 상태 관리 방식
+      options:
+        - 해당 없음
+        - Local State (useState)
+        - Zustand
+        - Context API
+    validations:
+      required: false
+
+  - type: textarea
+    id: error_handling
+    attributes:
+      label: 에러 처리 방식
+      placeholder: |
+        - API 실패 시 토스트 메시지 노출
+        - 빈 상태일 경우 EmptyState 컴포넌트 표시
+    validations:
+      required: false
+
+  - type: textarea
+    id: test_scope
+    attributes:
+      label: 테스트 작성 범위
+      placeholder: |
+        - useXxx 훅 단위 테스트
+        - formatXxx 유틸 함수 테스트
+    validations:
+      required: false
+
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 조건
+      placeholder: |
+        - [ ] 조건 1
+        - [ ] 조건 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 참고 사항
+      placeholder: 관련 파일 경로, 기존 패턴, 주의할 점 등
+    validations:
+      required: false
