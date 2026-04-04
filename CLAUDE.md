@@ -195,6 +195,7 @@ fill-ing/
 │   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
 │   ├── components/      # 컴포넌트
+│   │   ├── @common/     # 프로젝트 공통 컴포넌트
 │   │   ├── ui/          # 재사용 가능한 UI 컴포넌트
 │   │   │   ├── layout/          # 레이아웃 컴포넌트
 │   │   │   ├── progressbar/     # 프로그레스바
@@ -202,6 +203,9 @@ fill-ing/
 │   │   └── domain/      # 도메인 특화 컴포넌트
 │   ├── hooks/           # 커스텀 React Hooks
 │   │   └── ui/          # UI 관련 훅
+│   ├── pages/           # 페이지 컴포넌트
+│   │   └── main/        # 메인 페이지
+│   │       └── component/  # 메인 페이지 전용 컴포넌트
 │   ├── router/          # 라우팅 설정
 │   ├── stories/         # Storybook 스토리
 │   │   └── components/  # 컴포넌트 스토리
