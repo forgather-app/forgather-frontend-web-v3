@@ -196,11 +196,10 @@ fill-ing/
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
-│   │   ├── ui/          # 재사용 가능한 UI 컴포넌트
-│   │   │   ├── layout/          # 레이아웃 컴포넌트
-│   │   │   ├── progressbar/     # 프로그레스바
-│   │   │   └── swiperAction/    # 스와이프 액션 컴포넌트
-│   │   └── domain/      # 도메인 특화 컴포넌트
+│   │   └── ui/          # 재사용 가능한 UI 컴포넌트
+│   │       ├── layout/          # 레이아웃 컴포넌트
+│   │       ├── progressbar/     # 프로그레스바
+│   │       └── swiperAction/    # 스와이프 액션 컴포넌트
 │   ├── hooks/           # 커스텀 React Hooks
 │   │   └── ui/          # UI 관련 훅
 │   ├── pages/           # 페이지 컴포넌트
@@ -233,11 +232,11 @@ fill-ing/
 
 **예시**: Button, Input, Modal, Carousel, Layout
 
-### `/src/components/domain`
+### `/src/pages/<페이지명>/component`
 
-특정 도메인/비즈니스 로직과 연관된 컴포넌트입니다.
+특정 페이지에서만 사용하는 도메인 컴포넌트입니다. 페이지 디렉토리 내부에 위치합니다.
 
-**예시**: SongElement, PlaylistCard
+**예시**: `src/pages/main/component/SongElement.tsx`, `src/pages/main/component/PlaylistCard.tsx`
 
 ### `/src/hooks/ui`
 
@@ -298,7 +297,7 @@ npm run test         # 테스트 실행
 
 ### 새 컴포넌트 추가
 
-1. `/src/components/ui` 또는 `/src/components/domain`에 폴더 생성
+1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/component`에 폴더 생성
 2. `Component.tsx`, `Component.styles.ts` 파일 생성
 3. `/src/stories/components`에 `Component.stories.tsx` 생성
 4. Storybook에서 컴포넌트 확인 및 개발
