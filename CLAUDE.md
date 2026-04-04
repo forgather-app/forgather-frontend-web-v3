@@ -57,109 +57,14 @@
 
 ### 컴포넌트 작성 규칙
 
-#### 1. 파일 구조
+> 상세 규칙은 `.claude/conventions/ui-conventions.md`를 참조합니다.
 
-```typescript
-// Component.tsx
-import * as S from "./Component.styles";
-
-interface ComponentProps {
-  /** JSDoc 형식의 Props 설명 */
-  propName: string;
-  optionalProp?: boolean;
-}
-
-const Component = ({ propName, optionalProp = false }: ComponentProps) => {
-  return (
-    <S.Wrapper>
-      {/* 컴포넌트 내용 */}
-    </S.Wrapper>
-  );
-};
-
-export default Component;
-```
-
-#### 2. 스타일 파일 분리
-
-- 스타일은 `*.styles.ts` 파일로 분리
-- Emotion의 `styled` 사용
-- Named export로 스타일 컴포넌트 export
-- `* as S` 형태로 import하여 네임스페이스 사용
-
-```typescript
-// Component.styles.ts
-import styled from "@emotion/styled";
-
-export const Wrapper = styled.div`
-  // 스타일
-`;
-
-export const Title = styled.h1`
-  ${({ theme }) => ({ ...theme.typography.heading1 })};
-  color: ${({ theme }) => theme.colors.primary};
-`;
-```
-
-#### 3. Props 인터페이스
-
-- Props는 항상 `interface`로 정의 (type 사용 지양)
-- 컴포넌트명 + Props 네이밍 (`ComponentProps`)
-- JSDoc 주석으로 Props 설명 추가
-- Optional props에는 기본값 설정
-
-#### 4. 접근성 (a11y)
-
-- `aria-label`, `aria-hidden` 등 ARIA 속성 적극 활용
-- `tabIndex`로 키보드 네비게이션 지원
-- `role` 속성으로 의미론적 역할 명시
-- 스크린 리더를 위한 설명 제공
-
-```typescript
-<S.Info tabIndex={0} role="group" aria-label={`곡명 ${songTitle} 아티스트명 ${artist}`}>
-  <S.Title aria-hidden={true}>{songTitle}</S.Title>
-  <S.Artist aria-hidden={true}>{artist}</S.Artist>
-</S.Info>
-```
-
-#### 5. Biome Ignore 주석
-
-- 특정 규칙을 무시해야 할 경우 이유와 함께 주석 작성
-
-```typescript
-// biome-ignore lint/correctness/useExhaustiveDependencies: 첫 마운트시에만 계산
-useEffect(() => {
-  // ...
-}, []);
-```
-
-#### 6. 기본 Export
-
-- 컴포넌트는 기본 export 사용 (`export default Component`)
-- 유틸리티 함수나 타입은 named export 사용 가능
-
-### Storybook 작성 규칙
-
-```typescript
-// Component.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import Component from "../../components/path/Component";
-
-const meta: Meta<typeof Component> = {
-  title: "Component/ComponentName",
-  component: Component,
-};
-
-export default meta;
-
-type Story = StoryObj<typeof Component>;
-
-export const Default: Story = {
-  args: {
-    // props
-  },
-};
-```
+- 구현 파일(`Component.tsx`)과 스타일 파일(`Component.styles.ts`) 분리
+- Props는 `interface ComponentNameProps`로 정의, JSDoc 주석 필수
+- 컴포넌트는 `export default`, 유틸리티/타입은 named export
+- 모든 색상·타이포그래피는 `theme` 토큰 사용 (하드코딩 금지)
+- ARIA 속성 및 키보드 네비게이션 지원 필수
+- UI 컴포넌트는 Storybook 스토리 작성 필수
 
 ### 테스팅 규칙
 
