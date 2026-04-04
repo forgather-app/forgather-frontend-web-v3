@@ -1,6 +1,6 @@
-# Fill-ing 프로젝트 가이드
+# forgather 프로젝트 가이드
 
-대학생 밴드 테크니컬 라이딩 제작 서비스 Fill-ing의 프론트엔드 프로젝트입니다.
+미대생을 대상으로 전시 방명록을 작성하고 관리할 수 있는 서비스 forgather의 프론트엔드 프로젝트입니다.
 
 ## 기술 스택
 
@@ -175,11 +175,8 @@ export const formatDate = (date: Date | null): string => {
 # 테스트 실행
 npm run test
 
-# 커버리지 확인
-npm run test:coverage
-
-# watch 모드
-npm run test:watch
+# Storybook 테스트 실행
+npm run test:storybook
 ```
 
 ## 프로젝트 구조
@@ -191,28 +188,20 @@ fill-ing/
 ├── src/
 │   ├── api/             # API 관련 코드
 │   │   ├── customFetcher.ts  # Orval용 커스텀 fetch 함수
-│   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지)
-│   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지)
+│   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
+│   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
-│   │       ├── layout/          # 레이아웃 컴포넌트
-│   │       ├── progressbar/     # 프로그레스바
-│   │       └── swiperAction/    # 스와이프 액션 컴포넌트
-│   ├── hooks/           # 커스텀 React Hooks
-│   │   └── ui/          # UI 관련 훅
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
 │   │       └── component/  # 메인 페이지 전용 컴포넌트
-│   ├── router/          # 라우팅 설정
-│   ├── stories/         # Storybook 스토리
-│   │   └── components/  # 컴포넌트 스토리
 │   ├── styles/          # 전역 스타일 및 테마
-│   │   └── globals/     # 전역 스타일
-│   ├── types/           # TypeScript 타입 정의
-│   │   └── globals/     # 전역 타입
-│   ├── utils/           # 유틸리티 함수
+│   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
+│   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
+│   │   ├── global.ts        # 전역 CSS
+│   │   └── reset.ts         # CSS 리셋
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정
@@ -226,6 +215,10 @@ fill-ing/
 
 ## 디렉토리 역할
 
+### `/src/components/@common`
+
+프로젝트 전반에서 공유되는 공통 컴포넌트를 포함합니다.
+
 ### `/src/components/ui`
 
 재사용 가능한 범용 UI 컴포넌트를 포함합니다. 비즈니스 로직이 없는 프레젠테이션 컴포넌트입니다.
@@ -238,21 +231,13 @@ fill-ing/
 
 **예시**: `src/pages/main/component/SongElement.tsx`, `src/pages/main/component/PlaylistCard.tsx`
 
-### `/src/hooks/ui`
-
-UI 관련 커스텀 훅을 포함합니다.
-
-### `/src/utils`
-
-순수 함수 형태의 유틸리티를 포함합니다.
-
-**예시**: `hexToRgba.ts` - Hex 컬러를 RGBA로 변환
-
 ### `/src/styles`
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
-**예시**: VisuallyHidden 스타일 컴포넌트
+- `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
+- `GlobalStyle.tsx`: 전역 스타일 컴포넌트
+- `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
 ## 개발 워크플로우
 
@@ -419,9 +404,6 @@ const { data } = useGetSongs(); // useSuspenseQuery 기반
 ### 성능 측정 및 모니터링
 
 ```bash
-# Lighthouse CI 실행
-npm run lighthouse
-
 # 프로덕션 빌드 성능 확인
 npm run build
 npm run preview
