@@ -6,8 +6,19 @@ const STATUS_LABEL: Record<StatusType, string> = {
   ended: "종료",
 };
 
+/**
+ * 전시 진행 상태를 나타내는 칩 컴포넌트.
+ *
+ * - `inProgress`: 현재 진행 중인 전시 (보라색 배경)
+ * - `ended`: 종료된 전시 (회색 배경)
+ */
 interface StatusChipProps {
-  /** 전시 진행 상태 */
+  /**
+   * 전시 진행 상태.
+   *
+   * - `inProgress`: 진행중
+   * - `ended`: 종료
+   */
   status: StatusType;
 }
 
