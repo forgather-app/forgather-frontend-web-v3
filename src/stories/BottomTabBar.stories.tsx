@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import BottomTabBar, { type TabType } from "./BottomTabBar";
+import BottomTabBar, {
+  type TabType,
+} from "../components/@common/bottomTabBar/BottomTabBar";
 
 const meta: Meta<typeof BottomTabBar> = {
   title: "Common/BottomTabBar",

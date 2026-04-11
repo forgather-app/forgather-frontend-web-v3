@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import NavigationBar from "./NavigationBar";
+import NavigationBar from "../components/@common/navigationBar/NavigationBar";
 
 /** 뒤로가기·닫기·메뉴 등의 아이콘 액션을 포함한 앱 내비게이션 바.
  * - `onBackClick` 전달 시 왼쪽 뒤로가기 버튼(ic_back_32) 표시
