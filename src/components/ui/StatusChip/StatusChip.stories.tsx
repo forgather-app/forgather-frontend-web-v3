@@ -4,6 +4,7 @@ import StatusChip from "./StatusChip";
 const meta: Meta<typeof StatusChip> = {
   title: "UI/StatusChip",
   component: StatusChip,
+  tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
@@ -35,13 +36,4 @@ export const Ended: Story = {
   args: {
     status: "ended",
   },
-};
-
-export const AllStatuses: Story = {
-  render: () => (
-    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-      <StatusChip status="inProgress" />
-      <StatusChip status="ended" />
-    </div>
-  ),
 };
