@@ -2,90 +2,81 @@ name: "🎨 UI/컴포넌트 구현"
 description: "새로운 UI 또는 컴포넌트 구현"
 labels: ["ui", "claude"]
 body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 작업 설명
+      placeholder: 어떤 UI/컴포넌트를 만들어야 하는지 설명해주세요.
+    validations:
+      required: true
 
-- type: textarea
-  id: summary
-  attributes:
-  label: 작업 설명
-  placeholder: 어떤 UI/컴포넌트를 만들어야 하는지 설명해주세요.
-  validations:
-  required: true
+  - type: dropdown
+    id: ai_level
+    attributes:
+      label: AI 작업 범위
+      options:
+        - 코드 생성만
+        - 코드 + 스토리북
+        - 코드 + 테스트
+        - 코드 + 테스트 + 스토리북
 
-- type: dropdown
-  id: ai_level
-  attributes:
-  label: AI 작업 범위
-  options: - 코드 생성만 - 코드 + 스토리북 - 코드 + 테스트 - 코드 + 테스트 + 스토리북
+  - type: input
+    id: figma
+    attributes:
+      label: Figma URL
+      placeholder: "https://figma.com/design/:fileKey/:fileName?node-id=:nodeId"
+    validations:
+      required: false
 
-- type: input
-  id: figma
-  attributes:
-  label: Figma URL
-  placeholder: "https://figma.com/design/:fileKey/:fileName?node-id=:nodeId"
-  validations:
-  required: false
+  - type: textarea
+    id: components
+    attributes:
+      label: 구현 대상
+      placeholder: |
+        - ComponentA
+        - ComponentB
+    validations:
+      required: true
 
-- type: textarea
-  id: components
-  attributes:
-  label: 구현 대상
-  placeholder: | - ComponentA - ComponentB
-  validations:
-  required: true
+  - type: textarea
+    id: interface
+    attributes:
+      label: Props 인터페이스
+      description: 명시된 경우 이를 기준으로 구현. 구현 중 추가된 props는 PR에 명시.
+      placeholder: |
+        interface ComponentProps {
+          variant?: "primary" | "secondary";
+          disabled?: boolean;
+        }
+    validations:
+      required: false
 
-- type: textarea
-  id: interface
-  attributes:
-  label: Props 인터페이스
-  description: 명시된 경우 이를 기준으로 구현. 구현 중 추가된 props는 PR에 명시.
-  placeholder: |
-  interface ComponentProps {
-  variant?: "primary" | "secondary";
-  disabled?: boolean;
-  }
-  validations:
-  required: false
+  - type: textarea
+    id: states
+    attributes:
+      label: 상태/인터랙션
+      placeholder: |
+        - default
+        - hover
+        - disabled
+        - loading
+    validations:
+      required: false
 
-- type: textarea
-  id: states
-  attributes:
-  label: 상태/인터랙션
-  placeholder: | - default - hover - disabled - loading
-  validations:
-  required: false
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 조건
+      placeholder: |
+        - [ ] 조건 1
+        - [ ] 조건 2
+    validations:
+      required: true
 
-- type: textarea
-  id: done
-  attributes:
-  label: 완료 조건
-  placeholder: | - [ ] 조건 1 - [ ] 조건 2
-  validations:
-  required: true
-
-- type: textarea
-  id: notes
-  attributes:
-  label: 참고 사항
-  placeholder: 관련 파일 경로, 기존 패턴, 주의할 점 등
-  validations:
-  required: false
-
-ui.yml
-name: "🧹 Chore"
-description: "환경 설정, 패키지 업데이트, 설정 변경 등"
-labels: ["chore"]
-body:
-
-- type: textarea
-  id: task
-  attributes:
-  label: 작업 내용
-  placeholder: 어떤 작업인지 명확히 적어주세요.
-  validations:
-  required: true
-
-- type: textarea
-  id: notes
-  attributes:
-  label: 참고 사항
-  placeholder: 옵션
+  - type: textarea
+    id: notes
+    attributes:
+      label: 참고 사항
+      placeholder: 관련 파일 경로, 기존 패턴, 주의할 점 등
+    validations:
+      required: false

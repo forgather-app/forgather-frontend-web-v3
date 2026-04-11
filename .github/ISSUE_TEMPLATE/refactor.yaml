@@ -1,0 +1,37 @@
+name: "♻️ 리팩토링"
+description: "코드 구조 개선 및 리팩토링"
+labels: ["refactor"]
+body:
+  - type: textarea
+    id: as_is
+    attributes:
+      label: As Is
+      placeholder: 현재 문제점이나 개선이 필요한 상태를 설명해주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: to_be
+    attributes:
+      label: To Be
+      placeholder: 리팩토링 후 기대하는 상태를 설명해주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: 완료 조건
+      placeholder: |
+        - [ ] 조건 1
+        - [ ] 조건 2
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 참고 사항
+      placeholder: 관련 파일 경로, 주의할 점 등
+    validations:
+      required: false
