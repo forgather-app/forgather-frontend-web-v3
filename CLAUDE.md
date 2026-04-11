@@ -196,7 +196,7 @@ fill-ing/
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
-│   │       └── component/  # 메인 페이지 전용 컴포넌트
+│   │       └── components/  # 메인 페이지 전용 컴포넌트
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
@@ -225,11 +225,11 @@ fill-ing/
 
 **예시**: Button, Input, Modal, Carousel, Layout
 
-### `/src/pages/<페이지명>/component`
+### `/src/pages/<페이지명>/components`
 
 특정 페이지에서만 사용하는 도메인 컴포넌트입니다. 페이지 디렉토리 내부에 위치합니다.
 
-**예시**: `src/pages/main/component/SongElement.tsx`, `src/pages/main/component/PlaylistCard.tsx`
+**예시**: `src/pages/main/components/SongElement.tsx`, `src/pages/main/components/PlaylistCard.tsx`
 
 ### `/src/styles`
 
@@ -282,9 +282,9 @@ npm run test         # 테스트 실행
 
 ### 새 컴포넌트 추가
 
-1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/component`에 폴더 생성
+1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
 2. `Component.tsx`, `Component.styles.ts` 파일 생성
-3. `/src/stories/components`에 `Component.stories.tsx` 생성
+3. 컴포넌트 폴더 내에 `Component.stories.tsx` 생성 (예: `src/components/ui/Button/Button.stories.tsx`)
 4. Storybook에서 컴포넌트 확인 및 개발
 5. 접근성 검사 (a11y addon 활용)
 

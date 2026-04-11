@@ -1,6 +1,16 @@
+import { ThemeProvider } from "@emotion/react";
 import type { Preview } from '@storybook/react-vite'
+import React from 'react'
+import { theme } from "../src/styles/theme";
 
 const preview: Preview = {
+  decorators: [
+    (Story) => React.createElement(
+      ThemeProvider,
+      { theme },
+      React.createElement(Story)
+    ),
+  ],
   parameters: {
     controls: {
       matchers: {

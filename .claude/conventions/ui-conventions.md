@@ -52,7 +52,8 @@ export const Title = styled.h1`
 - Emotion의 `styled` 사용
 - Named export로 스타일 컴포넌트 export
 - `* as S` 형태로 import하여 네임스페이스 사용
-- **모든 색상·타이포그래피·간격은 `theme` 토큰 사용, 하드코딩 금지**
+- **모든 색상·타이포그래피는 `theme` 토큰 사용, 하드코딩 금지**
+- 간격 값은 spacing 토큰 도입 전까지 임시 사용 가능
 - 토큰에 없는 값은 `/* TODO: 토큰 없음 - {값} */` 주석 처리
 
 ### theme 토큰 접근 (중첩 구조 주의)

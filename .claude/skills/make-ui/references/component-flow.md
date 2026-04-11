@@ -39,10 +39,10 @@ Figma MCP(`get_design_context`)로 노드 정보를 가져와 다음을 파악�
 
 ## Step 4. 기존 컴포넌트 탐색
 
-**탐색 위치:**
+**탐색 위치 (존재하는 경우에만 탐색):**
 - `src/components/ui/` — 범용 UI 컴포넌트
-- `src/components/domain/` — 도메인 컴포넌트
 - `src/components/@common/` — 공통 컴포넌트
+- `src/pages/<페이지명>/components/` — 해당 페이지 전용 컴포넌트
 
 각 파일의 props 인터페이스를 확인하고, 재사용 가능한 컴포넌트와 사용법을 기록합니다.
 
@@ -50,7 +50,7 @@ Figma MCP(`get_design_context`)로 노드 정보를 가져와 다음을 파악�
 
 ## Step 5. 컴포넌트 구현
 
-저장 위치: `src/components/{ui | domain}/{ComponentName}/`
+저장 위치: `src/components/ui/{ComponentName}/`
 
 ### 파일 구조
 
@@ -109,7 +109,7 @@ export const AreaNamePlaceholder = styled.div`
 
 ## Step 6. Storybook 스토리 작성
 
-`src/stories/components/{ComponentName}.stories.tsx`를 생성합니다.
+`src/components/ui/{ComponentName}/{ComponentName}.stories.tsx`를 생성합니다. (`.storybook/main.ts`의 `src/**/*.stories.tsx` 패턴에 따라 컴포넌트 폴더 내에 위치)
 
 - Props의 주요 조합 + 엣지 케이스(disabled, loading, error 등) Story 작성
 - `.storybook/preview.ts`에 ThemeProvider 데코레이터 설정 여부 먼저 확인 (gotchas.md G3)
