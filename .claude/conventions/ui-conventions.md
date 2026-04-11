@@ -152,13 +152,14 @@ UI 컴포넌트(`src/components/ui/`, `src/components/@common/`)는 반드시 St
 페이지는 선택사항입니다.
 
 ```typescript
-// src/stories/components/ComponentName.stories.tsx
+// src/stories/ComponentName.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Component from "../../components/path/Component";
+import Component from "@/components/path/Component";
 
 const meta: Meta<typeof Component> = {
-  title: "Component/ComponentName",
+  title: "UI/ComponentName",
   component: Component,
+  tags: ["autodocs"],
 };
 
 export default meta;
