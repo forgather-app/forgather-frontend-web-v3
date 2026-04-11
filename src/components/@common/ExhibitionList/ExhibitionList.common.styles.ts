@@ -89,6 +89,7 @@ export const SpaceIconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: ${({ theme }) => theme.colors.gray.gray200};
 `;
 
 export const SpaceCount = styled.span`
