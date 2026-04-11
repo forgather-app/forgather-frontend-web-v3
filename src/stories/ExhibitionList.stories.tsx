@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import ExhibitionList from "@/components/@common/ExhibitionList/ExhibitionList";
 
+const THUMBNAIL_URL = "https://picsum.photos/seed/forgather/80/80";
+
 const meta: Meta<typeof ExhibitionList> = {
   title: "UI/ExhibitionList",
   component: ExhibitionList,
@@ -36,7 +38,7 @@ type Story = StoryObj<typeof ExhibitionList>;
 
 export const InProgress: Story = {
   args: {
-    thumbnailUrl: "",
+    thumbnailUrl: THUMBNAIL_URL,
     status: "inProgress",
     spaceCount: 5,
     title: "포게더 시각 디자인 전시회",
@@ -46,7 +48,7 @@ export const InProgress: Story = {
 
 export const Ended: Story = {
   args: {
-    thumbnailUrl: "",
+    thumbnailUrl: THUMBNAIL_URL,
     status: "ended",
     spaceCount: 42,
     title: "포게더 시각 디자인 전시회",
@@ -56,7 +58,7 @@ export const Ended: Story = {
 
 export const LongTitle: Story = {
   args: {
-    thumbnailUrl: "",
+    thumbnailUrl: THUMBNAIL_URL,
     status: "inProgress",
     spaceCount: 3,
     title: "매우 긴 전시회 제목이 들어왔을 때 말줄임표 처리 확인용 전시회",
@@ -66,9 +68,19 @@ export const LongTitle: Story = {
 
 export const ZeroCount: Story = {
   args: {
-    thumbnailUrl: "",
+    thumbnailUrl: THUMBNAIL_URL,
     status: "inProgress",
     spaceCount: 0,
+    title: "포게더 시각 디자인 전시회",
+    period: "26.2.8 - 26.2.10",
+  },
+};
+
+export const NoImage: Story = {
+  args: {
+    thumbnailUrl: "",
+    status: "inProgress",
+    spaceCount: 5,
     title: "포게더 시각 디자인 전시회",
     period: "26.2.8 - 26.2.10",
   },
