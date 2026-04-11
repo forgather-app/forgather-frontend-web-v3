@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import StatusChip from "../StatusChip";
+import StatusChip from "../components/@common/StatusChip/StatusChip";
 
 const meta: Meta<typeof StatusChip> = {
   title: "UI/StatusChip",
