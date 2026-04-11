@@ -34,7 +34,6 @@ body:
       options:
         - 해당 없음
         - Local State (useState)
-        - Zustand
         - Context API
     validations:
       required: false

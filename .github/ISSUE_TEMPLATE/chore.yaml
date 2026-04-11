@@ -1,49 +1,12 @@
-name: "🐛 버그 수정"
-description: "버그 리포트 및 수정 요청"
-labels: ["bug", "claude"]
+name: "🧹 Chore"
+description: "환경 설정, 패키지 업데이트, 설정 변경 등"
+labels: ["chore"]
 body:
   - type: textarea
-    id: summary
+    id: task
     attributes:
-      label: 버그 설명
-      placeholder: 어떤 버그인지 간단히 설명해주세요.
-    validations:
-      required: true
-
-  - type: textarea
-    id: steps
-    attributes:
-      label: 재현 방법
-      placeholder: |
-        1. 
-        2. 
-        3.
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected
-    attributes:
-      label: 예상 동작
-      placeholder: 어떻게 동작해야 하는지 설명해주세요.
-    validations:
-      required: true
-
-  - type: textarea
-    id: actual
-    attributes:
-      label: 실제 동작
-      placeholder: 실제로 어떻게 동작하는지 설명해주세요.
-    validations:
-      required: true
-
-  - type: textarea
-    id: done
-    attributes:
-      label: 완료 조건
-      placeholder: |
-        - [ ] 조건 1
-        - [ ] 조건 2
+      label: 작업 내용
+      placeholder: 어떤 작업인지 명확히 적어주세요.
     validations:
       required: true
 
@@ -51,6 +14,6 @@ body:
     id: notes
     attributes:
       label: 참고 사항
-      placeholder: 관련 파일 경로, 스크린샷, 로그 등
+      placeholder: 관련 파일, 참고 링크 등
     validations:
       required: false
