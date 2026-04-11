@@ -1,6 +1,6 @@
-# Fill-ing 프로젝트 가이드
+# forgather 프로젝트 가이드
 
-대학생 밴드 테크니컬 라이딩 제작 서비스 Fill-ing의 프론트엔드 프로젝트입니다.
+미대생을 대상으로 전시 방명록을 작성하고 관리할 수 있는 서비스 forgather의 프론트엔드 프로젝트입니다.
 
 ## 기술 스택
 
@@ -57,109 +57,14 @@
 
 ### 컴포넌트 작성 규칙
 
-#### 1. 파일 구조
+> 상세 규칙은 `.claude/conventions/ui-conventions.md`를 참조합니다.
 
-```typescript
-// Component.tsx
-import * as S from "./Component.styles";
-
-interface ComponentProps {
-  /** JSDoc 형식의 Props 설명 */
-  propName: string;
-  optionalProp?: boolean;
-}
-
-const Component = ({ propName, optionalProp = false }: ComponentProps) => {
-  return (
-    <S.Wrapper>
-      {/* 컴포넌트 내용 */}
-    </S.Wrapper>
-  );
-};
-
-export default Component;
-```
-
-#### 2. 스타일 파일 분리
-
-- 스타일은 `*.styles.ts` 파일로 분리
-- Emotion의 `styled` 사용
-- Named export로 스타일 컴포넌트 export
-- `* as S` 형태로 import하여 네임스페이스 사용
-
-```typescript
-// Component.styles.ts
-import styled from "@emotion/styled";
-
-export const Wrapper = styled.div`
-  // 스타일
-`;
-
-export const Title = styled.h1`
-  ${({ theme }) => ({ ...theme.typography.heading1 })};
-  color: ${({ theme }) => theme.colors.primary};
-`;
-```
-
-#### 3. Props 인터페이스
-
-- Props는 항상 `interface`로 정의 (type 사용 지양)
-- 컴포넌트명 + Props 네이밍 (`ComponentProps`)
-- JSDoc 주석으로 Props 설명 추가
-- Optional props에는 기본값 설정
-
-#### 4. 접근성 (a11y)
-
-- `aria-label`, `aria-hidden` 등 ARIA 속성 적극 활용
-- `tabIndex`로 키보드 네비게이션 지원
-- `role` 속성으로 의미론적 역할 명시
-- 스크린 리더를 위한 설명 제공
-
-```typescript
-<S.Info tabIndex={0} role="group" aria-label={`곡명 ${songTitle} 아티스트명 ${artist}`}>
-  <S.Title aria-hidden={true}>{songTitle}</S.Title>
-  <S.Artist aria-hidden={true}>{artist}</S.Artist>
-</S.Info>
-```
-
-#### 5. Biome Ignore 주석
-
-- 특정 규칙을 무시해야 할 경우 이유와 함께 주석 작성
-
-```typescript
-// biome-ignore lint/correctness/useExhaustiveDependencies: 첫 마운트시에만 계산
-useEffect(() => {
-  // ...
-}, []);
-```
-
-#### 6. 기본 Export
-
-- 컴포넌트는 기본 export 사용 (`export default Component`)
-- 유틸리티 함수나 타입은 named export 사용 가능
-
-### Storybook 작성 규칙
-
-```typescript
-// Component.stories.tsx
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import Component from "../../components/path/Component";
-
-const meta: Meta<typeof Component> = {
-  title: "Component/ComponentName",
-  component: Component,
-};
-
-export default meta;
-
-type Story = StoryObj<typeof Component>;
-
-export const Default: Story = {
-  args: {
-    // props
-  },
-};
-```
+- 구현 파일(`Component.tsx`)과 스타일 파일(`Component.styles.ts`) 분리
+- Props는 `interface ComponentNameProps`로 정의, JSDoc 주석 필수
+- 컴포넌트는 `export default`, 유틸리티/타입은 named export
+- 모든 색상·타이포그래피는 `theme` 토큰 사용 (하드코딩 금지)
+- ARIA 속성 및 키보드 네비게이션 지원 필수
+- UI 컴포넌트는 Storybook 스토리 작성 필수
 
 ### 테스팅 규칙
 
@@ -270,11 +175,8 @@ export const formatDate = (date: Date | null): string => {
 # 테스트 실행
 npm run test
 
-# 커버리지 확인
-npm run test:coverage
-
-# watch 모드
-npm run test:watch
+# Storybook 테스트 실행
+npm run test:storybook
 ```
 
 ## 프로젝트 구조
@@ -286,25 +188,20 @@ fill-ing/
 ├── src/
 │   ├── api/             # API 관련 코드
 │   │   ├── customFetcher.ts  # Orval용 커스텀 fetch 함수
-│   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지)
-│   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지)
+│   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
+│   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
 │   ├── components/      # 컴포넌트
-│   │   ├── ui/          # 재사용 가능한 UI 컴포넌트
-│   │   │   ├── layout/          # 레이아웃 컴포넌트
-│   │   │   ├── progressbar/     # 프로그레스바
-│   │   │   └── swiperAction/    # 스와이프 액션 컴포넌트
-│   │   └── domain/      # 도메인 특화 컴포넌트
-│   ├── hooks/           # 커스텀 React Hooks
-│   │   └── ui/          # UI 관련 훅
-│   ├── router/          # 라우팅 설정
-│   ├── stories/         # Storybook 스토리
-│   │   └── components/  # 컴포넌트 스토리
+│   │   ├── @common/     # 프로젝트 공통 컴포넌트
+│   │   └── ui/          # 재사용 가능한 UI 컴포넌트
+│   ├── pages/           # 페이지 컴포넌트
+│   │   └── main/        # 메인 페이지
+│   │       └── components/  # 메인 페이지 전용 컴포넌트
 │   ├── styles/          # 전역 스타일 및 테마
-│   │   └── globals/     # 전역 스타일
-│   ├── types/           # TypeScript 타입 정의
-│   │   └── globals/     # 전역 타입
-│   ├── utils/           # 유틸리티 함수
+│   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
+│   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
+│   │   ├── global.ts        # 전역 CSS
+│   │   └── reset.ts         # CSS 리셋
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정
@@ -318,33 +215,29 @@ fill-ing/
 
 ## 디렉토리 역할
 
+### `/src/components/@common`
+
+프로젝트 전반에서 공유되는 공통 컴포넌트를 포함합니다.
+
 ### `/src/components/ui`
 
 재사용 가능한 범용 UI 컴포넌트를 포함합니다. 비즈니스 로직이 없는 프레젠테이션 컴포넌트입니다.
 
 **예시**: Button, Input, Modal, Carousel, Layout
 
-### `/src/components/domain`
+### `/src/pages/<페이지명>/components`
 
-특정 도메인/비즈니스 로직과 연관된 컴포넌트입니다.
+특정 페이지에서만 사용하는 도메인 컴포넌트입니다. 페이지 디렉토리 내부에 위치합니다.
 
-**예시**: SongElement, PlaylistCard
-
-### `/src/hooks/ui`
-
-UI 관련 커스텀 훅을 포함합니다.
-
-### `/src/utils`
-
-순수 함수 형태의 유틸리티를 포함합니다.
-
-**예시**: `hexToRgba.ts` - Hex 컬러를 RGBA로 변환
+**예시**: `src/pages/main/components/SongElement.tsx`, `src/pages/main/components/PlaylistCard.tsx`
 
 ### `/src/styles`
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
-**예시**: VisuallyHidden 스타일 컴포넌트
+- `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
+- `GlobalStyle.tsx`: 전역 스타일 컴포넌트
+- `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
 ## 개발 워크플로우
 
@@ -389,9 +282,9 @@ npm run test         # 테스트 실행
 
 ### 새 컴포넌트 추가
 
-1. `/src/components/ui` 또는 `/src/components/domain`에 폴더 생성
+1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
 2. `Component.tsx`, `Component.styles.ts` 파일 생성
-3. `/src/stories/components`에 `Component.stories.tsx` 생성
+3. 컴포넌트 폴더 내에 `Component.stories.tsx` 생성 (예: `src/components/ui/Button/Button.stories.tsx`)
 4. Storybook에서 컴포넌트 확인 및 개발
 5. 접근성 검사 (a11y addon 활용)
 
@@ -511,9 +404,6 @@ const { data } = useGetSongs(); // useSuspenseQuery 기반
 ### 성능 측정 및 모니터링
 
 ```bash
-# Lighthouse CI 실행
-npm run lighthouse
-
 # 프로덕션 빌드 성능 확인
 npm run build
 npm run preview
