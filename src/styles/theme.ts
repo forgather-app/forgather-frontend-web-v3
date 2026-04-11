@@ -80,6 +80,16 @@ export const theme = {
     },
     semantic: {
       alertRed: "#FF4B4B",
+      black: "#111111",
+    },
+    gradient: {
+      grayStroke: "linear-gradient(to right, rgba(65, 72, 85, 0.80), rgba(65, 72, 85, 0.25))",
+      grayFill: "linear-gradient(to right, #292D32, #252930)",
+      purple: "linear-gradient(to right, #665BE1, #5647FF)",
+    },
+    skeleton: {
+      skeleton50: "linear-gradient(to right, rgba(214, 214, 216, 0.50), rgba(245, 245, 247, 0.50))",
+      skeleton20: "linear-gradient(to right, rgba(194, 220, 246, 0.20) 69%, rgba(245, 245, 247, 0.15) 100%)",
     },
   },
 } as const;
