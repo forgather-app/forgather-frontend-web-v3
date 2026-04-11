@@ -4,6 +4,7 @@ import ExhibitionListButton from "@/components/@common/ExhibitionList/Exhibition
 const meta: Meta<typeof ExhibitionListButton> = {
   title: "UI/ExhibitionListButton",
   component: ExhibitionListButton,
+  tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
@@ -57,29 +58,6 @@ export const Selected: Story = {
     title: "포게더 시각 디자인 전시회",
     period: "26.2.8 - 26.2.10",
   },
-};
-
-export const BothStates: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <ExhibitionListButton
-        isSelected={false}
-        thumbnailUrl=""
-        status="inProgress"
-        spaceCount={5}
-        title="포게더 시각 디자인 전시회 (미선택)"
-        period="26.2.8 - 26.2.10"
-      />
-      <ExhibitionListButton
-        isSelected={true}
-        thumbnailUrl=""
-        status="inProgress"
-        spaceCount={5}
-        title="포게더 시각 디자인 전시회 (선택됨)"
-        period="26.2.8 - 26.2.10"
-      />
-    </div>
-  ),
 };
 
 export const EndedSelected: Story = {

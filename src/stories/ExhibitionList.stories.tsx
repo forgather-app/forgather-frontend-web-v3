@@ -4,6 +4,7 @@ import ExhibitionList from "@/components/@common/ExhibitionList/ExhibitionList";
 const meta: Meta<typeof ExhibitionList> = {
   title: "UI/ExhibitionList",
   component: ExhibitionList,
+  tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
