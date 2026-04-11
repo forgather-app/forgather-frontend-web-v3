@@ -2,6 +2,8 @@ import { ic_space as SpaceIcon } from "@/assets/icons";
 import StatusChip from "../StatusChip/StatusChip";
 import * as S from "./ExhibitionList.common.styles";
 import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
+import { THUMBNAIL_FALLBACK_URL } from "@/constants/routes";
+import { handleImageError } from "@/utils/handleImageError";
 
 type ExhibitionListProps = ExhibitionListBaseProps;
 
@@ -14,7 +16,14 @@ const ExhibitionList = ({
 }: ExhibitionListProps) => {
   return (
     <S.Container>
-      <S.Thumbnail src={thumbnailUrl} alt="" aria-hidden />
+      <S.Thumbnail
+        src={thumbnailUrl || THUMBNAIL_FALLBACK_URL}
+        alt=""
+        aria-hidden
+        onError={(e) => {
+          handleImageError(e, THUMBNAIL_FALLBACK_URL);
+        }}
+      />
       <S.ContentWrapper>
         <S.ChipsRow>
           <StatusChip status={status} />

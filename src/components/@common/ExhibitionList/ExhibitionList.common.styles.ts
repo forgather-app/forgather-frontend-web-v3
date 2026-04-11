@@ -57,6 +57,7 @@ export const Thumbnail = styled.img`
   border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
+  background-color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
 export const ContentWrapper = styled.div`
