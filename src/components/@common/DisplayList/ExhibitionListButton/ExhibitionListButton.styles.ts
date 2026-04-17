@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { shouldForwardProp } from "../../../utils/styled";
-import { containerLayout } from "./ExhibitionList.common.styles";
+import { shouldForwardProp } from "../../../../utils/styled";
+import { containerLayout } from "../ExhibitionList.common.styles";
 
 type ButtonContainerProps = { $isSelected?: boolean };
 

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ExhibitionListButton from "@/components/@common/DisplayList/ExhibitionListButton";
+import ExhibitionListButton from "@/components/@common/DisplayList/ExhibitionListButton/ExhibitionListButton";
 
 const THUMBNAIL_URL = "https://picsum.photos/seed/forgather/80/80";
 
@@ -57,6 +57,17 @@ export const Selected: Story = {
     thumbnailUrl: THUMBNAIL_URL,
     status: "inProgress",
     spaceCount: 5,
+    title: "포게더 시각 디자인 전시회",
+    period: "26.2.8 - 26.2.10",
+  },
+};
+
+export const Ended: Story = {
+  args: {
+    isSelected: false,
+    thumbnailUrl: THUMBNAIL_URL,
+    status: "ended",
+    spaceCount: 42,
     title: "포게더 시각 디자인 전시회",
     period: "26.2.8 - 26.2.10",
   },

@@ -1,9 +1,10 @@
 import { ic_space as SpaceIcon } from "@/assets/icons";
 import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
+import type { StatusType } from "@/types/status";
 import { handleImageError } from "@/utils/handleImageError";
-import StatusChip from "../StatusChip/StatusChip";
-import * as S from "./ExhibitionList.common.styles";
-import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
+import StatusChip from "../../Chip/DisplayChip/StatusChip/StatusChip";
+import * as S from "../ExhibitionList.common.styles";
+import type { ExhibitionListBaseProps } from "../ExhibitionList.types";
 import { ButtonContainer } from "./ExhibitionListButton.styles";
 
 interface ExhibitionListButtonProps extends ExhibitionListBaseProps {
@@ -12,6 +13,13 @@ interface ExhibitionListButtonProps extends ExhibitionListBaseProps {
   /** 클릭 핸들러 */
   onClick?: () => void;
 }
+
+const matchChipVariant = (status: StatusType, isSelected: boolean) => {
+  if (status === "inProgress") return "active";
+  if (status === "ended" && !isSelected) return "inactive";
+  if (status === "ended" && isSelected) return "dimmed";
+  return "active";
+};
 
 const ExhibitionListButton = ({
   isSelected,
@@ -37,7 +45,10 @@ const ExhibitionListButton = ({
       />
       <S.ContentWrapper>
         <S.ChipsRow>
-          <StatusChip status={status} />
+          <StatusChip
+            status={status}
+            variant={matchChipVariant(status, isSelected)}
+          />
           <S.SpaceBadge>
             <S.SpaceIconWrapper aria-hidden>
               <SpaceIcon width={16} height={16} aria-hidden="true" />

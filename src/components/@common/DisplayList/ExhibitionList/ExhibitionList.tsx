@@ -1,10 +1,10 @@
 import { ic_space as SpaceIcon } from "@/assets/icons";
 import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
-import StatusChip from "../StatusChip/StatusChip";
-import * as S from "./ExhibitionList.common.styles";
+import StatusChip from "../../Chip/DisplayChip/StatusChip/StatusChip";
+import * as S from "../ExhibitionList.common.styles";
+import type { ExhibitionListBaseProps } from "../ExhibitionList.types";
 import { Container } from "./ExhibitionList.styles";
-import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
 
 type ExhibitionListProps = ExhibitionListBaseProps;
 
@@ -27,7 +27,10 @@ const ExhibitionList = ({
       />
       <S.ContentWrapper>
         <S.ChipsRow>
-          <StatusChip status={status} />
+          <StatusChip
+            status={status}
+            variant={status === "inProgress" ? "active" : "inactive"}
+          />
           <S.SpaceBadge>
             <S.SpaceIconWrapper aria-hidden>
               <SpaceIcon width={16} height={16} aria-hidden="true" />

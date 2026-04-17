@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ExhibitionList from "@/components/@common/DisplayList/ExhibitionList";
+import ExhibitionList from "@/components/@common/DisplayList/ExhibitionList/ExhibitionList";
 
 const THUMBNAIL_URL = "https://picsum.photos/seed/forgather/80/80";
 
