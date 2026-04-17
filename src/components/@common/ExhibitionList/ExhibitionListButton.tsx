@@ -1,9 +1,9 @@
 import { ic_space as SpaceIcon } from "@/assets/icons";
+import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
+import { handleImageError } from "@/utils/handleImageError";
 import StatusChip from "../StatusChip/StatusChip";
 import * as S from "./ExhibitionList.common.styles";
 import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
-import { THUMBNAIL_FALLBACK_URL } from "@/constants/routes";
-import { handleImageError } from "@/utils/handleImageError";
 
 interface ExhibitionListButtonProps extends ExhibitionListBaseProps {
   /** 선택 여부 */
@@ -29,10 +29,10 @@ const ExhibitionListButton = ({
       aria-label={`${title} 전시`}
     >
       <S.Thumbnail
-        src={thumbnailUrl || THUMBNAIL_FALLBACK_URL}
+        src={thumbnailUrl || EXHIBITION_LIST_FALLBACK_IMAGE}
         alt=""
         aria-hidden
-        onError={(e) => handleImageError(e, THUMBNAIL_FALLBACK_URL)}
+        onError={(e) => handleImageError(e, EXHIBITION_LIST_FALLBACK_IMAGE)}
       />
       <S.ContentWrapper>
         <S.ChipsRow>

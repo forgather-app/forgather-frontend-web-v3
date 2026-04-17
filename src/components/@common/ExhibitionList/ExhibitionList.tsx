@@ -2,7 +2,7 @@ import { ic_space as SpaceIcon } from "@/assets/icons";
 import StatusChip from "../StatusChip/StatusChip";
 import * as S from "./ExhibitionList.common.styles";
 import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
-import { THUMBNAIL_FALLBACK_URL } from "@/constants/routes";
+import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
 
 type ExhibitionListProps = ExhibitionListBaseProps;
@@ -17,11 +17,11 @@ const ExhibitionList = ({
   return (
     <S.Container>
       <S.Thumbnail
-        src={thumbnailUrl || THUMBNAIL_FALLBACK_URL}
+        src={thumbnailUrl || EXHIBITION_LIST_FALLBACK_IMAGE}
         alt=""
         aria-hidden
         onError={(e) => {
-          handleImageError(e, THUMBNAIL_FALLBACK_URL);
+          handleImageError(e, EXHIBITION_LIST_FALLBACK_IMAGE);
         }}
       />
       <S.ContentWrapper>
