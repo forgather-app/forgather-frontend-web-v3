@@ -1,9 +1,10 @@
 import { ic_space as SpaceIcon } from "@/assets/icons";
-import StatusChip from "../StatusChip/StatusChip";
-import * as S from "./ExhibitionList.common.styles";
-import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
 import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
+import StatusChip from "../StatusChip/StatusChip";
+import * as S from "./ExhibitionList.common.styles";
+import { Container } from "./ExhibitionList.styles";
+import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
 
 type ExhibitionListProps = ExhibitionListBaseProps;
 
@@ -15,7 +16,7 @@ const ExhibitionList = ({
   period,
 }: ExhibitionListProps) => {
   return (
-    <S.Container>
+    <Container>
       <S.Thumbnail
         src={thumbnailUrl || EXHIBITION_LIST_FALLBACK_IMAGE}
         alt=""
@@ -39,7 +40,7 @@ const ExhibitionList = ({
           <S.Period>{period}</S.Period>
         </S.TextWrapper>
       </S.ContentWrapper>
-    </S.Container>
+    </Container>
   );
 };
 

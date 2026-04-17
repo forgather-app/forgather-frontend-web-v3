@@ -4,6 +4,7 @@ import { handleImageError } from "@/utils/handleImageError";
 import StatusChip from "../StatusChip/StatusChip";
 import * as S from "./ExhibitionList.common.styles";
 import type { ExhibitionListBaseProps } from "./ExhibitionList.types";
+import { ButtonContainer } from "./ExhibitionListButton.styles";
 
 interface ExhibitionListButtonProps extends ExhibitionListBaseProps {
   /** 선택 여부 */
@@ -22,7 +23,7 @@ const ExhibitionListButton = ({
   onClick,
 }: ExhibitionListButtonProps) => {
   return (
-    <S.ButtonContainer
+    <ButtonContainer
       $isSelected={isSelected}
       onClick={onClick}
       aria-pressed={isSelected}
@@ -49,7 +50,7 @@ const ExhibitionListButton = ({
           <S.Period>{period}</S.Period>
         </S.TextWrapper>
       </S.ContentWrapper>
-    </S.ButtonContainer>
+    </ButtonContainer>
   );
 };
 

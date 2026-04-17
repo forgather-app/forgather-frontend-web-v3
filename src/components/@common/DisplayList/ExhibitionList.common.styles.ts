@@ -1,9 +1,6 @@
 import styled from "@emotion/styled";
-import { shouldForwardProp } from "../../../utils/styled";
 
-type ContainerProps = { $isSelected?: boolean };
-
-const containerLayout = `
+export const containerLayout = `
   display: flex;
   gap: 16px;
   align-items: center;
@@ -11,44 +8,6 @@ const containerLayout = `
   width: 328px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
-`;
-
-/**
- * 공통 컨테이너 — display 전용 (ExhibitionList)
- */
-export const Container = styled("div", { shouldForwardProp })<ContainerProps>`
-  ${containerLayout}
-
-  background: linear-gradient(172.26deg, #292d32 4.34%, #252930 57.97%);
-  border: 1px solid rgba(65, 72, 85, 0.8);
-`;
-
-/**
- * 인터랙션 컨테이너 — 버튼 전용 (ExhibitionListButton)
- * $isSelected에 따라 배경·테두리 스타일 전환
- */
-export const ButtonContainer = styled("button", {
-  shouldForwardProp,
-})<ContainerProps>`
-  ${containerLayout}
-
-  /* button 기본 스타일 초기화 */
-  appearance: none;
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-
-  ${({ theme, $isSelected }) =>
-    $isSelected
-      ? `
-        background-color: ${theme.colors.gray.gray500};
-        border: none;
-      `
-      : `
-
-        background: linear-gradient(172.26deg, #292d32 4.34%, #252930 57.97%);
-        border: 1px solid rgba(65, 72, 85, 0.8);
-      `}
 `;
 
 export const Thumbnail = styled.img`
