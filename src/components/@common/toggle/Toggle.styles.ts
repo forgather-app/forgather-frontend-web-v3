@@ -1,11 +1,14 @@
 import styled from "@emotion/styled";
 
-export const Wrapper = styled.div<{ $disabled: boolean }>`
+export const Wrapper = styled.button<{ $disabled: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 8px;
   cursor: ${({ $disabled }) => ($disabled ? "not-allowed" : "pointer")};
   opacity: ${({ $disabled }) => ($disabled ? 0.4 : 1)};
+  background: none;
+  border: none;
+  padding: 0;
   outline: none;
 
   &:focus-visible {

@@ -1,3 +1,4 @@
+import type { KeyboardEvent } from "react";
 import * as S from "./Toggle.styles";
 
 interface ToggleProps {
@@ -21,33 +22,29 @@ const Toggle = ({
   disabled = false,
 }: ToggleProps) => {
   const handleClick = () => {
-    if (!disabled) onChange(!checked);
+    onChange(!checked);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      if (!disabled) onChange(!checked);
+      onChange(!checked);
     }
   };
 
   return (
     <S.Wrapper
-      role="group"
+      type="button"
+      role="switch"
+      aria-checked={checked}
       aria-label={label}
+      disabled={disabled}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      tabIndex={disabled ? -1 : 0}
-      aria-disabled={disabled}
       $disabled={disabled}
     >
       {showLabel && <S.Label aria-hidden="true">{label}</S.Label>}
-      <S.Switch
-        role="switch"
-        aria-checked={checked}
-        aria-label={label}
-        $checked={checked}
-      >
+      <S.Switch $checked={checked}>
         <S.Thumb $checked={checked} />
       </S.Switch>
     </S.Wrapper>
