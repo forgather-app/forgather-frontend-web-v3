@@ -206,6 +206,21 @@ import Component from "../../components/path/Component";
 const meta: Meta<typeof Component> = {
   title: "Component/ComponentName",
   component: Component,
+  parameters: {
+    docs: {
+      description: {
+        component: "컴포넌트 역할 설명. variant가 있으면 각 variant의 용도와 사용 맥락을 기재합니다.",
+      },
+    },
+  },
+  argTypes: {
+    propName: {
+      description: "prop 역할 설명",
+      table: {
+        type: { summary: "타입" },
+      },
+    },
+  },
 };
 
 export default meta;
@@ -213,11 +228,24 @@ export default meta;
 type Story = StoryObj<typeof Component>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "이 Story가 나타내는 상태나 케이스를 한 줄로 설명합니다.",
+      },
+    },
+  },
   args: {
     // props
   },
 };
 ```
+
+**description 작성 규칙 (디자이너 협업 필수)**
+
+- `meta.parameters.docs.description.component` — 컴포넌트 전체 역할, variant별 용도, 인터랙션 동작을 기재합니다. **생략 금지**
+- `argTypes[prop].description` — 각 prop의 역할을 한 줄로 기재합니다. **생략 금지**
+- `Story.parameters.docs.description.story` — 해당 Story가 어떤 상태/케이스를 나타내는지 기재합니다. **생략 금지**
 
 ### Storybook ThemeProvider 설정
 
