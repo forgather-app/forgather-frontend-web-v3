@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import BottomTabBar from "../components/@common/bottomTabBar/BottomTabBar";
-import type { TabType } from "../components/@common/bottomTabBar/BottomTabBar.constants";
+import {
+  TAB_ITEMS,
+  type TabType,
+} from "../components/@common/bottomTabBar/BottomTabBar.constants";
 
 const meta: Meta<typeof BottomTabBar> = {
   title: "Common/BottomTabBar",
@@ -9,7 +12,7 @@ const meta: Meta<typeof BottomTabBar> = {
   argTypes: {
     activeTab: {
       control: "select",
-      options: ["홈", "방명록", "마이"] satisfies TabType[],
+      options: TAB_ITEMS.map((tab) => tab.id),
     },
     onTabChange: { action: "onTabChange" },
   },
