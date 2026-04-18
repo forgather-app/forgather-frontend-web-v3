@@ -1,23 +1,19 @@
 import styled from "@emotion/styled";
 
-interface WrapperProps {
-  $hasBothIcons: boolean;
-  $hasOnlyRightIcon: boolean;
-}
-
-export const Wrapper = styled.nav<WrapperProps>`
-  display: flex;
+export const Wrapper = styled.nav`
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  position: relative;
   width: 100%;
   /* TODO: 토큰 없음 - padding-top: 4px */
   padding-top: 4px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
-  justify-content: ${({ $hasBothIcons, $hasOnlyRightIcon }) => {
-    if ($hasBothIcons) return "space-between";
-    if ($hasOnlyRightIcon) return "flex-end";
-    return "flex-start";
-  }};
+`;
+
+export const Slot = styled.div<{ $align: "start" | "end" }>`
+  display: flex;
+  align-items: center;
+  justify-self: ${({ $align }) => $align};
 `;
 
 export const IconButton = styled.button`
@@ -30,7 +26,6 @@ export const IconButton = styled.button`
   border: none;
   cursor: pointer;
   color: ${({ theme }) => theme.colors.gray.gray100};
-  flex-shrink: 0;
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.colors.main.purple};
@@ -42,9 +37,9 @@ export const IconButton = styled.button`
 export const Title = styled.span`
   ${({ theme }) => ({ ...theme.typography.heading3 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
-  pointer-events: none;
 `;

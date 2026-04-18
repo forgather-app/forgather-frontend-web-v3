@@ -24,35 +24,32 @@ const NavigationBar = ({
 }: NavigationBarProps) => {
   const hasBackButton = !!onBackClick;
   const hasRightButton = !!rightIcon && !!onRightIconClick;
-  const hasBothIcons = hasBackButton && hasRightButton;
-  const hasOnlyRightIcon = !hasBackButton && hasRightButton;
 
   return (
-    <S.Wrapper
-      role="navigation"
-      aria-label={title ?? "네비게이션"}
-      $hasBothIcons={hasBothIcons}
-      $hasOnlyRightIcon={hasOnlyRightIcon}
-    >
-      {hasBackButton && (
-        <S.IconButton
-          type="button"
-          onClick={onBackClick}
-          aria-label="뒤로 가기"
-        >
-          <IcBack aria-hidden="true" />
-        </S.IconButton>
-      )}
-      {title && <S.Title>{title}</S.Title>}
-      {hasRightButton && (
-        <S.IconButton
-          type="button"
-          onClick={onRightIconClick}
-          aria-label={rightIconAriaLabel}
-        >
-          {rightIcon}
-        </S.IconButton>
-      )}
+    <S.Wrapper role="navigation" aria-label={title ?? "네비게이션"}>
+      <S.Slot $align="start">
+        {hasBackButton && (
+          <S.IconButton
+            type="button"
+            onClick={onBackClick}
+            aria-label="뒤로 가기"
+          >
+            <IcBack aria-hidden="true" />
+          </S.IconButton>
+        )}
+      </S.Slot>
+      <S.Title>{title}</S.Title>
+      <S.Slot $align="end">
+        {hasRightButton && (
+          <S.IconButton
+            type="button"
+            onClick={onRightIconClick}
+            aria-label={rightIconAriaLabel}
+          >
+            {rightIcon}
+          </S.IconButton>
+        )}
+      </S.Slot>
     </S.Wrapper>
   );
 };
