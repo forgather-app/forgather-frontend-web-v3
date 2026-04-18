@@ -31,10 +31,7 @@ const BottomSheetList = ({
   onClick,
 }: BottomSheetListProps) => {
   return (
-    <S.Container
-      onClick={onClick}
-      aria-label={description ? `${title}, ${description}` : title}
-    >
+    <S.Container type="button" onClick={onClick}>
       <S.TitleRow>
         {icon && <S.IconWrapper aria-hidden="true">{icon}</S.IconWrapper>}
         <S.Title>{title}</S.Title>
