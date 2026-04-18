@@ -56,6 +56,53 @@ export const Title = styled.h1`
 - 간격 값은 spacing 토큰 도입 전까지 임시 사용 가능
 - 토큰에 없는 값은 `/* TODO: 토큰 없음 - {값} */` 주석 처리
 
+### variant 분기 처리 패턴
+
+여러 variant를 가진 styled component는 ternary 대신 `Record<Variant, (theme: Theme) => string>` 패턴을 사용합니다.
+
+```typescript
+import type { Theme } from "@emotion/react";
+
+type Variant = "primary" | "secondary";
+
+// ❌ 지저분한 ternary 분기
+const Button = styled.button<{ variant: Variant }>`
+  ${({ variant, theme }) =>
+    variant === "primary"
+      ? `background: ${theme.colors.main.purple}; border-radius: 8px;`
+      : `background: ${theme.colors.gray.gray500}; border-radius: 4px;`}
+`;
+
+// ✅ Record 패턴 — 각 variant 스타일이 명확하게 분리됨
+const buttonVariants: Record<Variant, (theme: Theme) => string> = {
+  primary: (theme) => `
+    background: ${theme.colors.main.purple};
+    border-radius: 8px;
+  `,
+  secondary: (theme) => `
+    background: ${theme.colors.gray.gray500};
+    border-radius: 4px;
+  `,
+};
+
+const Button = styled.button<{ variant: Variant }>`
+  ${({ variant, theme }) => buttonVariants[variant](theme)}
+`;
+```
+
+active/inactive 같은 상태가 추가되면 중첩 Record로 확장합니다:
+
+```typescript
+type ActiveState = "active" | "inactive";
+
+const tabVariants: Record<Variant, Record<ActiveState, (theme: Theme) => string>> = {
+  pill: {
+    active: (theme) => `color: ${theme.colors.gray.gray600};`,
+    inactive: (theme) => `color: ${theme.colors.gray.gray200};`,
+  },
+};
+```
+
 ### theme 토큰 접근 (중첩 구조 주의)
 
 ```typescript
