@@ -5,10 +5,8 @@ interface ToggleProps {
   checked: boolean;
   /** 토글 상태 변경 핸들러 */
   onChange: (checked: boolean) => void;
-  /** 활성 상태 레이블 (기본값: "전체 공개") */
-  onLabel?: string;
-  /** 비활성 상태 레이블 (기본값: "나만보기") */
-  offLabel?: string;
+  /** 레이블 (기본값: "전체 공개") */
+  label?: string;
   /** 레이블 표시 여부 (기본값: true) */
   showLabel?: boolean;
   /** 비활성화 여부 */
@@ -18,8 +16,7 @@ interface ToggleProps {
 const Toggle = ({
   checked,
   onChange,
-  onLabel = "전체 공개",
-  offLabel = "나만보기",
+  label = "전체 공개",
   showLabel = true,
   disabled = false,
 }: ToggleProps) => {
@@ -34,12 +31,10 @@ const Toggle = ({
     }
   };
 
-  const label = checked ? onLabel : offLabel;
-
   return (
     <S.Wrapper
       role="group"
-      aria-label={`공개 설정: ${label}`}
+      aria-label={label}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       tabIndex={disabled ? -1 : 0}
