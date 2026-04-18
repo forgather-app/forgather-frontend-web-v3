@@ -23,8 +23,9 @@ const NavigationBar = ({
   onRightIconClick,
 }: NavigationBarProps) => {
   const hasBackButton = !!onBackClick;
-  const hasBothIcons = hasBackButton && !!rightIcon;
-  const hasOnlyRightIcon = !hasBackButton && !!rightIcon;
+  const hasRightButton = !!rightIcon && !!onRightIconClick;
+  const hasBothIcons = hasBackButton && hasRightButton;
+  const hasOnlyRightIcon = !hasBackButton && hasRightButton;
 
   return (
     <S.Wrapper
@@ -43,7 +44,7 @@ const NavigationBar = ({
         </S.IconButton>
       )}
       {title && <S.Title>{title}</S.Title>}
-      {rightIcon && (
+      {hasRightButton && (
         <S.IconButton
           type="button"
           onClick={onRightIconClick}
