@@ -1,4 +1,3 @@
-import { useState } from "react";
 import * as S from "./TabMenu.styles";
 
 interface TabItem {
@@ -11,25 +10,15 @@ interface TabItem {
 interface TabMenuProps {
   /** 탭 메뉴 스타일 variant */
   variant: "pill" | "box";
+  /** 현재 활성 탭 */
+  activeTab: "left" | "right";
   /** 왼쪽 탭 */
   left: TabItem;
   /** 오른쪽 탭 */
   right: TabItem;
 }
 
-const TabMenu = ({ variant, left, right }: TabMenuProps) => {
-  const [activeTab, setActiveTab] = useState<"left" | "right">("left");
-
-  const handleLeft = () => {
-    setActiveTab("left");
-    left.onClick();
-  };
-
-  const handleRight = () => {
-    setActiveTab("right");
-    right.onClick();
-  };
-
+const TabMenu = ({ variant, activeTab, left, right }: TabMenuProps) => {
   const isRightActive = activeTab === "right";
 
   return (
@@ -40,18 +29,20 @@ const TabMenu = ({ variant, left, right }: TabMenuProps) => {
         aria-hidden="true"
       />
       <S.TabButton
+        type="button"
         variant={variant}
         isActive={!isRightActive}
-        onClick={handleLeft}
+        onClick={left.onClick}
         role="tab"
         aria-selected={!isRightActive}
       >
         {left.text}
       </S.TabButton>
       <S.TabButton
+        type="button"
         variant={variant}
         isActive={isRightActive}
-        onClick={handleRight}
+        onClick={right.onClick}
         role="tab"
         aria-selected={isRightActive}
       >

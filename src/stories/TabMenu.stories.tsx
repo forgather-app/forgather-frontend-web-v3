@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import TabMenu from "../components/@common/TabMenu/TabMenu";
 
 const meta: Meta<typeof TabMenu> = {
@@ -16,6 +17,7 @@ const meta: Meta<typeof TabMenu> = {
 
 **인터랙션**
 탭 클릭 시 슬라이딩 인디케이터가 부드럽게 이동합니다.
+\`activeTab\` prop으로 외부에서 상태를 제어하는 controlled 컴포넌트입니다.
         `,
       },
     },
@@ -27,6 +29,14 @@ const meta: Meta<typeof TabMenu> = {
       options: ["pill", "box"],
       table: {
         type: { summary: '"pill" | "box"' },
+      },
+    },
+    activeTab: {
+      description: "현재 활성화된 탭",
+      control: { type: "radio" },
+      options: ["left", "right"],
+      table: {
+        type: { summary: '"left" | "right"' },
       },
     },
     left: {
@@ -53,6 +63,53 @@ const defaultArgs = {
   right: { text: "목록 보기", onClick: () => {} },
 };
 
+export const PillInteractive: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "탭을 직접 클릭해 pill 슬라이딩 애니메이션을 확인할 수 있습니다.",
+      },
+    },
+  },
+  render: (args) => {
+    const [activeTab, setActiveTab] = useState<"left" | "right">("left");
+    return (
+      <TabMenu
+        {...args}
+        activeTab={activeTab}
+        left={{ ...args.left, onClick: () => setActiveTab("left") }}
+        right={{ ...args.right, onClick: () => setActiveTab("right") }}
+      />
+    );
+  },
+  args: { variant: "pill", ...defaultArgs },
+};
+
+export const BoxInteractive: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "탭을 직접 클릭해 box 슬라이딩 애니메이션을 확인할 수 있습니다.",
+      },
+    },
+  },
+  render: (args) => {
+    const [activeTab, setActiveTab] = useState<"left" | "right">("left");
+    return (
+      <div style={{ width: 328 }}>
+        <TabMenu
+          {...args}
+          activeTab={activeTab}
+          left={{ ...args.left, onClick: () => setActiveTab("left") }}
+          right={{ ...args.right, onClick: () => setActiveTab("right") }}
+        />
+      </div>
+    );
+  },
+  args: { variant: "box", ...defaultArgs },
+};
+
 export const Pill: Story = {
   parameters: {
     docs: {
@@ -62,10 +119,7 @@ export const Pill: Story = {
       },
     },
   },
-  args: {
-    variant: "pill",
-    ...defaultArgs,
-  },
+  args: { variant: "pill", activeTab: "left", ...defaultArgs },
 };
 
 export const Box: Story = {
@@ -77,10 +131,7 @@ export const Box: Story = {
       },
     },
   },
-  args: {
-    variant: "box",
-    ...defaultArgs,
-  },
+  args: { variant: "box", activeTab: "left", ...defaultArgs },
   decorators: [
     (Story) => (
       <div style={{ width: 328 }}>
