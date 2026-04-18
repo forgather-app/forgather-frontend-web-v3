@@ -9,9 +9,11 @@ export const Track = styled.div`
 `;
 
 export const Fill = styled.div<{ value: number }>`
-  width: ${({ value }) => value}%;
+  width: 100%;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.main.purple};
   border-radius: 10px;
-  transition: width 0.3s ease;
+  transform-origin: left center;
+  transform: ${({ value }) => `scaleX(${value / 100})`};
+  transition: transform 0.3s ease;
 `;
