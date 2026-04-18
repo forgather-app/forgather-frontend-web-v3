@@ -97,14 +97,12 @@ export const BoxInteractive: Story = {
   render: (args) => {
     const [activeTab, setActiveTab] = useState<"left" | "right">("left");
     return (
-      <div style={{ width: 328 }}>
-        <TabMenu
-          {...args}
-          activeTab={activeTab}
-          left={{ ...args.left, onClick: () => setActiveTab("left") }}
-          right={{ ...args.right, onClick: () => setActiveTab("right") }}
-        />
-      </div>
+      <TabMenu
+        {...args}
+        activeTab={activeTab}
+        left={{ ...args.left, onClick: () => setActiveTab("left") }}
+        right={{ ...args.right, onClick: () => setActiveTab("right") }}
+      />
     );
   },
   args: { variant: "box", ...defaultArgs },

@@ -11,6 +11,7 @@ const containerVariants: Record<Variant, (theme: Theme) => string> = {
     box-shadow: 0px 0px 40px 0px rgba(17, 17, 17, 0.5);
   `,
   box: (theme) => `
+    width: 100%;
     background-color: ${theme.colors.gray.gray600};
     border-radius: 10px;
   `,
