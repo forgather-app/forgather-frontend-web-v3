@@ -18,6 +18,7 @@ export const TabList = styled.div`
   padding: 12px 20px;
 `;
 
+// TODO : shouldForwardProps 유틸 추가
 export const TabButton = styled.button<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
