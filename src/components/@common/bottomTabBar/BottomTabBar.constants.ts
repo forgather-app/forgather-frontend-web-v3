@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
-import IcFolder from "../../../assets/ic_folder.svg?react";
-import IcHome from "../../../assets/ic_home.svg?react";
-import IcPerson from "../../../assets/ic_person.svg?react";
+import IcFolder from "../../../assets/icons/ic_folder.svg?react";
+import IcHome from "../../../assets/icons/ic_home.svg?react";
+import IcPerson from "../../../assets/icons/ic_person.svg?react";
 
 export const TAB_ITEMS = [
   { id: "홈", label: "홈", Icon: IcHome },

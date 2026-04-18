@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import IcBack from "../../../assets/ic_back.svg?react";
+import IcBack from "../../../assets/icons/ic_back.svg?react";
 import * as S from "./NavigationBar.styles";
 
 interface NavigationBarProps {
