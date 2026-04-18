@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import type { ReactElement, SVGProps } from "react";
 import IcBack from "../../../assets/icons/ic_back.svg?react";
 import * as S from "./NavigationBar.styles";
 
 interface NavigationBarProps {
   /** 오른쪽 아이콘 (32×32 SVG 권장) */
-  rightIcon?: ReactNode;
+  rightIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   /** 중앙에 표시할 타이틀 텍스트 */
   title?: string;
   /** 오른쪽 아이콘 버튼의 접근성 레이블 */
