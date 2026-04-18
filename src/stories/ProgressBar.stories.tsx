@@ -4,6 +4,14 @@ import ProgressBar from "../components/@common/progressBar/ProgressBar";
 const meta: Meta<typeof ProgressBar> = {
   title: "Common/ProgressBar",
   component: ProgressBar,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "다단계 플로우에서 사용자의 현재 진행 정도를 표시하는 진행 상태 바입니다.",
+      },
+    },
+  },
   argTypes: {
     value: {
       control: { type: "range", min: 0, max: 100, step: 1 },

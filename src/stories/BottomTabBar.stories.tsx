@@ -9,12 +9,24 @@ import {
 const meta: Meta<typeof BottomTabBar> = {
   title: "Common/BottomTabBar",
   component: BottomTabBar,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "앱 하단에 고정되는 내비게이션 바입니다. 홈·방명록·마이 세 개의 탭으로 구성됩니다.",
+      },
+    },
+  },
   argTypes: {
     activeTab: {
       control: "select",
       options: TAB_ITEMS.map((tab) => tab.id),
+      description: "현재 활성화된(선택된) 탭",
     },
-    onTabChange: { action: "onTabChange" },
+    onTabChange: {
+      action: "onTabChange",
+      description: "탭을 눌렀을 때 실행되는 핸들러",
+    },
   },
 };
 

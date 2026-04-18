@@ -1,20 +1,30 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import NavigationBar from "../components/@common/navigationBar/NavigationBar";
 
-/** 뒤로가기·닫기·메뉴 등의 아이콘 액션을 포함한 앱 내비게이션 바.
- * - `onBackClick` 전달 시 왼쪽 뒤로가기 버튼(ic_back_32) 표시
- * - `rightIcon` 전달 시 오른쪽 아이콘 표시
- * - `title` 전달 시 중앙 타이틀 표시
- */
 const meta: Meta<typeof NavigationBar> = {
   title: "Common/NavigationBar",
   component: NavigationBar,
   parameters: {
     layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "화면 상단의 내비게이션 바입니다. 뒤로가기·타이틀·우측 아이콘 액션을 조합해 사용합니다.",
+      },
+    },
   },
   argTypes: {
-    onBackClick: { action: "뒤로가기 클릭" },
-    onRightIconClick: { action: "오른쪽 아이콘 클릭" },
+    title: { description: "중앙에 표시되는 타이틀" },
+    rightIcon: { description: "우측에 표시할 SVG 아이콘" },
+    rightIconAriaLabel: { description: "우측 아이콘 버튼의 접근성 레이블" },
+    onBackClick: {
+      action: "뒤로가기 클릭",
+      description: "왼쪽 뒤로가기 버튼을 눌렀을 때 실행되는 핸들러",
+    },
+    onRightIconClick: {
+      action: "오른쪽 아이콘 클릭",
+      description: "우측 아이콘 버튼을 눌렀을 때 실행되는 핸들러",
+    },
   },
 };
 
