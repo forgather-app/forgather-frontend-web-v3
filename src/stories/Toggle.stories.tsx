@@ -82,6 +82,7 @@ export const Disabled: Story = {
   parameters: {
     docs: { description: { story: "상호작용이 불가능한 비활성화 상태입니다." } },
   },
+  render: controlledRender,
   args: {
     checked: false,
     disabled: true,
@@ -95,6 +96,7 @@ export const DisabledOn: Story = {
   parameters: {
     docs: { description: { story: "켜진 채로 상호작용이 불가능한 비활성화 상태입니다." } },
   },
+  render: controlledRender,
   args: {
     checked: true,
     disabled: true,
