@@ -13,7 +13,7 @@ const meta: Meta<typeof ChipTabBar> = {
 탭 텍스트와 카운터 칩을 함께 표시하는 underline 스타일 탭 바입니다.
 
 **특징**
-- 항상 칩을 포함합니다. 칩 없는 탭이 필요하면 \`TabBar\`를 사용하세요.
+- 항상 칩을 포함합니다. 칩 없는 탭이 필요하면 \`TabMenu\`를 사용하세요.
 - \`activeTab\` prop으로 외부에서 상태를 제어하는 controlled 컴포넌트입니다.
 - 탭 전환 시 underline 인디케이터가 슬라이딩 애니메이션으로 이동합니다.
         `,
