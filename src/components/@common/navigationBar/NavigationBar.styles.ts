@@ -5,7 +5,6 @@ export const Wrapper = styled.nav`
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   width: 100%;
-  /* TODO: 토큰 없음 - padding-top: 4px */
   padding-top: 4px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
 `;
@@ -20,7 +19,6 @@ export const IconButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* TODO: 토큰 없음 - padding: 8px */
   padding: 8px;
   background: none;
   border: none;
