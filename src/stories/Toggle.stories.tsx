@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { useArgs } from "storybook/preview-api";
 import Toggle from "../components/@common/toggle/Toggle";
 
 const meta: Meta<typeof Toggle> = {
@@ -25,9 +25,18 @@ export default meta;
 
 type Story = StoryObj<typeof Toggle>;
 
-const ControlledToggle = (args: React.ComponentProps<typeof Toggle>) => {
-  const [checked, setChecked] = useState(args.checked);
-  return <Toggle {...args} checked={checked} onChange={setChecked} />;
+const controlledRender = (args: React.ComponentProps<typeof Toggle>) => {
+  const [{ checked }, setArgs] = useArgs<typeof args>();
+  return (
+    <Toggle
+      {...args}
+      checked={checked}
+      onChange={(next) => {
+        setArgs({ checked: next });
+        args.onChange?.(next);
+      }}
+    />
+  );
 };
 
 export const On: Story = {
@@ -35,7 +44,7 @@ export const On: Story = {
   parameters: {
     docs: { description: { story: "토글이 켜진 상태입니다." } },
   },
-  render: (args) => <ControlledToggle {...args} />,
+  render: controlledRender,
   args: {
     checked: true,
     label: "전체 공개",
@@ -48,7 +57,7 @@ export const Off: Story = {
   parameters: {
     docs: { description: { story: "토글이 꺼진 상태입니다." } },
   },
-  render: (args) => <ControlledToggle {...args} />,
+  render: controlledRender,
   args: {
     checked: false,
     label: "전체 공개",
@@ -61,7 +70,7 @@ export const WithoutLabel: Story = {
   parameters: {
     docs: { description: { story: "`showLabel={false}`로 레이블을 숨긴 상태입니다. 아이콘만 표시할 때 사용합니다." } },
   },
-  render: (args) => <ControlledToggle {...args} />,
+  render: controlledRender,
   args: {
     checked: true,
     showLabel: false,
