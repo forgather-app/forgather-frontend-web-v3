@@ -197,11 +197,13 @@ fill-ing/
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
 │   │       └── components/  # 메인 페이지 전용 컴포넌트
+│   ├── stories/         # Storybook 스토리 파일
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
+│   ├── utils/           # 유틸리티 함수
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정

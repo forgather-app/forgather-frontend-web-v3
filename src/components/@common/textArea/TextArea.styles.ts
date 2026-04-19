@@ -25,7 +25,7 @@ export const Wrapper = styled.div<WrapperProps>`
   border: ${({ isFocused, hasError, theme }) => {
     if (hasError) return `1px solid ${theme.colors.semantic.alertRed}`;
     if (isFocused) return `1px solid ${theme.colors.main.purple}`;
-    return "none";
+    return "1px solid transparent";
   }};
   height: ${({ size }) => (size === "large" ? "179px" : "auto")};
   padding: ${({ size }) => (size === "medium" ? "8px 12px" : "12px")};

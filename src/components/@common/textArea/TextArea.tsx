@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { getGraphemeLength } from "../../../utils/getGraphemeLength";
 import * as S from "./TextArea.styles";
 
@@ -21,7 +21,7 @@ const TextArea = ({
   value = "",
   onChange,
   size = "large",
-  placeholder = "전시에 대한 설명을 작성해주세요.",
+  placeholder = "내용을 입력해주세요",
   errorMessage,
   maxLength = 200,
   onFocus,
@@ -29,6 +29,7 @@ const TextArea = ({
   ...rest
 }: TextAreaProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const errorId = useId();
 
   const currentLength = getGraphemeLength(String(value));
   const isOverLimit = currentLength > maxLength;
@@ -40,6 +41,7 @@ const TextArea = ({
   return (
     <S.Wrapper isFocused={isFocused} hasError={hasError} size={size}>
       <S.Textarea
+        {...rest}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={(e) => {
@@ -52,12 +54,11 @@ const TextArea = ({
         }}
         placeholder={placeholder}
         aria-invalid={hasError}
-        aria-describedby={hasError ? "text-area-error" : undefined}
-        {...rest}
+        aria-describedby={hasError ? errorId : undefined}
       />
       <S.BottomRow hasError={hasError}>
         {hasError && (
-          <S.ErrorMessage id="text-area-error" role="alert">
+          <S.ErrorMessage id={errorId} role="alert">
             {activeError}
           </S.ErrorMessage>
         )}

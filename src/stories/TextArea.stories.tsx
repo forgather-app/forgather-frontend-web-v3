@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useState } from "react";
+import { type ComponentProps, useState } from "react";
 import TextArea from "../components/@common/textArea/TextArea";
 
 const meta: Meta<typeof TextArea> = {
@@ -55,7 +55,7 @@ export default meta;
 
 type Story = StoryObj<typeof TextArea>;
 
-const ControlledTextArea = (args: React.ComponentProps<typeof TextArea>) => {
+const ControlledTextArea = (args: ComponentProps<typeof TextArea>) => {
   const [value, setValue] = useState(args.value ?? "");
   return <TextArea {...args} value={value} onChange={setValue} />;
 };
