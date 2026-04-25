@@ -205,7 +205,7 @@ fill-ing/
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
-│   ├── types/           # 전역 타입 선언 (emotion.d.ts, svg.d.ts 등)
+│   ├── utils/           # 유틸리티 함수
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정

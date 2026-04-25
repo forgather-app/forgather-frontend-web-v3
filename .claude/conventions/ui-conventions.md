@@ -9,6 +9,20 @@ Fill-ing 프로젝트의 컴포넌트 및 페이지 구현 시 반드시 준수�
 
 모든 컴포넌트/페이지는 구현 파일과 스타일 파일을 분리합니다.
 
+### 폴더 네이밍
+
+- **컴포넌트 폴더명은 소문자 시작 camelCase**를 사용합니다 (`textField`, `textArea`, `bottomSheet` 등)
+- 파일명(`.tsx`, `.styles.ts`, `.stories.tsx`)은 PascalCase 컴포넌트명을 그대로 사용합니다
+
+```
+src/components/@common/textField/
+  TextField.tsx
+  TextField.styles.ts
+
+src/stories/
+  TextField.stories.tsx   ← 스토리는 항상 src/stories/ 아래에 작성
+```
+
 ```typescript
 // Component.tsx
 import * as S from "./Component.styles";
@@ -199,9 +213,9 @@ UI 컴포넌트(`src/components/ui/`, `src/components/@common/`)는 반드시 St
 페이지는 선택사항입니다.
 
 ```typescript
-// src/stories/components/ComponentName.stories.tsx
+// src/stories/ComponentName.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Component from "../../components/path/Component";
+import Component from "../components/path/Component";
 
 const meta: Meta<typeof Component> = {
   title: "Component/ComponentName",
