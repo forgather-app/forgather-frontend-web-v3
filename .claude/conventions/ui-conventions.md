@@ -70,6 +70,53 @@ export const Title = styled.h1`
 - 간격 값은 spacing 토큰 도입 전까지 임시 사용 가능
 - 토큰에 없는 값은 `/* TODO: 토큰 없음 - {값} */` 주석 처리
 
+### variant 분기 처리 패턴
+
+여러 variant를 가진 styled component는 ternary 대신 `Record<Variant, (theme: Theme) => string>` 패턴을 사용합니다.
+
+```typescript
+import type { Theme } from "@emotion/react";
+
+type Variant = "primary" | "secondary";
+
+// ❌ 지저분한 ternary 분기
+const Button = styled.button<{ variant: Variant }>`
+  ${({ variant, theme }) =>
+    variant === "primary"
+      ? `background: ${theme.colors.main.purple}; border-radius: 8px;`
+      : `background: ${theme.colors.gray.gray500}; border-radius: 4px;`}
+`;
+
+// ✅ Record 패턴 — 각 variant 스타일이 명확하게 분리됨
+const buttonVariants: Record<Variant, (theme: Theme) => string> = {
+  primary: (theme) => `
+    background: ${theme.colors.main.purple};
+    border-radius: 8px;
+  `,
+  secondary: (theme) => `
+    background: ${theme.colors.gray.gray500};
+    border-radius: 4px;
+  `,
+};
+
+const Button = styled.button<{ variant: Variant }>`
+  ${({ variant, theme }) => buttonVariants[variant](theme)}
+`;
+```
+
+active/inactive 같은 상태가 추가되면 중첩 Record로 확장합니다:
+
+```typescript
+type ActiveState = "active" | "inactive";
+
+const tabVariants: Record<Variant, Record<ActiveState, (theme: Theme) => string>> = {
+  pill: {
+    active: (theme) => `color: ${theme.colors.gray.gray600};`,
+    inactive: (theme) => `color: ${theme.colors.gray.gray200};`,
+  },
+};
+```
+
 ### theme 토큰 접근 (중첩 구조 주의)
 
 ```typescript
@@ -173,6 +220,21 @@ import Component from "../components/path/Component";
 const meta: Meta<typeof Component> = {
   title: "Component/ComponentName",
   component: Component,
+  parameters: {
+    docs: {
+      description: {
+        component: "컴포넌트 역할 설명. variant가 있으면 각 variant의 용도와 사용 맥락을 기재합니다.",
+      },
+    },
+  },
+  argTypes: {
+    propName: {
+      description: "prop 역할 설명",
+      table: {
+        type: { summary: "타입" },
+      },
+    },
+  },
 };
 
 export default meta;
@@ -180,11 +242,24 @@ export default meta;
 type Story = StoryObj<typeof Component>;
 
 export const Default: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "이 Story가 나타내는 상태나 케이스를 한 줄로 설명합니다.",
+      },
+    },
+  },
   args: {
     // props
   },
 };
 ```
+
+**description 작성 규칙 (디자이너 협업 필수)**
+
+- `meta.parameters.docs.description.component` — 컴포넌트 전체 역할, variant별 용도, 인터랙션 동작을 기재합니다. **생략 금지**
+- `argTypes[prop].description` — 각 prop의 역할을 한 줄로 기재합니다. **생략 금지**
+- `Story.parameters.docs.description.story` — 해당 Story가 어떤 상태/케이스를 나타내는지 기재합니다. **생략 금지**
 
 ### Storybook ThemeProvider 설정
 
