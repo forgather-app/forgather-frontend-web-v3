@@ -284,7 +284,7 @@ npm run test         # 테스트 실행
 
 1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
 2. `Component.tsx`, `Component.styles.ts` 파일 생성
-3. 컴포넌트 폴더 내에 `Component.stories.tsx` 생성 (예: `src/components/ui/Button/Button.stories.tsx`)
+3. `src/stories/{ComponentName}.stories.tsx` 파일 생성 (예: `src/stories/Button.stories.tsx`)
 4. Storybook에서 컴포넌트 확인 및 개발
 5. 접근성 검사 (a11y addon 활용)
 
