@@ -1,18 +1,18 @@
 import styled from "@emotion/styled";
 
 interface WrapperProps {
-  isFocused: boolean;
-  hasError: boolean;
-  size: "medium" | "large";
+  $isFocused: boolean;
+  $hasError: boolean;
+  $size: "medium" | "large";
 }
 
 interface CounterProps {
-  isFocused: boolean;
-  hasError: boolean;
+  $isFocused: boolean;
+  $hasError: boolean;
 }
 
 interface BottomRowProps {
-  hasError: boolean;
+  $hasError: boolean;
 }
 
 export const Wrapper = styled.div<WrapperProps>`
@@ -22,13 +22,13 @@ export const Wrapper = styled.div<WrapperProps>`
   gap: 12px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
   border-radius: 8px;
-  border: ${({ isFocused, hasError, theme }) => {
-    if (hasError) return `1px solid ${theme.colors.semantic.alertRed}`;
-    if (isFocused) return `1px solid ${theme.colors.main.purple}`;
+  border: ${({ $isFocused, $hasError, theme }) => {
+    if ($hasError) return `1px solid ${theme.colors.semantic.alertRed}`;
+    if ($isFocused) return `1px solid ${theme.colors.main.purple}`;
     return "1px solid transparent";
   }};
-  height: ${({ size }) => (size === "large" ? "179px" : "auto")};
-  padding: ${({ size }) => (size === "medium" ? "8px 12px" : "12px")};
+  height: ${({ $size }) => ($size === "large" ? "179px" : "auto")};
+  padding: ${({ $size }) => ($size === "medium" ? "8px 12px" : "12px")};
   width: 100%;
   box-sizing: border-box;
 `;
@@ -56,7 +56,7 @@ export const Textarea = styled.textarea`
 
 export const BottomRow = styled.div<BottomRowProps>`
   display: flex;
-  justify-content: ${({ hasError }) => (hasError ? "space-between" : "flex-end")};
+  justify-content: ${({ $hasError }) => ($hasError ? "space-between" : "flex-end")};
   align-items: flex-end;
 `;
 
@@ -67,8 +67,8 @@ export const ErrorMessage = styled.span`
 
 export const Counter = styled.span<CounterProps>`
   ${({ theme }) => ({ ...theme.typography.caption })};
-  color: ${({ isFocused, hasError, theme }) =>
-    hasError || isFocused
+  color: ${({ $isFocused, $hasError, theme }) =>
+    $hasError || $isFocused
       ? theme.colors.gray.gray200
       : theme.colors.gray.gray300};
   text-align: right;

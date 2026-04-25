@@ -39,7 +39,7 @@ const TextArea = ({
   const hasError = !!activeError;
 
   return (
-    <S.Wrapper isFocused={isFocused} hasError={hasError} size={size}>
+    <S.Wrapper $isFocused={isFocused} $hasError={hasError} $size={size}>
       <S.Textarea
         {...rest}
         value={value}
@@ -56,13 +56,13 @@ const TextArea = ({
         aria-invalid={hasError}
         aria-describedby={hasError ? errorId : undefined}
       />
-      <S.BottomRow hasError={hasError}>
+      <S.BottomRow $hasError={hasError}>
         {hasError && (
           <S.ErrorMessage id={errorId} role="alert">
             {activeError}
           </S.ErrorMessage>
         )}
-        <S.Counter isFocused={isFocused} hasError={hasError}>
+        <S.Counter $isFocused={isFocused} $hasError={hasError}>
           {currentLength} / {maxLength}자
         </S.Counter>
       </S.BottomRow>
