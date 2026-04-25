@@ -1,11 +1,12 @@
+import { ThemeProvider } from "@emotion/react";
 import GlobalStyle from "./styles/GlobalStyle";
+import { theme } from "./styles/theme";
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <h2>hello world</h2>
-    </>
+    </ThemeProvider>
   );
 }
 

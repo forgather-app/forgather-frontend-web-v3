@@ -7,7 +7,7 @@ export const theme = {
       letterSpacing: "-0.02em",
     },
     heading1: {
-      fontWeight: 700,
+      fontWeight: 600,
       fontSize: "20px",
       lineHeight: "130%",
       letterSpacing: "-0.02em",
@@ -31,6 +31,18 @@ export const theme = {
       letterSpacing: "-0.02em",
     },
     body2: {
+      fontWeight: 600,
+      fontSize: "16px",
+      lineHeight: "160%",
+      letterSpacing: "-0.02em",
+    },
+    body3: {
+      fontWeight: 500,
+      fontSize: "16px",
+      lineHeight: "160%",
+      letterSpacing: "-0.02em",
+    },
+    body4: {
       fontWeight: 400,
       fontSize: "16px",
       lineHeight: "160%",
@@ -40,6 +52,12 @@ export const theme = {
       fontWeight: 500,
       fontSize: "14px",
       lineHeight: "160%",
+      letterSpacing: "-0.02em",
+    },
+    subBody2: {
+      fontWeight: 600,
+      fontSize: "12px",
+      lineHeight: "140%",
       letterSpacing: "-0.02em",
     },
     button: {
