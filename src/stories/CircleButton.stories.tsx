@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import shareIcon from "../assets/icons/ic-share.svg";
-import CircleButton from "../components/ui/CircleButton/CircleButton";
+import CircleButton from "../components/@common/CircleButton/CircleButton";
 
 const meta: Meta<typeof CircleButton> = {
   title: "Common/CircleButton",
