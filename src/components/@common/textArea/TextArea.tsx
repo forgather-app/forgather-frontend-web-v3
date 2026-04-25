@@ -1,5 +1,6 @@
 import { useId } from "react";
 import { getGraphemeLength } from "../../../utils/getGraphemeLength";
+import { getMaxLengthErrorMessage } from "./TextArea.constants";
 import * as S from "./TextArea.styles";
 
 interface TextAreaProps
@@ -32,7 +33,7 @@ const TextArea = ({
   const isOverLimit = currentLength > maxLength;
   const activeError =
     errorMessage ??
-    (isOverLimit ? `최대 ${maxLength}자까지 입력 가능합니다.` : undefined);
+    (isOverLimit ? getMaxLengthErrorMessage(maxLength) : undefined);
   const hasError = !!activeError;
 
   return (
