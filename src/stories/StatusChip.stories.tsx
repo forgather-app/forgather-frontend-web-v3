@@ -21,7 +21,7 @@ const meta: Meta<typeof StatusChip> = {
     },
     variant: {
       control: { type: "radio" },
-      options: ["active", "inactive", "info", "dimmed"],
+      options: ["active", "inactive", "dimmed", "alert"],
       description: "칩의 시각적 표현 방식",
     },
   },
