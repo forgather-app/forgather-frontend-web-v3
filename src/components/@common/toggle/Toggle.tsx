@@ -17,7 +17,7 @@ interface ToggleProps {
 const Toggle = ({
   checked,
   onChange,
-  label = "전체 공개",
+  label = "토글 레이블",
   showLabel = true,
   disabled = false,
 }: ToggleProps) => {
