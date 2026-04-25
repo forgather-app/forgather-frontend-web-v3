@@ -6,7 +6,7 @@ interface ToggleProps {
   checked: boolean;
   /** 토글 상태 변경 핸들러 */
   onChange: (checked: boolean) => void;
-  /** 레이블 (기본값: "전체 공개") */
+  /** 레이블 (기본값: "토글 레이블") */
   label?: string;
   /** 레이블 표시 여부 (기본값: true) */
   showLabel?: boolean;
