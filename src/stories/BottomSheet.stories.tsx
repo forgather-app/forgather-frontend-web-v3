@@ -28,6 +28,9 @@ const meta: Meta<typeof BottomSheet> = {
       description: {
         component: `
 바텀시트 컨테이너 컴포넌트입니다. Backdrop과 콘텐츠 영역으로 구성됩니다.
+grabBar의 width는 작지만, 해당 컴포넌트를 감싸는 눈에 보이지 않는 컴포넌트를 두어 드래그가 편하도록 구성했습니다.
+
+✅ 어느정도 드래그 했을 때 바텀시트를 꺼지게 만들지 의논이 필요합니다. 현재 설정된 값은 100px 입니다.
 
 **구조**
 - \`Backdrop\`: 반투명 오버레이. 클릭 시 \`onClose\` 호출
@@ -47,7 +50,7 @@ type Story = StoryObj<typeof BottomSheet>;
 
 const InteractiveStory = () => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(isOpen);
+
   return (
     <>
       <button
@@ -70,6 +73,48 @@ const InteractiveStory = () => {
       </button>
       {isOpen && (
         <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}>
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
+          <BottomSheetList title="가리기 해제" />
+          <BottomSheetList title="삭제하기" />
+          <BottomSheetList title="신고하기" />
           <BottomSheetList title="가리기 해제" />
           <BottomSheetList title="삭제하기" />
           <BottomSheetList title="신고하기" />
