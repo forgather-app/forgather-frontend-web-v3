@@ -106,12 +106,15 @@ const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
         ref={sheetRef}
         $isVisible={isVisible}
         onTransitionEnd={alertAnimationEnd}
-        onPointerDown={handleMouseDown}
-        onPointerMove={handleMouseMove}
-        onPointerUp={handleMouseUp}
       >
         <S.Container ref={contentRef}>
-          <S.GrabBar />
+          <S.GrabAbleArea
+            onPointerDown={handleMouseDown}
+            onPointerMove={handleMouseMove}
+            onPointerUp={handleMouseUp}
+          >
+            <S.GrabBar />
+          </S.GrabAbleArea>
           {/**스크롤이 발생하는 영역 */}
           <S.Content>{children}</S.Content>
         </S.Container>

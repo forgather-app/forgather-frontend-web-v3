@@ -33,7 +33,7 @@ export const Container = styled.div`
 
 export const GrabAbleArea = styled.div`
   width: 100%;
-  padding: 4px;
+  padding: 10px 0 6px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,7 +48,7 @@ export const GrabBar = styled.div`
 
 export const Content = styled.div`
   width: 100%;
-  max-height: 80vh;
+  max-height: 50dvh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
