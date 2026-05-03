@@ -49,6 +49,7 @@
 - **JSX**: react-jsx (React 17+ 새로운 JSX Transform)
 - **No Unused Variables**: 사용하지 않는 변수 및 파라미터 금지
 - **Verbatim Module Syntax**: import/export 구문 명시적 사용
+- **Path Alias**: `@/*` → `src/*` (예: `@/components/...`, `@/styles/...`)
 
 ### 코드 포맷팅 (Biome)
 
@@ -202,6 +203,7 @@ fill-ing/
 │   ├── stories/         # Storybook 스토리 파일 (컴포넌트별 *.stories.tsx)
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
+│   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
@@ -240,6 +242,7 @@ fill-ing/
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
 - `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
+- `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트
 - `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
@@ -286,7 +289,7 @@ npm run test         # 테스트 실행
 
 ### 새 컴포넌트 추가
 
-1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
+1. 공통 컴포넌트는 `/src/components/@common`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
 2. `Component.tsx`, `Component.styles.ts` 파일 생성 (상수가 많으면 `Component.constants.ts`도 함께 생성)
 3. `src/stories/ComponentName.stories.tsx` 생성 (예: `src/stories/Button.stories.tsx`)
 4. Storybook에서 컴포넌트 확인 및 개발
