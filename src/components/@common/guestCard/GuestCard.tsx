@@ -8,10 +8,22 @@ import * as S from "./GuestCard.styles";
 
 type GuestCardHeaderIconType = "scrap" | "menu";
 
-type GuestCardHeaderType = {
+interface GuestCardHeaderCommonType {
   iconType: GuestCardHeaderIconType;
-  onIconClick: () => void;
-};
+}
+
+interface ScrapHeader extends GuestCardHeaderCommonType {
+  iconType: "scrap";
+  isScrapped: boolean;
+  toggleScrap: () => void;
+}
+
+interface MenuHeader extends GuestCardHeaderCommonType {
+  iconType: "menu";
+  onMenuClick: () => void;
+}
+
+type GuestCardHeaderType = ScrapHeader | MenuHeader;
 
 interface GuestCardProps {
   /** 방명록 작성자 이름 */
@@ -23,23 +35,46 @@ interface GuestCardProps {
   /** 방명록 사진 존재 여부 */
   isPhotoExist?: boolean;
   /** 헤더 우측 아이콘 및 인터랙션 타입 */
-  headerType: GuestCardHeaderType;
+  headerType?: GuestCardHeaderType;
 }
 
-const renderHeaderIcon = (type: GuestCardHeaderIconType): React.ReactNode => {
-  switch (type) {
-    case "scrap":
+const renderHeaderIcon = (headerType: GuestCardHeaderType): React.ReactNode => {
+  switch (headerType.iconType) {
+    case "scrap": {
+      const { isScrapped, toggleScrap } = headerType;
+
       return (
-        <IcScrap width={24} height={24} color={theme.colors.gray.gray500} />
+        <S.IconButton
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleScrap();
+          }}
+        >
+          <IcScrap
+            width={24}
+            height={24}
+            color={
+              isScrapped ? theme.colors.main.purple : theme.colors.gray.gray500
+            }
+          />
+        </S.IconButton>
       );
-    case "menu":
+    }
+    case "menu": {
+      const { onMenuClick } = headerType;
+      // TODO: 메뉴 UI 삽입
       return (
-        <IcVerticalDots
-          width={24}
-          height={24}
-          color={theme.colors.gray.white}
-        />
+        <button type="button" onClick={onMenuClick}>
+          <IcVerticalDots
+            width={24}
+            height={24}
+            color={theme.colors.gray.white}
+          />
+        </button>
       );
+    }
   }
 };
 
@@ -51,15 +86,12 @@ const GuestCard = ({
   headerType,
 }: GuestCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
-  const { iconType, onIconClick } = headerType;
 
   const frontFace = (
-    <S.Front $isFlip={isNew}>
+    <S.Front $isFlip={isNew} role="button" aria-label={`${author} 님의 방명록`}>
       <S.CardHeader>
         <span>{isPhotoExist && <IcPhoto />}</span>
-        <button type="button" onClick={onIconClick}>
-          {iconType && renderHeaderIcon(iconType)}
-        </button>
+        {headerType && renderHeaderIcon(headerType)}
       </S.CardHeader>
       <S.ContentArea>
         <S.Author>{author}</S.Author>
@@ -73,8 +105,12 @@ const GuestCard = ({
       <S.Scene>
         <S.Inner $isFlipped={isFlipped}>
           <S.Back
-            type="button"
-            onClick={() => setIsFlipped(true)}
+            role="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsFlipped(true);
+            }}
             aria-label="새로 도착한 방명록 — 클릭하여 열기"
             tabIndex={isFlipped ? -1 : 0}
           >

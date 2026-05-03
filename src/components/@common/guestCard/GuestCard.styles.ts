@@ -24,7 +24,7 @@ export const Inner = styled("div", { shouldForwardProp })<{
       : "transform: rotateY(0deg);"}
 `;
 
-export const Back = styled.button`
+export const Back = styled.div`
   position: absolute;
   inset: 0;
   backface-visibility: hidden;
@@ -76,7 +76,7 @@ export const BackText = styled.span`
   padding: 0 8px;
 `;
 
-export const Front = styled("button", { shouldForwardProp })<{
+export const Front = styled("div", { shouldForwardProp })<{
   $isFlip?: boolean;
 }>`
   ${({ $isFlip }) =>
@@ -115,6 +115,23 @@ export const CardHeader = styled.div`
   padding: 0 16px 0 10px;
   flex-shrink: 0;
   width: 100%;
+  overflow: hidden;
+`;
+
+export const IconButton = styled.button`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+  }
+  &:active {
+    transform: scale(0.85);
+  }
 `;
 
 export const ContentArea = styled.div`
