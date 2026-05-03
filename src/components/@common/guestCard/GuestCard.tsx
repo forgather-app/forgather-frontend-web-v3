@@ -8,6 +8,11 @@ import * as S from "./GuestCard.styles";
 
 type GuestCardHeaderIconType = "scrap" | "menu";
 
+type GuestCardHeaderType = {
+  iconType: GuestCardHeaderIconType;
+  onIconClick: () => void;
+};
+
 interface GuestCardProps {
   /** 방명록 작성자 이름 */
   author: string;
@@ -17,8 +22,8 @@ interface GuestCardProps {
   isNew: boolean;
   /** 방명록 사진 존재 여부 */
   isPhotoExist?: boolean;
-  /** 헤더 우측 아이콘 타입 */
-  iconType?: GuestCardHeaderIconType;
+  /** 헤더 우측 아이콘 및 인터랙션 타입 */
+  headerType: GuestCardHeaderType;
 }
 
 const renderHeaderIcon = (type: GuestCardHeaderIconType): React.ReactNode => {
@@ -43,15 +48,18 @@ const GuestCard = ({
   text,
   isNew,
   isPhotoExist,
-  iconType,
+  headerType,
 }: GuestCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const { iconType, onIconClick } = headerType;
 
   const frontFace = (
     <S.Front $isFlip={isNew}>
       <S.CardHeader>
         <span>{isPhotoExist && <IcPhoto />}</span>
-        <span>{iconType && renderHeaderIcon(iconType)}</span>
+        <button type="button" onClick={onIconClick}>
+          {iconType && renderHeaderIcon(iconType)}
+        </button>
       </S.CardHeader>
       <S.ContentArea>
         <S.Author>{author}</S.Author>
