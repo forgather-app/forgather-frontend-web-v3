@@ -160,6 +160,9 @@ export const IconButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  &:active{
+    transform: scale(0.85)
+  }
 `;
 
 export const DateText = styled.p`
