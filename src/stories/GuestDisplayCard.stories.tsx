@@ -19,8 +19,8 @@ const meta: Meta<typeof GuestDisplayCard> = {
         component:
           "방명록 상세 카드 컴포넌트입니다.\n\n" +
           "### displayType\n" +
-          "- **owner**: 자신의 방명록. 스크랩 토글(`isScrapped`, `toggleScrap`)과 메뉴(`onMenuClick`)가 필요합니다.\n" +
-          "- **visitor**: 타인의 방명록. 읽기 전용이며 추가 props를 받지 않습니다.\n\n" +
+          "- **owner**: 자신의 방명록. `interaction`으로 스크랩·메뉴 핸들러를 전달합니다.\n" +
+          "- **visitor**: 타인의 방명록. 읽기 전용이며 `interaction`을 받지 않습니다.\n\n" +
           "### isNew\n" +
           "- **true**: 로고·작성자·날짜가 보이는 teaser face로 시작합니다. 클릭하면 cardFlip 애니메이션 후 content face로 전환됩니다.\n" +
           "- **false**: content face를 바로 렌더링합니다.\n\n" +
@@ -34,7 +34,7 @@ const meta: Meta<typeof GuestDisplayCard> = {
       control: { type: "select" },
       options: ["owner", "visitor"],
       description:
-        "카드 뷰 타입. owner는 스크랩·메뉴 props가 필요하고, visitor는 읽기 전용입니다.",
+        "카드 뷰 타입. owner는 interaction이 필요하고, visitor는 읽기 전용입니다.",
       table: { type: { summary: '"owner" | "visitor"' } },
     },
     author: {
@@ -60,18 +60,17 @@ const meta: Meta<typeof GuestDisplayCard> = {
         "방명록 사진 URL 배열. 비어 있으면 사진 영역이 렌더링되지 않습니다.",
       table: { type: { summary: "string[]" } },
     },
-    isScrapped: {
-      control: { type: "boolean" },
-      description: "스크랩 여부. owner일 때만 유효합니다.",
-      table: { type: { summary: "boolean" }, category: "owner only" },
-    },
-    toggleScrap: {
-      description: "스크랩 토글 핸들러. owner일 때만 유효합니다.",
-      table: { type: { summary: "() => void" }, category: "owner only" },
-    },
-    onMenuClick: {
-      description: "메뉴 클릭 핸들러. owner일 때만 유효합니다.",
-      table: { type: { summary: "() => void" }, category: "owner only" },
+    interaction: {
+      control: false,
+      description:
+        "owner일 때만 유효. `{ isScrapped, toggleScrap, onMenuClick }`을 포함합니다. OwnerDefault / OwnerScrapped 스토리에서 확인하세요.",
+      table: {
+        type: {
+          summary:
+            "{ isScrapped: boolean; toggleScrap: () => void; onMenuClick: () => void }",
+        },
+        category: "owner only",
+      },
     },
   },
 };
@@ -80,10 +79,12 @@ export default meta;
 
 type Story = StoryObj<typeof GuestDisplayCard>;
 
-const commonArgs = {
+const COMMON = {
   author: "현주짱짱이",
   text: "그동안 고생 많았어! 작업 멋지다. 언제든 연락해 밥 한 번 살게~!",
   createdAt: new Date("2026-02-03T16:42:00"),
+  isNew: false as boolean,
+  photoSrcArray: undefined as string[] | undefined,
 };
 
 const SAMPLE_PHOTOS = [
@@ -94,29 +95,66 @@ const SAMPLE_PHOTOS = [
 
 // ─── Owner ──────────────────────────────────────────────────────────────────
 
-/** owner — 기본. 스크랩 토글과 메뉴 아이콘이 표시됩니다. */
+/** owner — 미스크랩 상태. 아이콘 클릭으로 스크랩 토글이 가능합니다. */
 export const OwnerDefault: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          "소유자 뷰 기본 상태. 스크랩 아이콘(토글 가능)과 메뉴 아이콘이 함께 표시됩니다.",
+          "소유자 뷰 기본 상태 (isScrapped: false). 스크랩 아이콘을 클릭하면 스크랩 상태로 전환됩니다.",
       },
     },
   },
-  render: (args) => {
+  render: ({ author, text, createdAt, isNew, photoSrcArray }) => {
     const [isScrapped, setIsScrapped] = useState(false);
     return (
       <GuestDisplayCard
-        {...args}
         displayType="owner"
-        isScrapped={isScrapped}
-        toggleScrap={() => setIsScrapped((prev) => !prev)}
-        onMenuClick={() => alert("메뉴 클릭")}
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew={isNew ?? false}
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
       />
     );
   },
-  args: { ...commonArgs, isNew: false },
+  args: COMMON,
+};
+
+/** owner — 스크랩된 상태. 스크랩 아이콘이 활성화된 초기 상태를 보여줍니다. */
+export const OwnerScrapped: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "소유자 뷰 스크랩 상태 (isScrapped: true). 스크랩 아이콘이 활성화된 채로 시작합니다.",
+      },
+    },
+  },
+  render: ({ author, text, createdAt, isNew, photoSrcArray }) => {
+    const [isScrapped, setIsScrapped] = useState(true);
+    return (
+      <GuestDisplayCard
+        displayType="owner"
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew={isNew ?? false}
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
+      />
+    );
+  },
+  args: COMMON,
 };
 
 /** owner — 새 방명록. teaser face에서 시작해 클릭 시 flip됩니다. */
@@ -129,19 +167,25 @@ export const OwnerNew: Story = {
       },
     },
   },
-  render: (args) => {
+  render: ({ author, text, createdAt, photoSrcArray }) => {
     const [isScrapped, setIsScrapped] = useState(false);
     return (
       <GuestDisplayCard
-        {...args}
         displayType="owner"
-        isScrapped={isScrapped}
-        toggleScrap={() => setIsScrapped((prev) => !prev)}
-        onMenuClick={() => alert("메뉴 클릭")}
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
       />
     );
   },
-  args: { ...commonArgs, isNew: true },
+  args: COMMON,
 };
 
 /** owner — 사진 1장. 대표 사진이 카드 상단에 표시됩니다. */
@@ -154,19 +198,25 @@ export const OwnerWithSinglePhoto: Story = {
       },
     },
   },
-  render: (args) => {
+  render: ({ author, text, createdAt, isNew, photoSrcArray }) => {
     const [isScrapped, setIsScrapped] = useState(false);
     return (
       <GuestDisplayCard
-        {...args}
         displayType="owner"
-        isScrapped={isScrapped}
-        toggleScrap={() => setIsScrapped((prev) => !prev)}
-        onMenuClick={() => alert("메뉴 클릭")}
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew={isNew ?? false}
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
       />
     );
   },
-  args: { ...commonArgs, isNew: false, photoSrcArray: [SAMPLE_PHOTOS[0]] },
+  args: { ...COMMON, photoSrcArray: [SAMPLE_PHOTOS[0]] },
 };
 
 /** owner — 사진 3장. 대표 사진과 `+2 장` 배지가 함께 표시됩니다. */
@@ -179,19 +229,25 @@ export const OwnerWithMultiplePhotos: Story = {
       },
     },
   },
-  render: (args) => {
+  render: ({ author, text, createdAt, isNew, photoSrcArray }) => {
     const [isScrapped, setIsScrapped] = useState(false);
     return (
       <GuestDisplayCard
-        {...args}
         displayType="owner"
-        isScrapped={isScrapped}
-        toggleScrap={() => setIsScrapped((prev) => !prev)}
-        onMenuClick={() => alert("메뉴 클릭")}
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew={isNew ?? false}
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
       />
     );
   },
-  args: { ...commonArgs, isNew: false, photoSrcArray: SAMPLE_PHOTOS },
+  args: { ...COMMON, photoSrcArray: SAMPLE_PHOTOS },
 };
 
 // ─── Visitor ─────────────────────────────────────────────────────────────────
@@ -206,7 +262,7 @@ export const VisitorDefault: Story = {
       },
     },
   },
-  args: { ...commonArgs, displayType: "visitor", isNew: false },
+  args: { ...COMMON, displayType: "visitor" },
 };
 
 /** visitor — 새 방명록. teaser face에서 시작해 클릭 시 읽기 전용 content face로 전환됩니다. */
@@ -219,7 +275,7 @@ export const VisitorNew: Story = {
       },
     },
   },
-  args: { ...commonArgs, displayType: "visitor", isNew: true },
+  args: { ...COMMON, displayType: "visitor", isNew: true },
 };
 
 /** visitor — 사진 3장. 읽기 전용으로 사진이 표시됩니다. */
@@ -232,12 +288,7 @@ export const VisitorWithPhotos: Story = {
       },
     },
   },
-  args: {
-    ...commonArgs,
-    displayType: "visitor",
-    isNew: false,
-    photoSrcArray: SAMPLE_PHOTOS,
-  },
+  args: { ...COMMON, displayType: "visitor", photoSrcArray: SAMPLE_PHOTOS },
 };
 
 // ─── Edge case ───────────────────────────────────────────────────────────────
@@ -252,50 +303,60 @@ export const OwnerLongText: Story = {
       },
     },
   },
-  render: (args) => {
+  render: ({ author, text, createdAt, isNew, photoSrcArray }) => {
     const [isScrapped, setIsScrapped] = useState(false);
     return (
       <GuestDisplayCard
-        {...args}
         displayType="owner"
-        isScrapped={isScrapped}
-        toggleScrap={() => setIsScrapped((prev) => !prev)}
-        onMenuClick={() => alert("메뉴 클릭")}
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew={isNew ?? false}
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
       />
     );
   },
   args: {
-    ...commonArgs,
-    isNew: false,
-    text: "그동안 정말 고생 많았어! 4년 동안 이 작업을 꾸준히 해온 게 정말 대단해. 졸업 전시를 보면서 너의 성장을 느낄 수 있었고, 작품 하나하나에 담긴 열정과 노력이 고스란히 느껴졌어. 언제나 응원하고 있을게. 앞으로도 좋은 작품 많이 만들어줘! 밥 한 번 꼭 먹자~ 연락해! 그동안 정말 고생 많았어! 4년 동안 이 작업을 꾸준히 해온 게 정말 대단해. 졸업 전시를 보면서 너의 성장을 느낄 수 있었고, 작품 하나하나에 담긴 열정과 노력이 고스란히 느껴졌어. 언제나 응원하고 있을게. 앞으로도 좋은 작품 많이 만들어줘! 밥 한 번 꼭 먹자~ 연락해!",
+    ...COMMON,
+    text: "그동안 정말 고생 많았어! 4년 동안 이 작업을 꾸준히 해온 게 정말 대단해. 졸업 전시를 보면서 너의 성장을 느낄 수 있었고, 작품 하나하나에 담긴 열정과 노력이 고스란히 느껴졌어. 언제나 응원하고 있을게. 앞으로도 좋은 작품 많이 만들어줘! 밥 한 번 꼭 먹자~ 연락해! 그동안 정말 고생 많았어! 4년 동안 이 작업을 꾸준히 해온 게 정말 대단해.",
   },
 };
 
-/** 사용자명이 길어 max-height 286px 클리핑이 적용되는 케이스 */
+/** 작성자 이름이 길어 text-overflow 처리되는 케이스 */
 export const OwnerLongAuthorName: Story = {
   parameters: {
     docs: {
       description: {
-        story: "사용자 이름이 아주 긴 경우(width 이상)텍스트가 클리핑됩니다.",
+        story:
+          "작성자 이름이 카드 너비를 초과하는 경우. text-overflow: ellipsis로 클리핑됩니다.",
       },
     },
   },
-  render: (args) => {
+  render: ({ author, text, createdAt, isNew, photoSrcArray }) => {
     const [isScrapped, setIsScrapped] = useState(false);
     return (
       <GuestDisplayCard
-        {...args}
         displayType="owner"
-        isScrapped={isScrapped}
-        toggleScrap={() => setIsScrapped((prev) => !prev)}
-        onMenuClick={() => alert("메뉴 클릭")}
+        author={author ?? COMMON.author}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew={isNew ?? false}
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
       />
     );
   },
   args: {
-    ...commonArgs,
+    ...COMMON,
     author: "너무너무너무너무너무너무너무긴이름",
-    isNew: false,
-    text: "그동안 정말 고생 많았어! 4년 동안 이 작업을 꾸준히 해온 게 정말 대단해. 졸업 전시를 보면서 너의 성장을 느낄 수 있었고, 작품 하나하나에 담긴 열정과 노력이 고스란히 느껴졌어. ",
   },
 };
