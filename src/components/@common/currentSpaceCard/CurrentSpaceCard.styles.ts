@@ -1,16 +1,5 @@
 import styled from "@emotion/styled";
 
-const iconBase = `
-  font-size: 16px;
-  inline-size: 1em;
-  block-size: 1em;
-  flex-shrink: 0;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-`;
-
 export const Wrapper = styled.article`
   display: flex;
   flex-direction: column;
@@ -69,10 +58,6 @@ export const LinkedExhibitionButton = styled.button`
   color: ${({ theme }) => theme.colors.gray.gray50};
 `;
 
-export const LinkIcon = styled.svg`
-  ${iconBase}
-`;
-
 export const LinkedExhibitionName = styled.span`
   ${({ theme }) => ({ ...theme.typography.caption })};
   overflow: hidden;
@@ -119,14 +104,6 @@ export const MetaItem = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-`;
-
-export const LocationIcon = styled.svg`
-  ${iconBase}
-`;
-
-export const CalendarIcon = styled.svg`
-  ${iconBase}
 `;
 
 export const ActionGroup = styled.nav`
