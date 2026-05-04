@@ -1,7 +1,9 @@
 import IcCalender from "@/assets/icons/ic_calendar.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcLocation from "@/assets/icons/ic_location.svg?react";
+import { CURRENT_SPACE_FALLBACK_IMAGE } from "@/constants/routes";
 import { theme } from "@/styles/theme";
+import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./CurrentSpaceCard.styles";
 
 interface ExhibitionDateType {
@@ -20,7 +22,7 @@ interface CurrentSpaceCardProps {
   /** 공간 이름 */
   spaceName: string;
   /** 공간 썸네일 이미지 URL */
-  thumbnailSrc?: string;
+  thumbnailUrl?: string;
   /** 연결된 전시 정보 */
   linkedExhibition?: ExhibitionInfoType;
   /** 카드 전체 클릭 핸들러 */
@@ -52,7 +54,7 @@ const stopCardClick = (event: React.MouseEvent<HTMLElement>) => {
 
 const CurrentSpaceCard = ({
   spaceName,
-  thumbnailSrc,
+  thumbnailUrl,
   linkedExhibition,
   onCardClick,
   onLinkedExhibitionClick,
@@ -89,11 +91,11 @@ const CurrentSpaceCard = ({
           }
         }}
       >
-        {thumbnailSrc ? (
-          <S.Thumbnail src={thumbnailSrc} alt={`${spaceName} 썸네일`} />
-        ) : (
-          <S.ThumbnailFallback aria-hidden />
-        )}
+        <S.Thumbnail
+          src={thumbnailUrl || CURRENT_SPACE_FALLBACK_IMAGE}
+          alt={`${spaceName} 썸네일`}
+          onError={(e) => handleImageError(e, CURRENT_SPACE_FALLBACK_IMAGE)}
+        />
         <S.GradientOverlay aria-hidden />
 
         {linkedExhibition && (

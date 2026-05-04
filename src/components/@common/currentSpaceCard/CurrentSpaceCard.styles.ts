@@ -22,7 +22,6 @@ export const Card = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 100%;
   height: 246px;
   padding: 16px;
@@ -38,12 +37,6 @@ export const Thumbnail = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`;
-
-export const ThumbnailFallback = styled.div`
-  position: absolute;
-  inset: 0;
-  background: ${({ theme }) => theme.colors.gradient.grayFill};
 `;
 
 export const GradientOverlay = styled.div`
@@ -93,6 +86,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-top: auto;
   width: 100%;
 `;
 

@@ -38,7 +38,7 @@ const meta: Meta<typeof CurrentSpaceCard> = {
       description: "공간 이름",
       table: { type: { summary: "string" } },
     },
-    thumbnailSrc: {
+    thumbnailUrl: {
       description:
         "공간 썸네일 이미지 URL. 없으면 기본 다크 배경이 표시됩니다.",
       table: { type: { summary: "string" } },
@@ -92,7 +92,7 @@ export const Default: Story = {
   },
   args: {
     spaceName: "포게더 : 작가와 방문객이 연결되는 곳",
-    thumbnailSrc: SAMPLE_THUMBNAIL,
+    thumbnailUrl: SAMPLE_THUMBNAIL,
     linkedExhibition: LINKED_EXHIBITION,
     onCardClick: () => console.log("CurrentSpaceCard: card clicked"),
     onLinkedExhibitionClick: (exhibition) =>
@@ -154,6 +154,6 @@ export const WithoutThumbnail: Story = {
   },
   args: {
     ...Default.args,
-    thumbnailSrc: undefined,
+    thumbnailUrl: undefined,
   },
 };
