@@ -193,9 +193,12 @@ fill-ing/
 │   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
 │   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
+│   │   └── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
+│   ├── constants/       # 앱 전역 상수
+│   │   └── routes.ts    # URL 및 경로 상수
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
 │   │       └── components/  # 메인 페이지 전용 컴포넌트
@@ -205,7 +208,8 @@ fill-ing/
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
-│   ├── utils/           # 유틸리티 함수
+│   ├── types/           # 전역 타입 선언
+│   ├── utils/           # 공통 유틸리티 함수
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정

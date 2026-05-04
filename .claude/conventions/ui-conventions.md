@@ -218,7 +218,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import Component from "../components/path/Component";
 
 const meta: Meta<typeof Component> = {
-  title: "Component/ComponentName",
+  title: "UI/ComponentName",
   component: Component,
   parameters: {
     docs: {
