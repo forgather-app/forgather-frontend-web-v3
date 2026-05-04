@@ -138,6 +138,13 @@ export const ActionGroup = styled.nav`
   background-color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
+export const ActionItem = styled.div`
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  min-width: 0;
+`;
+
 export const ActionButton = styled.button`
   ${({ theme }) => ({ ...theme.typography.label })};
   display: flex;

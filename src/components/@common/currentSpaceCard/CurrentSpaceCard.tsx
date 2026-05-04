@@ -3,69 +3,99 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcLocation from "@/assets/icons/ic_location.svg?react";
 import { CURRENT_SPACE_FALLBACK_IMAGE } from "@/constants/routes";
 import { theme } from "@/styles/theme";
+import { formatExhibitionPeriod } from "@/utils/date";
 import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./CurrentSpaceCard.styles";
 
 interface ExhibitionDateType {
+  /** 전시 시작일 */
   startDate: Date;
+  /** 전시 종료일 */
   endDate: Date;
 }
 
 interface ExhibitionInfoType {
+  /** 전시명 */
   name: string;
+  /** 전시 상세 페이지 URL */
   url: string;
+  /** 전시 기간 */
   period: ExhibitionDateType;
+  /** 전시 장소 */
   location: string;
 }
 
-interface CurrentSpaceCardProps {
+interface CurrentSpaceCardCommonProps {
   /** 공간 이름 */
   spaceName: string;
   /** 공간 썸네일 이미지 URL */
   thumbnailUrl?: string;
-  /** 연결된 전시 정보 */
-  linkedExhibition?: ExhibitionInfoType;
   /** 카드 전체 클릭 핸들러 */
   onCardClick?: () => void;
-  /** 상단 연결 전시 칩 클릭 핸들러 */
-  onLinkedExhibitionClick?: (exhibition: ExhibitionInfoType) => void;
   /** 방명록 버튼 클릭 핸들러 */
   onGuestBookClick?: () => void;
   /** 작품 관리 버튼 클릭 핸들러 */
   onArtworkManageClick?: () => void;
+}
+
+interface CurrentSpaceCardWithExhibitionProps
+  extends CurrentSpaceCardCommonProps {
+  /** 연결된 전시 정보 */
+  linkedExhibition: ExhibitionInfoType;
+  /** 상단 연결 전시 칩 클릭 핸들러 */
+  onLinkedExhibitionClick?: (exhibition: ExhibitionInfoType) => void;
   /** 전시 관리 버튼 클릭 핸들러 */
   onExhibitionManageClick?: () => void;
 }
 
-const formatShortDate = (date: Date) => {
-  const year = String(date.getFullYear()).slice(-2);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
+interface CurrentSpaceCardWithoutExhibitionProps
+  extends CurrentSpaceCardCommonProps {
+  /** 연결된 전시가 없는 상태 */
+  linkedExhibition?: undefined;
+}
 
-  return `${year}.${month}.${day}`;
-};
-
-const formatPeriod = ({ startDate, endDate }: ExhibitionDateType) =>
-  `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
+type CurrentSpaceCardProps =
+  | CurrentSpaceCardWithExhibitionProps
+  | CurrentSpaceCardWithoutExhibitionProps;
 
 const stopCardClick = (event: React.MouseEvent<HTMLElement>) => {
   event.stopPropagation();
 };
 
-const CurrentSpaceCard = ({
-  spaceName,
-  thumbnailUrl,
-  linkedExhibition,
-  onCardClick,
-  onLinkedExhibitionClick,
-  onGuestBookClick,
-  onArtworkManageClick,
-  onExhibitionManageClick,
-}: CurrentSpaceCardProps) => {
+const CurrentSpaceCard = (props: CurrentSpaceCardProps) => {
+  const {
+    spaceName,
+    thumbnailUrl,
+    linkedExhibition,
+    onCardClick,
+    onGuestBookClick,
+    onArtworkManageClick,
+  } = props;
   const periodText = linkedExhibition
-    ? formatPeriod(linkedExhibition.period)
+    ? formatExhibitionPeriod(
+        linkedExhibition.period.startDate,
+        linkedExhibition.period.endDate,
+      )
     : undefined;
   const locationText = linkedExhibition?.location;
+  const actions = [
+    {
+      label: "방명록",
+      onClick: onGuestBookClick,
+    },
+    {
+      label: "작품 관리",
+      onClick: onArtworkManageClick,
+    },
+    ...(linkedExhibition
+      ? [
+          {
+            label: "전시 관리",
+            onClick: props.onExhibitionManageClick,
+          },
+        ]
+      : []),
+  ];
 
   const handleLinkedExhibitionClick = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -73,7 +103,7 @@ const CurrentSpaceCard = ({
     stopCardClick(event);
 
     if (linkedExhibition) {
-      onLinkedExhibitionClick?.(linkedExhibition);
+      props.onLinkedExhibitionClick?.(linkedExhibition);
     }
   };
 
@@ -137,39 +167,23 @@ const CurrentSpaceCard = ({
       </S.Card>
 
       <S.ActionGroup aria-label={`${spaceName} 관리 메뉴`}>
-        <S.ActionButton
-          type="button"
-          onClick={(event) => {
-            stopCardClick(event);
-            onGuestBookClick?.();
-          }}
-        >
-          방명록
-        </S.ActionButton>
-        <S.Divider aria-hidden />
-        <S.ActionButton
-          type="button"
-          onClick={(event) => {
-            stopCardClick(event);
-            onArtworkManageClick?.();
-          }}
-        >
-          작품 관리
-        </S.ActionButton>
-        <S.Divider aria-hidden />
-        <S.ActionButton
-          type="button"
-          onClick={(event) => {
-            stopCardClick(event);
-            onExhibitionManageClick?.();
-          }}
-        >
-          전시 관리
-        </S.ActionButton>
+        {actions.map(({ label, onClick }, index) => (
+          <S.ActionItem key={label}>
+            {index > 0 && <S.Divider aria-hidden />}
+            <S.ActionButton
+              type="button"
+              onClick={(event) => {
+                stopCardClick(event);
+                onClick?.();
+              }}
+            >
+              {label}
+            </S.ActionButton>
+          </S.ActionItem>
+        ))}
       </S.ActionGroup>
     </S.Wrapper>
   );
 };
 
 export default CurrentSpaceCard;
-export type { CurrentSpaceCardProps, ExhibitionDateType, ExhibitionInfoType };

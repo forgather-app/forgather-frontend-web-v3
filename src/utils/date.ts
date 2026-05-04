@@ -13,3 +13,11 @@ export const formatGuestDisplayDate = (date: Date): string => {
   const { year, month, day, weekday, hours, minutes } = parseDateParts(date);
   return `${year}. ${month}. ${day} (${weekday})  |  ${hours}:${minutes}`;
 };
+
+export const formatShortDate = (date: Date): string => {
+  const { year, month, day } = parseDateParts(date);
+  return `${String(year).slice(-2)}.${Number(month)}.${Number(day)}`;
+};
+
+export const formatExhibitionPeriod = (startDate: Date, endDate: Date): string =>
+  `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
