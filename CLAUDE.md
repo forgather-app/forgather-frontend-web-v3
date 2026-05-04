@@ -28,6 +28,7 @@
 ### 개발 도구
 
 - **Biome**: 린터 및 포맷터 (ESLint + Prettier 대체)
+- **vite-plugin-svgr**: SVG 파일을 React 컴포넌트로 변환 (`?react` 쿼리 사용)
 - **Storybook 10.x**: 컴포넌트 문서화 및 개발 환경
   - `@storybook/addon-a11y`: 접근성 테스트
   - `@storybook/addon-docs`: 문서화
@@ -60,6 +61,7 @@
 > 상세 규칙은 `.claude/conventions/ui-conventions.md`를 참조합니다.
 
 - 구현 파일(`Component.tsx`)과 스타일 파일(`Component.styles.ts`) 분리
+- 상수·타입이 많을 경우 `Component.constants.ts`로 분리
 - Props는 `interface ComponentNameProps`로 정의, JSDoc 주석 필수
 - 컴포넌트는 `export default`, 유틸리티/타입은 named export
 - 모든 색상·타이포그래피는 `theme` 토큰 사용 (하드코딩 금지)
@@ -200,7 +202,7 @@ fill-ing/
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
 │   │       └── components/  # 메인 페이지 전용 컴포넌트
-│   ├── stories/         # Storybook 스토리 파일
+│   ├── stories/         # Storybook 스토리 파일 (컴포넌트별 *.stories.tsx)
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
@@ -289,8 +291,8 @@ npm run test         # 테스트 실행
 ### 새 컴포넌트 추가
 
 1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
-2. `Component.tsx`, `Component.styles.ts` 파일 생성
-3. 컴포넌트 폴더 내에 `Component.stories.tsx` 생성 (예: `src/components/ui/Button/Button.stories.tsx`)
+2. `Component.tsx`, `Component.styles.ts` 파일 생성 (상수가 많으면 `Component.constants.ts`도 함께 생성)
+3. `src/stories/ComponentName.stories.tsx` 생성 (예: `src/stories/Button.stories.tsx`)
 4. Storybook에서 컴포넌트 확인 및 개발
 5. 접근성 검사 (a11y addon 활용)
 
