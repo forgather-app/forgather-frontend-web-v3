@@ -6,6 +6,12 @@ import { theme } from "@/styles/theme";
 import { formatGuestDisplayDate } from "@/utils/date";
 import * as S from "./GuestDisplayCard.styles";
 
+interface InteractionHeaderType {
+  isScrapped: boolean;
+  toggleScrap: () => void;
+  onMenuClick: () => void;
+}
+
 interface CommonDisplayCardProps {
   /** 방명록 작성자 이름 */
   author: string;
@@ -22,9 +28,7 @@ interface CommonDisplayCardProps {
 interface OwnerDisplayCardProps extends CommonDisplayCardProps {
   /** 유저 자신의 방명록일 경우 */
   displayType: "owner";
-  isScrapped: boolean;
-  toggleScrap: () => void;
-  onMenuClick: () => void;
+  interaction: InteractionHeaderType;
 }
 
 interface VisitorDisplayCardProps extends CommonDisplayCardProps {
@@ -33,14 +37,33 @@ interface VisitorDisplayCardProps extends CommonDisplayCardProps {
 
 type GuestDisplayCardProps = OwnerDisplayCardProps | VisitorDisplayCardProps;
 
-const GuestDisplayCard = ({
-  author,
-  text,
-  createdAt,
-  displayType,
-  isNew,
-  photoSrcArray,
-}: GuestDisplayCardProps) => {
+const renderInteractionHeader = (interactionType: InteractionHeaderType) => {
+  const { isScrapped, toggleScrap, onMenuClick } = interactionType;
+
+  return (
+    <S.IconGroup>
+      <S.IconButton type="button" aria-label="스크랩" onClick={toggleScrap}>
+        <IcScrap
+          width={24}
+          height={24}
+          color={
+            isScrapped ? theme.colors.main.purple : theme.colors.gray.gray500
+          }
+        />
+      </S.IconButton>
+      <S.IconButton type="button" aria-label="메뉴" onClick={onMenuClick}>
+        <IcVerticalDots
+          width={20}
+          height={20}
+          color={theme.colors.gray.gray400}
+        />
+      </S.IconButton>
+    </S.IconGroup>
+  );
+};
+
+const GuestDisplayCard = (props: GuestDisplayCardProps) => {
+  const { author, text, createdAt, displayType, isNew, photoSrcArray } = props;
   const [isFlipped, setIsFlipped] = useState(false);
   const formattedDate = formatGuestDisplayDate(createdAt);
 
@@ -64,24 +87,8 @@ const GuestDisplayCard = ({
         <S.MetaSection>
           <S.HeaderRow>
             <S.AuthorName>{author}</S.AuthorName>
-            {displayType === "owner" && (
-              <S.IconGroup>
-                <S.IconButton type="button" aria-label="스크랩">
-                  <IcScrap
-                    width={24}
-                    height={24}
-                    color={theme.colors.gray.gray500}
-                  />
-                </S.IconButton>
-                <S.IconButton type="button" aria-label="메뉴">
-                  <IcVerticalDots
-                    width={20}
-                    height={20}
-                    color={theme.colors.gray.gray400}
-                  />
-                </S.IconButton>
-              </S.IconGroup>
-            )}
+            {displayType === "owner" &&
+              renderInteractionHeader(props.interaction)}
           </S.HeaderRow>
           <S.DateText>{formattedDate}</S.DateText>
         </S.MetaSection>
