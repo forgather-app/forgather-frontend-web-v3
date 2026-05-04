@@ -67,11 +67,17 @@ export const AuthorSection = styled.div`
 export const AuthorRow = styled.div`
   display: flex;
   align-items: baseline;
+  justify-content: center;
 `;
 
 export const TeaserAuthor = styled.span`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.gray50};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  max-width: 60%;
 `;
 
 export const TeaserSuffix = styled.span`

@@ -188,6 +188,37 @@ export const OwnerNew: Story = {
   args: COMMON,
 };
 
+/** owner — 새 방명록. teaser face에서 시작해 클릭 시 flip됩니다. */
+export const OwnerNewLongName: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "소유자 뷰이고 isNew: true인 상태. Author의 이름이 길 경우 표시되는 UI",
+      },
+    },
+  },
+  render: ({ text, createdAt, photoSrcArray }) => {
+    const [isScrapped, setIsScrapped] = useState(false);
+    return (
+      <GuestDisplayCard
+        displayType="owner"
+        author={`${COMMON.author}asdfasdfasdfasdfasdfasd`}
+        text={text ?? COMMON.text}
+        createdAt={createdAt ?? COMMON.createdAt}
+        isNew
+        photoSrcArray={photoSrcArray}
+        interaction={{
+          isScrapped,
+          toggleScrap: () => setIsScrapped((prev) => !prev),
+          onMenuClick: () => alert("메뉴 클릭"),
+        }}
+      />
+    );
+  },
+  args: COMMON,
+};
+
 /** owner — 사진 1장. 대표 사진이 카드 상단에 표시됩니다. */
 export const OwnerWithSinglePhoto: Story = {
   parameters: {
