@@ -8,6 +8,7 @@ const chipVariants: Record<ChipVariant, (theme: Theme) => string> = {
   inactive: (theme) => theme.colors.gray.gray500,
   dimmed: (theme) => theme.colors.gray.gray400,
   alert: (theme) => theme.colors.gray.gray700,
+  counter: (theme) => theme.colors.gray.gray600,
 };
 
 export const Chip = styled("div", { shouldForwardProp })<{
