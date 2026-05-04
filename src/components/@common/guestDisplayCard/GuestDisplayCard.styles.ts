@@ -91,13 +91,15 @@ export const ContentFace = styled("div", { shouldForwardProp })<{
     `}
   display: flex;
   flex-direction: column;
+  gap: 24px;
+  padding: 24px 24px 28px;
   overflow: hidden;
 `;
 
 export const PhotoArea = styled.div`
   position: relative;
   height: 140px;
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px;
   overflow: hidden;
   flex-shrink: 0;
 `;
@@ -126,7 +128,6 @@ export const ContentBody = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 24px 24px 28px;
 `;
 
 export const MetaSection = styled.div`
