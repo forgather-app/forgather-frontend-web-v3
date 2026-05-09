@@ -5,13 +5,16 @@ import { Backdrop } from "../../../styles/@common/Overlay/Backdrop.styles";
 import * as S from "./BottomSheet.styles";
 
 interface BottomSheetProps {
+  /** 바텀시트 열림 여부. true일 때 마운트되어야 합니다 (`{isOpen && <BottomSheet />}` 패턴 사용). */
   isOpen: boolean;
+  /** 닫힘 애니메이션이 끝난 후 호출되는 콜백. 부모에서 isOpen을 false로 전환해 언마운트합니다. */
   onClose: () => void;
+  /** 바텀시트 내부에 렌더링할 콘텐츠 */
   children: ReactNode;
 }
 
 const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
-  const { isVisible, toggleIsVisible, alertAnimationEnd } = useDisclosure({
+  const { isVisible, hideSheet, alertAnimationEnd } = useDisclosure({
     isOpen,
     onClose,
   });
@@ -31,7 +34,6 @@ const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
   const startX = useRef(0);
   const startY = useRef(0);
   const sheetRef = useRef<HTMLDivElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const isDragging = useRef(false);
 
@@ -41,31 +43,23 @@ const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
     sheetRef.current.style.transition = "transform 0.2s ease";
     sheetRef.current.style.transform = "translateY(100%)";
 
-    toggleIsVisible();
+    hideSheet();
   };
 
   const handleMouseDown = (e: React.PointerEvent) => {
-    if (contentRef.current && contentRef.current.scrollTop > 0) return;
-
     isDragging.current = true;
     startX.current = e.clientX;
     startY.current = e.clientY;
-
-    // NOTE: 클릭된 요소가 버튼이나 input 등 상호작용 요소라면 드래그 무시
-    const target = e.target as HTMLElement;
-    if (target.closest("button, input, textarea")) return;
 
     e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const handleMouseMove = (e: React.PointerEvent) => {
     if (!sheetRef.current) return;
-    if (!contentRef.current) return;
     if (!isDragging.current) return;
 
     const currentY = e.clientY;
     const deltaY = currentY - startY.current;
-    if (deltaY <= 0 || contentRef.current.scrollTop > 0) return;
     // NOTE: 윗방향으로는 드래그 불가
     // 추후 윗방향 드래그가  필요하다면, 높이 측정 후 해당 높이 이상으로 움직이지 못하도록 변경해야 함
     if (deltaY < 0) return;
@@ -79,7 +73,6 @@ const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
   const handleMouseUp = (e: React.PointerEvent) => {
     if (!sheetRef.current) return;
     if (!isDragging.current) return;
-    if (!contentRef.current) return;
 
     isDragging.current = false;
 
@@ -90,11 +83,17 @@ const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
 
     if (
       Math.abs(deltaY) >= CONSTRAINTS.BOTTOM_SHEET_CLOSE_THRESHOLD &&
-      deltaY < 0 &&
-      contentRef.current.scrollTop <= 1
+      deltaY < 0
     ) {
       closeBottomSheet();
     } else {
+      sheetRef.current.style.transform = "translateY(0)";
+    }
+  };
+
+  const handlePointerCancel = () => {
+    isDragging.current = false;
+    if (sheetRef.current) {
       sheetRef.current.style.transform = "translateY(0)";
     }
   };
@@ -106,12 +105,16 @@ const BottomSheet = ({ isOpen, onClose, children }: BottomSheetProps) => {
         ref={sheetRef}
         $isVisible={isVisible}
         onTransitionEnd={alertAnimationEnd}
+        role="dialog"
+        aria-modal={true}
+        aria-label="바텀시트"
       >
-        <S.Container ref={contentRef}>
+        <S.Container>
           <S.GrabAbleArea
             onPointerDown={handleMouseDown}
             onPointerMove={handleMouseMove}
             onPointerUp={handleMouseUp}
+            onPointerCancel={handlePointerCancel}
           >
             <S.GrabBar />
           </S.GrabAbleArea>
