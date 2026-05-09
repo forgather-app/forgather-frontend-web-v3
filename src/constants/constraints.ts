@@ -1,0 +1,3 @@
+export const CONSTRAINTS = {
+  BOTTOM_SHEET_CLOSE_THRESHOLD: 20,
+};
