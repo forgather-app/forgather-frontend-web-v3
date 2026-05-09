@@ -23,9 +23,9 @@ const meta: Meta<typeof Button> = {
       control: { type: "boolean" },
       description: "비활성화 여부 (Figma `inactive` 상태)",
     },
-    children: {
+    text: {
       control: { type: "text" },
-      description: "버튼 라벨",
+      description: "버튼 텍스트",
     },
   },
   decorators: [
@@ -44,7 +44,7 @@ type Story = StoryObj<typeof Button>;
 export const Primary: Story = {
   args: {
     variant: "primary",
-    children: "BUTTON",
+    text: "BUTTON",
   },
 };
 
@@ -52,14 +52,14 @@ export const PrimaryDisabled: Story = {
   args: {
     variant: "primary",
     disabled: true,
-    children: "BUTTON",
+    text: "BUTTON",
   },
 };
 
 export const Secondary: Story = {
   args: {
     variant: "secondary",
-    children: "BUTTON",
+    text: "BUTTON",
   },
 };
 
@@ -67,14 +67,14 @@ export const SecondaryDisabled: Story = {
   args: {
     variant: "secondary",
     disabled: true,
-    children: "BUTTON",
+    text: "BUTTON",
   },
 };
 
 export const Tertiary: Story = {
   args: {
     variant: "tertiary",
-    children: "BUTTON",
+    text: "BUTTON",
   },
 };
 
@@ -82,6 +82,6 @@ export const TertiaryDisabled: Story = {
   args: {
     variant: "tertiary",
     disabled: true,
-    children: "BUTTON",
+    text: "BUTTON",
   },
 };

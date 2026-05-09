@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes } from "react";
 import type { ButtonVariant } from "./Button.styles";
 import * as S from "./Button.styles";
 
@@ -11,19 +11,19 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * - `tertiary`: 부가 액션 (흰색 배경)
    */
   variant?: ButtonVariant;
-  /** 버튼 라벨 또는 자식 노드 */
-  children: ReactNode;
+  /** 버튼 텍스트 */
+  text: string;
 }
 
 const Button = ({
   variant = "primary",
   type = "button",
-  children,
+  text,
   ...rest
 }: ButtonProps) => {
   return (
     <S.Button $variant={variant} type={type} {...rest}>
-      {children}
+      {text}
     </S.Button>
   );
 };
