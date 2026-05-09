@@ -9,6 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * - `primary`: 주요 액션 (보라색 배경)
    * - `secondary`: 보조 액션 (연보라 배경)
    * - `tertiary`: 부가 액션 (흰색 배경)
+   * - `underlined`: 텍스트 링크형 액션 (배경 없음, 밑줄)
    */
   variant?: ButtonVariant;
   /** 버튼 텍스트 */

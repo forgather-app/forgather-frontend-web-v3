@@ -9,14 +9,14 @@ const meta: Meta<typeof Button> = {
     docs: {
       description: {
         component:
-          "기본 버튼 컴포넌트입니다.\n\n3가지 변형(`primary`, `secondary`, `tertiary`)을 지원하며, `disabled` 속성으로 비활성 상태를 표현합니다.",
+          "기본 버튼 컴포넌트입니다.\n\n4가지 변형(`primary`, `secondary`, `tertiary`, `underlined`)을 지원하며, `disabled` 속성으로 비활성 상태를 표현합니다.",
       },
     },
   },
   argTypes: {
     variant: {
       control: { type: "radio" },
-      options: ["primary", "secondary", "tertiary"],
+      options: ["primary", "secondary", "tertiary", "underlined"],
       description: "버튼 시각 변형",
     },
     disabled: {
@@ -82,6 +82,13 @@ export const TertiaryDisabled: Story = {
   args: {
     variant: "tertiary",
     disabled: true,
+    text: "BUTTON",
+  },
+};
+
+export const Underlined: Story = {
+  args: {
+    variant: "underlined",
     text: "BUTTON",
   },
 };

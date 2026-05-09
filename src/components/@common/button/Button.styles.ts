@@ -1,7 +1,7 @@
 import { css, type Theme } from "@emotion/react";
 import styled from "@emotion/styled";
 
-export type ButtonVariant = "primary" | "secondary" | "tertiary";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "underlined";
 
 const getVariantStyle = (theme: Theme, variant: ButtonVariant) => {
   switch (variant) {
@@ -57,6 +57,24 @@ const getVariantStyle = (theme: Theme, variant: ButtonVariant) => {
         &:disabled {
           background-color: ${theme.colors.gray.gray400};
           color: ${theme.colors.gray.gray300};
+        }
+      `;
+    case "underlined":
+      return css`
+        padding: 0;
+        width: auto;
+        background-color: transparent;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        font-weight: ${theme.typography.label.fontWeight};
+        font-size: ${theme.typography.label.fontSize};
+        line-height: ${theme.typography.label.lineHeight};
+        letter-spacing: ${theme.typography.label.letterSpacing};
+        color: ${theme.colors.gray.gray200};
+        transition: none;
+
+        &:focus-visible {
+          border-radius: 2px;
         }
       `;
   }
