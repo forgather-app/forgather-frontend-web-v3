@@ -214,12 +214,21 @@ UI 컴포넌트(`src/components/ui/`, `src/components/@common/`)는 반드시 St
 
 ```typescript
 // src/stories/ComponentName.stories.tsx
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import Component from "../components/path/Component";
 
 const meta: Meta<typeof Component> = {
-  title: "Component/ComponentName",
+  title: "UI/ComponentName",
   component: Component,
+<<<<<<< feature/#31-tabbar
+  tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        // ✅ 필수: 컴포넌트 역할, variant 용도, 인터랙션 동작 기술
+        component: "컴포넌트 설명을 여기에 작성합니다.",
+=======
   parameters: {
     docs: {
       description: {
@@ -232,6 +241,7 @@ const meta: Meta<typeof Component> = {
       description: "prop 역할 설명",
       table: {
         type: { summary: "타입" },
+>>>>>>> feature/#24-component-exhibition-list
       },
     },
   },
@@ -241,6 +251,22 @@ export default meta;
 
 type Story = StoryObj<typeof Component>;
 
+<<<<<<< feature/#31-tabbar
+// controlled 컴포넌트는 render 함수 + useState로 인터랙티브 Story 작성
+export const Interactive: Story = {
+  parameters: {
+    docs: {
+      description: {
+        // ✅ 필수: 이 Story가 나타내는 상태/케이스 설명
+        story: "Story 설명을 여기에 작성합니다.",
+      },
+    },
+  },
+  render: (args) => {
+    const [value, setValue] = useState("initial");
+    return <Component {...args} value={value} onChange={setValue} />;
+  },
+=======
 export const Default: Story = {
   parameters: {
     docs: {
@@ -249,17 +275,26 @@ export const Default: Story = {
       },
     },
   },
+>>>>>>> feature/#24-component-exhibition-list
   args: {
     // props
   },
 };
 ```
 
+<<<<<<< feature/#31-tabbar
+**Storybook 작성 체크리스트 (디자이너 협업 필수)**
+
+- [ ] `meta.parameters.docs.description.component` — 컴포넌트 전체 역할, variant 용도, 인터랙션 동작 **생략 금지**
+- [ ] 각 `Story.parameters.docs.description.story` — 해당 Story의 상태/케이스 설명 **생략 금지**
+- [ ] controlled 컴포넌트는 `render` + `useState`로 인터랙티브 Story 작성
+=======
 **description 작성 규칙 (디자이너 협업 필수)**
 
 - `meta.parameters.docs.description.component` — 컴포넌트 전체 역할, variant별 용도, 인터랙션 동작을 기재합니다. **생략 금지**
 - `argTypes[prop].description` — 각 prop의 역할을 한 줄로 기재합니다. **생략 금지**
 - `Story.parameters.docs.description.story` — 해당 Story가 어떤 상태/케이스를 나타내는지 기재합니다. **생략 금지**
+>>>>>>> feature/#24-component-exhibition-list
 
 ### Storybook ThemeProvider 설정
 

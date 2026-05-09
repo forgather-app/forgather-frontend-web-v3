@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import StatusChip from "../components/@common/StatusChip/StatusChip";
+import StatusChip from "../components/@common/Chip/DisplayChip/StatusChip/StatusChip";
 
 const meta: Meta<typeof StatusChip> = {
   title: "UI/StatusChip",
@@ -9,15 +9,20 @@ const meta: Meta<typeof StatusChip> = {
     docs: {
       description: {
         component:
-          "전시 진행 상태를 나타내는 칩 컴포넌트입니다.\n\n`inProgress`(진행중)는 보라색, `ended`(종료)는 회색으로 표시됩니다.",
+          "전시 진행 상태를 나타내는 칩 컴포넌트입니다.\n\n`variant`로 시각적 표현을 결정합니다: `active`(보라), `inactive`(회색), `info`(빨간).",
       },
     },
   },
   argTypes: {
     status: {
       control: { type: "radio" },
-      options: ["inProgress", "ended"],
-      description: "전시 진행 상태",
+      options: ["inProgress", "ended", "+2"],
+      description: "라벨 텍스트용 상태",
+    },
+    variant: {
+      control: { type: "radio" },
+      options: ["active", "inactive", "dimmed", "alert"],
+      description: "칩의 시각적 표현 방식",
     },
   },
 };
@@ -26,14 +31,10 @@ export default meta;
 
 type Story = StoryObj<typeof StatusChip>;
 
-export const InProgress: Story = {
-  args: {
-    status: "inProgress",
-  },
+export const Active: Story = {
+  args: { status: "inProgress", variant: "active" },
 };
 
-export const Ended: Story = {
-  args: {
-    status: "ended",
-  },
+export const Inactive: Story = {
+  args: { status: "ended", variant: "inactive" },
 };
