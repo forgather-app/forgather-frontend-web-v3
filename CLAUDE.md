@@ -194,20 +194,31 @@ fill-ing/
 │   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
 │   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
+│   │   └── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
+│   ├── constants/       # 공통 상수 (레이아웃 제약, 임계값 등)
+│   ├── hooks/           # 커스텀 훅
+│   │   └── @common/     # 프로젝트 공통 훅
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
 │   │       └── components/  # 메인 페이지 전용 컴포넌트
-│   ├── stories/         # Storybook 스토리 파일 (컴포넌트별 *.stories.tsx)
+│   ├── stories/         # Storybook 스토리 (컴포넌트 단위)
 │   ├── styles/          # 전역 스타일 및 테마
+<<<<<<< feature/#58-guest-display-card
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
 │   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
+=======
+│   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
+│   │   ├── @common/         # 공통 스타일 컴포넌트 (Backdrop 등)
+│   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피, 레이아웃 등)
+>>>>>>> develop
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
-│   ├── utils/           # 유틸리티 함수
+│   ├── types/           # 전역 타입 선언
+│   ├── utils/           # 공통 유틸리티 함수
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정
@@ -237,12 +248,30 @@ fill-ing/
 
 **예시**: `src/pages/main/components/SongElement.tsx`, `src/pages/main/components/PlaylistCard.tsx`
 
+### `/src/hooks/@common`
+
+프로젝트 전반에서 재사용되는 공통 커스텀 훅을 포함합니다.
+
+**예시**: `useDisclosure` (모달·시트 열림/닫힘 상태 및 애니메이션 관리)
+
+### `/src/constants`
+
+UI 제약값, 임계값 등 프로젝트 공통 상수를 관리합니다.
+
+**예시**: `constraints.ts` (BOTTOM_SHEET_CLOSE_THRESHOLD 등)
+
 ### `/src/styles`
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
+<<<<<<< feature/#58-guest-display-card
 - `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
 - `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
+=======
+- `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
+- `@common/`: Backdrop 등 재사용 가능한 공통 스타일 컴포넌트
+- `theme.ts`: 색상, 타이포그래피, 레이아웃(zIndex) 등 디자인 토큰 정의
+>>>>>>> develop
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트
 - `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
