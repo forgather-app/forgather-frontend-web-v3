@@ -22,7 +22,7 @@ const Button = ({
   ...rest
 }: ButtonProps) => {
   return (
-    <S.Button variant={variant} type={type} {...rest}>
+    <S.Button $variant={variant} type={type} {...rest}>
       {children}
     </S.Button>
   );

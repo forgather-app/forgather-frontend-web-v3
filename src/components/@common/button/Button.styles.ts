@@ -47,7 +47,7 @@ const getVariantPalette = (
   }
 };
 
-export const Button = styled.button<{ variant: ButtonVariant }>`
+export const Button = styled.button<{ $variant: ButtonVariant }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -58,17 +58,17 @@ export const Button = styled.button<{ variant: ButtonVariant }>`
   border-radius: 8px;
   cursor: pointer;
   ${({ theme }) => ({ ...theme.typography.button })};
-  background-color: ${({ theme, variant }) => getVariantPalette(theme, variant).background};
-  color: ${({ theme, variant }) => getVariantPalette(theme, variant).color};
+  background-color: ${({ theme, $variant }) => getVariantPalette(theme, $variant).background};
+  color: ${({ theme, $variant }) => getVariantPalette(theme, $variant).color};
   transition: background-color 0.15s ease;
 
   &:hover:not(:disabled) {
-    background-color: ${({ theme, variant }) => getVariantPalette(theme, variant).hoverBackground};
+    background-color: ${({ theme, $variant }) => getVariantPalette(theme, $variant).hoverBackground};
   }
 
   &:active:not(:disabled) {
-    background-color: ${({ theme, variant }) =>
-      getVariantPalette(theme, variant).pressedBackground};
+    background-color: ${({ theme, $variant }) =>
+      getVariantPalette(theme, $variant).pressedBackground};
   }
 
   &:focus-visible {
@@ -78,8 +78,8 @@ export const Button = styled.button<{ variant: ButtonVariant }>`
 
   &:disabled {
     cursor: not-allowed;
-    background-color: ${({ theme, variant }) =>
-      getVariantPalette(theme, variant).disabledBackground};
-    color: ${({ theme, variant }) => getVariantPalette(theme, variant).disabledColor};
+    background-color: ${({ theme, $variant }) =>
+      getVariantPalette(theme, $variant).disabledBackground};
+    color: ${({ theme, $variant }) => getVariantPalette(theme, $variant).disabledColor};
   }
 `;
