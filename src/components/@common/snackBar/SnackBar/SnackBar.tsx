@@ -1,7 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { type JSX, useEffect, useRef, useState } from "react";
+import IcAlert from "@/assets/icons/ic_alert.svg?react";
+import IcCheck from "@/assets/icons/ic_check.svg?react";
+import IcClose from "@/assets/icons/ic_close.svg?react";
 import { CONSTRAINTS } from "@/constants/constraints";
 import useDisclosure from "@/hooks/@common/useDisclosure";
 import useDragToClose from "@/hooks/@common/useDragToClose";
+import { theme } from "@/styles/theme";
 import * as S from "./SnackBar.styles";
 
 /**
@@ -14,16 +18,23 @@ import * as S from "./SnackBar.styles";
  *
  * 부모에서 `{show && <SnackBar onClose={...} />}` 패턴으로 마운트/언마운트합니다.
  */
+
+type IconType = "alert" | "error";
 interface SnackBarProps {
   /** 닫힘 애니메이션 종료 후 호출되는 콜백. 부모에서 컴포넌트를 언마운트합니다. */
   onClose: () => void;
   /** 스낵바에 표시할 메시지 */
   message: string;
   /** 아이콘 타입. 'alert'는 체크 아이콘, 'error'는 경고 아이콘, undefined면 아이콘 없음 */
-  IconType?: "alert" | "error";
+  iconType?: IconType;
 }
 
-const SnackBar = ({ onClose, message, IconType }: SnackBarProps) => {
+const ICON = {
+  alert: <IcCheck width={24} height={24} color="#DAD4FF" />,
+  error: <IcAlert width={24} height={24} color="#FF4B4B" />,
+} satisfies Record<IconType, JSX.Element>;
+
+const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
   const snackBarRef = useRef<HTMLDivElement | null>(null);
   const [isDissolving, setIsDissolving] = useState(false);
   const { isVisible, hideSheet, alertAnimationEnd } = useDisclosure({
@@ -43,13 +54,13 @@ const SnackBar = ({ onClose, message, IconType }: SnackBarProps) => {
     direction: "horizontal",
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: 스낵바 마운트 시 1회만 타이머 설정
   useEffect(() => {
     const timer = setTimeout(hideSheet, 3000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [hideSheet]);
 
-  const handleCloseButton = () => {
+  const handleCloseButton = (e: React.PointerEvent) => {
+    e.stopPropagation();
     setIsDissolving(true);
     hideSheet();
   };
@@ -58,7 +69,7 @@ const SnackBar = ({ onClose, message, IconType }: SnackBarProps) => {
     <S.Wrapper
       ref={snackBarRef}
       $isVisible={isVisible}
-      $hasIcon={!!IconType}
+      $hasIcon={!!iconType}
       $isDissolving={isDissolving}
       onAnimationEnd={alertAnimationEnd}
       onTransitionEnd={alertAnimationEnd}
@@ -71,15 +82,17 @@ const SnackBar = ({ onClose, message, IconType }: SnackBarProps) => {
       aria-label={message}
     >
       <S.Content>
-        {IconType && (
-          <S.IconArea aria-hidden="true">
-            {/* TODO: [Icon] - IconType에 따른 아이콘 구현 필요 (alert: 체크, error: 경고) */}
-          </S.IconArea>
+        {iconType && (
+          <S.IconArea aria-hidden="true">{ICON[iconType]}</S.IconArea>
         )}
         <S.Message>{message}</S.Message>
       </S.Content>
-      <S.CloseButton type="button" onClick={handleCloseButton} aria-label="스낵바 닫기">
-        {/* TODO: [CloseIcon] - X 닫기 아이콘 구현 필요 */}
+      <S.CloseButton
+        type="button"
+        onPointerUp={(e) => handleCloseButton(e)}
+        aria-label="스낵바 닫기"
+      >
+        <IcClose width={24} height={24} color={theme.colors.gray.white} />
       </S.CloseButton>
     </S.Wrapper>
   );

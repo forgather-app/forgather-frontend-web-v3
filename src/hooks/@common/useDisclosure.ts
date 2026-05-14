@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 /**
  * 닫힘 애니메이션이 끝난 뒤 `onClose`를 호출하는 열림/닫힘 상태 관리 훅.
@@ -20,9 +20,9 @@ interface UseDisclosureProps {
 const useDisclosure = ({ isOpen, onClose }: UseDisclosureProps) => {
   const [isVisible, setIsVisible] = useState(isOpen);
 
-  const hideSheet = () => {
+  const hideSheet = useCallback(() => {
     setIsVisible(false);
-  };
+  }, []);
 
   const alertAnimationEnd = () => {
     // NOTE: 바텀시트가 꺼질 떄만 동작

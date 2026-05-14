@@ -56,7 +56,7 @@ const meta: Meta<typeof SnackBar> = {
       description: "스낵바에 표시할 메시지",
       table: { type: { summary: "string" } },
     },
-    IconType: {
+    iconType: {
       description:
         "아이콘 타입. 'alert'는 체크 아이콘, 'error'는 경고 아이콘, undefined면 아이콘 없음",
       table: { type: { summary: "'alert' | 'error' | undefined" } },
@@ -68,7 +68,7 @@ export default meta;
 
 type Story = StoryObj<typeof SnackBar>;
 
-const makeStory = (message: string, IconType?: "alert" | "error") => () => {
+const makeStory = (message: string, iconType?: "alert" | "error") => () => {
   const [show, setShow] = useState(false);
 
   return (
@@ -95,7 +95,7 @@ const makeStory = (message: string, IconType?: "alert" | "error") => () => {
         <SnackBar
           onClose={() => setShow(false)}
           message={message}
-          IconType={IconType}
+          iconType={iconType}
         />
       )}
     </>
