@@ -161,3 +161,55 @@ export const Default: Story = {
   },
   render: () => <OpenStory />,
 };
+
+const LONG_MESSAGE =
+  "이 스낵바의 메시지가 매우 길어질 때에도 레이아웃이 올바르게 표시되는지 확인할 수 있습니다.";
+
+const LongMessageStory = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <>
+      {!isOpen && (
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            padding: "10px 20px",
+            backgroundColor: theme.colors.main.purple,
+            color: theme.colors.gray.white,
+            border: "none",
+            borderRadius: 8,
+            cursor: "pointer",
+          }}
+        >
+          다시 열기
+        </button>
+      )}
+      {isOpen && (
+        <ActionSnackBar
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          onClick={() => console.log("액션 실행")}
+          message={LONG_MESSAGE}
+        />
+      )}
+    </>
+  );
+};
+
+export const LongMessage: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "메시지가 매우 길 때의 ActionSnackBar. 텍스트 줄바꿈과 레이아웃을 확인합니다.",
+      },
+    },
+  },
+  render: () => <LongMessageStory />,
+};

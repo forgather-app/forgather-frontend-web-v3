@@ -102,12 +102,18 @@ const makeStory = (message: string, iconType?: "alert" | "error") => () => {
   );
 };
 
+const LONG_MESSAGE =
+  "이 스낵바의 메시지가 매우 길어질 때에도 레이아웃이 올바르게 표시되는지 확인할 수 있습니다.";
+
 const DefaultStoryComponent = makeStory("일반 스낵바 내용을 입력해주세요");
 const ErrorStoryComponent = makeStory("알럿 내용을 입력해주세요", "error");
 const AlertStoryComponent = makeStory(
   "일반 스낵바 내용을 입력해주세요",
   "alert",
 );
+const LongMessageStoryComponent = makeStory(LONG_MESSAGE);
+const LongMessageErrorStoryComponent = makeStory(LONG_MESSAGE, "error");
+const LongMessageAlertStoryComponent = makeStory(LONG_MESSAGE, "alert");
 
 export const Default: Story = {
   parameters: {
@@ -141,4 +147,38 @@ export const AlertType: Story = {
     },
   },
   render: () => <AlertStoryComponent />,
+};
+
+export const LongMessage: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "메시지가 매우 길 때의 기본 스낵바. 텍스트 줄바꿈과 레이아웃을 확인합니다.",
+      },
+    },
+  },
+  render: () => <LongMessageStoryComponent />,
+};
+
+export const LongMessageError: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "메시지가 매우 길 때의 error 타입 스낵바.",
+      },
+    },
+  },
+  render: () => <LongMessageErrorStoryComponent />,
+};
+
+export const LongMessageAlert: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "메시지가 매우 길 때의 alert 타입 스낵바.",
+      },
+    },
+  },
+  render: () => <LongMessageAlertStoryComponent />,
 };
