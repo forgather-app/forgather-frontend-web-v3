@@ -59,8 +59,7 @@ const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
     return () => clearTimeout(timer);
   }, [hideSheet]);
 
-  const handleCloseButton = (e: React.PointerEvent) => {
-    e.stopPropagation();
+  const handleCloseButton = () => {
     setIsDissolving(true);
     hideSheet();
   };
@@ -89,7 +88,9 @@ const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
       </S.Content>
       <S.CloseButton
         type="button"
-        onPointerUp={(e) => handleCloseButton(e)}
+        // NOTE: PC에서는 클릭이 적용되지 않는 현상이 존재하여 해결을 위해 삽입
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={handleCloseButton}
         aria-label="스낵바 닫기"
       >
         <IcClose width={24} height={24} color={theme.colors.gray.white} />
