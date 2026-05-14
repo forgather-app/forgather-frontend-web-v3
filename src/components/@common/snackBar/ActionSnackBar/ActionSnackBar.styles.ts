@@ -2,7 +2,9 @@ import styled from "@emotion/styled";
 import { slideIn, slideOut } from "@/styles/animations";
 import { shouldForwardProp } from "@/utils/styled";
 
-export const Wrapper = styled("div", { shouldForwardProp })<{ $isVisible: boolean }>`
+export const Wrapper = styled("div", { shouldForwardProp })<{
+  $isVisible: boolean;
+}>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,6 +21,11 @@ export const Wrapper = styled("div", { shouldForwardProp })<{ $isVisible: boolea
 export const Message = styled.p`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray700};
+  overflow: hidden;
+  flex: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 80%;
   white-space: nowrap;
   flex-shrink: 0;
 `;

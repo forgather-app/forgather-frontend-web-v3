@@ -43,6 +43,11 @@ export const IconArea = styled.div`
 export const Message = styled.p`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray50};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1;
   white-space: nowrap;
   flex-shrink: 0;
 `;
@@ -58,5 +63,4 @@ export const CloseButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 0;
-  /* TODO: CloseIcon - X 아이콘 구현 필요 */
 `;
