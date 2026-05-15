@@ -48,7 +48,6 @@ export const On: Story = {
   args: {
     checked: true,
     label: "전체 공개",
-    showLabel: true,
   },
 };
 
@@ -61,19 +60,18 @@ export const Off: Story = {
   args: {
     checked: false,
     label: "전체 공개",
-    showLabel: true,
   },
 };
 
 export const WithoutLabel: Story = {
   name: "레이블 없음",
   parameters: {
-    docs: { description: { story: "`showLabel={false}`로 레이블을 숨긴 상태입니다. 아이콘만 표시할 때 사용합니다." } },
+    docs: { description: { story: "label 없이 아이콘만 표시하는 상태입니다. aria-label로 접근성 레이블을 제공합니다." } },
   },
   render: controlledRender,
   args: {
     checked: true,
-    showLabel: false,
+    ariaLabel: "전체 공개",
   },
 };
 
@@ -87,7 +85,6 @@ export const Disabled: Story = {
     checked: false,
     disabled: true,
     label: "전체 공개",
-    showLabel: true,
   },
 };
 
@@ -101,6 +98,5 @@ export const DisabledOn: Story = {
     checked: true,
     disabled: true,
     label: "전체 공개",
-    showLabel: true,
   },
 };

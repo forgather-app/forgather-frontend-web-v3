@@ -6,10 +6,10 @@ interface ToggleProps {
   checked: boolean;
   /** 토글 상태 변경 핸들러 */
   onChange: (checked: boolean) => void;
-  /** 레이블 (기본값: "토글 레이블") */
+  /** 시각적으로 표시할 레이블. 제공하면 레이블이 렌더링됩니다. */
   label?: string;
-  /** 레이블 표시 여부 (기본값: true) */
-  showLabel?: boolean;
+  /** 스크린 리더용 접근성 레이블. label이 없을 때 필수입니다. */
+  ariaLabel?: string;
   /** 비활성화 여부 */
   disabled?: boolean;
 }
@@ -17,10 +17,11 @@ interface ToggleProps {
 const Toggle = ({
   checked,
   onChange,
-  label = "토글 레이블",
-  showLabel = true,
+  label,
+  ariaLabel,
   disabled = false,
 }: ToggleProps) => {
+  const showLabel = !!label;
   const handleClick = () => {
     onChange(!checked);
   };
@@ -37,7 +38,7 @@ const Toggle = ({
       type="button"
       role="switch"
       aria-checked={checked}
-      aria-label={label}
+      aria-label={ariaLabel ?? label}
       disabled={disabled}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
