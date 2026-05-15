@@ -54,11 +54,8 @@ const TextField = ({
     variant === "count" ? getGraphemeLength(String(value ?? "")) : 0;
 
   const showClear =
-    variant === "search"
-      ? hasValue && isFocused
-      : variant === "link"
-        ? hasValue
-        : false;
+    (variant === "search" && hasValue && isFocused) ||
+    (variant === "link" && hasValue);
 
   const handleClear = () => {
     if (onClear) onClear();
