@@ -9,6 +9,20 @@ Fill-ing 프로젝트의 컴포넌트 및 페이지 구현 시 반드시 준수�
 
 모든 컴포넌트/페이지는 구현 파일과 스타일 파일을 분리합니다.
 
+### 폴더 네이밍
+
+- **컴포넌트 폴더명은 소문자 시작 camelCase**를 사용합니다 (`textField`, `textArea`, `bottomSheet` 등)
+- 파일명(`.tsx`, `.styles.ts`, `.stories.tsx`)은 PascalCase 컴포넌트명을 그대로 사용합니다
+
+```
+src/components/@common/textField/
+  TextField.tsx
+  TextField.styles.ts
+
+src/stories/
+  TextField.stories.tsx   ← 스토리는 항상 src/stories/ 아래에 작성
+```
+
 ```typescript
 // Component.tsx
 import * as S from "./Component.styles";
@@ -55,6 +69,53 @@ export const Title = styled.h1`
 - **모든 색상·타이포그래피는 `theme` 토큰 사용, 하드코딩 금지**
 - 간격 값은 spacing 토큰 도입 전까지 임시 사용 가능
 - 토큰에 없는 값은 `/* TODO: 토큰 없음 - {값} */` 주석 처리
+
+### variant 분기 처리 패턴
+
+여러 variant를 가진 styled component는 ternary 대신 `Record<Variant, (theme: Theme) => string>` 패턴을 사용합니다.
+
+```typescript
+import type { Theme } from "@emotion/react";
+
+type Variant = "primary" | "secondary";
+
+// ❌ 지저분한 ternary 분기
+const Button = styled.button<{ variant: Variant }>`
+  ${({ variant, theme }) =>
+    variant === "primary"
+      ? `background: ${theme.colors.main.purple}; border-radius: 8px;`
+      : `background: ${theme.colors.gray.gray500}; border-radius: 4px;`}
+`;
+
+// ✅ Record 패턴 — 각 variant 스타일이 명확하게 분리됨
+const buttonVariants: Record<Variant, (theme: Theme) => string> = {
+  primary: (theme) => `
+    background: ${theme.colors.main.purple};
+    border-radius: 8px;
+  `,
+  secondary: (theme) => `
+    background: ${theme.colors.gray.gray500};
+    border-radius: 4px;
+  `,
+};
+
+const Button = styled.button<{ variant: Variant }>`
+  ${({ variant, theme }) => buttonVariants[variant](theme)}
+`;
+```
+
+active/inactive 같은 상태가 추가되면 중첩 Record로 확장합니다:
+
+```typescript
+type ActiveState = "active" | "inactive";
+
+const tabVariants: Record<Variant, Record<ActiveState, (theme: Theme) => string>> = {
+  pill: {
+    active: (theme) => `color: ${theme.colors.gray.gray600};`,
+    inactive: (theme) => `color: ${theme.colors.gray.gray200};`,
+  },
+};
+```
 
 ### theme 토큰 접근 (중첩 구조 주의)
 
@@ -152,25 +213,88 @@ UI 컴포넌트(`src/components/ui/`, `src/components/@common/`)는 반드시 St
 페이지는 선택사항입니다.
 
 ```typescript
-// src/stories/components/ComponentName.stories.tsx
+// src/stories/ComponentName.stories.tsx
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Component from "../../components/path/Component";
+import Component from "../components/path/Component";
 
 const meta: Meta<typeof Component> = {
-  title: "Component/ComponentName",
+  title: "UI/ComponentName",
   component: Component,
+<<<<<<< feature/#31-tabbar
+  tags: ["autodocs"],
+  parameters: {
+    docs: {
+      description: {
+        // ✅ 필수: 컴포넌트 역할, variant 용도, 인터랙션 동작 기술
+        component: "컴포넌트 설명을 여기에 작성합니다.",
+=======
+  parameters: {
+    docs: {
+      description: {
+        component: "컴포넌트 역할 설명. variant가 있으면 각 variant의 용도와 사용 맥락을 기재합니다.",
+      },
+    },
+  },
+  argTypes: {
+    propName: {
+      description: "prop 역할 설명",
+      table: {
+        type: { summary: "타입" },
+>>>>>>> feature/#24-component-exhibition-list
+      },
+    },
+  },
 };
 
 export default meta;
 
 type Story = StoryObj<typeof Component>;
 
+<<<<<<< feature/#31-tabbar
+// controlled 컴포넌트는 render 함수 + useState로 인터랙티브 Story 작성
+export const Interactive: Story = {
+  parameters: {
+    docs: {
+      description: {
+        // ✅ 필수: 이 Story가 나타내는 상태/케이스 설명
+        story: "Story 설명을 여기에 작성합니다.",
+      },
+    },
+  },
+  render: (args) => {
+    const [value, setValue] = useState("initial");
+    return <Component {...args} value={value} onChange={setValue} />;
+  },
+=======
 export const Default: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "이 Story가 나타내는 상태나 케이스를 한 줄로 설명합니다.",
+      },
+    },
+  },
+>>>>>>> feature/#24-component-exhibition-list
   args: {
     // props
   },
 };
 ```
+
+<<<<<<< feature/#31-tabbar
+**Storybook 작성 체크리스트 (디자이너 협업 필수)**
+
+- [ ] `meta.parameters.docs.description.component` — 컴포넌트 전체 역할, variant 용도, 인터랙션 동작 **생략 금지**
+- [ ] 각 `Story.parameters.docs.description.story` — 해당 Story의 상태/케이스 설명 **생략 금지**
+- [ ] controlled 컴포넌트는 `render` + `useState`로 인터랙티브 Story 작성
+=======
+**description 작성 규칙 (디자이너 협업 필수)**
+
+- `meta.parameters.docs.description.component` — 컴포넌트 전체 역할, variant별 용도, 인터랙션 동작을 기재합니다. **생략 금지**
+- `argTypes[prop].description` — 각 prop의 역할을 한 줄로 기재합니다. **생략 금지**
+- `Story.parameters.docs.description.story` — 해당 Story가 어떤 상태/케이스를 나타내는지 기재합니다. **생략 금지**
+>>>>>>> feature/#24-component-exhibition-list
 
 ### Storybook ThemeProvider 설정
 

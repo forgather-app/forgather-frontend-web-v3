@@ -111,6 +111,38 @@ Orval 기본 설정이 `useSuspenseQuery`이므로 데이터 페칭 컴포넌트
 
 ---
 
+## G8. GlobalStyle에 이미 정의된 스타일 중복 금지
+
+`src/styles/global.ts`에 아래 기본 리셋이 전역 적용되어 있습니다.
+styled component에서 이 속성들을 다시 선언하면 중복이 됩니다.
+
+```css
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+input:focus, textarea:focus {
+  border: none;
+  outline: none;
+}
+```
+
+`styled.button`, `styled.a`, `styled.input` 등을 작성할 때 위 속성은 **생략**합니다.
+컴포넌트 고유 스타일(background-color, border-radius 특정 값 등)만 작성합니다.
+
+---
+
 ## G7. 근접 토큰 대체 판단
 
 디자인 수치가 토큰과 다를 때의 판단 기준:

@@ -28,6 +28,7 @@
 ### 개발 도구
 
 - **Biome**: 린터 및 포맷터 (ESLint + Prettier 대체)
+- **vite-plugin-svgr**: SVG 파일을 React 컴포넌트로 변환 (`?react` 쿼리 사용)
 - **Storybook 10.x**: 컴포넌트 문서화 및 개발 환경
   - `@storybook/addon-a11y`: 접근성 테스트
   - `@storybook/addon-docs`: 문서화
@@ -48,6 +49,7 @@
 - **JSX**: react-jsx (React 17+ 새로운 JSX Transform)
 - **No Unused Variables**: 사용하지 않는 변수 및 파라미터 금지
 - **Verbatim Module Syntax**: import/export 구문 명시적 사용
+- **Path Alias**: `@/*` → `src/*` (예: `@/components/...`, `@/styles/...`)
 
 ### 코드 포맷팅 (Biome)
 
@@ -60,6 +62,7 @@
 > 상세 규칙은 `.claude/conventions/ui-conventions.md`를 참조합니다.
 
 - 구현 파일(`Component.tsx`)과 스타일 파일(`Component.styles.ts`) 분리
+- 상수·타입이 많을 경우 `Component.constants.ts`로 분리
 - Props는 `interface ComponentNameProps`로 정의, JSDoc 주석 필수
 - 컴포넌트는 `export default`, 유틸리티/타입은 named export
 - 모든 색상·타이포그래피는 `theme` 토큰 사용 (하드코딩 금지)
@@ -191,17 +194,26 @@ fill-ing/
 │   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
 │   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
+│   │   └── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
+│   ├── constants/       # 공통 상수 (레이아웃 제약, 임계값 등)
+│   ├── hooks/           # 커스텀 훅
+│   │   └── @common/     # 프로젝트 공통 훅
 │   ├── pages/           # 페이지 컴포넌트
 │   │   └── main/        # 메인 페이지
 │   │       └── components/  # 메인 페이지 전용 컴포넌트
+│   ├── stories/         # Storybook 스토리 (컴포넌트 단위)
 │   ├── styles/          # 전역 스타일 및 테마
-│   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
+│   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
+│   │   ├── @common/         # 공통 스타일 컴포넌트 (Backdrop 등)
+│   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피, 레이아웃 등)
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
+│   ├── types/           # 전역 타입 선언
+│   ├── utils/           # 공통 유틸리티 함수
 │   ├── App.tsx          # 메인 App 컴포넌트
 │   └── main.tsx         # 애플리케이션 엔트리 포인트
 ├── biome.json           # Biome 설정
@@ -231,11 +243,25 @@ fill-ing/
 
 **예시**: `src/pages/main/components/SongElement.tsx`, `src/pages/main/components/PlaylistCard.tsx`
 
+### `/src/hooks/@common`
+
+프로젝트 전반에서 재사용되는 공통 커스텀 훅을 포함합니다.
+
+**예시**: `useDisclosure` (모달·시트 열림/닫힘 상태 및 애니메이션 관리)
+
+### `/src/constants`
+
+UI 제약값, 임계값 등 프로젝트 공통 상수를 관리합니다.
+
+**예시**: `constraints.ts` (BOTTOM_SHEET_CLOSE_THRESHOLD 등)
+
 ### `/src/styles`
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
-- `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
+- `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
+- `@common/`: Backdrop 등 재사용 가능한 공통 스타일 컴포넌트
+- `theme.ts`: 색상, 타이포그래피, 레이아웃(zIndex) 등 디자인 토큰 정의
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트
 - `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
@@ -282,9 +308,9 @@ npm run test         # 테스트 실행
 
 ### 새 컴포넌트 추가
 
-1. 범용 UI 컴포넌트는 `/src/components/ui`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
-2. `Component.tsx`, `Component.styles.ts` 파일 생성
-3. `src/stories/{ComponentName}.stories.tsx` 파일 생성 (예: `src/stories/Button.stories.tsx`)
+1. 공통 컴포넌트는 `/src/components/@common`에, 페이지 전용 컴포넌트는 `/src/pages/<페이지명>/components`에 폴더 생성
+2. `Component.tsx`, `Component.styles.ts` 파일 생성 (상수가 많으면 `Component.constants.ts`도 함께 생성)
+3. `src/stories/ComponentName.stories.tsx` 생성 (예: `src/stories/Button.stories.tsx`)
 4. Storybook에서 컴포넌트 확인 및 개발
 5. 접근성 검사 (a11y addon 활용)
 
