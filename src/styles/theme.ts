@@ -121,8 +121,9 @@ export const theme = {
   },
   layout: {
     zIndex: {
-      bottomSheet: 10,
       backdrop: 1,
+      bottomSheet: 10,
+      modal: 20,
     },
   },
 } as const;
