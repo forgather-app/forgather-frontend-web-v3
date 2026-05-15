@@ -16,7 +16,7 @@ const PlaceholderIcon = () => (
 );
 
 const meta: Meta<typeof BottomSheetList> = {
-  title: "UI/BottomSheet/List",
+  title: "Common/BottomSheet/List",
   component: BottomSheetList,
   tags: ["autodocs"],
   parameters: {
