@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
-import clearIcon from "../../../assets/icons/ic_clear.svg";
-import linkIcon from "../../../assets/icons/ic_link.svg";
-import searchIcon from "../../../assets/icons/ic_search.svg";
+import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
+import LinkIcon from "../../../assets/icons/ic_link.svg?react";
+import SearchIcon from "../../../assets/icons/ic_search.svg?react";
 import { getGraphemeLength } from "../../../utils/getGraphemeLength";
 import * as S from "./TextField.styles";
 
@@ -73,24 +73,8 @@ const TextField = ({
         $hasError={hasError}
         $isFocused={isFocused}
       >
-        {variant === "search" && (
-          <S.LeadingIcon
-            src={searchIcon}
-            alt=""
-            aria-hidden
-            width={20}
-            height={20}
-          />
-        )}
-        {variant === "link" && (
-          <S.LeadingIcon
-            src={linkIcon}
-            alt=""
-            aria-hidden
-            width={16}
-            height={16}
-          />
-        )}
+        {variant === "search" && <SearchIcon aria-hidden width={20} height={20} />}
+        {variant === "link" && <LinkIcon aria-hidden width={16} height={16} />}
         <S.Input
           {...rest}
           $variant={variant}
@@ -116,7 +100,7 @@ const TextField = ({
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleClear}
           >
-            <img src={clearIcon} alt="" aria-hidden width={20} height={20} />
+            <ClearIcon aria-hidden width={20} height={20} />
           </S.ClearButton>
         )}
         {variant === "count" && maxCount !== undefined && (

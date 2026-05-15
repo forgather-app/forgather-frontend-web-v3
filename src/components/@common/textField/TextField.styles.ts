@@ -66,9 +66,6 @@ export const FieldRow = styled.div<FieldRowProps>`
     getFieldRowStyles($variant, $hasValue, $hasError, $isFocused)(theme)}
 `;
 
-export const LeadingIcon = styled.img`
-  flex-shrink: 0;
-`;
 
 export const Input = styled.input<InputProps>`
   flex: 1;
