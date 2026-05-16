@@ -29,12 +29,17 @@ interface ModalProps {
 
 const modalStack: string[] = [];
 
-const Modal = ({
+type ModalComponent = React.FC<ModalProps> & {
+  Overlay: React.FC<ModalOverlayProps>;
+  Content: React.FC<ModalContentProps>;
+};
+
+const Modal: ModalComponent = ({
   isOpen,
   onClose,
   closeOnEsc = true,
   children,
-}: ModalProps) => {
+}) => {
   const modalId = useId();
 
   useEffect(() => {
