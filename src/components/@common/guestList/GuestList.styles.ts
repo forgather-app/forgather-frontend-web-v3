@@ -43,6 +43,10 @@ export const NewCard = styled.button`
     background-size: 300% 100%;
     animation: ${gradientSweep} 20s linear infinite;
     z-index: -1;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 `;
 

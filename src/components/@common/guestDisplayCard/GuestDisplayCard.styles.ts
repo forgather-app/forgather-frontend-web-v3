@@ -168,7 +168,7 @@ export const IconButton = styled.button`
   align-items: center;
   justify-content: center;
   &:active{
-    transform: scale(0.85)
+    transform: scale(0.85);
   }
 `;
 

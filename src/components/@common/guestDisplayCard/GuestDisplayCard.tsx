@@ -76,7 +76,7 @@ const GuestDisplayCard = (props: GuestDisplayCardProps) => {
       {photoSrcArray && (
         <S.PhotoArea>
           <S.Photo src={photoSrcArray[0]} alt="방명록 사진" />
-          {photoSrcArray.length - 1 > 0 && (
+          {photoSrcArray.length > 1 && (
             <S.PhotoBadge aria-label={`사진 ${photoSrcArray.length}장`}>
               +{photoSrcArray.length - 1} 장
             </S.PhotoBadge>

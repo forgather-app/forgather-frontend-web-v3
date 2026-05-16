@@ -13,6 +13,9 @@ const preview: Preview = {
     ),
   ],
   parameters: {
+    docs: {
+      autodocs: true,
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

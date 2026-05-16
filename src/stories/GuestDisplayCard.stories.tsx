@@ -188,7 +188,7 @@ export const OwnerNew: Story = {
   args: COMMON,
 };
 
-/** owner — 새 방명록. teaser face에서 시작해 클릭 시 flip됩니다. */
+/** owner — 새 방명록. 작성자 이름이 길 경우 teaser face에서의 말줄임 처리를 확인합니다. */
 export const OwnerNewLongName: Story = {
   parameters: {
     docs: {
