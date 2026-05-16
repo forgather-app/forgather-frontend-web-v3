@@ -100,6 +100,12 @@ export const theme = {
       alertRed: "#FF4B4B",
       black: "#111111",
     },
+    button: {
+      primaryHover: "#5439F0",
+      secondaryText: "#3B19FF",
+      secondaryHover: "#C7BDFF",
+      tertiaryHover: "#DCDEE1",
+    },
     gradient: {
       grayStroke:
         "linear-gradient(to right, rgba(65, 72, 85, 0.80), rgba(65, 72, 85, 0.25))",
