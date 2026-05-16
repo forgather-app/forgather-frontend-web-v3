@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import ActionSnackBar from "../components/@common/snackBar/ActionSnackBar/ActionSnackBar";
-import { theme } from "../styles/theme";
+import ActionSnackBar from "@/components/@common/snackBar/ActionSnackBar";
+import { theme } from "@/styles/theme";
 
 const meta: Meta<typeof ActionSnackBar> = {
   title: "Common/ActionSnackBar",
