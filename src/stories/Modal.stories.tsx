@@ -79,7 +79,6 @@ const modalBodyStyle: React.CSSProperties = {
   display: "flex",
   flexDirection: "column",
   gap: 24,
-  padding: "24px 0",
   alignItems: "center",
 };
 
@@ -94,7 +93,6 @@ const actionRowStyle: React.CSSProperties = {
   display: "flex",
   gap: 16,
   width: "100%",
-  padding: "0 24px",
 };
 
 const MonoStory = () => {
@@ -323,11 +321,9 @@ const StackedModalsStory = () => {
             <div
               style={{
                 width: "100%",
-                padding: "0 24px",
                 display: "flex",
                 flexDirection: "column",
                 gap: 8,
-                boxSizing: "border-box",
               }}
             >
               <div
