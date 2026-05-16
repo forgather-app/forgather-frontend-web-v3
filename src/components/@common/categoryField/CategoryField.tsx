@@ -1,4 +1,5 @@
 import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
+import PlusIcon from "../../../assets/icons/ic_plus.svg?react";
 import * as S from "./CategoryField.styles";
 
 interface CategoryFieldProps {
@@ -37,21 +38,7 @@ const CategoryField = ({
           />
         </S.InputField>
         <S.AddButton type="button" onClick={onAdd} aria-label="카테고리 추가">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M12 5V19M5 12H19"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+          <PlusIcon aria-hidden width={24} height={24} />
           <S.AddLabel>추가</S.AddLabel>
         </S.AddButton>
       </S.InputRow>
