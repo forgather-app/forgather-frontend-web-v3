@@ -206,14 +206,9 @@ fill-ing/
 │   │       └── components/  # 메인 페이지 전용 컴포넌트
 │   ├── stories/         # Storybook 스토리 (컴포넌트 단위)
 │   ├── styles/          # 전역 스타일 및 테마
-<<<<<<< feature/#58-guest-display-card
-│   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피 등)
-│   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
-=======
 │   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
 │   │   ├── @common/         # 공통 스타일 컴포넌트 (Backdrop 등)
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피, 레이아웃 등)
->>>>>>> develop
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
 │   │   ├── global.ts        # 전역 CSS
 │   │   └── reset.ts         # CSS 리셋
