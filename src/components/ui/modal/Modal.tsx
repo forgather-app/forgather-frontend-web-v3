@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useEffect } from "react";
+import { createContext, type ReactNode, useContext, useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import { Backdrop } from "../../../styles/@common/Overlay/Backdrop.styles";
 import * as S from "./Modal.styles";
@@ -27,28 +27,37 @@ interface ModalProps {
   children: ReactNode;
 }
 
+const modalStack: string[] = [];
+
 const Modal = ({
   isOpen,
   onClose,
   closeOnEsc = true,
   children,
 }: ModalProps) => {
-  useEffect(() => {
-    if (!isOpen) return;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
+  const modalId = useId();
 
   useEffect(() => {
-    if (!closeOnEsc) return;
+    if (!isOpen) return;
+    modalStack.push(modalId);
+    if (modalStack.length === 1) document.body.style.overflow = "hidden";
+    return () => {
+      const idx = modalStack.lastIndexOf(modalId);
+      if (idx >= 0) modalStack.splice(idx, 1);
+      if (modalStack.length === 0) document.body.style.overflow = "";
+    };
+  }, [isOpen, modalId]);
+
+  useEffect(() => {
+    if (!closeOnEsc || !isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) onClose();
+      if (e.key !== "Escape") return;
+      if (modalStack.at(-1) !== modalId) return;
+      onClose();
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [closeOnEsc, isOpen, onClose]);
+  }, [closeOnEsc, isOpen, onClose, modalId]);
 
   return createPortal(
     <ModalContext.Provider value={{ isOpen, onClose }}>
