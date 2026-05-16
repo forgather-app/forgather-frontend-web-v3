@@ -5,6 +5,7 @@ import SpaceCard from "../components/ui/spaceCard/SpaceCard";
 const meta: Meta<typeof SpaceCard> = {
   title: "UI/SpaceCard",
   component: SpaceCard,
+  tags: ["autodocs"],
   parameters: {
     docs: {
       description: {

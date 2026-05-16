@@ -4,6 +4,7 @@ import SpaceFileCard from "../components/ui/spaceFileCard/SpaceFileCard";
 const meta: Meta<typeof SpaceFileCard> = {
   title: "UI/SpaceFileCard",
   component: SpaceFileCard,
+  tags: ["autodocs"],
   parameters: {
     docs: {
       description: {
