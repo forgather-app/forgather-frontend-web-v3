@@ -12,11 +12,13 @@ user-invocable: true
 
 ## 시작 전 필독 (각 1회)
 
-스킬 진입 즉시, 구현을 시작하기 **전에** 아래 두 파일을 읽습니다.
-이후 플로우 진행 중에는 다시 열지 않아도 됩니다.
+스킬 진입 즉시, 구현을 시작하기 **전에** 아래 파일들을 **순서대로** 읽습니다.
+**모두 읽기 전까지 구현을 시작할 수 없습니다.**
 
-1. `.claude/conventions/ui-conventions.md` — 파일 구조, 스타일, 접근성, Storybook 등 코딩 규칙
-2. `.claude/skills/make-ui/references/gotchas.md` — 이 프로젝트에서 반복되는 함정 패턴
+1. `src/styles/global.ts` — 전역 스타일 리셋. 여기 정의된 속성은 styled component에서 절대 중복 선언하지 않습니다.
+2. `src/styles/reset.ts` — CSS 리셋. `p`, `h1~h6`, `div` 등 대부분 요소의 `margin: 0`, `padding: 0`이 포함됩니다.
+3. `.claude/conventions/ui-conventions.md` — 파일 구조, 스타일, 접근성, Storybook 등 코딩 규칙
+4. `.claude/skills/make-ui/references/gotchas.md` — 이 프로젝트에서 반복되는 함정 패턴
 
 ---
 
