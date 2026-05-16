@@ -1,5 +1,6 @@
 import { createContext, type ReactNode, useContext, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { Backdrop } from "../../../styles/@common/Overlay/Backdrop.styles";
 import * as S from "./Modal.styles";
 
 interface ModalContextValue {
@@ -66,7 +67,7 @@ interface ModalOverlayProps {
 
 const Overlay = ({ disableClose = false }: ModalOverlayProps) => {
   const { onClose } = useModalContext();
-  return <S.Overlay onClick={disableClose ? undefined : onClose} />;
+  return <Backdrop onClick={disableClose ? undefined : onClose} />;
 };
 
 interface ModalContentProps {

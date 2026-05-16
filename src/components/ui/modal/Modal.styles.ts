@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Backdrop } from "../../../styles/@common/Overlay/Backdrop.styles";
 
 export const ModalRoot = styled.div<{ $isVisible: boolean }>`
   position: fixed;
@@ -14,13 +13,9 @@ export const ModalRoot = styled.div<{ $isVisible: boolean }>`
   transition: opacity 0.2s ease;
 `;
 
-export const Overlay = styled(Backdrop)`
-  z-index: 0;
-`;
-
 export const Content = styled.div<{ $isVisible: boolean }>`
   position: relative;
-  z-index: 1;
+  z-index: ${({ theme }) => theme.layout.zIndex.backdrop + 1};
   width: 328px;
   background: ${({ theme }) => theme.colors.gray.gray600};
   border-radius: 16px;
