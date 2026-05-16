@@ -259,9 +259,14 @@ UI 제약값, 임계값 등 프로젝트 공통 상수를 관리합니다.
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
+<<<<<<< feature/#58-guest-display-card
+- `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
+- `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
+=======
 - `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
 - `@common/`: Backdrop 등 재사용 가능한 공통 스타일 컴포넌트
 - `theme.ts`: 색상, 타이포그래피, 레이아웃(zIndex) 등 디자인 토큰 정의
+>>>>>>> develop
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트
 - `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
