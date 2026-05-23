@@ -15,37 +15,9 @@ export const InputRow = styled.div`
   width: 100%;
 `;
 
-export const InputField = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
+export const TextFieldWrapper = styled.div`
   flex: 1;
   min-width: 0;
-  padding: 8px 12px;
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
-  border: 1px solid ${({ theme }) => theme.colors.main.purple};
-  border-radius: 8px;
-`;
-
-export const HashPrefix = styled.span`
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.white};
-  flex-shrink: 0;
-`;
-
-export const Input = styled.input`
-  flex: 1;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.white};
-  caret-color: ${({ theme }) => theme.colors.main.purple};
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.gray.gray300};
-  }
 `;
 
 export const AddButton = styled.button`

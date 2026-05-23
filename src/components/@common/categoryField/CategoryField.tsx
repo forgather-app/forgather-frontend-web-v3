@@ -1,5 +1,6 @@
 import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
 import PlusIcon from "../../../assets/icons/ic_plus.svg?react";
+import TextField from "../textField/TextField";
 import * as S from "./CategoryField.styles";
 
 interface CategoryFieldProps {
@@ -28,9 +29,9 @@ const CategoryField = ({
   return (
     <S.Wrapper>
       <S.InputRow>
-        <S.InputField>
-          <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
-          <S.Input
+        <S.TextFieldWrapper>
+          <TextField
+            variant="category"
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={(e) => {
@@ -42,7 +43,7 @@ const CategoryField = ({
             placeholder={placeholder}
             aria-label="카테고리 입력"
           />
-        </S.InputField>
+        </S.TextFieldWrapper>
         <S.AddButton type="button" onClick={onAdd} aria-label="카테고리 추가">
           <PlusIcon aria-hidden width={24} height={24} />
           <S.AddLabel>추가</S.AddLabel>
