@@ -204,6 +204,7 @@ fill-ing/
 │   │   └── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
+│   │   ├── layout/      # 레이아웃 컴포넌트 (Layout.tsx)
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
 │   ├── constants/       # 공통 상수 (레이아웃 제약, 임계값 등)
 │   ├── hooks/           # 커스텀 훅
