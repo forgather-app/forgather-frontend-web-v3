@@ -3,9 +3,11 @@ import IcPerson from "@/assets/icons/ic_person.svg?react";
 import IcSmallLogo from "@/assets/icons/logos/logo_small.svg?react";
 import * as S from "./GuestList.styles";
 
-/** 새로 도착한 방명록. 오로라 효과 보더와 함께 알림 UI가 노출됩니다. */
+/** 새로 도착한 방명록. 오로라 효과 보더와 함께 알림 UI가 노출됩니다. 클릭 시 일반 카드로 전환됩니다. */
 interface NewGuestListProps {
   isNew: true;
+  /** 클릭 시 일반 카드로 전환하는 핸들러 */
+  onClick: () => void;
 }
 
 /** 일반 방명록 카드 */
@@ -24,7 +26,11 @@ type GuestListProps = NewGuestListProps | RegularGuestListProps;
 const GuestList = (props: GuestListProps) => {
   if (props.isNew) {
     return (
-      <S.NewCard type="button" aria-label="새로 도착한 방명록">
+      <S.NewCard
+        type="button"
+        aria-label="새로 도착한 방명록"
+        onClick={props.onClick}
+      >
         <S.NewCardContent>
           <IcSmallLogo />
           <S.NewCardText>새로 도착한 방명록</S.NewCardText>
