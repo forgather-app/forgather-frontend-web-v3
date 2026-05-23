@@ -1,56 +1,35 @@
 import type { Theme } from "@emotion/react";
 import styled from "@emotion/styled";
-import type { TextFieldVariant } from "./TextField";
-
-interface FieldRowProps {
-  $variant: TextFieldVariant;
-  $hasValue: boolean;
-  $hasError: boolean;
-  $isFocused: boolean;
-}
+import type { FieldRowStyleVariant, TextFieldVariant } from "./TextField";
 
 type InputProps = { $variant: TextFieldVariant };
 
-type CounterProps = { $isFocused: boolean };
+const countBase = (theme: Theme) => `
+  background-color: ${theme.colors.gray.gray600};
+  border-radius: 8px;
+  padding: 8px 12px;
+  justify-content: space-between;
+`;
 
-const getFieldRowStyles =
-  (
-    $variant: TextFieldVariant,
-    $hasValue: boolean,
-    $hasError: boolean,
-    $isFocused: boolean,
-  ) =>
-  (theme: Theme): string => {
-    switch ($variant) {
-      case "count": {
-        const borderColor = $hasError
-          ? theme.colors.semantic.alertRed
-          : $isFocused && $hasValue
-            ? theme.colors.main.purple
-            : "transparent";
-        return `
-          background-color: ${theme.colors.gray.gray600};
-          border: 1px solid ${borderColor};
-          border-radius: 8px;
-          padding: 8px 12px;
-          justify-content: space-between;
-          align-items: ${$hasError ? "flex-start" : "center"};
-        `;
-      }
-      default: {
-        const bottomColor = $hasError
-          ? theme.colors.semantic.alertRed
-          : $variant !== "default" && $hasValue
-            ? theme.colors.gray.white
-            : theme.colors.gray.gray400;
-        return `
-          background-color: ${theme.colors.gray.gray700};
-          border-bottom: 1px solid ${bottomColor};
-          padding: 12px 4px;
-        `;
-      }
-    }
-  };
+const baseRow = (theme: Theme) => `
+  background-color: ${theme.colors.gray.gray700};
+  padding: 12px 4px;
+`;
+
+const fieldRowVariants: Record<FieldRowStyleVariant, (theme: Theme) => string> = {
+  "count-error": (theme) =>
+    `${countBase(theme)} border: 1px solid ${theme.colors.semantic.alertRed}; align-items: flex-start;`,
+  "count-active": (theme) =>
+    `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center;`,
+  "count-idle": (theme) =>
+    `${countBase(theme)} border: 1px solid transparent; align-items: center;`,
+  "base-error": (theme) =>
+    `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.semantic.alertRed};`,
+  "base-filled": (theme) =>
+    `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.white};`,
+  "base-idle": (theme) =>
+    `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.gray400};`,
+};
 
 export const Wrapper = styled.div`
   display: flex;
@@ -58,14 +37,12 @@ export const Wrapper = styled.div`
   width: 100%;
 `;
 
-export const FieldRow = styled.div<FieldRowProps>`
+export const FieldRow = styled.div<{ $styleVariant: FieldRowStyleVariant }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  ${({ $variant, $hasValue, $hasError, $isFocused, theme }) =>
-    getFieldRowStyles($variant, $hasValue, $hasError, $isFocused)(theme)}
+  ${({ $styleVariant, theme }) => fieldRowVariants[$styleVariant](theme)}
 `;
-
 
 export const Input = styled.input<InputProps>`
   flex: 1;
@@ -73,9 +50,7 @@ export const Input = styled.input<InputProps>`
   background: transparent;
   border: none;
   ${({ $variant, theme }) =>
-    $variant === "count"
-      ? { ...theme.typography.subBody }
-      : { ...theme.typography.body3 }};
+    $variant === "count" ? { ...theme.typography.subBody } : { ...theme.typography.body3 }};
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 
@@ -104,10 +79,10 @@ export const CounterBox = styled.div`
   flex-shrink: 0;
 `;
 
-export const Counter = styled.span<CounterProps>`
+export const Counter = styled.span<{ $styleVariant: FieldRowStyleVariant }>`
   ${({ theme }) => ({ ...theme.typography.caption })};
-  color: ${({ $isFocused, theme }) =>
-    $isFocused ? theme.colors.gray.gray200 : theme.colors.gray.gray300};
+  color: ${({ $styleVariant, theme }) =>
+    $styleVariant === "count-active" ? theme.colors.gray.gray200 : theme.colors.gray.gray300};
 `;
 
 export const ErrorMessage = styled.span`
