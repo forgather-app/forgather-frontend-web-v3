@@ -138,6 +138,7 @@ const GuestBookPage = ({
             headerType={{
               iconType: "scrap",
               isScrapped: false,
+              // TODO: API 연동 후 스크랩 기능 구현
               toggleScrap: () => {},
             }}
           />
