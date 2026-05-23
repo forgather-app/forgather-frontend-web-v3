@@ -120,6 +120,7 @@ export const theme = {
     },
   },
   layout: {
+    maxWidth: "400px",
     zIndex: {
       bottomSheet: 10,
       backdrop: 1,
