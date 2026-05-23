@@ -91,10 +91,7 @@ export const NewGuestBadge = styled.div`
 `;
 
 export const NewGuestCount = styled.span`
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 140%;
-  letter-spacing: -0.02em;
+  ${({ theme }) => ({ ...theme.typography.subBody1 })};
   color: ${({ theme }) => theme.colors.gray.white};
 `;
 
