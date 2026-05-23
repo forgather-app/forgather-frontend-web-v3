@@ -30,15 +30,9 @@ interface SnackBarProps {
 }
 
 const ICON = {
-  alert: (
-    <IcCheck width={24} height={24} color={theme.colors.main.purple100} />
-  ),
+  alert: <IcCheck width={24} height={24} color={theme.colors.main.purple100} />,
   error: (
-    <IcAlert
-      width={24}
-      height={24}
-      color={theme.colors.semantic.alertRed}
-    />
+    <IcAlert width={24} height={24} color={theme.colors.semantic.alertRed} />
   ),
 } satisfies Record<IconType, JSX.Element>;
 
