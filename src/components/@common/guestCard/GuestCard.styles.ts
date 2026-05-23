@@ -4,7 +4,8 @@ import { cardFlip, gradientSweep } from "@/styles/animations";
 import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const Scene = styled.div`
-  max-width: 154px;
+  width: 100%;
+  max-width: 200px;
   height: 184px;
   perspective: 800px;
 `;
@@ -34,18 +35,13 @@ export const Back = styled.div`
   justify-content: center;
   gap: 16px;
   border-radius: 8px;
-  background: radial-gradient(
-    ellipse at center,
-    ${({ theme }) => theme.colors.gray.gray700},
-    ${({ theme }) => theme.colors.semantic.black}
-  );
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: 10px;
-    background: linear-gradient(
+  border: 2px solid transparent;
+  background-image: radial-gradient(
+      ellipse at center,
+      ${({ theme }) => theme.colors.gray.gray700},
+      ${({ theme }) => theme.colors.semantic.black}
+    ),
+    linear-gradient(
       90deg,
       ${({ theme }) => theme.colors.main.purple},
       ${({ theme }) => theme.colors.main.purple100},
@@ -53,10 +49,10 @@ export const Back = styled.div`
       ${({ theme }) => theme.colors.main.purple100},
       ${({ theme }) => theme.colors.main.purple}
     );
-    background-size: 300% 100%;
-    animation: ${gradientSweep} 20s linear infinite;
-    z-index: -1;
-  }
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 100%;
+  animation: ${gradientSweep} 20s linear infinite;
 `;
 
 export const LogoWrapper = styled.div`
