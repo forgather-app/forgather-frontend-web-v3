@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useCallback, useRef, useState } from "react";
+import * as S from "@/components/layout/HeaderScrollLayout/HeaderScrollLayout.styles";
 import { CONSTRAINTS } from "@/constants/constraints";
-import * as S from "./HeaderScrollLayout.styles";
 
 interface HeaderScrollLayoutProps {
   /** 상단에 sticky로 붙는 헤더 영역 */
