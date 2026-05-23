@@ -1,9 +1,14 @@
 import { useState } from "react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
 import GuestCard from "@/components/@common/guestCard/GuestCard";
+import GuestList from "@/components/@common/guestList/GuestList";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";
+
+type GuestBookView = "card" | "list";
+
+type GuestBookFilter = "all" | "photo" | "scrap";
 
 interface GuestBookPageProps {
   /** 스페이스 ID */
@@ -98,16 +103,77 @@ const GuestBookPage = ({
   spaceName = "스페이스 이름",
   onBack,
 }: GuestBookPageProps) => {
-  const [activeTab, setActiveTab] = useState<"left" | "right">("left");
-  const [activeFilter, setActiveFilter] = useState<"all" | "photo" | "scrap">(
-    "all",
-  );
+  const [activeView, setActiveView] = useState<GuestBookView>("card");
+  const [activeFilter, setActiveFilter] = useState<GuestBookFilter>("all");
+  // TODO: API 연동 시 mutation(읽음 처리) + invalidateQueries로 교체 필요. isNew는 서버 상태
+  const [openedCardIds, setOpenedCardIds] = useState<Set<number>>(new Set());
+  // TODO: API 응답으로 대체 필요
+  const totalCount = DUMMY_CARDS.length;
+
+  function renderCardView() {
+    return (
+      <S.CardGrid>
+        {DUMMY_CARDS.map((card) => (
+          <GuestCard
+            key={card.id}
+            isNew={card.isNew}
+            author={card.author}
+            text={card.text}
+            isPhotoExist={card.isPhotoExist}
+            headerType={{
+              iconType: "scrap",
+              isScrapped: false,
+              // TODO: API 연동 후 스크랩 기능 구현
+              toggleScrap: () => {},
+            }}
+          />
+        ))}
+      </S.CardGrid>
+    );
+  }
+
+  function renderListView() {
+    return (
+      <S.GuestListContainer>
+        {DUMMY_CARDS.map((card) => {
+          if (card.isNew && !openedCardIds.has(card.id)) {
+            return (
+              <GuestList
+                key={card.id}
+                isNew
+                onClick={() =>
+                  setOpenedCardIds((prev) => new Set(prev).add(card.id))
+                }
+              />
+            );
+          }
+          return (
+            <GuestList
+              key={card.id}
+              title={card.author}
+              hasPhoto={card.isPhotoExist}
+              onClick={() => {}}
+            />
+          );
+        })}
+      </S.GuestListContainer>
+    );
+  }
+
+  function renderContent() {
+    switch (activeView) {
+      case "card":
+        return renderCardView();
+      case "list":
+        return renderListView();
+    }
+  }
 
   return (
     <NavigationBarLayout title={spaceName} onBackClick={onBack}>
       <S.FilterSection>
         <S.CountText>
-          총 <S.CountNumber>00</S.CountNumber>개의 방명록
+          총 <S.CountNumber>{totalCount}</S.CountNumber>개의 방명록
         </S.CountText>
         <S.ChipRow>
           <FilterChip
@@ -127,30 +193,14 @@ const GuestBookPage = ({
           />
         </S.ChipRow>
       </S.FilterSection>
-      <S.CardGrid>
-        {DUMMY_CARDS.map((card) => (
-          <GuestCard
-            key={card.id}
-            isNew={card.isNew}
-            author={card.author}
-            text={card.text}
-            isPhotoExist={card.isPhotoExist}
-            headerType={{
-              iconType: "scrap",
-              isScrapped: false,
-              // TODO: API 연동 후 스크랩 기능 구현
-              toggleScrap: () => {},
-            }}
-          />
-        ))}
-      </S.CardGrid>
+      {renderContent()}
       <S.BottomSpacer />
       <S.BottomTabWrapper>
         <TabMenu
           variant="pill"
-          activeTab={activeTab}
-          left={{ text: "카드 보기", onClick: () => setActiveTab("left") }}
-          right={{ text: "목록 보기", onClick: () => setActiveTab("right") }}
+          activeTab={activeView === "card" ? "left" : "right"}
+          left={{ text: "카드 보기", onClick: () => setActiveView("card") }}
+          right={{ text: "목록 보기", onClick: () => setActiveView("list") }}
         />
       </S.BottomTabWrapper>
     </NavigationBarLayout>
