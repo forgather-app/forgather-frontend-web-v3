@@ -111,12 +111,12 @@ export const PinButton = styled.button<{ $isPinned: boolean }>`
   }
 `;
 
-export const Card = styled.div<{ $isClickable: boolean }>`
+export const Card = styled.div`
   position: relative;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);
-  ${({ $isClickable }) => $isClickable && "cursor: pointer;"}
+  cursor: pointer;
 
   &:active:not(:has(button:active)) {
     --content-bg: ${({ theme }) => theme.colors.gray.gray500};

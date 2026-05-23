@@ -34,9 +34,9 @@ const SpaceCard = ({
 }: SpaceCardProps) => {
   return (
     <S.Card
+      role="button"
       onClick={onClick}
       aria-label={`스페이스: ${title}, 전시: ${exhibitionName ?? "연결된 전시 없음"}`}
-      $isClickable
     >
       <S.BackgroundImage
         src={backgroundImageUrl ?? spaceCardFallback}
@@ -56,9 +56,7 @@ const SpaceCard = ({
                 {exhibitionName ?? "연결된 전시 없음"}
               </S.ExhibitionName>
             </S.ExhibitionLink>
-            <S.GuestBadge
-              aria-label={`방문객 ${guestCount}명`}
-            >
+            <S.GuestBadge aria-label={`방문객 ${guestCount}명`}>
               <S.GuestAvatarGroup aria-hidden>
                 <S.GuestAvatar>
                   <IcSmallLogo width={14} height={14} />
