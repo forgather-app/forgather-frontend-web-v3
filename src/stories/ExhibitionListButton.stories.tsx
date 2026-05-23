@@ -4,7 +4,7 @@ import ExhibitionListButton from "@/components/@common/DisplayList/ExhibitionLis
 const THUMBNAIL_URL = "https://picsum.photos/seed/forgather/80/80";
 
 const meta: Meta<typeof ExhibitionListButton> = {
-  title: "UI/ExhibitionListButton",
+  title: "Common/ExhibitionListButton",
   component: ExhibitionListButton,
   tags: ["autodocs"],
   parameters: {

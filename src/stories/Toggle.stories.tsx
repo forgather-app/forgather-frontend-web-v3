@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useArgs } from "storybook/preview-api";
-import Toggle from "../components/@common/toggle/Toggle";
+import Toggle from "../components/@common/Toggle/Toggle";
 
 const meta: Meta<typeof Toggle> = {
   title: "Common/Toggle",
