@@ -33,6 +33,12 @@ const CategoryField = ({
           <S.Input
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                onAdd();
+              }
+            }}
             placeholder={placeholder}
             aria-label="카테고리 입력"
           />
