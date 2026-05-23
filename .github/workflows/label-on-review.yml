@@ -1,0 +1,59 @@
+name: Label on Review
+
+on:
+  pull_request_review:
+    types: [submitted]
+  issue_comment:
+    types: [created]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  add-review-label:
+    name: Add review label
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure review label exists
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'review',
+              });
+            } catch {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'review',
+                color: 'fbca04',
+                description: '리뷰가 달린 PR',
+              });
+            }
+
+      - name: Add review label to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let prNumber;
+
+            if (context.eventName === 'pull_request_review') {
+              prNumber = context.payload.pull_request.number;
+            } else if (context.eventName === 'issue_comment') {
+              // PR 코멘트인 경우에만 처리 (일반 이슈 코멘트 제외)
+              if (!context.payload.issue.pull_request) return;
+              prNumber = context.payload.issue.number;
+            }
+
+            if (!prNumber) return;
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              labels: ['review'],
+            });
