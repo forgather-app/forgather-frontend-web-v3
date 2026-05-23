@@ -1,11 +1,19 @@
 import { useId, useState } from "react";
-import clearIcon from "../../../assets/icons/ic_clear.svg";
-import linkIcon from "../../../assets/icons/ic_link.svg";
-import searchIcon from "../../../assets/icons/ic_search.svg";
+import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
+import LinkIcon from "../../../assets/icons/ic_link.svg?react";
+import SearchIcon from "../../../assets/icons/ic_search.svg?react";
 import { getGraphemeLength } from "../../../utils/getGraphemeLength";
 import * as S from "./TextField.styles";
 
 export type TextFieldVariant = "default" | "search" | "link" | "count";
+
+export type FieldRowStyleVariant =
+  | "count-error"
+  | "count-active"
+  | "count-idle"
+  | "base-error"
+  | "base-filled"
+  | "base-idle";
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /**
@@ -31,6 +39,17 @@ const DEFAULT_PLACEHOLDER: Record<TextFieldVariant, string> = {
   count: "",
 };
 
+const toStyleVariant = (
+  variant: TextFieldVariant,
+  isFocused: boolean,
+  hasError: boolean,
+  hasValue: boolean,
+): FieldRowStyleVariant => {
+  if (hasError) return variant === "count" ? "count-error" : "base-error";
+  if (variant === "count") return isFocused && hasValue ? "count-active" : "count-idle";
+  return variant !== "default" && hasValue ? "base-filled" : "base-idle";
+};
+
 const TextField = ({
   value,
   onChange,
@@ -49,13 +68,13 @@ const TextField = ({
   const hasValue = !!value;
   const hasError =
     (variant === "link" || variant === "count") && !!errorMessage;
-
   const graphemeCount =
     variant === "count" ? getGraphemeLength(String(value ?? "")) : 0;
-
   const showClear =
     (variant === "search" && hasValue && isFocused) ||
     (variant === "link" && hasValue);
+
+  const styleVariant = toStyleVariant(variant, isFocused, hasError, hasValue);
 
   const handleClear = () => {
     if (onClear) onClear();
@@ -67,30 +86,11 @@ const TextField = ({
 
   return (
     <S.Wrapper>
-      <S.FieldRow
-        $variant={variant}
-        $hasValue={hasValue}
-        $hasError={hasError}
-        $isFocused={isFocused}
-      >
+      <S.FieldRow $styleVariant={styleVariant}>
         {variant === "search" && (
-          <S.LeadingIcon
-            src={searchIcon}
-            alt=""
-            aria-hidden
-            width={20}
-            height={20}
-          />
+          <SearchIcon aria-hidden width={20} height={20} />
         )}
-        {variant === "link" && (
-          <S.LeadingIcon
-            src={linkIcon}
-            alt=""
-            aria-hidden
-            width={16}
-            height={16}
-          />
-        )}
+        {variant === "link" && <LinkIcon aria-hidden width={16} height={16} />}
         <S.Input
           {...rest}
           $variant={variant}
@@ -116,12 +116,12 @@ const TextField = ({
             onMouseDown={(e) => e.preventDefault()}
             onClick={handleClear}
           >
-            <img src={clearIcon} alt="" aria-hidden width={20} height={20} />
+            <ClearIcon aria-hidden width={20} height={20} />
           </S.ClearButton>
         )}
         {variant === "count" && maxCount !== undefined && (
           <S.CounterBox>
-            <S.Counter $isFocused={isFocused}>
+            <S.Counter $styleVariant={styleVariant}>
               {graphemeCount} / {maxCount}자
             </S.Counter>
             {hasError && (
