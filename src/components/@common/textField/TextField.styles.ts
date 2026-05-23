@@ -29,6 +29,8 @@ const fieldRowVariants: Record<FieldRowStyleVariant, (theme: Theme) => string> =
     `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.white};`,
   "base-idle": (theme) =>
     `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.gray400};`,
+  category: (theme) =>
+    `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center; gap: 4px;`,
 };
 
 export const Wrapper = styled.div`
@@ -44,13 +46,21 @@ export const FieldRow = styled.div<{ $styleVariant: FieldRowStyleVariant }>`
   ${({ $styleVariant, theme }) => fieldRowVariants[$styleVariant](theme)}
 `;
 
+export const HashPrefix = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.white};
+  flex-shrink: 0;
+`;
+
 export const Input = styled.input<InputProps>`
   flex: 1;
   min-width: 0;
   background: transparent;
   border: none;
   ${({ $variant, theme }) =>
-    $variant === "count" ? { ...theme.typography.subBody } : { ...theme.typography.body3 }};
+    $variant === "count" || $variant === "category"
+      ? { ...theme.typography.subBody }
+      : { ...theme.typography.body3 }};
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 
