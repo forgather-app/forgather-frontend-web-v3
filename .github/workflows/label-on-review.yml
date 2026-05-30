@@ -40,6 +40,10 @@ jobs:
         with:
           script: |
             let prNumber;
+            const sender = context.payload.sender.login;
+
+            // 봇 계정 제외
+            if (sender.endsWith('[bot]')) return;
 
             if (context.eventName === 'pull_request_review') {
               // approve 시 남긴 코멘트는 제외
