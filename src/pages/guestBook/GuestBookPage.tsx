@@ -5,14 +5,7 @@ import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";
 
-interface GuestBookPageProps {
-  /** 스페이스 ID */
-  spaceId: string;
-  /** 스페이스 이름 */
-  spaceName?: string;
-  /** 뒤로가기 핸들러 */
-  onBack: () => void;
-}
+const DUMMY_SPACE_NAME = "스페이스 이름";
 
 const DUMMY_CARDS = [
   {
@@ -94,17 +87,16 @@ const DUMMY_CARDS = [
   },
 ];
 
-const GuestBookPage = ({
-  spaceName = "스페이스 이름",
-  onBack,
-}: GuestBookPageProps) => {
+const GuestBookPage = () => {
+  const handleBack = () => window.history.back();
+
   const [activeTab, setActiveTab] = useState<"left" | "right">("left");
   const [activeFilter, setActiveFilter] = useState<"all" | "photo" | "scrap">(
     "all",
   );
 
   return (
-    <NavigationBarLayout title={spaceName} onBackClick={onBack}>
+    <NavigationBarLayout title={DUMMY_SPACE_NAME} onBackClick={handleBack}>
       <S.FilterSection>
         <S.CountText>
           총 <S.CountNumber>00</S.CountNumber>개의 방명록

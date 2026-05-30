@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import GuestBookPage from "@/pages/guestBook/GuestBookPage";
 
 export const Route = createFileRoute("/spaces/$spaceId/guestbook")({
@@ -6,10 +6,5 @@ export const Route = createFileRoute("/spaces/$spaceId/guestbook")({
 });
 
 function RouteComponent() {
-  const { spaceId } = Route.useParams();
-  const navigate = useNavigate();
-
-  return (
-    <GuestBookPage spaceId={spaceId} onBack={() => navigate({ to: ".." })} />
-  );
+  return <GuestBookPage />;
 }
