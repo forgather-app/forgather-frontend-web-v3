@@ -18,6 +18,8 @@ export const slideOut = keyframes`
 export const dissolve = keyframes`
   from { opacity: 1; }
   to { opacity: 0; }
+`;
+
 export const cardFlip = keyframes`
   from { transform: rotateY(0deg); }
   to { transform: rotateY(180deg); }
