@@ -1,4 +1,10 @@
-import { createContext, type ReactNode, useContext, useEffect, useId } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useId,
+} from "react";
 import { createPortal } from "react-dom";
 import { Backdrop } from "../../../styles/@common/Overlay/Backdrop.styles";
 import * as S from "./Modal.styles";

@@ -5,7 +5,12 @@ import SearchIcon from "../../../assets/icons/ic_search.svg?react";
 import { getGraphemeLength } from "../../../utils/getGraphemeLength";
 import * as S from "./TextField.styles";
 
-export type TextFieldVariant = "default" | "search" | "link" | "count" | "category";
+export type TextFieldVariant =
+  | "default"
+  | "search"
+  | "link"
+  | "count"
+  | "category";
 
 export type FieldRowStyleVariant =
   | "count-error"
@@ -49,7 +54,8 @@ const toStyleVariant = (
 ): FieldRowStyleVariant => {
   if (variant === "category") return "category";
   if (hasError) return variant === "count" ? "count-error" : "base-error";
-  if (variant === "count") return isFocused && hasValue ? "count-active" : "count-idle";
+  if (variant === "count")
+    return isFocused && hasValue ? "count-active" : "count-idle";
   return variant !== "default" && hasValue ? "base-filled" : "base-idle";
 };
 
@@ -94,7 +100,9 @@ const TextField = ({
           <SearchIcon aria-hidden width={20} height={20} />
         )}
         {variant === "link" && <LinkIcon aria-hidden width={16} height={16} />}
-        {variant === "category" && <S.HashPrefix aria-hidden="true">#</S.HashPrefix>}
+        {variant === "category" && (
+          <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
+        )}
         <S.Input
           {...rest}
           $variant={variant}

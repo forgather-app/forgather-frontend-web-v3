@@ -16,22 +16,23 @@ const baseRow = (theme: Theme) => `
   padding: 12px 4px;
 `;
 
-const fieldRowVariants: Record<FieldRowStyleVariant, (theme: Theme) => string> = {
-  "count-error": (theme) =>
-    `${countBase(theme)} border: 1px solid ${theme.colors.semantic.alertRed}; align-items: flex-start;`,
-  "count-active": (theme) =>
-    `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center;`,
-  "count-idle": (theme) =>
-    `${countBase(theme)} border: 1px solid transparent; align-items: center;`,
-  "base-error": (theme) =>
-    `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.semantic.alertRed};`,
-  "base-filled": (theme) =>
-    `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.white};`,
-  "base-idle": (theme) =>
-    `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.gray400};`,
-  category: (theme) =>
-    `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center; gap: 4px;`,
-};
+const fieldRowVariants: Record<FieldRowStyleVariant, (theme: Theme) => string> =
+  {
+    "count-error": (theme) =>
+      `${countBase(theme)} border: 1px solid ${theme.colors.semantic.alertRed}; align-items: flex-start;`,
+    "count-active": (theme) =>
+      `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center;`,
+    "count-idle": (theme) =>
+      `${countBase(theme)} border: 1px solid transparent; align-items: center;`,
+    "base-error": (theme) =>
+      `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.semantic.alertRed};`,
+    "base-filled": (theme) =>
+      `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.white};`,
+    "base-idle": (theme) =>
+      `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.gray400};`,
+    category: (theme) =>
+      `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center; gap: 4px;`,
+  };
 
 export const Wrapper = styled.div`
   display: flex;
@@ -92,7 +93,9 @@ export const CounterBox = styled.div`
 export const Counter = styled.span<{ $styleVariant: FieldRowStyleVariant }>`
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ $styleVariant, theme }) =>
-    $styleVariant === "count-active" ? theme.colors.gray.gray200 : theme.colors.gray.gray300};
+    $styleVariant === "count-active"
+      ? theme.colors.gray.gray200
+      : theme.colors.gray.gray300};
 `;
 
 export const ErrorMessage = styled.span`
