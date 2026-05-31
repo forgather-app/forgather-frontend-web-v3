@@ -52,6 +52,22 @@ Figma MCP(`get_design_context`)로 노드 정보를 가져와 다음을 파악�
 
 저장 위치: `src/components/ui/{ComponentName}/`
 
+### Import 경로 규칙
+
+모든 import는 반드시 `@/` alias를 사용합니다. 상대 경로(`../`, `./` 이외의 depth)는 금지입니다.
+
+```typescript
+// ❌ 상대 경로 (깊이가 있는 경우)
+import Button from "../../components/@common/button/Button";
+import FunnelLayout from "../shared/funnel/FunnelLayout";
+
+// ✅ alias 경로
+import Button from "@/components/@common/button/Button";
+import FunnelLayout from "@/shared/funnel/FunnelLayout";
+```
+
+같은 폴더 내 파일(`./Component.styles`)은 상대 경로 유지합니다.
+
 ### 파일 구조
 
 ```typescript
