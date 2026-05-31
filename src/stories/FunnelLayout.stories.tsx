@@ -25,8 +25,8 @@ const meta: Meta<typeof FunnelLayout> = {
       table: { type: { summary: "number" } },
     },
     title: {
-      description: "상단 제목. ReactNode를 받으므로 JSX도 사용 가능합니다.",
-      table: { type: { summary: "ReactNode" } },
+      description: "상단 제목. 줄바꿈은 \\n 사용.",
+      table: { type: { summary: "string" } },
     },
     buttonText: {
       description: "하단 버튼 텍스트",

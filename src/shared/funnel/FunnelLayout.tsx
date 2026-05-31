@@ -8,8 +8,8 @@ interface FunnelLayoutProps {
   step: number;
   /** 전체 단계 수 */
   totalSteps: number;
-  /** 상단 제목 */
-  title: ReactNode;
+  /** 상단 제목. 줄바꿈은 \n 사용 */
+  title: string;
   /** 컨텐츠 영역 */
   children: ReactNode;
   /** 다음 버튼 텍스트 */
