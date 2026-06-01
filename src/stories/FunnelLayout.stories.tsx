@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import Button from "@/components/@common/button/Button";
 import FunnelLayout from "@/shared/funnel/FunnelLayout";
 
 const meta: Meta<typeof FunnelLayout> = {
@@ -9,14 +10,14 @@ const meta: Meta<typeof FunnelLayout> = {
     docs: {
       description: {
         component:
-          "퍼널(단계별 입력) 플로우에 사용되는 레이아웃 컴포넌트. 상단 진행률 바, 제목 슬롯, 컨텐츠 슬롯, 하단 버튼으로 구성됩니다. `buttonDisabled`로 버튼 활성화 여부를 제어할 수 있습니다.",
+          "퍼널(단계별 입력) 플로우에 사용되는 레이아웃 컴포넌트. 진행률 바, 제목, 컨텐츠 슬롯, 하단 버튼 슬롯으로 구성됩니다. `button` prop으로 버튼을 주입합니다.",
       },
     },
   },
   argTypes: {
-    step: {
-      description: "현재 단계 (1부터 시작)",
-      control: { type: "number", min: 1 },
+    stepIndex: {
+      description: "현재 단계 인덱스 (0부터 시작)",
+      control: { type: "number", min: 0 },
       table: { type: { summary: "number" } },
     },
     totalSteps: {
@@ -27,23 +28,6 @@ const meta: Meta<typeof FunnelLayout> = {
     title: {
       description: "상단 제목. 줄바꿈은 \\n 사용.",
       table: { type: { summary: "string" } },
-    },
-    buttonText: {
-      description: "하단 버튼 텍스트",
-      table: { type: { summary: "string" } },
-    },
-    buttonDisabled: {
-      description:
-        "하단 버튼 비활성화 여부. 필수 입력 미완료 시 true로 설정합니다.",
-      control: "boolean",
-      table: {
-        type: { summary: "boolean" },
-        defaultValue: { summary: "false" },
-      },
-    },
-    onButtonClick: {
-      description: "하단 버튼 클릭 핸들러",
-      table: { type: { summary: "() => void" } },
     },
   },
 };
@@ -73,38 +57,16 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "기본 상태. 진행률 33%, 버튼 활성화.",
+        story: "기본 상태. 1/3 단계, button slot에 버튼 주입.",
       },
     },
   },
   args: {
-    step: 1,
+    stepIndex: 0,
     totalSteps: 3,
     title: "전시 대표 이미지를\n설정해 주세요!",
-    buttonText: "다음",
-    buttonDisabled: false,
-    onButtonClick: () => {},
     children: <PlaceholderContent />,
-  },
-};
-
-export const ButtonDisabled: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "버튼 비활성화 상태. 필수 입력값을 아직 채우지 않은 경우에 사용합니다.",
-      },
-    },
-  },
-  args: {
-    step: 1,
-    totalSteps: 3,
-    title: "전시 대표 이미지를\n설정해 주세요!",
-    buttonText: "다음",
-    buttonDisabled: true,
-    onButtonClick: () => {},
-    children: <PlaceholderContent />,
+    button: <Button text="다음" onClick={() => {}} />,
   },
 };
 
@@ -112,17 +74,15 @@ export const LastStep: Story = {
   parameters: {
     docs: {
       description: {
-        story: "마지막 단계. 진행률 100%이며 완료 버튼을 표시합니다.",
+        story: "마지막 단계. 진행률 100%.",
       },
     },
   },
   args: {
-    step: 3,
+    stepIndex: 2,
     totalSteps: 3,
     title: "모든 정보를\n입력하셨습니다!",
-    buttonText: "완료",
-    buttonDisabled: false,
-    onButtonClick: () => {},
     children: <PlaceholderContent />,
+    button: <Button text="완료" onClick={() => {}} />,
   },
 };
