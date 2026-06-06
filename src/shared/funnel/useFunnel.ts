@@ -18,7 +18,7 @@ interface UseFunnelProps<T extends readonly string[], D> {
  * const STEPS = ["image", "info"] as const;
  * type Data = { image: { file: File }; info: { title: string } };
  *
- * const { currentStep, onNext, onPrev, data } = useFunnel<typeof STEPS, Data>({
+ * const { currentStepIndex, onNext, onPrev, data } = useFunnel<typeof STEPS, Data>({
  *   steps: STEPS,
  *   initialData: { image: { file: null }, info: { title: "" } },
  * });

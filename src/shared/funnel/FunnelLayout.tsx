@@ -22,7 +22,7 @@ const FunnelLayout = ({
   children,
   button,
 }: FunnelLayoutProps) => {
-  const progress = (stepIndex / totalSteps) * 100;
+  const progress = ((stepIndex + 1) / totalSteps) * 100;
 
   return (
     <S.Container>
