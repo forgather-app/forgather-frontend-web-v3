@@ -24,3 +24,10 @@ export const IconCircle = styled.div`
 export const InvisibleInput = styled.input`
   display: none;
 `;
+
+export const PreviewImage = styled.img`
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  object-fit: cover;
+`;

@@ -9,7 +9,7 @@ const meta: Meta<typeof ImageInput> = {
     docs: {
       description: {
         component:
-          "이미지 업로드용 클릭 영역 컴포넌트. 클릭 시 파일 선택창이 열립니다.",
+          "이미지 업로드용 클릭 영역 컴포넌트. 클릭 시 파일 선택창이 열립니다. 이미지 선택 후 미리보기를 표시하려면 previewImage에 object URL을 전달하세요.",
       },
     },
   },
@@ -19,4 +19,20 @@ export default meta;
 
 type Story = StoryObj<typeof ImageInput>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    previewImage: null,
+  },
+};
+
+export const WithPreview: Story = {
+  parameters: {
+    docs: {
+      description: { story: "이미지 선택 후 미리보기 상태." },
+    },
+  },
+  args: {
+    previewImage:
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop",
+  },
+};
