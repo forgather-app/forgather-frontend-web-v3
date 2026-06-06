@@ -7,12 +7,10 @@ interface FunnelLayoutProps {
   stepIndex: number;
   /** 전체 단계 수 */
   totalSteps: number;
-  /** 상단 제목. 줄바꿈은 \n 사용 */
+  /** 단계 제목. 줄바꿈은 \n 사용 */
   title: string;
-  /** 컨텐츠 영역 */
+  /** 단계 컴포넌트 (ItemLayout으로 감싸야 함) */
   children: ReactNode;
-  /** 하단 버튼 슬롯 */
-  button: ReactNode;
 }
 
 // TODO: #78 머지 후 HeaderScrollLayout + NavigationBar로 교체
@@ -21,20 +19,16 @@ const FunnelLayout = ({
   totalSteps,
   title,
   children,
-  button,
 }: FunnelLayoutProps) => {
   const progress = ((stepIndex + 1) / totalSteps) * 100;
 
   return (
     <S.Container>
-      <S.Main>
+      <S.Top>
         <ProgressBar value={progress} />
-        <S.Content>
-          <S.Title>{title}</S.Title>
-          {children}
-        </S.Content>
-      </S.Main>
-      <S.Footer>{button}</S.Footer>
+        <S.Title>{title}</S.Title>
+      </S.Top>
+      <S.Body>{children}</S.Body>
     </S.Container>
   );
 };
