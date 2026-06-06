@@ -1,5 +1,6 @@
 import FunnelLayout from "@/shared/funnel/FunnelLayout";
 import useFunnel from "@/shared/funnel/useFunnel";
+import ImageStep from "./steps/ImageStep";
 
 const STEPS = ["image", "description", "information"] as const;
 
@@ -34,7 +35,7 @@ type StepType = typeof STEPS;
 type DataType = CreateExhibitionFunnelData;
 
 const CreateExhibitionFunnel = () => {
-  const { currentStepIndex } = useFunnel<StepType, DataType>({
+  const { currentStepIndex, onNext } = useFunnel<StepType, DataType>({
     steps: STEPS,
     initialData: INITIAL_DATA,
   });
@@ -43,9 +44,8 @@ const CreateExhibitionFunnel = () => {
       stepIndex={currentStepIndex}
       totalSteps={STEPS.length}
       title={TITLE_META[STEPS[currentStepIndex]]}
-      button={null}
     >
-      {null}
+      {STEPS[currentStepIndex] === "image" && <ImageStep onNext={onNext} />}
     </FunnelLayout>
   );
 };
