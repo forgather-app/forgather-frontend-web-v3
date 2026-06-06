@@ -48,10 +48,14 @@ jobs:
             if (context.eventName === 'pull_request_review') {
               // approve 시 남긴 코멘트는 제외
               if (context.payload.review.state === 'approved') return;
+              // PR 작성자 본인 리뷰 제외
+              if (sender === context.payload.pull_request.user.login) return;
               prNumber = context.payload.pull_request.number;
             } else if (context.eventName === 'issue_comment') {
               // PR 코멘트인 경우에만 처리 (일반 이슈 코멘트 제외)
               if (!context.payload.issue.pull_request) return;
+              // PR 작성자 본인 코멘트 제외
+              if (sender === context.payload.issue.user.login) return;
               prNumber = context.payload.issue.number;
             }
 
