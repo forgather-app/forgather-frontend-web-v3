@@ -18,23 +18,20 @@ const ImageInput = ({ previewImage, onChange }: ImageInputProps) => {
 
   return (
     <>
-      {previewImage ? (
-        <S.PreviewImage src={previewImage} alt="선택한 이미지 미리보기" />
-      ) : (
-        <>
-          <S.ClickArea htmlFor={INPUT_ID} aria-label="이미지 선택">
-            <S.IconCircle>
-              <IcCamera width={24} height={24} fill="none" aria-hidden="true" />
-            </S.IconCircle>
-          </S.ClickArea>
-          <S.InvisibleInput
-            id={INPUT_ID}
-            type="file"
-            accept="image/*"
-            onChange={handleChange}
-          />
-        </>
-      )}
+      <S.ClickArea htmlFor={INPUT_ID} aria-label="이미지 선택">
+        {previewImage && (
+          <S.PreviewImage src={previewImage} alt="선택한 이미지 미리보기" />
+        )}
+        <S.IconCircle>
+          <IcCamera width={24} height={24} fill="none" aria-hidden="true" />
+        </S.IconCircle>
+      </S.ClickArea>
+      <S.InvisibleInput
+        id={INPUT_ID}
+        type="file"
+        accept="image/*"
+        onChange={handleChange}
+      />
     </>
   );
 };
