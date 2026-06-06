@@ -15,6 +15,7 @@ interface FunnelLayoutProps {
   button: ReactNode;
 }
 
+// TODO: #78 머지 후 HeaderScrollLayout + NavigationBar로 교체
 const FunnelLayout = ({
   stepIndex,
   totalSteps,
