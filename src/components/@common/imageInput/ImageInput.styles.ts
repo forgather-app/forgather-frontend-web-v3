@@ -25,6 +25,7 @@ export const IconCircle = styled.div`
   height: 64px;
   background-color: ${({ theme }) => theme.colors.gray.gray500};
   border-radius: 50%;
+  opacity: 0.7;
 `;
 
 export const InvisibleInput = styled.input`
