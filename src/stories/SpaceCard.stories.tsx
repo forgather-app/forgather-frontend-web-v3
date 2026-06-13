@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import SpaceCard from "../components/ui/spaceCard/SpaceCard";
+import SpaceCard from "../components/UI/SpaceCard/SpaceCard";
 
 const meta: Meta<typeof SpaceCard> = {
   title: "UI/SpaceCard",
