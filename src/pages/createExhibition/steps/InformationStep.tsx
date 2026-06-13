@@ -1,6 +1,9 @@
 import { useState } from "react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcLocation from "@/assets/icons/ic_location.svg?react";
+import BottomSheet from "@/components/@common/BottomSheet/BottomSheet";
+import type { DateRange } from "@/components/@common/dateRangePicker/DateRangePicker";
+import DateRangePicker from "@/components/@common/dateRangePicker/DateRangePicker";
 import PickerField from "@/components/@common/pickerField/PickerField";
 import ItemLayout from "@/shared/funnel/ItemLayout";
 import * as S from "./InformationStep.styles";
@@ -15,18 +18,28 @@ interface InformationStepProps {
   }) => void;
 }
 
+const formatDateRange = (range: DateRange | undefined): string => {
+  if (!range?.from) return "";
+  const fmt = (d: Date) =>
+    `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+  return range.to ? `${fmt(range.from)} ~ ${fmt(range.to)}` : fmt(range.from);
+};
+
 const InformationStep = ({ onNext }: InformationStepProps) => {
-  const [date, _setDate] = useState("");
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const [isDateOpen, setIsDateOpen] = useState(false);
   const [operatingHours, _setOperatingHours] = useState("");
   const [location, setLocation] = useState<Location | null>(null);
 
-  const isValid = !!date && !!operatingHours && !!location;
+  const dateDisplay = formatDateRange(dateRange);
+  const isValid =
+    !!dateRange?.from && !!dateRange?.to && !!operatingHours && !!location;
 
   const handleLocationSelect = (value: Location) => () => setLocation(value);
 
   const handleNext = () => {
     if (!location) return;
-    onNext({ date, operatingHours, location });
+    onNext({ date: dateDisplay, operatingHours, location });
   };
 
   return (
@@ -34,7 +47,11 @@ const InformationStep = ({ onNext }: InformationStepProps) => {
       <S.FieldsWrapper>
         <S.FieldGroup>
           <S.Label>날짜</S.Label>
-          <PickerField value={date} placeholder="날짜를 선택해주세요" />
+          <PickerField
+            value={dateDisplay}
+            placeholder="날짜를 선택해주세요"
+            onClick={() => setIsDateOpen(true)}
+          />
         </S.FieldGroup>
         <S.FieldGroup>
           <S.Label>운영 시간</S.Label>
@@ -65,6 +82,14 @@ const InformationStep = ({ onNext }: InformationStepProps) => {
           </S.LocationButtons>
         </S.FieldGroup>
       </S.FieldsWrapper>
+
+      {isDateOpen && (
+        <S.BottomSheetContainer>
+          <BottomSheet isOpen={isDateOpen} onClose={() => setIsDateOpen(false)}>
+            <DateRangePicker selected={dateRange} onSelect={setDateRange} />
+          </BottomSheet>
+        </S.BottomSheetContainer>
+      )}
     </ItemLayout>
   );
 };

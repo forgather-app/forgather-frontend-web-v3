@@ -22,6 +22,17 @@ export const LocationButtons = styled.div`
   gap: 8px;
 `;
 
+export const BottomSheetContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: ${({ theme }) => theme.layout.maxWidth};
+  z-index: ${({ theme }) => theme.layout.zIndex.bottomSheet};
+`;
+
 export const LocationButton = styled.button<{ $isSelected: boolean }>`
   display: flex;
   align-items: center;
