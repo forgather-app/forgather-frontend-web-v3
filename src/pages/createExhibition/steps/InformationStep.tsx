@@ -6,6 +6,7 @@ import type { DateRange } from "@/components/@common/dateRangePicker/DateRangePi
 import DateRangePicker from "@/components/@common/dateRangePicker/DateRangePicker";
 import PickerField from "@/components/@common/pickerField/PickerField";
 import ItemLayout from "@/shared/funnel/ItemLayout";
+import { formatDateRange } from "@/utils/date";
 import * as S from "./InformationStep.styles";
 
 type Location = "online" | "offline";
@@ -18,20 +19,12 @@ interface InformationStepProps {
   }) => void;
 }
 
-const formatDateRange = (range: DateRange | undefined): string => {
-  if (!range?.from) return "";
-  const fmt = (d: Date) =>
-    `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-  return range.to ? `${fmt(range.from)} ~ ${fmt(range.to)}` : fmt(range.from);
-};
-
 const InformationStep = ({ onNext }: InformationStepProps) => {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const [isDateOpen, setIsDateOpen] = useState(false);
   const [operatingHours, _setOperatingHours] = useState("");
   const [location, setLocation] = useState<Location | null>(null);
 
-  const dateDisplay = formatDateRange(dateRange);
   const isValid =
     !!dateRange?.from && !!dateRange?.to && !!operatingHours && !!location;
 
@@ -39,7 +32,7 @@ const InformationStep = ({ onNext }: InformationStepProps) => {
 
   const handleNext = () => {
     if (!location) return;
-    onNext({ date: dateDisplay, operatingHours, location });
+    onNext({ date: formatDateRange(dateRange), operatingHours, location });
   };
 
   return (
@@ -48,7 +41,7 @@ const InformationStep = ({ onNext }: InformationStepProps) => {
         <S.FieldGroup>
           <S.Label>날짜</S.Label>
           <PickerField
-            value={dateDisplay}
+            value={formatDateRange(dateRange)}
             placeholder="날짜를 선택해주세요"
             onClick={() => setIsDateOpen(true)}
           />

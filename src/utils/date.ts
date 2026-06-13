@@ -23,3 +23,14 @@ export const formatExhibitionPeriod = (
   startDate: Date,
   endDate: Date,
 ): string => `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
+
+export const formatDateRange = (
+  range: { from?: Date; to?: Date } | undefined,
+): string => {
+  if (!range?.from) return "";
+  const formatDate = (date: Date) => date.toLocaleDateString("ko-KR");
+
+  return range.to
+    ? `${formatDate(range.from)} ~ ${formatDate(range.to)}`
+    : formatDate(range.from);
+};
