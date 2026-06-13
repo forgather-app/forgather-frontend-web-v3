@@ -31,9 +31,23 @@ export const CardGrid = styled.div`
   row-gap: 16px;
 `;
 
+export const GuestListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
 export const BottomSpacer = styled.div`
+  position: sticky;
+  bottom: 0;
   flex-shrink: 0;
-  height: 100px;
+  height: 34px;
+  background: linear-gradient(
+    180deg,
+    rgba(27, 29, 31, 0) 0%,
+    ${({ theme }) => theme.colors.gray.gray700} 50%
+  );
+  pointer-events: none;
 `;
 
 export const BottomTabWrapper = styled.div`
