@@ -111,8 +111,6 @@ export const New: Story = {
     },
   },
   args: {
-    title: "가면라이더",
     isNew: true,
-    hasPhoto: false,
   },
 };
