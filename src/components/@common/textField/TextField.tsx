@@ -1,8 +1,8 @@
 import { useId, useState } from "react";
-import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
-import LinkIcon from "../../../assets/icons/ic_link.svg?react";
-import SearchIcon from "../../../assets/icons/ic_search.svg?react";
-import { getGraphemeLength } from "../../../utils/getGraphemeLength";
+import ClearIcon from "@/assets/icons/ic_clear.svg?react";
+import LinkIcon from "@/assets/icons/ic_link.svg?react";
+import SearchIcon from "@/assets/icons/ic_search.svg?react";
+import { getGraphemeLength } from "@/utils/getGraphemeLength";
 import * as S from "./TextField.styles";
 
 export type TextFieldVariant =
