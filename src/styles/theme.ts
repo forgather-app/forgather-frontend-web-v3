@@ -126,9 +126,12 @@ export const theme = {
     },
   },
   layout: {
+    maxWidth: "400px",
     zIndex: {
-      bottomSheet: 10,
       backdrop: 1,
+      modalContent: 2,
+      bottomSheet: 10,
+      modal: 20,
     },
   },
 } as const;

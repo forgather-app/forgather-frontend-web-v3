@@ -14,6 +14,13 @@
 
 - **Emotion**: CSS-in-JS 라이브러리
 
+### 라우팅
+
+- **TanStack React Router**: 타입 안전 파일 기반 라우팅
+  - `src/routes/`에 라우트 정의 (createFileRoute)
+  - `src/pages/`에 실제 페이지 컴포넌트 분리
+  - `src/routeTree.gen.ts`: 자동 생성 라우트 트리 (수정 금지)
+
 ### 서버 상태 관리
 
 - **TanStack React Query**: 서버 상태 관리 및 데이터 페칭
@@ -186,6 +193,12 @@ npm run test:storybook
 
 ```
 fill-ing/
+├── .github/
+│   ├── workflows/       # GitHub Actions CI 워크플로우
+│   │   ├── ci.yml                    # 타입 체크 및 Biome 린트 (모든 PR)
+│   │   ├── label-on-review.yml       # review 라벨 자동 부착
+│   │   └── label-good-to-merge.yml   # good to merge 라벨 자동 관리
+│   └── ISSUE_TEMPLATE/  # 이슈 템플릿
 ├── .storybook/          # Storybook 설정
 ├── public/              # 정적 파일
 ├── src/
@@ -197,13 +210,17 @@ fill-ing/
 │   │   └── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
+│   │   ├── layout/      # 레이아웃 컴포넌트 (Layout.tsx)
 │   │   └── ui/          # 재사용 가능한 UI 컴포넌트
 │   ├── constants/       # 공통 상수 (레이아웃 제약, 임계값 등)
 │   ├── hooks/           # 커스텀 훅
 │   │   └── @common/     # 프로젝트 공통 훅
-│   ├── pages/           # 페이지 컴포넌트
-│   │   └── main/        # 메인 페이지
-│   │       └── components/  # 메인 페이지 전용 컴포넌트
+│   ├── pages/           # 페이지 컴포넌트 (라우트 정의 없음, UI만)
+│   │   └── MainPage.tsx # 메인 페이지 컴포넌트
+│   ├── routes/          # TanStack Router 라우트 정의
+│   │   ├── __root.tsx   # 루트 레이아웃 (공통 래퍼)
+│   │   └── index.tsx    # / 경로 라우트
+│   ├── routeTree.gen.ts # 자동 생성 라우트 트리 (수정 금지)
 │   ├── stories/         # Storybook 스토리 (컴포넌트 단위)
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
@@ -237,11 +254,18 @@ fill-ing/
 
 **예시**: Button, Input, Modal, Carousel, Layout
 
-### `/src/pages/<페이지명>/components`
+### `/src/routes`
 
-특정 페이지에서만 사용하는 도메인 컴포넌트입니다. 페이지 디렉토리 내부에 위치합니다.
+TanStack Router의 파일 기반 라우트 정의를 포함합니다. `createFileRoute`로 라우트를 선언하고 실제 컴포넌트는 `src/pages/`에서 import합니다.
 
-**예시**: `src/pages/main/components/SongElement.tsx`, `src/pages/main/components/PlaylistCard.tsx`
+- `__root.tsx`: 전체 앱을 감싸는 루트 레이아웃. 공통 UI(헤더, 네비게이션 등)를 여기에 배치합니다.
+- `index.tsx`, `about.tsx` 등: 경로별 라우트 파일
+
+### `/src/pages`
+
+페이지 단위 컴포넌트를 포함합니다. 라우트 정의 없이 순수한 React 컴포넌트만 작성합니다.
+
+**예시**: `src/pages/MainPage.tsx`, `src/pages/ExhibitionPage.tsx`
 
 ### `/src/hooks/@common`
 
@@ -259,9 +283,14 @@ UI 제약값, 임계값 등 프로젝트 공통 상수를 관리합니다.
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
+<<<<<<< feature/#58-guest-display-card
+- `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
+- `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
+=======
 - `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
 - `@common/`: Backdrop 등 재사용 가능한 공통 스타일 컴포넌트
 - `theme.ts`: 색상, 타이포그래피, 레이아웃(zIndex) 등 디자인 토큰 정의
+>>>>>>> develop
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트
 - `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 

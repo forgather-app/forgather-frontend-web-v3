@@ -12,7 +12,8 @@ const meta: Meta<typeof Toggle> = {
     },
     docs: {
       description: {
-        component: "on/off 두 상태를 전환하는 토글 컴포넌트입니다. `checked` + `onChange`로 외부에서 상태를 제어합니다.",
+        component:
+          "on/off 두 상태를 전환하는 토글 컴포넌트입니다. `checked` + `onChange`로 외부에서 상태를 제어합니다.",
       },
     },
   },
@@ -66,7 +67,12 @@ export const Off: Story = {
 export const WithoutLabel: Story = {
   name: "레이블 없음",
   parameters: {
-    docs: { description: { story: "label 없이 아이콘만 표시하는 상태입니다. aria-label로 접근성 레이블을 제공합니다." } },
+    docs: {
+      description: {
+        story:
+          "label 없이 아이콘만 표시하는 상태입니다. aria-label로 접근성 레이블을 제공합니다.",
+      },
+    },
   },
   render: controlledRender,
   args: {
@@ -78,7 +84,9 @@ export const WithoutLabel: Story = {
 export const Disabled: Story = {
   name: "비활성화 (꺼짐)",
   parameters: {
-    docs: { description: { story: "상호작용이 불가능한 비활성화 상태입니다." } },
+    docs: {
+      description: { story: "상호작용이 불가능한 비활성화 상태입니다." },
+    },
   },
   render: controlledRender,
   args: {
@@ -91,7 +99,11 @@ export const Disabled: Story = {
 export const DisabledOn: Story = {
   name: "비활성화 (켜짐)",
   parameters: {
-    docs: { description: { story: "켜진 채로 상호작용이 불가능한 비활성화 상태입니다." } },
+    docs: {
+      description: {
+        story: "켜진 채로 상호작용이 불가능한 비활성화 상태입니다.",
+      },
+    },
   },
   render: controlledRender,
   args: {
