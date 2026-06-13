@@ -24,6 +24,17 @@
       "quoteStyle": "double"
     }
   },
+  "overrides": [
+    {
+      "includes": [
+        "src/routeTree.gen.ts",
+        "src/api/generated.ts",
+        "src/api/model/**"
+      ],
+      "linter": { "enabled": false },
+      "formatter": { "enabled": false }
+    }
+  ],
   "assist": {
     "enabled": true,
     "actions": {
