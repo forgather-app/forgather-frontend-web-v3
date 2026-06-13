@@ -8,11 +8,17 @@ interface ImageStepProps {
 
 const ImageStep = ({ onNext }: ImageStepProps) => {
   const [image, setImage] = useState<Blob | null>(null);
+  const changeImage = (newImage: Blob | null) => {
+    setImage(newImage);
+  };
   const previewUrl = image ? URL.createObjectURL(image) : null;
 
   return (
     <ItemLayout text="다음" disabled={!image} onClick={() => onNext({ image })}>
-      <ImageInput previewImage={previewUrl} onChange={setImage} />
+      <ImageInput
+        previewImage={previewUrl}
+        onChange={(newImage) => changeImage(newImage)}
+      />
     </ItemLayout>
   );
 };
