@@ -1,5 +1,5 @@
 import type { ReactElement, ReactNode, SVGProps } from "react";
-import NavigationBar from "@/components/@common/navigationBar/NavigationBar";
+import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import HeaderScrollLayout from "../HeaderScrollLayout/HeaderScrollLayout";
 
 interface NavigationBarLayoutProps {

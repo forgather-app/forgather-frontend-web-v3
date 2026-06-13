@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
-import GuestCard from "@/components/@common/guestCard/GuestCard";
-import GuestList from "@/components/@common/guestList/GuestList";
+import GuestCard from "@/components/@common/GuestCard/GuestCard";
+import GuestList from "@/components/@common/GuestList/GuestList";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import Tooltip from "@/components/@common/tooltip/Tooltip";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";

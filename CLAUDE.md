@@ -193,6 +193,12 @@ npm run test:storybook
 
 ```
 fill-ing/
+├── .github/
+│   ├── workflows/       # GitHub Actions CI 워크플로우
+│   │   ├── ci.yml                    # 타입 체크 및 Biome 린트 (모든 PR)
+│   │   ├── label-on-review.yml       # review 라벨 자동 부착
+│   │   └── label-good-to-merge.yml   # good to merge 라벨 자동 관리
+│   └── ISSUE_TEMPLATE/  # 이슈 템플릿
 ├── .storybook/          # Storybook 설정
 ├── public/              # 정적 파일
 ├── src/

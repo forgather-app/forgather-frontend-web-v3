@@ -54,6 +54,12 @@ export const theme = {
       lineHeight: "160%",
       letterSpacing: "-0.02em",
     },
+    subBody1: {
+      fontWeight: 700,
+      fontSize: "12px",
+      lineHeight: "140%",
+      letterSpacing: "-0.02em",
+    },
     subBody2: {
       fontWeight: 600,
       fontSize: "12px",
@@ -122,8 +128,10 @@ export const theme = {
   layout: {
     maxWidth: "400px",
     zIndex: {
-      bottomSheet: 10,
       backdrop: 1,
+      modalContent: 2,
+      bottomSheet: 10,
+      modal: 20,
     },
   },
 } as const;

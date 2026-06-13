@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentProps, useState } from "react";
-import TextArea from "../components/@common/textArea/TextArea";
+import TextArea from "../components/@common/TextArea/TextArea";
 
 const meta: Meta<typeof TextArea> = {
   title: "Common/TextArea",
   component: TextArea,
+  tags: ["autodocs"],
   parameters: {
     backgrounds: { default: "dark" },
     docs: {
@@ -46,7 +47,8 @@ const meta: Meta<typeof TextArea> = {
       control: "text",
     },
     onChange: {
-      description: "값 변경 핸들러 `(value: string) => void`",
+      description:
+        "값 변경 핸들러. 네이티브 textarea change 이벤트를 그대로 받습니다. `(e: React.ChangeEvent<HTMLTextAreaElement>) => void`",
     },
   },
 };
@@ -56,8 +58,14 @@ export default meta;
 type Story = StoryObj<typeof TextArea>;
 
 const ControlledTextArea = (args: ComponentProps<typeof TextArea>) => {
-  const [value, setValue] = useState(args.value ?? "");
-  return <TextArea {...args} value={value} onChange={setValue} />;
+  const [value, setValue] = useState(String(args.value ?? ""));
+  return (
+    <TextArea
+      {...args}
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
 };
 
 export const LargeDefault: Story = {
