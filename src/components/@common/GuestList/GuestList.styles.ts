@@ -7,6 +7,7 @@ const cardBase = `
   align-items: center;
   justify-content: space-between;
   padding: 16px;
+  border: 1px solid transparent;
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
@@ -20,19 +21,12 @@ export const Card = styled.button`
 
 export const NewCard = styled.button`
   ${cardBase}
-  position: relative;
-  background: linear-gradient(
-    to bottom,
-    ${({ theme }) => theme.colors.gray.gray700} 12.5%,
-    ${({ theme }) => theme.colors.semantic.black}
-  );
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: 10px;
-    background: linear-gradient(
+  background-image: linear-gradient(
+      to bottom,
+      ${({ theme }) => theme.colors.gray.gray700} 12.5%,
+      ${({ theme }) => theme.colors.semantic.black}
+    ),
+    linear-gradient(
       90deg,
       ${({ theme }) => theme.colors.main.purple},
       ${({ theme }) => theme.colors.main.purple100},
@@ -40,13 +34,13 @@ export const NewCard = styled.button`
       ${({ theme }) => theme.colors.main.purple100},
       ${({ theme }) => theme.colors.main.purple}
     );
-    background-size: 300% 100%;
-    animation: ${gradientSweep} 20s linear infinite;
-    z-index: -1;
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  background-size: 100% 100%, 300% 100%;
+  animation: ${gradientSweep} 20s linear infinite;
 
-    @media (prefers-reduced-motion: reduce) {
-      animation: none;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 `;
 

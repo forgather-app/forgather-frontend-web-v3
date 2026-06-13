@@ -3,7 +3,7 @@ import { useState } from "react";
 import ChipTabBar from "@/components/@common/TabBar/ChipTabBar";
 
 const meta: Meta<typeof ChipTabBar> = {
-  title: "UI/ChipTabBar",
+  title: "Common/ChipTabBar",
   component: ChipTabBar,
   tags: ["autodocs"],
   parameters: {

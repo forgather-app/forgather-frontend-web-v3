@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import Button from "../components/@common/button/Button";
-import Modal from "../components/ui/modal/Modal";
+import Button from "../components/@common/Button/Button";
+import Modal from "../components/UI/Modal/Modal";
 import { theme } from "../styles/theme";
 
 const meta: Meta<typeof Modal> = {
-  title: "UI/Modal",
+  title: "Common/Modal",
   component: Modal,
   tags: ["autodocs"],
   decorators: [

@@ -35,15 +35,26 @@ gh api user --jq .login            # GitHub 로그인 ID (assignee 설정에 사
 
 ## Step 1. 사용자에게 질의
 
-`AskUserQuestion` 도구로 아래 항목을 **한 번에** 물어봅니다.
+`AskUserQuestion` 도구로 아래 항목을 **질문당 하나씩, 순서대로** 물어봅니다.
 
-| 항목 | 옵션 |
+### 1-1. base 브랜치
+
+| 옵션 | 설명 |
 |------|------|
-| **base 브랜치** | `develop`, `main`, `master`, 직접 입력 |
-| **PR prefix** | `feature`, `fix`, `refactor`, `chore`, `style`, `docs`, `test` |
-| **이슈 번호** (브랜치명에서 못 찾은 경우만) | 숫자 직접 입력, "없음" 선택 가능 |
+| `develop` | 기본 개발 브랜치 |
+| `main` | 프로덕션 브랜치 |
+| `master` | 레거시 프로덕션 브랜치 |
+| 직접 입력 | feature 브랜치 등 그 외 브랜치 |
 
-이슈 번호를 브랜치명에서 성공적으로 추출했다면 이슈 번호 질문은 생략합니다.
+### 1-2. PR prefix
+
+| 옵션 |
+|------|
+| `feature`, `fix`, `refactor`, `chore`, `style`, `docs`, `test` |
+
+### 1-3. 이슈 번호 (브랜치명에서 못 찾은 경우만)
+
+이슈 번호를 브랜치명에서 성공적으로 추출했다면 이 질문은 생략합니다.
 
 ---
 

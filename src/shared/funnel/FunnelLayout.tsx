@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import ProgressBar from "@/components/@common/progressBar/ProgressBar";
+import ProgressBar from "@/components/@common/ProgressBar/ProgressBar";
 import * as S from "./FunnelLayout.styles";
 
 interface FunnelLayoutProps {
@@ -7,28 +7,33 @@ interface FunnelLayoutProps {
   stepIndex: number;
   /** 전체 단계 수 */
   totalSteps: number;
-  /** 단계 제목. 줄바꿈은 \n 사용 */
+  /** 상단 제목. 줄바꿈은 \n 사용 */
   title: string;
-  /** 단계 컴포넌트 (ItemLayout으로 감싸야 함) */
+  /** 컨텐츠 영역 */
   children: ReactNode;
+  /** 하단 버튼 슬롯 */
+  button: ReactNode;
 }
 
-// TODO: #78 머지 후 HeaderScrollLayout + NavigationBar로 교체
 const FunnelLayout = ({
   stepIndex,
   totalSteps,
   title,
   children,
+  button,
 }: FunnelLayoutProps) => {
   const progress = ((stepIndex + 1) / totalSteps) * 100;
 
   return (
     <S.Container>
-      <S.Top>
+      <S.Main>
         <ProgressBar value={progress} />
-        <S.Title>{title}</S.Title>
-      </S.Top>
-      <S.Body>{children}</S.Body>
+        <S.Content>
+          <S.Title>{title}</S.Title>
+          {children}
+        </S.Content>
+      </S.Main>
+      <S.Footer>{button}</S.Footer>
     </S.Container>
   );
 };

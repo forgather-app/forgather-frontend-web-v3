@@ -2,7 +2,7 @@ import type { ReactElement, SVGProps } from "react";
 import IcBack from "../../../assets/icons/ic_back.svg?react";
 import * as S from "./NavigationBar.styles";
 
-interface NavigationBarProps {
+export interface NavigationBarProps {
   /** 오른쪽 아이콘 (32×32 SVG 권장) */
   rightIcon?: ReactElement<SVGProps<SVGSVGElement>>;
   /** 중앙에 표시할 타이틀 텍스트 */

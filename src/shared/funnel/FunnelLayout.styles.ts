@@ -3,16 +3,23 @@ import styled from "@emotion/styled";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
-export const Top = styled.div`
-  flex-shrink: 0;
+export const Main = styled.main`
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0 16px 20px;
+  padding: 0 16px;
+  overflow-y: auto;
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export const Title = styled.h2`
@@ -21,9 +28,7 @@ export const Title = styled.h2`
   white-space: pre-line;
 `;
 
-export const Body = styled.div`
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+export const Footer = styled.footer`
+  flex-shrink: 0;
+  padding: 12px 16px;
 `;

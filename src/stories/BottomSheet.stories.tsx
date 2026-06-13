@@ -5,7 +5,7 @@ import BottomSheetList from "../components/@common/BottomSheet/List/BottomSheetL
 import { theme } from "../styles/theme";
 
 const meta: Meta<typeof BottomSheet> = {
-  title: "UI/BottomSheet/BottomSheet",
+  title: "Common/BottomSheet/BottomSheet",
   component: BottomSheet,
   tags: ["autodocs"],
   decorators: [
