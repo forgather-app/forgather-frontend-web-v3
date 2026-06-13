@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import NavigationBar, {
   type NavigationBarProps,
-} from "@/components/@common/navigationBar/NavigationBar";
+} from "@/components/@common/NavigationBar/NavigationBar";
 import HeaderScrollLayout from "../HeaderScrollLayout/HeaderScrollLayout";
 
 interface NavigationBarLayoutProps extends NavigationBarProps {

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
-import GuestCard from "@/components/@common/guestCard/GuestCard";
+import GuestCard from "@/components/@common/GuestCard/GuestCard";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";

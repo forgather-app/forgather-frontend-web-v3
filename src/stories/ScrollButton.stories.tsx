@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ScrollButton from "../components/@common/scrollButton/ScrollButton";
+import ScrollButton from "../components/@common/ScrollButton/ScrollButton";
 
 const meta: Meta<typeof ScrollButton> = {
   title: "Common/ScrollButton",

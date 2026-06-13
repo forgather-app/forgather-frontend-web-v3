@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import GuestList from "@/components/@common/guestList/GuestList";
+import GuestList from "@/components/@common/GuestList/GuestList";
 
 const meta: Meta<typeof GuestList> = {
-  title: "UI/GuestList",
+  title: "Common/GuestList",
   component: GuestList,
   tags: ["autodocs"],
   decorators: [
