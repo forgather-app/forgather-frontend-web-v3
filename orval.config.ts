@@ -9,12 +9,17 @@ export default defineConfig({
           const paths = spec.paths ?? {};
 
           for (const path of Object.values(paths)) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // biome-ignore lint/suspicious/noExplicitAny: OpenAPI path spec has no strict type
             for (const method of Object.values(path as Record<string, any>)) {
               if (!method?.parameters) continue;
 
               for (const param of method.parameters) {
-                if (param.in && !param.schema && !param.$ref && !param.content) {
+                if (
+                  param.in &&
+                  !param.schema &&
+                  !param.$ref &&
+                  !param.content
+                ) {
                   param.schema = { type: "string" };
                 }
               }

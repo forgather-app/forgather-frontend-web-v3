@@ -3,12 +3,7 @@ import { getGraphemeLength } from "../../../utils/getGraphemeLength";
 import * as S from "./TextArea.styles";
 
 interface TextAreaProps
-  extends Omit<
-    React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    "onChange" | "size" | "maxLength"
-  > {
-  /** 값 변경 핸들러 */
-  onChange: (value: string) => void;
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
   /** 높이 크기 (medium: 높이 auto, large: 높이 179px 고정) */
   size?: "medium" | "large";
   /** 최대 입력 가능 글자 수 (Counter 표시용) */
@@ -35,7 +30,7 @@ const TextArea = ({
       <S.Textarea
         {...rest}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
         placeholder={placeholder}
         aria-invalid={hasError}
         aria-describedby={hasError ? errorId : undefined}

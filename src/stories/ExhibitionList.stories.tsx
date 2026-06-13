@@ -4,7 +4,7 @@ import ExhibitionList from "@/components/@common/DisplayList/ExhibitionList/Exhi
 const THUMBNAIL_URL = "https://picsum.photos/seed/forgather/80/80";
 
 const meta: Meta<typeof ExhibitionList> = {
-  title: "UI/ExhibitionList",
+  title: "Common/ExhibitionList",
   component: ExhibitionList,
   tags: ["autodocs"],
   parameters: {

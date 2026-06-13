@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CurrentSpaceCard from "@/components/@common/currentSpaceCard/CurrentSpaceCard";
+import CurrentSpaceCard from "@/components/@common/CurrentSpaceCard/CurrentSpaceCard";
 
 const SAMPLE_THUMBNAIL =
   "https://www.figma.com/api/mcp/asset/5b6ede47-c742-452e-bdb8-e471b913615e";
@@ -15,7 +15,7 @@ const LINKED_EXHIBITION = {
 };
 
 const meta: Meta<typeof CurrentSpaceCard> = {
-  title: "UI/CurrentSpaceCard",
+  title: "Common/CurrentSpaceCard",
   component: CurrentSpaceCard,
   tags: ["autodocs"],
   decorators: [

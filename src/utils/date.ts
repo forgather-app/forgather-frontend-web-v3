@@ -19,5 +19,7 @@ export const formatShortDate = (date: Date): string => {
   return `${String(year).slice(-2)}.${Number(month)}.${Number(day)}`;
 };
 
-export const formatExhibitionPeriod = (startDate: Date, endDate: Date): string =>
-  `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
+export const formatExhibitionPeriod = (
+  startDate: Date,
+  endDate: Date,
+): string => `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
