@@ -1,3 +1,5 @@
+import { useState } from "react";
+import Button from "@/components/@common/Button/Button";
 import FunnelLayout from "@/shared/funnel/FunnelLayout";
 import useFunnel from "@/shared/funnel/useFunnel";
 import ImageStep from "./steps/ImageStep";
@@ -39,13 +41,38 @@ const CreateExhibitionFunnel = () => {
     steps: STEPS,
     initialData: INITIAL_DATA,
   });
+  const [pendingImage, setPendingImage] = useState<Blob | null>(null);
+
+  const currentStep = STEPS[currentStepIndex];
+
+  function renderStep() {
+    if (currentStep === "image") {
+      return <ImageStep onImageChange={setPendingImage} />;
+    }
+    return null;
+  }
+
+  function renderButton() {
+    if (currentStep === "image") {
+      return (
+        <Button
+          text="다음"
+          disabled={!pendingImage}
+          onClick={() => onNext({ image: pendingImage })}
+        />
+      );
+    }
+    return null;
+  }
+
   return (
     <FunnelLayout
       stepIndex={currentStepIndex}
       totalSteps={STEPS.length}
-      title={TITLE_META[STEPS[currentStepIndex]]}
+      title={TITLE_META[currentStep]}
+      button={renderButton()}
     >
-      {STEPS[currentStepIndex] === "image" && <ImageStep onNext={onNext} />}
+      {renderStep()}
     </FunnelLayout>
   );
 };
