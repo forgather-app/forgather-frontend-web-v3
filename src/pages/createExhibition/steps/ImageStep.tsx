@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ImageInput from "@/components/@common/imageInput/ImageInput";
 import ItemLayout from "@/shared/funnel/ItemLayout";
 
@@ -11,7 +11,16 @@ const ImageStep = ({ onNext }: ImageStepProps) => {
   const changeImage = (newImage: Blob | null) => {
     setImage(newImage);
   };
-  const previewUrl = image ? URL.createObjectURL(image) : null;
+  const previewUrl = useMemo(
+    () => (image ? URL.createObjectURL(image) : null),
+    [image],
+  );
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   return (
     <ItemLayout text="다음" disabled={!image} onClick={() => onNext({ image })}>
