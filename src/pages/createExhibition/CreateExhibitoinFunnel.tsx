@@ -2,6 +2,7 @@ import FunnelLayout from "@/shared/funnel/FunnelLayout";
 import useFunnel from "@/shared/funnel/useFunnel";
 import DescriptionStep from "./steps/DescriptionStep";
 import ImageStep from "./steps/ImageStep";
+import InformationStep from "./steps/InformationStep";
 
 const STEPS = ["image", "description", "information"] as const;
 
@@ -21,15 +22,16 @@ interface CreateExhibitionFunnelData
     description: string;
   };
   information: {
-    date: Date | null;
-    operatingHours: "same" | "different";
+    date: string;
+    operatingHours: string;
+    location: "online" | "offline" | null;
   };
 }
 
 const INITIAL_DATA: CreateExhibitionFunnelData = {
   image: { image: null },
   description: { title: "", description: "" },
-  information: { date: null, operatingHours: "same" },
+  information: { date: "", operatingHours: "", location: null },
 };
 
 type StepType = typeof STEPS;
@@ -50,6 +52,7 @@ const CreateExhibitionFunnel = () => {
     >
       {currentStep === "image" && <ImageStep onNext={onNext} />}
       {currentStep === "description" && <DescriptionStep onNext={onNext} />}
+      {currentStep === "information" && <InformationStep onNext={onNext} />}
     </FunnelLayout>
   );
 };
