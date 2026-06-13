@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import NavigationBar from "../components/@common/navigationBar/NavigationBar";
+import NavigationBar from "../components/@common/NavigationBar/NavigationBar";
 
 const meta: Meta<typeof NavigationBar> = {
   title: "Common/NavigationBar",

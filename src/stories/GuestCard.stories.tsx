@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import GuestCard from "@/components/@common/guestCard/GuestCard";
+import GuestCard from "@/components/@common/GuestCard/GuestCard";
 
 const meta: Meta<typeof GuestCard> = {
-  title: "UI/GuestCard",
+  title: "Common/GuestCard",
   component: GuestCard,
   tags: ["autodocs"],
   decorators: [

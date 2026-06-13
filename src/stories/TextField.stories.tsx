@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentProps, useState } from "react";
-import TextField from "../components/@common/textField/TextField";
+import TextField from "../components/@common/TextField/TextField";
 
 const meta: Meta<typeof TextField> = {
   title: "Common/TextField",
