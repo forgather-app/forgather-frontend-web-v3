@@ -3,8 +3,12 @@ import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
 import GuestCard from "@/components/@common/GuestCard/GuestCard";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
+import Tooltip from "@/components/@common/tooltip/Tooltip";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";
+
+// TODO: API 연동 시 서버 응답으로 대체
+const MOCK_NEW_COUNT = 3;
 
 type GuestBookView = "card" | "list";
 
@@ -107,6 +111,7 @@ const GuestBookPage = ({
   const [activeFilter, setActiveFilter] = useState<GuestBookFilter>("all");
   // TODO: API 연동 시 mutation(읽음 처리) + invalidateQueries로 교체 필요. isNew는 서버 상태
   const [openedCardIds, setOpenedCardIds] = useState<Set<number>>(new Set());
+  const [isTooltipVisible, setIsTooltipVisible] = useState(MOCK_NEW_COUNT > 0);
   // TODO: API 응답으로 대체 필요
   const totalCount = DUMMY_CARDS.length;
 
@@ -193,7 +198,23 @@ const GuestBookPage = ({
           />
         </S.ChipRow>
       </S.FilterSection>
-      {renderContent()}
+
+      <S.ContentWrapper>
+        {isTooltipVisible && (
+          <S.TooltipAnchor>
+            <Tooltip
+              onClose={() => setIsTooltipVisible(false)}
+              ariaLabel={`${MOCK_NEW_COUNT}개의 새 방명록`}
+            >
+              <S.TooltipText>
+                <S.TooltipCount>{MOCK_NEW_COUNT}개</S.TooltipCount>
+                <S.TooltipSub>의 새 방명록</S.TooltipSub>
+              </S.TooltipText>
+            </Tooltip>
+          </S.TooltipAnchor>
+        )}
+        {renderContent()}
+      </S.ContentWrapper>
       <S.BottomSpacer />
       <S.BottomTabWrapper>
         <TabMenu

@@ -37,6 +37,31 @@ export const GuestListContainer = styled.div`
   gap: 8px;
 `;
 
+export const ContentWrapper = styled.div`
+  position: relative;
+`;
+
+export const TooltipAnchor = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+`;
+
+export const TooltipCount = styled.span`
+  ${({ theme }) => ({ ...theme.typography.caption })};
+  color: ${({ theme }) => theme.colors.gray.gray50};
+`;
+
+export const TooltipSub = styled.span`
+  ${({ theme }) => ({ ...theme.typography.caption })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const TooltipText = styled.div`
+  display: flex;
+`;
+
 export const BottomSpacer = styled.div`
   position: sticky;
   bottom: 0;
