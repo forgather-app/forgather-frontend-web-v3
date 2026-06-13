@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import IcPlus from "../assets/icons/ic_plus.svg?react";
 import IcSearch from "../assets/icons/ic_search.svg?react";
-import Button from "../components/@common/button/Button";
+import Button from "../components/@common/Button/Button";
 
 const meta: Meta<typeof Button> = {
   title: "Common/Button",

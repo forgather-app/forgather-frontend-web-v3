@@ -3,7 +3,7 @@ import { useState } from "react";
 import TabMenu from "../components/@common/TabMenu/TabMenu";
 
 const meta: Meta<typeof TabMenu> = {
-  title: "UI/TabMenu",
+  title: "Common/TabMenu",
   component: TabMenu,
   parameters: {
     docs: {

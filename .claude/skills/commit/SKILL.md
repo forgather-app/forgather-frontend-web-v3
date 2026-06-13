@@ -12,6 +12,7 @@ user-invocable: true
 
 - **절대 `git push`를 실행하지 않습니다.** push는 어떤 상황에서도 금지입니다.
 - 사용자에게 묻지 않고 분석 → 커밋까지 자동 실행합니다.
+- 아래 경로의 파일은 **절대 커밋하지 않습니다**: `.tanstack/`, `*.gen.ts` (단, `routeTree.gen.ts`는 라우트 변경 시 함께 커밋), `.env*`, `*.local`
 
 ## 작동 방식
 

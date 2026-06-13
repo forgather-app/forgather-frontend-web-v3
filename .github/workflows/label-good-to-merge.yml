@@ -1,0 +1,107 @@
+name: Label Good to Merge
+
+on:
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-all-approved:
+    name: Check all reviewers approved
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure good-to-merge label exists
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'good to merge',
+              });
+            } catch {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'good to merge',
+                color: '0e8a16',
+                description: '모든 리뷰어가 승인한 PR',
+              });
+            }
+
+      - name: Add or remove good-to-merge label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const prNumber = context.payload.pull_request.number;
+
+            // PR 상세 정보 조회 (아직 리뷰하지 않은 요청 리뷰어 목록 포함)
+            const { data: pr } = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: prNumber,
+            });
+
+            const pendingReviewers = pr.requested_reviewers.map(r => r.login);
+            const pendingTeams = pr.requested_teams.map(t => t.slug);
+
+            // 아직 리뷰하지 않은 리뷰어가 있으면 라벨 제거 후 종료
+            if (pendingReviewers.length > 0 || pendingTeams.length > 0) {
+              console.log('Pending reviewers:', pendingReviewers);
+              try {
+                await github.rest.issues.removeLabel({
+                  owner,
+                  repo,
+                  issue_number: prNumber,
+                  name: 'good to merge',
+                });
+              } catch {}
+              return;
+            }
+
+            // 제출된 모든 리뷰 조회
+            const { data: reviews } = await github.rest.pulls.listReviews({
+              owner,
+              repo,
+              pull_number: prNumber,
+            });
+
+            // 리뷰어별 최신 리뷰 상태만 추출
+            const latestReviewByUser = {};
+            for (const review of reviews) {
+              // PENDING 상태(드래프트)는 제출되지 않은 리뷰이므로 제외
+              if (review.state === 'PENDING') continue;
+              latestReviewByUser[review.user.login] = review.state;
+            }
+
+            const reviewStates = Object.values(latestReviewByUser);
+
+            // 리뷰가 1건도 없거나 APPROVED가 아닌 리뷰가 있으면 라벨 제거
+            const allApproved =
+              reviewStates.length > 0 &&
+              reviewStates.every(state => state === 'APPROVED');
+
+            if (allApproved) {
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: prNumber,
+                labels: ['good to merge'],
+              });
+              console.log('All reviewers approved. Added "good to merge" label.');
+            } else {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner,
+                  repo,
+                  issue_number: prNumber,
+                  name: 'good to merge',
+                });
+                console.log('Not all approved. Removed "good to merge" label.');
+              } catch {}
+            }

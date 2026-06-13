@@ -54,6 +54,12 @@ export const theme = {
       lineHeight: "160%",
       letterSpacing: "-0.02em",
     },
+    subBody1: {
+      fontWeight: 700,
+      fontSize: "12px",
+      lineHeight: "140%",
+      letterSpacing: "-0.02em",
+    },
     subBody2: {
       fontWeight: 600,
       fontSize: "12px",

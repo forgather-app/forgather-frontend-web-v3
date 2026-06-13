@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import CategoryField from "../components/@common/categoryField/CategoryField";
+import CategoryField from "../components/@common/CategoryField/CategoryField";
 
 const meta: Meta<typeof CategoryField> = {
   title: "Common/CategoryField",

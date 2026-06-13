@@ -8,7 +8,15 @@ const preview: Preview = {
     (Story) => (
       <ThemeProvider theme={theme}>
         <GlobalStyle />
-        <Story />
+        <div
+          style={{
+            backgroundColor: theme.colors.gray.gray700,
+            minHeight: "100vh",
+            padding: "16px",
+          }}
+        >
+          <Story />
+        </div>
       </ThemeProvider>
     ),
   ],

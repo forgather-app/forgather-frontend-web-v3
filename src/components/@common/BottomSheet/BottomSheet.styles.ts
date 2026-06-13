@@ -1,10 +1,5 @@
-import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-
-const slideIn = keyframes`
-  from {transform: translateY(100%)}
-  to{transform: translateY(0%)}
-`;
+import { slideIn } from "@/styles/animations";
 
 export const Wrapper = styled.div<{ $isVisible: boolean }>`
   position: absolute;
