@@ -1,6 +1,6 @@
 import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
 import PlusIcon from "../../../assets/icons/ic_plus.svg?react";
-import TextField from "../textField/TextField";
+import TextField from "../TextField/TextField";
 import * as S from "./CategoryField.styles";
 
 interface CategoryFieldProps {
