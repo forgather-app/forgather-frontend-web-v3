@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import ProgressBar from "@/components/@common/progressBar/ProgressBar";
+import ProgressBar from "@/components/@common/ProgressBar/ProgressBar";
 import * as S from "./FunnelLayout.styles";
 
 interface FunnelLayoutProps {

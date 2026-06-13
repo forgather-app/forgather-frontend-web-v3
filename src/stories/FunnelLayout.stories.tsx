@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import Button from "@/components/@common/button/Button";
+import Button from "@/components/@common/Button/Button";
 import FunnelLayout from "@/shared/funnel/FunnelLayout";
 
 const meta: Meta<typeof FunnelLayout> = {
