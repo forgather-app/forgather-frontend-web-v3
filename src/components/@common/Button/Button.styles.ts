@@ -171,7 +171,4 @@ export const Button = styled.button<{ $variant: ButtonVariant }>`
     outline-offset: 2px;
   }
 
-  &:disabled {
-    cursor: not-allowed;
-  }
 `;

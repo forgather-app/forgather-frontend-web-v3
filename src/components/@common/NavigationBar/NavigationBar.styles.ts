@@ -5,7 +5,6 @@ export const Wrapper = styled.nav`
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   width: 100%;
-  padding-top: 4px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 

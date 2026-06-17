@@ -1,5 +1,5 @@
 import type { ReactElement, SVGProps } from "react";
-import IcBack from "../../../assets/icons/ic_back.svg?react";
+import IcBack from "@/assets/icons/ic_back.svg?react";
 import * as S from "./NavigationBar.styles";
 
 export interface NavigationBarProps {

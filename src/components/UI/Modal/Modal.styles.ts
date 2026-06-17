@@ -16,8 +16,9 @@ export const ModalRoot = styled.div<{ $isVisible: boolean }>`
 export const Content = styled.div<{ $isVisible: boolean }>`
   position: relative;
   z-index: ${({ theme }) => theme.layout.zIndex.modalContent};
-  min-width: 328px;
-  padding: 24px;
+  width: calc(100% - 32px);
+  max-width: 328px;
+  overflow: hidden;
   background: ${({ theme }) => theme.colors.gray.gray600};
   border-radius: 16px;
 
