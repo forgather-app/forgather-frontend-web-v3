@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as CreateExhibitionIndexRouteImport } from './routes/create-exhibition/index'
 import { Route as SpacesSpaceIdGuestbookRouteImport } from './routes/spaces/$spaceId/guestbook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignUpIndexRoute = SignUpIndexRouteImport.update({
+  id: '/sign-up/',
+  path: '/sign-up/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CreateExhibitionIndexRoute = CreateExhibitionIndexRouteImport.update({
@@ -32,30 +38,43 @@ const SpacesSpaceIdGuestbookRoute = SpacesSpaceIdGuestbookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
+  '/sign-up/': typeof SignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof SpacesSpaceIdGuestbookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/create-exhibition': typeof CreateExhibitionIndexRoute
+  '/sign-up': typeof SignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof SpacesSpaceIdGuestbookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
+  '/sign-up/': typeof SignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof SpacesSpaceIdGuestbookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/create-exhibition/' | '/spaces/$spaceId/guestbook'
+  fullPaths:
+    | '/'
+    | '/create-exhibition/'
+    | '/sign-up/'
+    | '/spaces/$spaceId/guestbook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/create-exhibition' | '/spaces/$spaceId/guestbook'
-  id: '__root__' | '/' | '/create-exhibition/' | '/spaces/$spaceId/guestbook'
+  to: '/' | '/create-exhibition' | '/sign-up' | '/spaces/$spaceId/guestbook'
+  id:
+    | '__root__'
+    | '/'
+    | '/create-exhibition/'
+    | '/sign-up/'
+    | '/spaces/$spaceId/guestbook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CreateExhibitionIndexRoute: typeof CreateExhibitionIndexRoute
+  SignUpIndexRoute: typeof SignUpIndexRoute
   SpacesSpaceIdGuestbookRoute: typeof SpacesSpaceIdGuestbookRoute
 }
 
@@ -66,6 +85,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-up/': {
+      id: '/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up/'
+      preLoaderRoute: typeof SignUpIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/create-exhibition/': {
@@ -88,6 +114,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CreateExhibitionIndexRoute: CreateExhibitionIndexRoute,
+  SignUpIndexRoute: SignUpIndexRoute,
   SpacesSpaceIdGuestbookRoute: SpacesSpaceIdGuestbookRoute,
 }
 export const routeTree = rootRouteImport
