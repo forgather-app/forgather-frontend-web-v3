@@ -8,11 +8,12 @@ export const Wrapper = styled.div`
 
 export const ScrollArea = styled.div`
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const Footer = styled.footer`
   flex-shrink: 0;
-  padding: 12px 16px;
 `;
