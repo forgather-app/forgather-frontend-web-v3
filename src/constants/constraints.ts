@@ -7,9 +7,3 @@ export const CONSTRAINTS = {
     ARTIST_NAME_MAX_LENGTH: 20,
   },
 };
-
-export const LAYOUT = {
-  SIDE_PADDING: 16,
-  SECTION_GAP: 20,
-  CARD_GAP: 8,
-};

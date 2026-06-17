@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
-import { LAYOUT } from "@/constants/constraints";
 
 export const Container = styled.div`
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: ${LAYOUT.SECTION_GAP}px;
+  gap: ${({ theme }) => theme.layout.sectionGap}px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
   overflow: hidden;
 `;
@@ -14,7 +13,7 @@ export const TopGroup = styled.div`
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: ${LAYOUT.SIDE_PADDING}px;
+  gap: ${({ theme }) => theme.layout.sidePadding}px;
 `;
 
 export const Title = styled.h2`
