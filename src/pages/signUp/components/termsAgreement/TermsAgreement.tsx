@@ -3,10 +3,9 @@ import IcBack from "@/assets/icons/ic_back.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import IcRectangleCheck from "@/assets/icons/ic_rectangle_check.svg?react";
 import Modal from "@/components/UI/Modal/Modal";
-import type { TermsItem } from "@/constants/terms";
 import { TERMS_ITEMS } from "@/constants/terms";
 import * as S from "./TermsAgreement.styles";
-import type { TermsAgreementState } from "./TermsAgreement.type";
+import type { TermsAgreementState, TermsItem } from "./TermsAgreement.type";
 
 interface TermsAgreementProps {
   /** 현재 약관 동의 상태 */
