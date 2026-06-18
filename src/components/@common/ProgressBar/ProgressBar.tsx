@@ -21,7 +21,7 @@ const ProgressBar = ({
       aria-valuemax={100}
       aria-label={ariaLabel}
     >
-      <S.Fill value={clampedValue} />
+      <S.Fill style={{ transform: `scaleX(${clampedValue / 100})` }} />
     </S.Track>
   );
 };

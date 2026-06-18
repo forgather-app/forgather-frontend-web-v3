@@ -11,8 +11,8 @@ interface FunnelLayoutProps {
   title: string;
   /** 컨텐츠 영역 */
   children: ReactNode;
-  /** 하단 버튼 슬롯 */
-  button: ReactNode;
+  /** 하단 버튼 슬롯 (선택) */
+  button?: ReactNode;
 }
 
 const FunnelLayout = ({

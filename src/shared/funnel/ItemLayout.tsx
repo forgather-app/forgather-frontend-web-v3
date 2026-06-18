@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import Button from "@/components/@common/button/Button";
+import Button from "@/components/@common/Button/Button";
 import * as S from "./ItemLayout.styles";
 
 interface ItemLayoutProps {
