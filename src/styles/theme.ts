@@ -127,6 +127,9 @@ export const theme = {
   },
   layout: {
     maxWidth: "400px",
+    sidePadding: 16,
+    sectionGap: 20,
+    cardGap: 8,
     zIndex: {
       backdrop: 1,
       modalContent: 2,
