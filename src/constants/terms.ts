@@ -1,15 +1,7 @@
-import type { TermsAgreementState } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
+import type { TermsItem } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
 
 export type { TermsAgreementState } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
 export { INITIAL_TERMS_STATE } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
-
-export interface TermsItem {
-  key: keyof TermsAgreementState;
-  label: string;
-  required: boolean;
-  /** 클릭 시 모달로 전체 내용을 보여줄 약관. undefined면 모달 없음 */
-  modalContent?: string;
-}
 
 export const TERMS_ITEMS: TermsItem[] = [
   {
