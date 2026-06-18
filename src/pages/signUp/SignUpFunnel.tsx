@@ -46,7 +46,9 @@ const SignUpFunnel = () => {
       {STEPS[currentStepIndex] === "artistName" && (
         <ArtistNameStep onNext={onNext} />
       )}
-      {STEPS[currentStepIndex] === "terms" && <TermsStep onNext={onNext} />}
+      {STEPS[currentStepIndex] === "terms" && (
+        <TermsStep initialTerms={INITIAL_DATA.terms.terms} onNext={onNext} />
+      )}
     </FunnelLayout>
   );
 };

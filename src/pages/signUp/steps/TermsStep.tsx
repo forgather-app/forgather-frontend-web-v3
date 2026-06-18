@@ -6,13 +6,18 @@ import {
 import TermsAgreement from "@/pages/signUp/components/termsAgreement/TermsAgreement";
 import { validateTerms } from "@/pages/signUp/validate/validateTerms";
 import ItemLayout from "@/shared/funnel/ItemLayout";
+import * as S from "./TermsStep.styles";
 
 interface TermsStepProps {
+  initialTerms?: TermsAgreementState;
   onNext: (data: { terms: TermsAgreementState }) => void;
 }
 
-const TermsStep = ({ onNext }: TermsStepProps) => {
-  const [terms, setTerms] = useState<TermsAgreementState>(INITIAL_TERMS_STATE);
+const TermsStep = ({
+  initialTerms = INITIAL_TERMS_STATE,
+  onNext,
+}: TermsStepProps) => {
+  const [terms, setTerms] = useState<TermsAgreementState>(initialTerms);
 
   const isValid = validateTerms(terms);
 
@@ -22,7 +27,7 @@ const TermsStep = ({ onNext }: TermsStepProps) => {
       disabled={!isValid}
       onClick={() => onNext({ terms })}
     >
-      <div style={{ flex: 1 }} />
+      <S.Spacer />
       <TermsAgreement value={terms} onChange={setTerms} />
     </ItemLayout>
   );
