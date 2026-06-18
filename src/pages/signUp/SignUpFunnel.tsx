@@ -11,7 +11,7 @@ const TITLE_META = {
   terms: "원활한 이용을 위해서\n아래 약관에 동의해주세요",
 } satisfies Record<(typeof STEPS)[number], string>;
 
-interface SignUpFunnelData extends Record<(typeof STEPS)[number], unknown> {
+interface SignUpFunnelData {
   artistName: { artistName: string };
   terms: { terms: TermsAgreementState };
 }

@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { validateArtistName } from "@/pages/signUp/validate/validateArtistName";
@@ -12,13 +13,13 @@ interface ArtistNameStepProps {
 const ArtistNameStep = ({ onNext }: ArtistNameStepProps) => {
   const [artistName, setArtistName] = useState("");
 
-  const isValid = validateArtistName(artistName);
+  const isValid = useMemo(() => validateArtistName(artistName), [artistName]);
 
   return (
     <ItemLayout
       text="다음"
       disabled={!isValid}
-      onClick={() => onNext({ artistName })}
+      onClick={() => onNext({ artistName: artistName.trim() })}
     >
       <S.FieldGroup>
         <S.Label>닉네임</S.Label>
