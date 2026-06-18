@@ -14,6 +14,8 @@ interface FunnelLayoutProps {
   children: ReactNode;
   /** 하단 버튼 슬롯 (선택) */
   button?: ReactNode;
+  /** NavigationBar에 표시할 제목 (선택) */
+  navigationTitle?: string;
   /** 뒤로가기 버튼 클릭 핸들러 */
   onBackClick?: () => void;
 }
@@ -24,6 +26,7 @@ const FunnelLayout = ({
   title,
   children,
   button,
+  navigationTitle,
   onBackClick,
 }: FunnelLayoutProps) => {
   const progress = ((stepIndex + 1) / totalSteps) * 100;
@@ -31,7 +34,7 @@ const FunnelLayout = ({
   return (
     <S.Container>
       <S.TopGroup>
-        <NavigationBar title="시작하기" onBackClick={onBackClick} />
+        <NavigationBar title={navigationTitle} onBackClick={onBackClick} />
         <ProgressBar value={progress} />
       </S.TopGroup>
       <S.Title>{title}</S.Title>
