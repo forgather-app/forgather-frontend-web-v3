@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ProgressBar from "@/components/@common/ProgressBar/ProgressBar";
 import * as S from "./FunnelLayout.styles";
 
@@ -13,6 +14,10 @@ interface FunnelLayoutProps {
   children: ReactNode;
   /** 하단 버튼 슬롯 (선택) */
   button?: ReactNode;
+  /** NavigationBar에 표시할 제목 (선택) */
+  navigationTitle?: string;
+  /** 뒤로가기 버튼 클릭 핸들러 */
+  onBackClick?: () => void;
 }
 
 const FunnelLayout = ({
@@ -21,19 +26,20 @@ const FunnelLayout = ({
   title,
   children,
   button,
+  navigationTitle,
+  onBackClick,
 }: FunnelLayoutProps) => {
   const progress = ((stepIndex + 1) / totalSteps) * 100;
 
   return (
     <S.Container>
-      <S.Main>
+      <S.TopGroup>
+        <NavigationBar title={navigationTitle} onBackClick={onBackClick} />
         <ProgressBar value={progress} />
-        <S.Content>
-          <S.Title>{title}</S.Title>
-          {children}
-        </S.Content>
-      </S.Main>
-      <S.Footer>{button}</S.Footer>
+      </S.TopGroup>
+      <S.Title>{title}</S.Title>
+      <S.Main>{children}</S.Main>
+      {button && <S.Footer>{button}</S.Footer>}
     </S.Container>
   );
 };
