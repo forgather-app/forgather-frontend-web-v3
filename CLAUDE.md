@@ -222,7 +222,8 @@ fill-ing/
 │   │   └── index.tsx    # / 경로 라우트
 │   ├── routeTree.gen.ts # 자동 생성 라우트 트리 (수정 금지)
 │   ├── shared/          # 도메인 독립적인 공유 모듈
-│   │   └── funnel/      # 퍼널(단계별 입력 플로우) 레이아웃 및 훅
+│   │   ├── funnel/      # 퍼널(단계별 입력 플로우) 레이아웃 및 훅
+│   │   └── carousel/    # 좌우 스와이프 캐러셀 레이아웃
 │   ├── stories/         # Storybook 스토리 (컴포넌트 단위)
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
@@ -274,7 +275,7 @@ TanStack Router의 파일 기반 라우트 정의를 포함합니다. `createFil
 도메인에 독립적이면서 여러 페이지에서 재사용되는 공유 모듈을 포함합니다.
 컴포넌트와 훅을 함께 묶어 기능 단위로 관리합니다.
 
-**예시**: `funnel/` (퍼널 레이아웃 `FunnelLayout` + 상태 관리 훅 `useFunnel`)
+**예시**: `funnel/` (퍼널 레이아웃 `FunnelLayout` + 상태 관리 훅 `useFunnel`), `carousel/` (좌우 스와이프 캐러셀 레이아웃 `CarouselLayout`)
 
 ### `/src/hooks/@common`
 
