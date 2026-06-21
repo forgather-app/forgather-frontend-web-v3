@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import CarouselLayout from "../shared/carousel/CarouselLayout";
+import CarouselLayout from "@/shared/carousel/CarouselLayout";
 
 const PlaceholderSlide = styled.div<{ bg?: string }>`
   height: 100%;
@@ -74,11 +74,7 @@ export const TwoSlides: Story = {
   },
   render: () => (
     <CarouselLayout
-      footer={
-        <div style={{ padding: "12px 0" }}>
-          <KakaoButton type="button">카카오로 로그인하기</KakaoButton>
-        </div>
-      }
+      footer={<KakaoButton type="button">카카오로 로그인하기</KakaoButton>}
     >
       <PlaceholderSlide>
         <SlideTitle>마음이 기록되는 곳,{"\n"}나만의 스페이스!</SlideTitle>
