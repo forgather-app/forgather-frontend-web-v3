@@ -1,11 +1,6 @@
 import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 
-const scaleIn = keyframes`
-  from { transform: translate(-50%, 0) scale(0.3); opacity: 0; }
-  to { transform: translate(-50%, 0) scale(1); opacity: 1; }
-`;
-
 const pulse = keyframes`
   0%, 100% { transform: translate(-50%, 0) scale(1); }
   50% { transform: translate(-50%, 0) scale(1.06); }
@@ -23,7 +18,6 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
   overflow: hidden;
 `;
 
@@ -34,6 +28,7 @@ export const MessageChip = styled.div`
   border-radius: 8px;
   padding: 10px 16px;
   box-shadow: 0 2px 4.5px rgba(255, 255, 255, 0.06);
+  margin-bottom: -20px;
 `;
 
 export const ChipText = styled.p`
@@ -60,8 +55,8 @@ export const Ring = styled.div`
   border-radius: 50%;
   border: 2px solid rgba(180, 175, 220, 0.35);
   z-index: 0;
+  transform: translate(-50%, 0);
   animation:
-    ${scaleIn} 0.8s ease-out forwards,
     ${ringPulse} 3s ease-in-out 0.8s infinite;
 `;
 
@@ -75,8 +70,8 @@ export const Circle = styled.div`
   background: #ffffff;
   border: 1.5px solid rgba(140, 135, 180, 0.3);
   z-index: 0;
+  transform: translate(-50%, 0);
   animation:
-    ${scaleIn} 0.8s ease-out forwards,
     ${pulse} 3s ease-in-out 0.8s infinite;
 `;
 
