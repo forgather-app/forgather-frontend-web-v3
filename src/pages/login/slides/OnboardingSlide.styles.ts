@@ -28,6 +28,6 @@ export const Description = styled.p`
 export const IllustrationArea = styled.div`
   flex: 1;
   margin-top: 32px;
-  border-radius: 12px;
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  position: relative;
+  overflow: hidden;
 `;
