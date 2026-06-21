@@ -37,7 +37,7 @@ export const MessageChip = styled.div`
 `;
 
 export const ChipText = styled.p`
-  ${({ theme }) => ({ ...theme.typography.subBody2 })};
+  ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray200};
   text-align: center;
   white-space: pre-line;
