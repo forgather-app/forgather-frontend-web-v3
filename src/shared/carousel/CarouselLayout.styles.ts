@@ -6,21 +6,23 @@ export const Container = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
   overflow: hidden;
+  gap: 32px;
 `;
 
 export const Viewport = styled.div`
   flex: 1;
   overflow: hidden;
   position: relative;
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
 `;
 
 export const DotsWrapper = styled.div`
-  position: absolute;
-  top: 24px;
-  left: 0;
   display: flex;
   gap: 8px;
-  z-index: 1;
+  padding: 24px 0;
+  flex-shrink: 0;
 `;
 
 export const Dot = styled.div<{ isActive: boolean }>`
@@ -36,6 +38,9 @@ export const Track = styled.div<{ currentIndex: number }>`
   height: 100%;
   transform: translateX(${({ currentIndex }) => -currentIndex * 100}%);
   transition: transform 0.3s ease;
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
 `;
 
 export const Slide = styled.div`

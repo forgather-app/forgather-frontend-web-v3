@@ -31,22 +31,22 @@ const CarouselLayout = ({ children, footer }: CarouselLayoutProps) => {
 
   return (
     <S.Container>
+      <S.DotsWrapper role="tablist" aria-label="슬라이드 인디케이터">
+        {slides.map((_, index) => (
+          <S.Dot
+            // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel indicator
+            key={index}
+            isActive={index === currentIndex}
+            role="tab"
+            aria-selected={index === currentIndex}
+            aria-label={`슬라이드 ${index + 1}`}
+          />
+        ))}
+      </S.DotsWrapper>
       <S.Viewport
         onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
       >
-        <S.DotsWrapper role="tablist" aria-label="슬라이드 인디케이터">
-          {slides.map((_, index) => (
-            <S.Dot
-              // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel indicator
-              key={index}
-              isActive={index === currentIndex}
-              role="tab"
-              aria-selected={index === currentIndex}
-              aria-label={`슬라이드 ${index + 1}`}
-            />
-          ))}
-        </S.DotsWrapper>
         <S.Track currentIndex={currentIndex}>
           {slides.map((slide, index) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel slide
