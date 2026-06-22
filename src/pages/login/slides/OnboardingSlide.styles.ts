@@ -4,7 +4,6 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding-top: 64px;
 `;
 
 export const TextSection = styled.div`
@@ -27,7 +26,6 @@ export const Description = styled.p`
 
 export const IllustrationArea = styled.div`
   flex: 1;
-  margin-top: 32px;
   position: relative;
   overflow: hidden;
 `;
