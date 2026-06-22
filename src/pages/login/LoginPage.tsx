@@ -1,22 +1,17 @@
-import { useNavigate } from "@tanstack/react-router";
+import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
 import CarouselLayout from "@/shared/carousel/CarouselLayout";
 import OnboardingIllustration1 from "./illustrations/OnboardingIllustration1";
 import * as S from "./LoginPage.styles";
 import OnboardingSlide from "./slides/OnboardingSlide";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-
-  const handleLoginPress = () => {
-    navigate({ to: "/sign-up" });
-  };
-
   return (
     <CarouselLayout
       footer={
         <S.FooterWrapper>
-          <S.KakaoButton type="button" onClick={handleLoginPress}>
-            카카오로 로그인하기
+          <S.KakaoButton to="/sign-up">
+            <KakaoLogo aria-hidden="true" />
+            <span>카카오로 로그인하기</span>
           </S.KakaoButton>
         </S.FooterWrapper>
       }
