@@ -17,7 +17,6 @@ const CarouselLayout = ({ children, footer }: CarouselLayoutProps) => {
 
   const handlePointerDown = (e: React.PointerEvent) => {
     pointerStartX.current = e.clientX;
-    e.currentTarget.setPointerCapture(e.pointerId);
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {

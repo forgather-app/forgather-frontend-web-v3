@@ -16,6 +16,7 @@ export const Viewport = styled.div`
   display: flex;
   align-items: start;
   justify-content: flex-start;
+  touch-action: pan-y;
 `;
 
 export const DotsWrapper = styled.div`
@@ -38,7 +39,6 @@ export const Track = styled.div<{ currentIndex: number }>`
   height: 100%;
   transform: translateX(${({ currentIndex }) => -currentIndex * 100}%);
   transition: transform 0.3s ease;
-  display: flex;
   align-items: start;
   justify-content: flex-start;
 `;
