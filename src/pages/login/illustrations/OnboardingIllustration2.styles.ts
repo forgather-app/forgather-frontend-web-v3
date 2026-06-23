@@ -82,6 +82,7 @@ export const LinesContainer = styled("div", {
 export const PeopleRow = styled.div`
   display: flex;
   width: 100%;
+  height: 160px;
   gap: 12px;
 `;
 
@@ -90,19 +91,20 @@ export const PersonItem = styled.div`
   flex: 1;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
 `;
 
 export const BoxWrapper = styled("div", {
   shouldForwardProp: (prop) => prop !== "$isActive",
 })<{ $isActive: boolean }>`
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
   opacity: 0;
 
   svg {
     width: 100%;
     height: 100%;
+    display: block;
   }
 
   ${({ $isActive }) =>
@@ -112,9 +114,23 @@ export const BoxWrapper = styled("div", {
     `}
 `;
 
-export const PersonRect = styled.div`
-  width: 60px;
-  height: 90px;
-  background: ${({ theme }) => theme.colors.gray.gray500};
-  border-radius: 12px;
+export const HumanWrapper = styled("div", {
+  shouldForwardProp: (prop) => prop !== "$isActive",
+})<{ $isActive: boolean }>`
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  opacity: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  ${({ $isActive }) =>
+    $isActive &&
+    css`
+      animation: ${slideUp} 0.5s ease 0.6s forwards;
+    `}
 `;

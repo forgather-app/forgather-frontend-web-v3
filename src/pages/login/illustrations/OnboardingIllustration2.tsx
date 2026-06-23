@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import OnboardingHuman1 from "@/assets/images/onboarding_human1.svg?react";
+import OnboardingHuman2 from "@/assets/images/onboarding_human2.svg?react";
+import OnboardingHuman3 from "@/assets/images/onboarding_human3.svg?react";
 import OnboardingSquareImage from "@/assets/images/onboarding_square_image.svg?react";
 import * as S from "./OnboardingIllustration2.styles";
 
@@ -64,12 +67,20 @@ const OnboardingIllustration2 = () => {
       </S.LinesContainer>
 
       <S.PeopleRow>
-        {[0, 1, 2].map((i) => (
-          <S.PersonItem key={i}>
+        {(
+          [
+            ["human1", OnboardingHuman1],
+            ["human2", OnboardingHuman2],
+            ["human3", OnboardingHuman3],
+          ] as const
+        ).map(([key, HumanImage]) => (
+          <S.PersonItem key={key}>
             <S.BoxWrapper $isActive={isActive}>
               <OnboardingSquareImage />
             </S.BoxWrapper>
-            <S.PersonRect />
+            <S.HumanWrapper $isActive={isActive}>
+              <HumanImage />
+            </S.HumanWrapper>
           </S.PersonItem>
         ))}
       </S.PeopleRow>
