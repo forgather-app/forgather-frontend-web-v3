@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import OnboardingSquareImage from "@/assets/images/onboarding_squre_image.svg?react";
+import OnboardingSquareImage from "@/assets/images/onboarding_square_image.svg?react";
 import * as S from "./OnboardingIllustration2.styles";
 
 const OnboardingIllustration2 = () => {
