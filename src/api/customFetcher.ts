@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+import { apiClient } from "./apiClient";
 
 export const customFetcher = async <T>({
   url,
@@ -12,28 +12,19 @@ export const customFetcher = async <T>({
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   params?: Record<string, string>;
   data?: unknown;
-  headers?: HeadersInit;
+  headers?: Record<string, string>;
   signal?: AbortSignal;
 }): Promise<T> => {
-  const queryString = params
-    ? `?${new URLSearchParams(params).toString()}`
-    : "";
-
-  const response = await fetch(`${BASE_URL}${url}${queryString}`, {
+  const response = await apiClient.request<T>({
+    url,
     method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    ...(data ? { body: JSON.stringify(data) } : {}),
+    params,
+    data,
+    headers,
     signal,
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
-
-  return response.json();
+  return response.data;
 };
 
 export default customFetcher;
