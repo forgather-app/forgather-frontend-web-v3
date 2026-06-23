@@ -23,15 +23,21 @@ const OnboardingIllustration1 = () => {
     const el = ref.current;
     if (!el) return;
 
-    let intervalId: ReturnType<typeof setInterval>;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          intervalId = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
-          }, 2000);
-          observer.disconnect();
+          if (!intervalId) {
+            intervalId = setInterval(() => {
+              setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
+            }, 2000);
+          }
+        } else {
+          if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+          }
         }
       },
       { threshold: 0.3 },
@@ -41,7 +47,9 @@ const OnboardingIllustration1 = () => {
 
     return () => {
       observer.disconnect();
-      clearInterval(intervalId);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
     };
   }, []);
 
