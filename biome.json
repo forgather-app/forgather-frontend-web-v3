@@ -28,7 +28,7 @@
     {
       "includes": [
         "src/routeTree.gen.ts",
-        "src/api/generated.ts",
+        "src/api/generated/**",
         "src/api/model/**"
       ],
       "linter": { "enabled": false },
