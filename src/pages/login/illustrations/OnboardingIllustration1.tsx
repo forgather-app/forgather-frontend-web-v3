@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LogoSmall from "@/assets/icons/logos/logo_small.svg?react";
 import OnboardingImage from "@/assets/images/onboarding_image.svg?react";
 import * as S from "./OnboardingIllustration1.styles";
@@ -16,17 +16,37 @@ const getSignedDist = (i: number, activeIndex: number): number => {
 };
 
 const OnboardingIllustration1 = () => {
+  const ref = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
-    }, 2000);
-    return () => clearInterval(id);
+    const el = ref.current;
+    if (!el) return;
+
+    let intervalId: ReturnType<typeof setInterval>;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          intervalId = setInterval(() => {
+            setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
+          }, 2000);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
+
+    observer.observe(el);
+
+    return () => {
+      observer.disconnect();
+      clearInterval(intervalId);
+    };
   }, []);
 
   return (
-    <S.Wrapper>
+    <S.Wrapper ref={ref}>
       <S.MessageChip>
         <S.ChipText>
           맨날 밤 새더니 역시 멋지다.{"\n"}전시 준비하느라 고생 많았어!
@@ -45,7 +65,7 @@ const OnboardingIllustration1 = () => {
 
             return (
               <S.FlowerItem
-                key={i}
+                key={`${i + 1}-flower`}
                 $isCenter={isCenter}
                 style={{
                   width: `${size}px`,
