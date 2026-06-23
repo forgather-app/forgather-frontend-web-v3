@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import LogoSmall from "@/assets/icons/logos/logo_small.svg?react";
 import OnboardingImage from "@/assets/images/onboarding_image.svg?react";
 import * as S from "./OnboardingIllustration1.styles";
@@ -16,45 +16,18 @@ const getSignedDist = (i: number, activeIndex: number): number => {
 };
 
 const OnboardingIllustration1 = () => {
-  const ref = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const intervalId = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
+    }, 2000);
 
-    let intervalId: ReturnType<typeof setInterval> | null = null;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (!intervalId) {
-            intervalId = setInterval(() => {
-              setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
-            }, 2000);
-          }
-        } else {
-          if (intervalId) {
-            clearInterval(intervalId);
-            intervalId = null;
-          }
-        }
-      },
-      { threshold: 0.3 },
-    );
-
-    observer.observe(el);
-
-    return () => {
-      observer.disconnect();
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <S.Wrapper ref={ref}>
+    <S.Wrapper>
       <S.MessageChip>
         <S.ChipText>
           맨날 밤 새더니 역시 멋지다.{"\n"}전시 준비하느라 고생 많았어!
