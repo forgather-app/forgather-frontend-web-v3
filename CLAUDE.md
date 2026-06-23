@@ -207,7 +207,8 @@ fill-ing/
 │   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
 │   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
-│   │   └── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
+│   │   ├── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
+│   │   └── images/      # SVG 이미지 자산 (온보딩 일러스트 등)
 │   ├── components/      # 컴포넌트
 │   │   ├── @common/     # 프로젝트 공통 컴포넌트
 │   │   ├── layout/      # 레이아웃 컴포넌트 (Layout.tsx)
@@ -216,10 +217,12 @@ fill-ing/
 │   ├── hooks/           # 커스텀 훅
 │   │   └── @common/     # 프로젝트 공통 훅
 │   ├── pages/           # 페이지 컴포넌트 (라우트 정의 없음, UI만)
-│   │   └── MainPage.tsx # 메인 페이지 컴포넌트
+│   │   ├── MainPage.tsx # 메인 페이지 컴포넌트
+│   │   └── login/       # 로그인 페이지 (LoginPage, OnboardingSlide, 일러스트)
 │   ├── routes/          # TanStack Router 라우트 정의
-│   │   ├── __root.tsx   # 루트 레이아웃 (공통 래퍼)
-│   │   └── index.tsx    # / 경로 라우트
+│   │   ├── __root.tsx        # 루트 레이아웃 (공통 래퍼)
+│   │   ├── index.tsx         # / 경로 라우트
+│   │   └── login/index.tsx   # /login 경로 라우트
 │   ├── routeTree.gen.ts # 자동 생성 라우트 트리 (수정 금지)
 │   ├── shared/          # 도메인 독립적인 공유 모듈
 │   │   ├── funnel/      # 퍼널(단계별 입력 플로우) 레이아웃 및 훅
@@ -293,14 +296,9 @@ UI 제약값, 임계값 등 프로젝트 공통 상수를 관리합니다.
 
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
-<<<<<<< feature/#58-guest-display-card
-- `theme.ts`: 색상, 타이포그래피 등 디자인 토큰 정의
-- `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
-=======
 - `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
 - `@common/`: Backdrop 등 재사용 가능한 공통 스타일 컴포넌트
 - `theme.ts`: 색상, 타이포그래피, 레이아웃(zIndex) 등 디자인 토큰 정의
->>>>>>> develop
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트
 - `global.ts`, `reset.ts`: 전역 CSS 및 리셋
 
