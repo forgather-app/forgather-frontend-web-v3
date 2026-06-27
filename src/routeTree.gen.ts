@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as CreateExhibitionIndexRouteImport } from './routes/create-exhibition/index'
+import { Route as LoginCallbackRouteImport } from './routes/login/callback'
 import { Route as SpacesSpaceIdGuestbookRouteImport } from './routes/spaces/$spaceId/guestbook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const CreateExhibitionIndexRoute = CreateExhibitionIndexRouteImport.update({
   path: '/create-exhibition/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginCallbackRoute = LoginCallbackRouteImport.update({
+  id: '/login/callback',
+  path: '/login/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SpacesSpaceIdGuestbookRoute = SpacesSpaceIdGuestbookRouteImport.update({
   id: '/spaces/$spaceId/guestbook',
   path: '/spaces/$spaceId/guestbook',
@@ -43,6 +49,7 @@ const SpacesSpaceIdGuestbookRoute = SpacesSpaceIdGuestbookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login/callback': typeof LoginCallbackRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
   '/login/': typeof LoginIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login/callback': typeof LoginCallbackRoute
   '/create-exhibition': typeof CreateExhibitionIndexRoute
   '/login': typeof LoginIndexRoute
   '/sign-up': typeof SignUpIndexRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/login/callback': typeof LoginCallbackRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
   '/login/': typeof LoginIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login/callback'
     | '/create-exhibition/'
     | '/login/'
     | '/sign-up/'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/login/callback'
     | '/create-exhibition'
     | '/login'
     | '/sign-up'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login/callback'
     | '/create-exhibition/'
     | '/login/'
     | '/sign-up/'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginCallbackRoute: typeof LoginCallbackRoute
   CreateExhibitionIndexRoute: typeof CreateExhibitionIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
@@ -125,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateExhibitionIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login/callback': {
+      id: '/login/callback'
+      path: '/login/callback'
+      fullPath: '/login/callback'
+      preLoaderRoute: typeof LoginCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/spaces/$spaceId/guestbook': {
       id: '/spaces/$spaceId/guestbook'
       path: '/spaces/$spaceId/guestbook'
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginCallbackRoute: LoginCallbackRoute,
   CreateExhibitionIndexRoute: CreateExhibitionIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,
