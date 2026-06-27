@@ -9,6 +9,8 @@ const KakaoCallbackPage = () => {
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
   const { code } = useSearch({ from: "/login/callback" });
+  // NOTE: Strict Mode에서 useEffect가 두 번 실행되는 것을 방지.
+  // 카카오 인가코드는 일회성이라 두 번째 요청이 실패하면 로그인 실패로 처리됨.
   const hasRequested = useRef(false);
 
   useEffect(() => {
