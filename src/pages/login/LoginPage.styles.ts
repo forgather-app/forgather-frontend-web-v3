@@ -10,8 +10,6 @@ export const KakaoButton = styled.button`
   padding: 14px 16px;
   background-color: #ffe812;
   border-radius: 8px;
-  cursor: pointer;
-  border: none;
   display: flex;
   align-items: center;
   ${({ theme }) => ({ ...theme.typography.button })};
