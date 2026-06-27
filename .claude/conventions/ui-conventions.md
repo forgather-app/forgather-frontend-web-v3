@@ -70,6 +70,20 @@ export const Title = styled.h1`
 - 간격 값은 spacing 토큰 도입 전까지 임시 사용 가능
 - 토큰에 없는 값은 `/* TODO: 토큰 없음 - {값} */` 주석 처리
 
+### 전역 리셋 중복 방지
+
+UI를 구현하기 전에 반드시 `src/styles/reset.ts`와 `src/styles/global.ts`를 확인합니다.
+이미 전역으로 리셋된 속성은 styled component에 다시 작성하지 않습니다.
+
+현재 전역 리셋 목록 (`src/styles/global.ts`):
+
+```
+button: cursor, border, background, padding, box-shadow, border-radius
+a: text-decoration, color, cursor
+input: border, outline (focus 시)
+* : box-sizing, font-family
+```
+
 ### variant 분기 처리 패턴
 
 여러 variant를 가진 styled component는 ternary 대신 `Record<Variant, (theme: Theme) => string>` 패턴을 사용합니다.
