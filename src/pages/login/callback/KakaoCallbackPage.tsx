@@ -1,5 +1,5 @@
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useKakaoLoginConfirm } from "@/api/generated/auth-인증";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -9,6 +9,7 @@ const KakaoCallbackPage = () => {
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
   const { code } = useSearch({ from: "/login/callback" });
+  const hasRequested = useRef(false);
 
   useEffect(() => {
     if (!code) {
@@ -16,6 +17,9 @@ const KakaoCallbackPage = () => {
       navigate({ to: "/login" });
       return;
     }
+
+    if (hasRequested.current) return;
+    hasRequested.current = true;
 
     confirmLogin(
       { data: { access_token: code } },
