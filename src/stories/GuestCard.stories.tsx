@@ -67,22 +67,9 @@ const defaultArgs = {
   text: "졸업 전시 축하해요! 오랜 시간 동안 준비한 게 느껴지고 작품 하나하나에 정성이 담겨 있었어요.",
 };
 
-/** isNew: true — 뒷면 상태. 클릭하면 flip 애니메이션과 함께 앞면으로 전환됩니다. */
+/** isNew: true — 새 방명록 스택 카드. 여러 장이 겹친 UI로 표시되며 클릭 시 개별 View로 이동합니다. */
 export const New: Story = {
-  render: (args) => {
-    const [isScrapped, setIsScrapped] = useState(false);
-    return (
-      <GuestCard
-        {...args}
-        headerType={{
-          iconType: "scrap",
-          isScrapped,
-          toggleScrap: () => setIsScrapped((prev) => !prev),
-        }}
-      />
-    );
-  },
-  args: { ...defaultArgs, isNew: true },
+  args: { ...defaultArgs, isNew: true, onClick: () => alert("방명록 열기") },
 };
 
 /** 유저가 보는 일반 방명록 — 스크랩 토글 가능 */
