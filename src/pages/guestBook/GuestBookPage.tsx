@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
 import GuestCard from "@/components/@common/GuestCard/GuestCard";
 import GuestCardStack from "@/components/@common/GuestCardStack/GuestCardStack";
@@ -129,6 +129,7 @@ const GuestBookPage = ({
   const [activeView, setActiveView] = useState<GuestBookView>("card");
   const [activeFilter, setActiveFilter] = useState<GuestBookFilter>("all");
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const isTooltipDismissed = useRef(false);
   // TODO: API 연동 시 서버 상태로 대체
   const [scrappedIds, setScrappedIds] = useState<Set<number>>(
     () => new Set(DUMMY_CARDS.filter((c) => c.isScrapped).map((c) => c.id)),
@@ -222,7 +223,7 @@ const GuestBookPage = ({
             isSelected={activeFilter === "photo"}
             onClick={() => {
               setActiveFilter("photo");
-              setIsTooltipVisible(hasNewCards);
+              if (!isTooltipDismissed.current) setIsTooltipVisible(hasNewCards);
             }}
           />
           <FilterChip
@@ -230,7 +231,7 @@ const GuestBookPage = ({
             isSelected={activeFilter === "scrap"}
             onClick={() => {
               setActiveFilter("scrap");
-              setIsTooltipVisible(hasNewCards);
+              if (!isTooltipDismissed.current) setIsTooltipVisible(hasNewCards);
             }}
           />
         </S.ChipRow>
@@ -240,7 +241,10 @@ const GuestBookPage = ({
         {isTooltipVisible && (
           <S.TooltipAnchor>
             <Tooltip
-              onClose={() => setIsTooltipVisible(false)}
+              onClose={() => {
+                setIsTooltipVisible(false);
+                isTooltipDismissed.current = true;
+              }}
               ariaLabel={`${MOCK_NEW_COUNT}개의 새 방명록`}
             >
               <S.TooltipText>
