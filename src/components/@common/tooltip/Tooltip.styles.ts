@@ -1,4 +1,10 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
+
+const fadeIn = keyframes`
+  from { opacity: 0;}
+  to   { opacity: 1; }
+`;
 
 export const Container = styled.div`
   position: relative;
@@ -8,6 +14,7 @@ export const Container = styled.div`
   padding: 4px 8px;
   background-color: ${({ theme }) => theme.colors.semantic.black};
   border-radius: 4px;
+  animation: ${fadeIn} 0.2s ease-out both;
 
   &::before {
     content: "";
