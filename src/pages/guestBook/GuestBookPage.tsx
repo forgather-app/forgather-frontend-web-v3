@@ -137,9 +137,14 @@ const GuestBookPage = ({
   const regularCards = DUMMY_CARDS.filter((card) => !card.isNew);
 
   const filteredCards = regularCards.filter((card) => {
-    if (activeFilter === "photo") return card.isPhotoExist;
-    if (activeFilter === "scrap") return scrappedIds.has(card.id);
-    return true;
+    switch (activeFilter) {
+      case "photo":
+        return card.isPhotoExist;
+      case "scrap":
+        return scrappedIds.has(card.id);
+      default:
+        return true;
+    }
   });
 
   // TODO: API 응답으로 대체 필요
