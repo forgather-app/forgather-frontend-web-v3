@@ -10,6 +10,16 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   return (
-    <GuestBookPage spaceId={spaceId} onBack={() => navigate({ to: ".." })} />
+    <GuestBookPage
+      spaceId={spaceId}
+      onBack={() => navigate({ to: ".." })}
+      onCardClick={(guestbookId) =>
+        navigate({
+          to: "/new-guestbook/$guestbookId",
+          params: { guestbookId: String(guestbookId) },
+        })
+      }
+      onNewStackClick={() => navigate({ to: "/new-guestbooks" })}
+    />
   );
 }

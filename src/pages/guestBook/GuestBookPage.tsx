@@ -1,7 +1,9 @@
 import { useState } from "react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
 import GuestCard from "@/components/@common/GuestCard/GuestCard";
+import GuestCardStack from "@/components/@common/GuestCardStack/GuestCardStack";
 import GuestList from "@/components/@common/GuestList/GuestList";
+import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import Tooltip from "@/components/@common/tooltip/Tooltip";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
@@ -21,6 +23,10 @@ interface GuestBookPageProps {
   spaceName?: string;
   /** 뒤로가기 핸들러 */
   onBack: () => void;
+  /** 일반 방명록 카드 클릭 핸들러 */
+  onCardClick: (guestbookId: number) => void;
+  /** 새 방명록 스택 클릭 핸들러 (새 방명록 목록 페이지로 이동) */
+  onNewStackClick: () => void;
 }
 
 const DUMMY_CARDS = [
@@ -30,6 +36,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해요!",
     isPhotoExist: false,
+    isScrapped: false,
   },
   {
     id: 2,
@@ -37,6 +44,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
+    isScrapped: false,
   },
   {
     id: 3,
@@ -44,6 +52,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
+    isScrapped: true,
   },
   {
     id: 4,
@@ -51,6 +60,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
+    isScrapped: false,
   },
   {
     id: 5,
@@ -58,6 +68,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
+    isScrapped: true,
   },
   {
     id: 6,
@@ -65,6 +76,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
+    isScrapped: false,
   },
   {
     id: 7,
@@ -72,6 +84,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
+    isScrapped: false,
   },
   {
     id: 8,
@@ -79,6 +92,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
+    isScrapped: false,
   },
   {
     id: 9,
@@ -86,6 +100,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
+    isScrapped: true,
   },
   {
     id: 10,
@@ -93,6 +108,7 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
+    isScrapped: false,
   },
   {
     id: 11,
@@ -100,36 +116,60 @@ const DUMMY_CARDS = [
     author: "김이름",
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
+    isScrapped: false,
   },
 ];
 
 const GuestBookPage = ({
   spaceName = "스페이스 이름",
   onBack,
+  onCardClick,
+  onNewStackClick,
 }: GuestBookPageProps) => {
   const [activeView, setActiveView] = useState<GuestBookView>("card");
   const [activeFilter, setActiveFilter] = useState<GuestBookFilter>("all");
-  // TODO: API 연동 시 mutation(읽음 처리) + invalidateQueries로 교체 필요. isNew는 서버 상태
-  const [openedCardIds, setOpenedCardIds] = useState<Set<number>>(new Set());
-  const [isTooltipVisible, setIsTooltipVisible] = useState(MOCK_NEW_COUNT > 0);
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  // TODO: API 연동 시 서버 상태로 대체
+  const [scrappedIds, setScrappedIds] = useState<Set<number>>(
+    () => new Set(DUMMY_CARDS.filter((c) => c.isScrapped).map((c) => c.id)),
+  );
+
+  const hasNewCards = DUMMY_CARDS.some((card) => card.isNew);
+  const regularCards = DUMMY_CARDS.filter((card) => !card.isNew);
+
+  const filteredCards = regularCards.filter((card) => {
+    if (activeFilter === "photo") return card.isPhotoExist;
+    if (activeFilter === "scrap") return scrappedIds.has(card.id);
+    return true;
+  });
+
   // TODO: API 응답으로 대체 필요
-  const totalCount = DUMMY_CARDS.length;
+  const totalCount = filteredCards.length;
+
+  function toggleScrap(id: number) {
+    setScrappedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
 
   function renderCardView() {
     return (
       <S.CardGrid>
-        {DUMMY_CARDS.map((card) => (
+        {hasNewCards && <GuestCardStack onClick={onNewStackClick} />}
+        {filteredCards.map((card) => (
           <GuestCard
             key={card.id}
-            isNew={card.isNew}
             author={card.author}
             text={card.text}
             isPhotoExist={card.isPhotoExist}
+            onClick={() => onCardClick(card.id)}
             headerType={{
               iconType: "scrap",
-              isScrapped: false,
-              // TODO: API 연동 후 스크랩 기능 구현
-              toggleScrap: () => {},
+              isScrapped: scrappedIds.has(card.id),
+              toggleScrap: () => toggleScrap(card.id),
             }}
           />
         ))}
@@ -140,27 +180,15 @@ const GuestBookPage = ({
   function renderListView() {
     return (
       <S.GuestListContainer>
-        {DUMMY_CARDS.map((card) => {
-          if (card.isNew && !openedCardIds.has(card.id)) {
-            return (
-              <GuestList
-                key={card.id}
-                isNew
-                onClick={() =>
-                  setOpenedCardIds((prev) => new Set(prev).add(card.id))
-                }
-              />
-            );
-          }
-          return (
-            <GuestList
-              key={card.id}
-              title={card.author}
-              hasPhoto={card.isPhotoExist}
-              onClick={() => {}}
-            />
-          );
-        })}
+        {hasNewCards && <GuestListStack onClick={onNewStackClick} />}
+        {filteredCards.map((card) => (
+          <GuestList
+            key={card.id}
+            title={card.author}
+            hasPhoto={card.isPhotoExist}
+            onClick={() => onCardClick(card.id)}
+          />
+        ))}
       </S.GuestListContainer>
     );
   }
@@ -184,17 +212,26 @@ const GuestBookPage = ({
           <FilterChip
             label="전체"
             isSelected={activeFilter === "all"}
-            onClick={() => setActiveFilter("all")}
+            onClick={() => {
+              setActiveFilter("all");
+              setIsTooltipVisible(false);
+            }}
           />
           <FilterChip
             label="이미지 방명록"
             isSelected={activeFilter === "photo"}
-            onClick={() => setActiveFilter("photo")}
+            onClick={() => {
+              setActiveFilter("photo");
+              setIsTooltipVisible(hasNewCards);
+            }}
           />
           <FilterChip
             label="스크랩"
             isSelected={activeFilter === "scrap"}
-            onClick={() => setActiveFilter("scrap")}
+            onClick={() => {
+              setActiveFilter("scrap");
+              setIsTooltipVisible(hasNewCards);
+            }}
           />
         </S.ChipRow>
       </S.FilterSection>
