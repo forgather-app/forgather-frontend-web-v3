@@ -1,22 +1,19 @@
 import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
+import useKakaoLoginBridge from "@/hooks/@common/useKakaoLoginBridge";
 import CarouselLayout from "@/shared/carousel/CarouselLayout";
 import OnboardingIllustration1 from "./illustrations/OnboardingIllustration1";
 import OnboardingIllustration2 from "./illustrations/OnboardingIllustration2";
 import * as S from "./LoginPage.styles";
 import OnboardingSlide from "./slides/OnboardingSlide";
 
-const KAKAO_REDIRECT_URI = `${import.meta.env.VITE_DOMAIN}/login/callback`;
-
 const LoginPage = () => {
-  const handleKakaoLogin = () => {
-    window.Kakao.Auth.authorize({ redirectUri: KAKAO_REDIRECT_URI });
-  };
+  const { requestKakaoLogin } = useKakaoLoginBridge();
 
   return (
     <CarouselLayout
       footer={
         <S.FooterWrapper>
-          <S.KakaoButton type="button" onClick={handleKakaoLogin}>
+          <S.KakaoButton type="button" onClick={requestKakaoLogin}>
             <KakaoLogo aria-hidden="true" />
             <span>카카오로 로그인하기</span>
           </S.KakaoButton>
