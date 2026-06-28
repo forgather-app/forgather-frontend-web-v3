@@ -18,7 +18,7 @@ const GuestListStack = ({ onClick }: GuestListStackProps) => {
       <S.FrontCard>
         <S.Content>
           <IcSmallLogo width={24} height={24} aria-hidden />
-          <S.Label>새로 도착한 방명록</S.Label>
+          <S.Label aria-hidden>새로 도착한 방명록</S.Label>
         </S.Content>
       </S.FrontCard>
     </S.Container>

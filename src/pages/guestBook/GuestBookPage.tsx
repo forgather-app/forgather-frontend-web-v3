@@ -9,9 +9,6 @@ import Tooltip from "@/components/@common/tooltip/Tooltip";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";
 
-// TODO: API 연동 시 서버 응답으로 대체
-const MOCK_NEW_COUNT = 3;
-
 type GuestBookView = "card" | "list";
 
 type GuestBookFilter = "all" | "photo" | "scrap";
@@ -135,7 +132,8 @@ const GuestBookPage = ({
     () => new Set(DUMMY_CARDS.filter((c) => c.isScrapped).map((c) => c.id)),
   );
 
-  const hasNewCards = DUMMY_CARDS.some((card) => card.isNew);
+  const newCards = DUMMY_CARDS.filter((card) => card.isNew);
+  const hasNewCards = newCards.length > 0;
   const regularCards = DUMMY_CARDS.filter((card) => !card.isNew);
 
   const filteredCards = regularCards.filter((card) => {
@@ -245,10 +243,10 @@ const GuestBookPage = ({
                 setIsTooltipVisible(false);
                 isTooltipDismissed.current = true;
               }}
-              ariaLabel={`${MOCK_NEW_COUNT}개의 새 방명록`}
+              ariaLabel={`${newCards.length}개의 새 방명록`}
             >
               <S.TooltipText>
-                <S.TooltipCount>{MOCK_NEW_COUNT}개</S.TooltipCount>
+                <S.TooltipCount>{newCards.length}개</S.TooltipCount>
                 <S.TooltipSub>의 새 방명록</S.TooltipSub>
               </S.TooltipText>
             </Tooltip>
