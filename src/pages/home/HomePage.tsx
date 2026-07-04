@@ -11,6 +11,15 @@ const HomePage = () => {
   const [activeNavTab, setActiveNavTab] = useState<"홈" | "방명록" | "마이">(
     "홈",
   );
+  const [spaces, setSpaces] = useState(MOCK_SPACES);
+
+  const handlePinClick = (spaceId: number) => {
+    setSpaces((prev) =>
+      prev.map((space) =>
+        space.id === spaceId ? { ...space, isPinned: !space.isPinned } : space,
+      ),
+    );
+  };
 
   return (
     <S.HomePageContainer>
@@ -26,7 +35,7 @@ const HomePage = () => {
         </S.Header>
 
         <S.ContentWrapper>
-          {MOCK_SPACES.length === 0 && MOCK_CURRENT_SPACES.length === 0 ? (
+          {spaces.length === 0 && MOCK_CURRENT_SPACES.length === 0 ? (
             <HomeEmptyView />
           ) : (
             <>
@@ -35,12 +44,12 @@ const HomePage = () => {
               )}
 
               <S.ContentHeader>
-                <S.SpaceCount>{MOCK_SPACES.length}개</S.SpaceCount>
+                <S.SpaceCount>{spaces.length}개</S.SpaceCount>
                 <S.SpaceCountText>의 스페이스</S.SpaceCountText>
               </S.ContentHeader>
 
               <S.SpaceList>
-                {MOCK_SPACES.map((space) => (
+                {spaces.map((space) => (
                   <SpaceCard
                     key={space.id}
                     title={space.title}
@@ -49,7 +58,7 @@ const HomePage = () => {
                     backgroundImageUrl={space.backgroundImageUrl}
                     isPinned={space.isPinned}
                     onClick={() => {}}
-                    onPinClick={() => {}}
+                    onPinClick={() => handlePinClick(space.id)}
                   />
                 ))}
               </S.SpaceList>
