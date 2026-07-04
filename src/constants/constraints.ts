@@ -6,4 +6,9 @@ export const CONSTRAINTS = {
   SIGN_UP: {
     ARTIST_NAME_MAX_LENGTH: 20,
   },
+
+  CREATE_SPACE: {
+    NAME_MAX_LENGTH: 100,
+    DESCRIPTION_MAX_LENGTH: 200,
+  },
 };
