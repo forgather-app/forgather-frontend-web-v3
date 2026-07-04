@@ -74,6 +74,7 @@ const HomePage = () => {
             <S.CreateButtonText>스페이스 만들기</S.CreateButtonText>
           </S.CreateButton>
         </S.CreateButtonContainer>
+        {/* TODO: 탭 클릭 시 해당 라우트(방명록, 마이 등)로 navigate 연결 필요 (현재는 활성 상태만 변경) */}
         <BottomTabBar activeTab={activeNavTab} onTabChange={setActiveNavTab} />
       </S.BottomSection>
     </S.HomePageContainer>
