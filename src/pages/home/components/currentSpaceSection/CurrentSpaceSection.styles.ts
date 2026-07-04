@@ -15,11 +15,15 @@ export const Title = styled.h3`
 export const CarouselWrapper = styled.div`
   overflow: hidden;
   touch-action: pan-y;
+  margin: 0 ${({ theme }) => -theme.layout.sidePadding}px;
+  padding: 0 ${({ theme }) => theme.layout.sidePadding}px;
 `;
 
 export const Track = styled.div<{ currentIndex: number }>`
   display: flex;
-  transform: translateX(${({ currentIndex }) => -currentIndex * 100}%);
+  gap: ${({ theme }) => theme.layout.cardGap}px;
+  transform: ${({ currentIndex, theme }) =>
+    `translateX(calc(${-currentIndex} * (100% + ${theme.layout.cardGap}px)))`};
   transition: transform 0.3s ease;
 `;
 
