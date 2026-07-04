@@ -94,10 +94,12 @@ const CurrentSpaceSection = ({
             <S.Dot
               // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel indicator
               key={index}
+              type="button"
               isActive={index === currentIndex}
+              onClick={() => setCurrentIndex(index)}
               role="tab"
               aria-selected={index === currentIndex}
-              aria-label={`슬라이드 ${index + 1}`}
+              aria-label={`${index + 1}번째 슬라이드로 이동`}
             />
           ))}
         </S.DotsWrapper>

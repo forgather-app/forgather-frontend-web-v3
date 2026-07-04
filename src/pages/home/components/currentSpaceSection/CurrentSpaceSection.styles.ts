@@ -34,7 +34,7 @@ export const DotsWrapper = styled.div`
   gap: 8px;
 `;
 
-export const Dot = styled.div<{ isActive: boolean }>`
+export const Dot = styled.button<{ isActive: boolean }>`
   width: 8px;
   height: 8px;
   border-radius: 50%;
