@@ -63,8 +63,12 @@ const useKakaoLoginBridge = () => {
   // Web → RN: 카카오 로그인 요청
   const requestKakaoLogin = () => {
     if (isRequesting) return;
+    if (!window.ReactNativeWebView) {
+      showSnackBar(ERROR_MESSAGES.APP_ONLY_FEATURE, "error");
+      return;
+    }
     setIsRequesting(true);
-    window.ReactNativeWebView?.postMessage(
+    window.ReactNativeWebView.postMessage(
       JSON.stringify({ type: "KAKAO_LOGIN" }),
     );
   };
