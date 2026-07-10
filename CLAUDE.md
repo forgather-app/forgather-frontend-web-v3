@@ -32,6 +32,8 @@
   - `useSuspenseQuery` 기본 사용
   - Custom fetcher (`src/api/customFetcher.ts`) 기반 요청 처리
 
+> 생성된 API 훅을 컴포넌트에서 연동하는 방법(mutation 호출, 에러 처리, 네비게이션)은 `.claude/conventions/api-conventions.md`를 참조합니다.
+
 ### 개발 도구
 
 - **Biome**: 린터 및 포맷터 (ESLint + Prettier 대체)
