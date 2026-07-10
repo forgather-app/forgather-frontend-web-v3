@@ -49,7 +49,7 @@ const Component = () => {
 ```
 
 - 요청 바디(variables)가 없는 mutation(`TVariables = void`)은 `mutate(undefined, { onSuccess, onError })` 형태로 호출합니다.
-- 중복 요청 방지가 필요한 경우(예: 일회성 인가 코드) `useRef`로 요청 여부를 추적합니다 — [`KakaoCallbackPage.tsx`](../../src/pages/login/callback/KakaoCallbackPage.tsx) 참고.
+- 중복 요청 방지가 필요한 경우 `useState`/`useRef`로 요청 여부를 추적합니다 — [`useKakaoLoginBridge.ts`](../../src/hooks/@common/useKakaoLoginBridge.ts) 참고.
 - 버튼 등 트리거 요소는 `isPending`일 때 `disabled` 처리해 중복 클릭을 막습니다.
 
 ---
@@ -87,5 +87,5 @@ navigate({ to: "/" });
 
 ## 5. 참고 구현
 
-- [`KakaoCallbackPage.tsx`](../../src/pages/login/callback/KakaoCallbackPage.tsx) — mutation 호출 + 성공/실패 분기 + 스낵바 + 네비게이션의 기본형
+- [`useKakaoLoginBridge.ts`](../../src/hooks/@common/useKakaoLoginBridge.ts) — mutation 호출 + 성공/실패 분기 + 스낵바 + 네비게이션의 기본형
 - [`TermsStep.tsx`](../../src/pages/signUp/steps/TermsStep.tsx) — 퍼널 내부 단계에서 mutation 성공 시에만 다음 단계로 진행하는 패턴
