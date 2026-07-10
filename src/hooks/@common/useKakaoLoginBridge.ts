@@ -23,8 +23,10 @@ const useKakaoLoginBridge = () => {
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
       try {
-        const data = JSON.parse(String(e.data)) as KakaoTokenMessage;
-        if (data.type !== "KAKAO_TOKEN") return;
+        const rawData =
+          typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        if (!rawData || rawData.type !== "KAKAO_TOKEN") return;
+        const data = rawData as KakaoTokenMessage;
 
         confirmLogin(
           {
