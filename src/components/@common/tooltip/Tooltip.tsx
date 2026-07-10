@@ -1,4 +1,5 @@
 import { ic_close } from "@/assets/icons";
+import { theme } from "@/styles/theme";
 import * as S from "./Tooltip.styles";
 
 interface TooltipProps {
@@ -18,7 +19,12 @@ const Tooltip = ({ children, onClose, ariaLabel }: TooltipProps) => {
       {children}
       {onClose && (
         <S.CloseButton onClick={onClose} aria-label="닫기">
-          <IcClose width={16} height={16} aria-hidden="true" />
+          <IcClose
+            width={16}
+            height={16}
+            color={theme.colors.gray.gray300}
+            aria-hidden="true"
+          />
         </S.CloseButton>
       )}
     </S.Container>

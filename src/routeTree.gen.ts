@@ -9,13 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NewGuestbooksRouteImport } from './routes/new-guestbooks'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as CreateExhibitionIndexRouteImport } from './routes/create-exhibition/index'
 import { Route as NewGuestbookGuestbookIdRouteImport } from './routes/new-guestbook/$guestbookId'
+<<<<<<< feature/#104-kakao-login-native
+=======
+import { Route as LoginCallbackRouteImport } from './routes/login/callback'
+>>>>>>> develop
 import { Route as SpacesSpaceIdGuestbookRouteImport } from './routes/spaces/$spaceId/guestbook'
 
+const NewGuestbooksRoute = NewGuestbooksRouteImport.update({
+  id: '/new-guestbooks',
+  path: '/new-guestbooks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -39,6 +49,14 @@ const CreateExhibitionIndexRoute = CreateExhibitionIndexRouteImport.update({
 const NewGuestbookGuestbookIdRoute = NewGuestbookGuestbookIdRouteImport.update({
   id: '/new-guestbook/$guestbookId',
   path: '/new-guestbook/$guestbookId',
+<<<<<<< feature/#104-kakao-login-native
+=======
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginCallbackRoute = LoginCallbackRouteImport.update({
+  id: '/login/callback',
+  path: '/login/callback',
+>>>>>>> develop
   getParentRoute: () => rootRouteImport,
 } as any)
 const SpacesSpaceIdGuestbookRoute = SpacesSpaceIdGuestbookRouteImport.update({
@@ -49,6 +67,11 @@ const SpacesSpaceIdGuestbookRoute = SpacesSpaceIdGuestbookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+<<<<<<< feature/#104-kakao-login-native
+=======
+  '/new-guestbooks': typeof NewGuestbooksRoute
+  '/login/callback': typeof LoginCallbackRoute
+>>>>>>> develop
   '/new-guestbook/$guestbookId': typeof NewGuestbookGuestbookIdRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
   '/login/': typeof LoginIndexRoute
@@ -57,6 +80,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+<<<<<<< feature/#104-kakao-login-native
+=======
+  '/new-guestbooks': typeof NewGuestbooksRoute
+  '/login/callback': typeof LoginCallbackRoute
+>>>>>>> develop
   '/new-guestbook/$guestbookId': typeof NewGuestbookGuestbookIdRoute
   '/create-exhibition': typeof CreateExhibitionIndexRoute
   '/login': typeof LoginIndexRoute
@@ -66,6 +94,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+<<<<<<< feature/#104-kakao-login-native
+=======
+  '/new-guestbooks': typeof NewGuestbooksRoute
+  '/login/callback': typeof LoginCallbackRoute
+>>>>>>> develop
   '/new-guestbook/$guestbookId': typeof NewGuestbookGuestbookIdRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
   '/login/': typeof LoginIndexRoute
@@ -76,6 +109,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+<<<<<<< feature/#104-kakao-login-native
+=======
+    | '/new-guestbooks'
+    | '/login/callback'
+>>>>>>> develop
     | '/new-guestbook/$guestbookId'
     | '/create-exhibition/'
     | '/login/'
@@ -84,6 +122,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+<<<<<<< feature/#104-kakao-login-native
+=======
+    | '/new-guestbooks'
+    | '/login/callback'
+>>>>>>> develop
     | '/new-guestbook/$guestbookId'
     | '/create-exhibition'
     | '/login'
@@ -92,6 +135,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+<<<<<<< feature/#104-kakao-login-native
+=======
+    | '/new-guestbooks'
+    | '/login/callback'
+>>>>>>> develop
     | '/new-guestbook/$guestbookId'
     | '/create-exhibition/'
     | '/login/'
@@ -101,6 +149,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+<<<<<<< feature/#104-kakao-login-native
+=======
+  NewGuestbooksRoute: typeof NewGuestbooksRoute
+  LoginCallbackRoute: typeof LoginCallbackRoute
+>>>>>>> develop
   NewGuestbookGuestbookIdRoute: typeof NewGuestbookGuestbookIdRoute
   CreateExhibitionIndexRoute: typeof CreateExhibitionIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
@@ -110,6 +163,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/new-guestbooks': {
+      id: '/new-guestbooks'
+      path: '/new-guestbooks'
+      fullPath: '/new-guestbooks'
+      preLoaderRoute: typeof NewGuestbooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -143,6 +203,16 @@ declare module '@tanstack/react-router' {
       path: '/new-guestbook/$guestbookId'
       fullPath: '/new-guestbook/$guestbookId'
       preLoaderRoute: typeof NewGuestbookGuestbookIdRouteImport
+<<<<<<< feature/#104-kakao-login-native
+=======
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/callback': {
+      id: '/login/callback'
+      path: '/login/callback'
+      fullPath: '/login/callback'
+      preLoaderRoute: typeof LoginCallbackRouteImport
+>>>>>>> develop
       parentRoute: typeof rootRouteImport
     }
     '/spaces/$spaceId/guestbook': {
@@ -157,6 +227,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+<<<<<<< feature/#104-kakao-login-native
+=======
+  NewGuestbooksRoute: NewGuestbooksRoute,
+  LoginCallbackRoute: LoginCallbackRoute,
+>>>>>>> develop
   NewGuestbookGuestbookIdRoute: NewGuestbookGuestbookIdRoute,
   CreateExhibitionIndexRoute: CreateExhibitionIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
