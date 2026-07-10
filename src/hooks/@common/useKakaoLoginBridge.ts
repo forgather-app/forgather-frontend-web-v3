@@ -1,10 +1,10 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useKakaoLoginConfirm } from "@/api/generated/auth-인증";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
-// RN → Web 메시지 형식
+// NOTE: RN → Web 메시지 형식
 // { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string } }
 interface KakaoTokenMessage {
   type: "KAKAO_TOKEN";
@@ -18,6 +18,7 @@ const useKakaoLoginBridge = () => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
+  const [isRequesting, setIsRequesting] = useState(false);
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
@@ -39,24 +40,34 @@ const useKakaoLoginBridge = () => {
             },
             onError: () => {
               showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");
+              setIsRequesting(false);
             },
           },
         );
-      } catch {}
+      } catch (err) {
+        // TODO: 원인 파악 후 제거
+        console.error("KAKAO_TOKEN parse/handle error", err, e.data);
+      }
     };
 
     window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    document.addEventListener("message", handleMessage as EventListener);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+      document.removeEventListener("message", handleMessage as EventListener);
+    };
   }, [confirmLogin, navigate, showSnackBar]);
 
   // Web → RN: 카카오 로그인 요청
   const requestKakaoLogin = () => {
+    if (isRequesting) return;
+    setIsRequesting(true);
     window.ReactNativeWebView?.postMessage(
       JSON.stringify({ type: "KAKAO_LOGIN" }),
     );
   };
 
-  return { requestKakaoLogin };
+  return { requestKakaoLogin, isRequesting };
 };
 
 export default useKakaoLoginBridge;

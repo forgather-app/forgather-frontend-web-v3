@@ -7,13 +7,17 @@ import * as S from "./LoginPage.styles";
 import OnboardingSlide from "./slides/OnboardingSlide";
 
 const LoginPage = () => {
-  const { requestKakaoLogin } = useKakaoLoginBridge();
+  const { requestKakaoLogin, isRequesting } = useKakaoLoginBridge();
 
   return (
     <CarouselLayout
       footer={
         <S.FooterWrapper>
-          <S.KakaoButton type="button" onClick={requestKakaoLogin}>
+          <S.KakaoButton
+            type="button"
+            onClick={requestKakaoLogin}
+            disabled={isRequesting}
+          >
             <KakaoLogo aria-hidden="true" />
             <span>카카오로 로그인하기</span>
           </S.KakaoButton>

@@ -19,4 +19,8 @@ export const KakaoButton = styled.button`
     flex: 1;
     text-align: center;
   }
+
+  &:disabled {
+    opacity: 0.6;
+  }
 `;
