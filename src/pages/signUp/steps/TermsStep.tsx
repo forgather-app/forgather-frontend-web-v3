@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSubmitOnboarding } from "@/api/generated/auth-인증";
 import { useGetLatestTerms } from "@/api/generated/term-약관";
 import type { ApiResponseListTermResponse } from "@/api/model";
@@ -32,24 +32,20 @@ const TermsStep = ({
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: submitOnboarding, isPending } = useSubmitOnboarding();
-  // NOTE: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 런타임 값은 JSON이라 안전하게 캐스팅
   const {
-    data: termsResponse,
+    data: terms = [],
     isLoading,
     isError,
     refetch,
-  } = useGetLatestTerms();
-  const terms = useMemo<Term[]>(() => {
-    const data =
-      (termsResponse as unknown as ApiResponseListTermResponse | undefined)
-        ?.data ?? [];
-
-    return data
-      .filter((term): term is Term => term.id !== undefined)
-      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-  }, [termsResponse]);
-
-  const isValid = validateTerms(agreement, terms);
+  } = useGetLatestTerms<Term[]>({
+    query: {
+      select: (response) =>
+        // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+        ((response as unknown as ApiResponseListTermResponse).data ?? [])
+          .filter((term): term is Term => term.id !== undefined)
+          .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
+    },
+  });
 
   const handleNext = () => {
     submitOnboarding(
@@ -76,7 +72,7 @@ const TermsStep = ({
   return (
     <ItemLayout
       text="다음"
-      disabled={isLoading || !isValid || isPending}
+      disabled={isLoading || !validateTerms(agreement, terms) || isPending}
       onClick={handleNext}
     >
       <S.Spacer />

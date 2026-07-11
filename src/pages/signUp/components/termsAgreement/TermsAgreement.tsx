@@ -4,6 +4,7 @@ import IcBack from "@/assets/icons/ic_back.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import IcRectangleCheck from "@/assets/icons/ic_rectangle_check.svg?react";
 import Modal from "@/components/UI/Modal/Modal";
+import { isAllTermsAgreed } from "@/pages/signUp/validate/validateTerms";
 import { MarkdownContent } from "@/styles/@common/Markdown/Markdown.styles";
 import * as S from "./TermsAgreement.styles";
 import type { Term, TermsAgreementState } from "./TermsAgreement.type";
@@ -27,10 +28,8 @@ const TermsAgreement = ({
 }: TermsAgreementProps) => {
   const [modalTerm, setModalTerm] = useState<Term | null>(null);
 
-  const isAllAgreed = terms.length > 0 && terms.every((term) => value[term.id]);
-
   const handleAllAgree = () => {
-    const next = !isAllAgreed;
+    const next = !isAllTermsAgreed(value, terms);
     onChange(Object.fromEntries(terms.map((term) => [term.id, next])));
   };
 
@@ -49,12 +48,16 @@ const TermsAgreement = ({
             <S.HiddenInput
               type="checkbox"
               id="terms-all"
-              checked={isAllAgreed}
+              checked={isAllTermsAgreed(value, terms)}
               onChange={handleAllAgree}
               disabled={isLoading}
               aria-label="전체 동의"
             />
-            <S.CheckIcon $checked={isAllAgreed} $dimmed={isLoading} aria-hidden>
+            <S.CheckIcon
+              $checked={isAllTermsAgreed(value, terms)}
+              $dimmed={isLoading}
+              aria-hidden
+            >
               <IcRectangleCheck width={28} height={28} />
             </S.CheckIcon>
           </S.CheckboxWrapper>
