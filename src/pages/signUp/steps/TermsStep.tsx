@@ -94,6 +94,7 @@ const TermsStep = ({
           terms={terms}
           value={agreement}
           onChange={setAgreement}
+          isLoading={isLoading}
         />
       )}
     </ItemLayout>
