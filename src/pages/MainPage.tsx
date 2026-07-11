@@ -1,14 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
 
-const buttonStyle = {
-  display: "block",
-  marginTop: 16,
-  padding: "8px 16px",
-  border: "1px solid white",
-  color: "white",
-  borderRadius: 8,
-} as const;
-
 const PAGE_LINKS = [
   { label: "로그인 페이지 이동 (임시)", to: "/login" },
   { label: "회원가입 페이지 이동 (임시)", to: "/sign-up" },
@@ -34,12 +25,7 @@ function MainPage() {
     <div style={{ border: "1px solid white", flex: 1, color: "white" }}>
       메인페이지
       {PAGE_LINKS.map((link) => (
-        <button
-          key={link.to}
-          type="button"
-          onClick={() => navigate(link)}
-          style={buttonStyle}
-        >
+        <button key={link.to} type="button" onClick={() => navigate(link)}>
           {link.label}
         </button>
       ))}
