@@ -31,6 +31,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
@@ -86,16 +88,16 @@ export const getRetrieveReportHistoryQueryKey = (params?: RetrieveReportHistoryP
     }
 
     
-export const getRetrieveReportHistoryQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(params: RetrieveReportHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+export const getRetrieveReportHistoryQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(params: RetrieveReportHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getRetrieveReportHistoryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportHistory>>> = ({ signal }) => retrieveReportHistory(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportHistory>>> = ({ signal }) => retrieveReportHistory(params, { signal, ...requestOptions });
 
       
 
@@ -115,7 +117,7 @@ export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retri
           TError,
           Awaited<ReturnType<typeof retrieveReportHistory>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
@@ -125,11 +127,11 @@ export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retri
           TError,
           Awaited<ReturnType<typeof retrieveReportHistory>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
- params: RetrieveReportHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+ params: RetrieveReportHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -137,7 +139,7 @@ export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retri
  */
 
 export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
- params: RetrieveReportHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+ params: RetrieveReportHistoryParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -151,16 +153,16 @@ export function useRetrieveReportHistory<TData = Awaited<ReturnType<typeof retri
 
 
 
-export const getRetrieveReportHistorySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+export const getRetrieveReportHistorySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getRetrieveReportHistoryQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportHistory>>> = ({ signal }) => retrieveReportHistory(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportHistory>>> = ({ signal }) => retrieveReportHistory(params, { signal, ...requestOptions });
 
       
 
@@ -174,15 +176,15 @@ export type RetrieveReportHistorySuspenseQueryError = unknown
 
 
 export function useRetrieveReportHistorySuspense<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
- params: RetrieveReportHistoryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+ params: RetrieveReportHistoryParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportHistorySuspense<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
- params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+ params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportHistorySuspense<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
- params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+ params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -190,7 +192,7 @@ export function useRetrieveReportHistorySuspense<TData = Awaited<ReturnType<type
  */
 
 export function useRetrieveReportHistorySuspense<TData = Awaited<ReturnType<typeof retrieveReportHistory>>, TError = unknown>(
- params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, }
+ params: RetrieveReportHistoryParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportHistory>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -250,16 +252,16 @@ export const getRetrieveReportDetailQueryKey = (reportId: number,) => {
     }
 
     
-export const getRetrieveReportDetailQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+export const getRetrieveReportDetailQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getRetrieveReportDetailQueryKey(reportId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportDetail>>> = ({ signal }) => retrieveReportDetail(reportId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportDetail>>> = ({ signal }) => retrieveReportDetail(reportId, { signal, ...requestOptions });
 
       
 
@@ -279,7 +281,7 @@ export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrie
           TError,
           Awaited<ReturnType<typeof retrieveReportDetail>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
@@ -289,11 +291,11 @@ export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrie
           TError,
           Awaited<ReturnType<typeof retrieveReportDetail>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
- reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+ reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -301,7 +303,7 @@ export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrie
  */
 
 export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
- reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+ reportId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -315,16 +317,16 @@ export function useRetrieveReportDetail<TData = Awaited<ReturnType<typeof retrie
 
 
 
-export const getRetrieveReportDetailSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+export const getRetrieveReportDetailSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getRetrieveReportDetailQueryKey(reportId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportDetail>>> = ({ signal }) => retrieveReportDetail(reportId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof retrieveReportDetail>>> = ({ signal }) => retrieveReportDetail(reportId, { signal, ...requestOptions });
 
       
 
@@ -338,15 +340,15 @@ export type RetrieveReportDetailSuspenseQueryError = unknown
 
 
 export function useRetrieveReportDetailSuspense<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
- reportId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+ reportId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportDetailSuspense<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
- reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+ reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useRetrieveReportDetailSuspense<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
- reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+ reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -354,7 +356,7 @@ export function useRetrieveReportDetailSuspense<TData = Awaited<ReturnType<typeo
  */
 
 export function useRetrieveReportDetailSuspense<TData = Awaited<ReturnType<typeof retrieveReportDetail>>, TError = unknown>(
- reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, }
+ reportId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof retrieveReportDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

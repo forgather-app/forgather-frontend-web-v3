@@ -27,6 +27,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getSummaryResponse200 = {
@@ -71,16 +73,16 @@ export const getGetSummaryQueryKey = () => {
     }
 
     
-export const getGetSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+export const getGetSummaryQueryOptions = <TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSummaryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSummary>>> = ({ signal }) => getSummary({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSummary>>> = ({ signal }) => getSummary({ signal, ...requestOptions });
 
       
 
@@ -100,7 +102,7 @@ export function useGetSummary<TData = Awaited<ReturnType<typeof getSummary>>, TE
           TError,
           Awaited<ReturnType<typeof getSummary>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSummary<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
@@ -110,16 +112,16 @@ export function useGetSummary<TData = Awaited<ReturnType<typeof getSummary>>, TE
           TError,
           Awaited<ReturnType<typeof getSummary>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSummary<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSummary<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -133,16 +135,16 @@ export function useGetSummary<TData = Awaited<ReturnType<typeof getSummary>>, TE
 
 
 
-export const getGetSummarySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+export const getGetSummarySuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSummaryQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSummary>>> = ({ signal }) => getSummary({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSummary>>> = ({ signal }) => getSummary({ signal, ...requestOptions });
 
       
 
@@ -156,20 +158,20 @@ export type GetSummarySuspenseQueryError = unknown
 
 
 export function useGetSummarySuspense<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSummarySuspense<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSummarySuspense<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSummarySuspense<TData = Awaited<ReturnType<typeof getSummary>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSummary>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

@@ -27,6 +27,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
@@ -75,16 +77,16 @@ export const getLandingQueryKey = () => {
     }
 
     
-export const getLandingQueryOptions = <TData = Awaited<ReturnType<typeof landing>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+export const getLandingQueryOptions = <TData = Awaited<ReturnType<typeof landing>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getLandingQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof landing>>> = ({ signal }) => landing({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof landing>>> = ({ signal }) => landing({ signal, ...requestOptions });
 
       
 
@@ -104,7 +106,7 @@ export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError =
           TError,
           Awaited<ReturnType<typeof landing>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
@@ -114,11 +116,11 @@ export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError =
           TError,
           Awaited<ReturnType<typeof landing>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -126,7 +128,7 @@ export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError =
  */
 
 export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -140,16 +142,16 @@ export function useLanding<TData = Awaited<ReturnType<typeof landing>>, TError =
 
 
 
-export const getLandingSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof landing>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+export const getLandingSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof landing>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getLandingQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof landing>>> = ({ signal }) => landing({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof landing>>> = ({ signal }) => landing({ signal, ...requestOptions });
 
       
 
@@ -163,15 +165,15 @@ export type LandingSuspenseQueryError = unknown
 
 
 export function useLandingSuspense<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useLandingSuspense<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useLandingSuspense<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -179,7 +181,7 @@ export function useLandingSuspense<TData = Awaited<ReturnType<typeof landing>>, 
  */
 
 export function useLandingSuspense<TData = Awaited<ReturnType<typeof landing>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof landing>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

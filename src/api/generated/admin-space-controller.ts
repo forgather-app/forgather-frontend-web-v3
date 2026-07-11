@@ -33,6 +33,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getAllSpacesResponse200 = {
@@ -84,16 +86,16 @@ export const getGetAllSpacesQueryKey = (params?: GetAllSpacesParams,) => {
     }
 
     
-export const getGetAllSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(params: GetAllSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+export const getGetAllSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(params: GetAllSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetAllSpacesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpaces>>> = ({ signal }) => getAllSpaces(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpaces>>> = ({ signal }) => getAllSpaces(params, { signal, ...requestOptions });
 
       
 
@@ -113,7 +115,7 @@ export function useGetAllSpaces<TData = Awaited<ReturnType<typeof getAllSpaces>>
           TError,
           Awaited<ReturnType<typeof getAllSpaces>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllSpaces<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
@@ -123,16 +125,16 @@ export function useGetAllSpaces<TData = Awaited<ReturnType<typeof getAllSpaces>>
           TError,
           Awaited<ReturnType<typeof getAllSpaces>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllSpaces<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
- params: GetAllSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+ params: GetAllSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetAllSpaces<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
- params: GetAllSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+ params: GetAllSpacesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -146,16 +148,16 @@ export function useGetAllSpaces<TData = Awaited<ReturnType<typeof getAllSpaces>>
 
 
 
-export const getGetAllSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+export const getGetAllSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetAllSpacesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpaces>>> = ({ signal }) => getAllSpaces(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllSpaces>>> = ({ signal }) => getAllSpaces(params, { signal, ...requestOptions });
 
       
 
@@ -169,20 +171,20 @@ export type GetAllSpacesSuspenseQueryError = unknown
 
 
 export function useGetAllSpacesSuspense<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
- params: GetAllSpacesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+ params: GetAllSpacesParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllSpacesSuspense<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
- params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+ params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllSpacesSuspense<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
- params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+ params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetAllSpacesSuspense<TData = Awaited<ReturnType<typeof getAllSpaces>>, TError = unknown>(
- params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, }
+ params: GetAllSpacesParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -238,16 +240,16 @@ export const getGetSpaceDetailQueryKey = (spaceCode: string,) => {
     }
 
     
-export const getGetSpaceDetailQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+export const getGetSpaceDetailQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSpaceDetailQueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceDetail>>> = ({ signal }) => getSpaceDetail(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceDetail>>> = ({ signal }) => getSpaceDetail(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -267,7 +269,7 @@ export function useGetSpaceDetail<TData = Awaited<ReturnType<typeof getSpaceDeta
           TError,
           Awaited<ReturnType<typeof getSpaceDetail>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpaceDetail<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
@@ -277,16 +279,16 @@ export function useGetSpaceDetail<TData = Awaited<ReturnType<typeof getSpaceDeta
           TError,
           Awaited<ReturnType<typeof getSpaceDetail>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpaceDetail<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSpaceDetail<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -300,16 +302,16 @@ export function useGetSpaceDetail<TData = Awaited<ReturnType<typeof getSpaceDeta
 
 
 
-export const getGetSpaceDetailSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+export const getGetSpaceDetailSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSpaceDetailQueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceDetail>>> = ({ signal }) => getSpaceDetail(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpaceDetail>>> = ({ signal }) => getSpaceDetail(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -323,20 +325,20 @@ export type GetSpaceDetailSuspenseQueryError = unknown
 
 
 export function useGetSpaceDetailSuspense<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
- spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+ spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpaceDetailSuspense<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpaceDetailSuspense<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSpaceDetailSuspense<TData = Awaited<ReturnType<typeof getSpaceDetail>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpaceDetail>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -399,16 +401,16 @@ export const getGetSpacesByFiltersQueryKey = (params?: GetSpacesByFiltersParams,
     }
 
     
-export const getGetSpacesByFiltersQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(params: GetSpacesByFiltersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+export const getGetSpacesByFiltersQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(params: GetSpacesByFiltersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSpacesByFiltersQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByFilters>>> = ({ signal }) => getSpacesByFilters(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByFilters>>> = ({ signal }) => getSpacesByFilters(params, { signal, ...requestOptions });
 
       
 
@@ -428,7 +430,7 @@ export function useGetSpacesByFilters<TData = Awaited<ReturnType<typeof getSpace
           TError,
           Awaited<ReturnType<typeof getSpacesByFilters>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByFilters<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
@@ -438,16 +440,16 @@ export function useGetSpacesByFilters<TData = Awaited<ReturnType<typeof getSpace
           TError,
           Awaited<ReturnType<typeof getSpacesByFilters>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByFilters<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
- params: GetSpacesByFiltersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+ params: GetSpacesByFiltersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSpacesByFilters<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
- params: GetSpacesByFiltersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+ params: GetSpacesByFiltersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -461,16 +463,16 @@ export function useGetSpacesByFilters<TData = Awaited<ReturnType<typeof getSpace
 
 
 
-export const getGetSpacesByFiltersSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+export const getGetSpacesByFiltersSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSpacesByFiltersQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByFilters>>> = ({ signal }) => getSpacesByFilters(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByFilters>>> = ({ signal }) => getSpacesByFilters(params, { signal, ...requestOptions });
 
       
 
@@ -484,20 +486,20 @@ export type GetSpacesByFiltersSuspenseQueryError = unknown
 
 
 export function useGetSpacesByFiltersSuspense<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
- params: GetSpacesByFiltersParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+ params: GetSpacesByFiltersParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByFiltersSuspense<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
- params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+ params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByFiltersSuspense<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
- params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+ params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSpacesByFiltersSuspense<TData = Awaited<ReturnType<typeof getSpacesByFilters>>, TError = unknown>(
- params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, }
+ params: GetSpacesByFiltersParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByFilters>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -560,16 +562,16 @@ export const getGetSpacesByNameQueryKey = (params?: GetSpacesByNameParams,) => {
     }
 
     
-export const getGetSpacesByNameQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(params: GetSpacesByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+export const getGetSpacesByNameQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(params: GetSpacesByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSpacesByNameQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByName>>> = ({ signal }) => getSpacesByName(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByName>>> = ({ signal }) => getSpacesByName(params, { signal, ...requestOptions });
 
       
 
@@ -589,7 +591,7 @@ export function useGetSpacesByName<TData = Awaited<ReturnType<typeof getSpacesBy
           TError,
           Awaited<ReturnType<typeof getSpacesByName>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByName<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
@@ -599,16 +601,16 @@ export function useGetSpacesByName<TData = Awaited<ReturnType<typeof getSpacesBy
           TError,
           Awaited<ReturnType<typeof getSpacesByName>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByName<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
- params: GetSpacesByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+ params: GetSpacesByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSpacesByName<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
- params: GetSpacesByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+ params: GetSpacesByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -622,16 +624,16 @@ export function useGetSpacesByName<TData = Awaited<ReturnType<typeof getSpacesBy
 
 
 
-export const getGetSpacesByNameSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+export const getGetSpacesByNameSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetSpacesByNameQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByName>>> = ({ signal }) => getSpacesByName(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSpacesByName>>> = ({ signal }) => getSpacesByName(params, { signal, ...requestOptions });
 
       
 
@@ -645,20 +647,20 @@ export type GetSpacesByNameSuspenseQueryError = unknown
 
 
 export function useGetSpacesByNameSuspense<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
- params: GetSpacesByNameParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+ params: GetSpacesByNameParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByNameSuspense<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
- params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+ params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSpacesByNameSuspense<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
- params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+ params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetSpacesByNameSuspense<TData = Awaited<ReturnType<typeof getSpacesByName>>, TError = unknown>(
- params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, }
+ params: GetSpacesByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getSpacesByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

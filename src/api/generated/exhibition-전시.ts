@@ -23,6 +23,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
@@ -65,15 +67,15 @@ export const create = async (createExhibitionRequest: CreateExhibitionRequest, o
 
 
 export const getCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext> => {
 
 const mutationKey = ['create'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -81,7 +83,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof create>>, {data: CreateExhibitionRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  create(data,)
+          return  create(data,requestOptions)
         }
 
 
@@ -99,7 +101,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 전시 생성
  */
 export const useCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof create>>,
         TError,
