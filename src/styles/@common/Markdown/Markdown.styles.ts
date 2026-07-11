@@ -24,8 +24,13 @@ export const MarkdownContent = styled.div`
     color: ${({ theme }) => theme.colors.gray.gray100};
   }
 
-  ul,
+  ul {
+    list-style: disc;
+    padding-left: 20px;
+  }
+
   ol {
+    list-style: decimal;
     padding-left: 20px;
   }
 
