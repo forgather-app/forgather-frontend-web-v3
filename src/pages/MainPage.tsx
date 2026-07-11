@@ -24,9 +24,13 @@ function MainPage() {
   return (
     <div style={{ border: "1px solid white", flex: 1, color: "white" }}>
       메인페이지
-      {PAGE_LINKS.map((link) => (
-        <button key={link.to} type="button" onClick={() => navigate(link)}>
-          {link.label}
+      {PAGE_LINKS.map(({ label, ...navigateOptions }) => (
+        <button
+          key={navigateOptions.to}
+          type="button"
+          onClick={() => navigate(navigateOptions)}
+        >
+          {label}
         </button>
       ))}
     </div>
