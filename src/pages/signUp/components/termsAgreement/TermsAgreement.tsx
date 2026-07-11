@@ -1,35 +1,34 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 import IcBack from "@/assets/icons/ic_back.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import IcRectangleCheck from "@/assets/icons/ic_rectangle_check.svg?react";
 import Modal from "@/components/UI/Modal/Modal";
-import { TERMS_ITEMS } from "@/constants/terms";
+import { MarkdownContent } from "@/styles/@common/Markdown/Markdown.styles";
 import * as S from "./TermsAgreement.styles";
-import type { TermsAgreementState, TermsItem } from "./TermsAgreement.type";
+import type { Term, TermsAgreementState } from "./TermsAgreement.type";
 
 interface TermsAgreementProps {
+  /** 조회된 약관 목록 */
+  terms: Term[];
   /** 현재 약관 동의 상태 */
   value: TermsAgreementState;
   /** 약관 동의 상태 변경 핸들러 */
   onChange: (state: TermsAgreementState) => void;
 }
 
-const TermsAgreement = ({ value, onChange }: TermsAgreementProps) => {
-  const [modalItem, setModalItem] = useState<TermsItem | null>(null);
+const TermsAgreement = ({ terms, value, onChange }: TermsAgreementProps) => {
+  const [modalTerm, setModalTerm] = useState<Term | null>(null);
 
-  const isAllAgreed = TERMS_ITEMS.every((item) => value[item.key]);
+  const isAllAgreed = terms.every((term) => value[term.id]);
 
   const handleAllAgree = () => {
     const next = !isAllAgreed;
-    onChange({
-      isServiceTermsAgreed: next,
-      isPrivacyPolicyAgreed: next,
-      isMarketingAgreed: next,
-    });
+    onChange(Object.fromEntries(terms.map((term) => [term.id, next])));
   };
 
-  const handleItemToggle = (key: keyof TermsAgreementState) => {
-    onChange({ ...value, [key]: !value[key] });
+  const handleItemToggle = (id: number) => {
+    onChange({ ...value, [id]: !value[id] });
   };
 
   return (
@@ -52,21 +51,21 @@ const TermsAgreement = ({ value, onChange }: TermsAgreementProps) => {
         </S.AllAgreeRow>
 
         <S.ItemList>
-          {TERMS_ITEMS.map((item) => (
-            <S.ItemRow key={item.key}>
+          {terms.map((term) => (
+            <S.ItemRow key={term.id}>
               <S.ItemLabel
                 type="button"
-                $hasModal={!!item.modalContent}
-                onClick={() => item.modalContent && setModalItem(item)}
-                aria-haspopup={item.modalContent ? "dialog" : undefined}
+                $hasModal={!!term.content}
+                onClick={() => term.content && setModalTerm(term)}
+                aria-haspopup={term.content ? "dialog" : undefined}
               >
-                {item.required ? (
+                {term.isRequired ? (
                   <S.RequiredBadge aria-label="필수">[필수]</S.RequiredBadge>
                 ) : (
                   <S.OptionalBadge aria-label="선택">[선택]</S.OptionalBadge>
                 )}
-                <S.LabelText>{item.label}</S.LabelText>
-                {item.modalContent && (
+                <S.LabelText>{term.name}</S.LabelText>
+                {term.content && (
                   <S.ChevronIcon aria-hidden="true">
                     <IcBack
                       width={16}
@@ -79,12 +78,12 @@ const TermsAgreement = ({ value, onChange }: TermsAgreementProps) => {
               <S.CheckboxWrapper>
                 <S.HiddenInput
                   type="checkbox"
-                  id={`terms-${item.key}`}
-                  checked={value[item.key]}
-                  onChange={() => handleItemToggle(item.key)}
-                  aria-label={item.label}
+                  id={`terms-${term.id}`}
+                  checked={!!value[term.id]}
+                  onChange={() => handleItemToggle(term.id)}
+                  aria-label={term.name}
                 />
-                <S.CheckIcon $checked={value[item.key]} aria-hidden>
+                <S.CheckIcon $checked={!!value[term.id]} aria-hidden>
                   <IcRectangleCheck width={28} height={28} />
                 </S.CheckIcon>
               </S.CheckboxWrapper>
@@ -93,22 +92,26 @@ const TermsAgreement = ({ value, onChange }: TermsAgreementProps) => {
         </S.ItemList>
       </S.Wrapper>
 
-      <Modal isOpen={!!modalItem} onClose={() => setModalItem(null)}>
+      <Modal isOpen={!!modalTerm} onClose={() => setModalTerm(null)}>
         <Modal.Overlay />
         <Modal.Content>
-          {modalItem && (
+          {modalTerm && (
             <S.ModalInner>
               <S.ModalHeader>
-                <S.ModalTitle>{modalItem.label}</S.ModalTitle>
+                <S.ModalTitle>{modalTerm.name}</S.ModalTitle>
                 <S.ModalCloseButton
                   type="button"
                   aria-label="닫기"
-                  onClick={() => setModalItem(null)}
+                  onClick={() => setModalTerm(null)}
                 >
                   <IcClose aria-hidden width={24} height={24} />
                 </S.ModalCloseButton>
               </S.ModalHeader>
-              <S.ModalBody>{modalItem.modalContent}</S.ModalBody>
+              <S.ModalBody>
+                <MarkdownContent>
+                  <ReactMarkdown>{modalTerm.content ?? ""}</ReactMarkdown>
+                </MarkdownContent>
+              </S.ModalBody>
             </S.ModalInner>
           )}
         </Modal.Content>

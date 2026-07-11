@@ -166,7 +166,6 @@ export const ModalCloseButton = styled.button`
 export const ModalBody = styled.div`
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.gray.gray50};
-  white-space: pre-line;
   overflow-y: auto;
   max-height: 324px;
   padding-bottom: 16px;
