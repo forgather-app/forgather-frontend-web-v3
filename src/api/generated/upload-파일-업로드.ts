@@ -24,6 +24,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
@@ -72,15 +74,15 @@ export const issuePreSignedUrls = async (spaceCode: string,
 
 
 export const getIssuePreSignedUrlsMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issuePreSignedUrls>>, TError,{spaceCode: string;data: IssueSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issuePreSignedUrls>>, TError,{spaceCode: string;data: IssueSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof issuePreSignedUrls>>, TError,{spaceCode: string;data: IssueSignedUrlRequest}, TContext> => {
 
 const mutationKey = ['issuePreSignedUrls'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -88,7 +90,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof issuePreSignedUrls>>, {spaceCode: string;data: IssueSignedUrlRequest}> = (props) => {
           const {spaceCode,data} = props ?? {};
 
-          return  issuePreSignedUrls(spaceCode,data,)
+          return  issuePreSignedUrls(spaceCode,data,requestOptions)
         }
 
 
@@ -107,7 +109,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 업로드 URL 발급
  */
 export const useIssuePreSignedUrls = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issuePreSignedUrls>>, TError,{spaceCode: string;data: IssueSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issuePreSignedUrls>>, TError,{spaceCode: string;data: IssueSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof issuePreSignedUrls>>,
         TError,
@@ -172,15 +174,15 @@ export const issueProductSignedUrls = async (spaceCode: string,
 
 
 export const getIssueProductSignedUrlsMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueProductSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueProductSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof issueProductSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext> => {
 
 const mutationKey = ['issueProductSignedUrls'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -188,7 +190,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof issueProductSignedUrls>>, {spaceCode: string;data: IssuePreSignedUrlRequest}> = (props) => {
           const {spaceCode,data} = props ?? {};
 
-          return  issueProductSignedUrls(spaceCode,data,)
+          return  issueProductSignedUrls(spaceCode,data,requestOptions)
         }
 
 
@@ -206,7 +208,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 스페이스 작품 사진 업로드 URL 발급
  */
 export const useIssueProductSignedUrls = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueProductSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueProductSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof issueProductSignedUrls>>,
         TError,
@@ -271,15 +273,15 @@ export const issueGuestbookPreSignedUrls = async (spaceCode: string,
 
 
 export const getIssueGuestbookPreSignedUrlsMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext> => {
 
 const mutationKey = ['issueGuestbookPreSignedUrls'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -287,7 +289,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>, {spaceCode: string;data: IssuePreSignedUrlRequest}> = (props) => {
           const {spaceCode,data} = props ?? {};
 
-          return  issueGuestbookPreSignedUrls(spaceCode,data,)
+          return  issueGuestbookPreSignedUrls(spaceCode,data,requestOptions)
         }
 
 
@@ -305,7 +307,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 스페이스 방명록 사진 업로드 URL 발급
  */
 export const useIssueGuestbookPreSignedUrls = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>, TError,{spaceCode: string;data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof issueGuestbookPreSignedUrls>>,
         TError,
@@ -369,15 +371,15 @@ export const issueExhibitionSignedUrls = async (issuePreSignedUrlRequest: IssueP
 
 
 export const getIssueExhibitionSignedUrlsMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueExhibitionSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueExhibitionSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof issueExhibitionSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext> => {
 
 const mutationKey = ['issueExhibitionSignedUrls'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -385,7 +387,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof issueExhibitionSignedUrls>>, {data: IssuePreSignedUrlRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  issueExhibitionSignedUrls(data,)
+          return  issueExhibitionSignedUrls(data,requestOptions)
         }
 
 
@@ -403,7 +405,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 전시 사진 업로드 URL 발급
  */
 export const useIssueExhibitionSignedUrls = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueExhibitionSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueExhibitionSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof issueExhibitionSignedUrls>>,
         TError,

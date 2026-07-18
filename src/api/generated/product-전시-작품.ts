@@ -36,6 +36,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
@@ -84,16 +86,16 @@ export const getGetV3QueryKey = (spaceCode: string,) => {
     }
 
     
-export const getGetV3QueryOptions = <TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+export const getGetV3QueryOptions = <TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetV3QueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getV3>>> = ({ signal }) => getV3(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getV3>>> = ({ signal }) => getV3(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -113,7 +115,7 @@ export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unk
           TError,
           Awaited<ReturnType<typeof getV3>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
@@ -123,11 +125,11 @@ export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unk
           TError,
           Awaited<ReturnType<typeof getV3>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -135,7 +137,7 @@ export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unk
  */
 
 export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -149,16 +151,16 @@ export function useGetV3<TData = Awaited<ReturnType<typeof getV3>>, TError = unk
 
 
 
-export const getGetV3SuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+export const getGetV3SuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetV3QueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getV3>>> = ({ signal }) => getV3(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getV3>>> = ({ signal }) => getV3(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -172,15 +174,15 @@ export type GetV3SuspenseQueryError = unknown
 
 
 export function useGetV3Suspense<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
- spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+ spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetV3Suspense<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetV3Suspense<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -188,7 +190,7 @@ export function useGetV3Suspense<TData = Awaited<ReturnType<typeof getV3>>, TErr
  */
 
 export function useGetV3Suspense<TData = Awaited<ReturnType<typeof getV3>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getV3>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -243,15 +245,15 @@ export const registerV3 = async (spaceCode: string,
 
 
 export const getRegisterV3MutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerV3>>, TError,{spaceCode: string;data: RegisterProductRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerV3>>, TError,{spaceCode: string;data: RegisterProductRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof registerV3>>, TError,{spaceCode: string;data: RegisterProductRequest}, TContext> => {
 
 const mutationKey = ['registerV3'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -259,7 +261,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof registerV3>>, {spaceCode: string;data: RegisterProductRequest}> = (props) => {
           const {spaceCode,data} = props ?? {};
 
-          return  registerV3(spaceCode,data,)
+          return  registerV3(spaceCode,data,requestOptions)
         }
 
 
@@ -277,7 +279,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 작품 등록
  */
 export const useRegisterV3 = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerV3>>, TError,{spaceCode: string;data: RegisterProductRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof registerV3>>, TError,{spaceCode: string;data: RegisterProductRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof registerV3>>,
         TError,
@@ -335,16 +337,16 @@ export const getGetQueryKey = (spaceCode: string,
 
     
 export const getGetQueryOptions = <TData = Awaited<ReturnType<typeof get>>, TError = unknown>(spaceCode: string,
-    productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetQueryKey(spaceCode,productId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof get>>> = ({ signal }) => get(spaceCode,productId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof get>>> = ({ signal }) => get(spaceCode,productId, { signal, ...requestOptions });
 
       
 
@@ -365,7 +367,7 @@ export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown
           TError,
           Awaited<ReturnType<typeof get>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
@@ -376,12 +378,12 @@ export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown
           TError,
           Awaited<ReturnType<typeof get>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
  spaceCode: string,
-    productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -390,7 +392,7 @@ export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown
 
 export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
  spaceCode: string,
-    productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -405,16 +407,16 @@ export function useGet<TData = Awaited<ReturnType<typeof get>>, TError = unknown
 
 
 export const getGetSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof get>>, TError = unknown>(spaceCode: string,
-    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetQueryKey(spaceCode,productId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof get>>> = ({ signal }) => get(spaceCode,productId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof get>>> = ({ signal }) => get(spaceCode,productId, { signal, ...requestOptions });
 
       
 
@@ -429,17 +431,17 @@ export type GetSuspenseQueryError = unknown
 
 export function useGetSuspense<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
  spaceCode: string,
-    productId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSuspense<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
  spaceCode: string,
-    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetSuspense<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
  spaceCode: string,
-    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -448,7 +450,7 @@ export function useGetSuspense<TData = Awaited<ReturnType<typeof get>>, TError =
 
 export function useGetSuspense<TData = Awaited<ReturnType<typeof get>>, TError = unknown>(
  spaceCode: string,
-    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, }
+    productId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof get>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -503,15 +505,15 @@ export const deleteV2 = async (spaceCode: string,
 
 
 export const getDeleteV2MutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteV2>>, TError,{spaceCode: string;productId: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteV2>>, TError,{spaceCode: string;productId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteV2>>, TError,{spaceCode: string;productId: number}, TContext> => {
 
 const mutationKey = ['deleteV2'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -519,7 +521,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteV2>>, {spaceCode: string;productId: number}> = (props) => {
           const {spaceCode,productId} = props ?? {};
 
-          return  deleteV2(spaceCode,productId,)
+          return  deleteV2(spaceCode,productId,requestOptions)
         }
 
 
@@ -537,7 +539,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 작품 삭제
  */
 export const useDeleteV2 = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteV2>>, TError,{spaceCode: string;productId: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteV2>>, TError,{spaceCode: string;productId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteV2>>,
         TError,
@@ -589,15 +591,15 @@ export const updateV3 = async (spaceCode: string,
 
 
 export const getUpdateV3MutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateV3>>, TError,{spaceCode: string;productId: number;data: UpdateProductRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateV3>>, TError,{spaceCode: string;productId: number;data: UpdateProductRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof updateV3>>, TError,{spaceCode: string;productId: number;data: UpdateProductRequest}, TContext> => {
 
 const mutationKey = ['updateV3'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -605,7 +607,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateV3>>, {spaceCode: string;productId: number;data: UpdateProductRequest}> = (props) => {
           const {spaceCode,productId,data} = props ?? {};
 
-          return  updateV3(spaceCode,productId,data,)
+          return  updateV3(spaceCode,productId,data,requestOptions)
         }
 
 
@@ -623,7 +625,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 작품 수정
  */
 export const useUpdateV3 = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateV3>>, TError,{spaceCode: string;productId: number;data: UpdateProductRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateV3>>, TError,{spaceCode: string;productId: number;data: UpdateProductRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateV3>>,
         TError,

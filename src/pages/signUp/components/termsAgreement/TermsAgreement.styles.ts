@@ -17,10 +17,13 @@ export const AllAgreeRow = styled.div`
   padding: 16px;
 `;
 
-export const AllAgreeLabel = styled.label`
+export const AllAgreeLabel = styled("label", { shouldForwardProp })<{
+  $dimmed?: boolean;
+}>`
   ${({ theme }) => ({ ...theme.typography.label })};
   color: ${({ theme }) => theme.colors.gray.gray50};
   cursor: pointer;
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
 `;
 
 export const ItemList = styled.ul`
@@ -109,10 +112,13 @@ export const HiddenInput = styled.input`
 
 export const CheckIcon = styled("span", { shouldForwardProp })<{
   $checked: boolean;
+  $dimmed?: boolean;
 }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
+  transition: opacity 0.15s;
 
   svg rect {
     stroke: ${({ theme, $checked }) =>
@@ -166,7 +172,6 @@ export const ModalCloseButton = styled.button`
 export const ModalBody = styled.div`
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.gray.gray50};
-  white-space: pre-line;
   overflow-y: auto;
   max-height: 324px;
   padding-bottom: 16px;

@@ -1,4 +1,15 @@
-import { TERMS_ITEMS, type TermsAgreementState } from "@/constants/terms";
+import type {
+  Term,
+  TermsAgreementState,
+} from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
 
-export const validateTerms = (state: TermsAgreementState): boolean =>
-  TERMS_ITEMS.filter((item) => item.required).every((item) => state[item.key]);
+export const validateTerms = (
+  state: TermsAgreementState,
+  terms: Term[],
+): boolean =>
+  terms.filter((term) => term.isRequired).every((term) => state[term.id]);
+
+export const isAllTermsAgreed = (
+  state: TermsAgreementState,
+  terms: Term[],
+): boolean => terms.length > 0 && terms.every((term) => state[term.id]);

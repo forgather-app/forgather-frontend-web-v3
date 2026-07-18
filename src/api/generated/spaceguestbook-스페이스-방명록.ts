@@ -37,6 +37,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
@@ -85,16 +87,16 @@ export const getReadGuestBookV2QueryKey = (spaceCode: string,) => {
     }
 
     
-export const getReadGuestBookV2QueryOptions = <TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+export const getReadGuestBookV2QueryOptions = <TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getReadGuestBookV2QueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBookV2>>> = ({ signal }) => readGuestBookV2(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBookV2>>> = ({ signal }) => readGuestBookV2(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -114,7 +116,7 @@ export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBo
           TError,
           Awaited<ReturnType<typeof readGuestBookV2>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
@@ -124,11 +126,11 @@ export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBo
           TError,
           Awaited<ReturnType<typeof readGuestBookV2>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -136,7 +138,7 @@ export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBo
  */
 
 export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -150,16 +152,16 @@ export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBo
 
 
 
-export const getReadGuestBookV2SuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+export const getReadGuestBookV2SuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getReadGuestBookV2QueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBookV2>>> = ({ signal }) => readGuestBookV2(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBookV2>>> = ({ signal }) => readGuestBookV2(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -173,15 +175,15 @@ export type ReadGuestBookV2SuspenseQueryError = unknown
 
 
 export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+ spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -189,7 +191,7 @@ export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof rea
  */
 
 export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -244,15 +246,15 @@ export const writeCard = async (spaceCode: string,
 
 
 export const getWriteCardMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof writeCard>>, TError,{spaceCode: string;data: WriteGuestBookCardRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof writeCard>>, TError,{spaceCode: string;data: WriteGuestBookCardRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof writeCard>>, TError,{spaceCode: string;data: WriteGuestBookCardRequest}, TContext> => {
 
 const mutationKey = ['writeCard'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -260,7 +262,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof writeCard>>, {spaceCode: string;data: WriteGuestBookCardRequest}> = (props) => {
           const {spaceCode,data} = props ?? {};
 
-          return  writeCard(spaceCode,data,)
+          return  writeCard(spaceCode,data,requestOptions)
         }
 
 
@@ -278,7 +280,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 방명록 카드 작성
  */
 export const useWriteCard = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof writeCard>>, TError,{spaceCode: string;data: WriteGuestBookCardRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof writeCard>>, TError,{spaceCode: string;data: WriteGuestBookCardRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof writeCard>>,
         TError,
@@ -330,15 +332,15 @@ export const report = async (spaceCode: string,
 
 
 export const getReportMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof report>>, TError,{spaceCode: string;guestBookCardId: number;data: CreateGuestBookReportRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof report>>, TError,{spaceCode: string;guestBookCardId: number;data: CreateGuestBookReportRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof report>>, TError,{spaceCode: string;guestBookCardId: number;data: CreateGuestBookReportRequest}, TContext> => {
 
 const mutationKey = ['report'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -346,7 +348,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof report>>, {spaceCode: string;guestBookCardId: number;data: CreateGuestBookReportRequest}> = (props) => {
           const {spaceCode,guestBookCardId,data} = props ?? {};
 
-          return  report(spaceCode,guestBookCardId,data,)
+          return  report(spaceCode,guestBookCardId,data,requestOptions)
         }
 
 
@@ -364,7 +366,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 방명록 신고
  */
 export const useReport = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof report>>, TError,{spaceCode: string;guestBookCardId: number;data: CreateGuestBookReportRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof report>>, TError,{spaceCode: string;guestBookCardId: number;data: CreateGuestBookReportRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof report>>,
         TError,
@@ -423,16 +425,16 @@ export const getReadCardQueryKey = (spaceCode: string,
 
     
 export const getReadCardQueryOptions = <TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getReadCardQueryKey(spaceCode,guestBookCardId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readCard>>> = ({ signal }) => readCard(spaceCode,guestBookCardId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readCard>>> = ({ signal }) => readCard(spaceCode,guestBookCardId, { signal, ...requestOptions });
 
       
 
@@ -453,7 +455,7 @@ export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError
           TError,
           Awaited<ReturnType<typeof readCard>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
@@ -464,12 +466,12 @@ export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError
           TError,
           Awaited<ReturnType<typeof readCard>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
  spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -478,7 +480,7 @@ export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError
 
 export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
  spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -493,16 +495,16 @@ export function useReadCard<TData = Awaited<ReturnType<typeof readCard>>, TError
 
 
 export const getReadCardSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getReadCardQueryKey(spaceCode,guestBookCardId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readCard>>> = ({ signal }) => readCard(spaceCode,guestBookCardId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readCard>>> = ({ signal }) => readCard(spaceCode,guestBookCardId, { signal, ...requestOptions });
 
       
 
@@ -517,17 +519,17 @@ export type ReadCardSuspenseQueryError = unknown
 
 export function useReadCardSuspense<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
  spaceCode: string,
-    guestBookCardId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadCardSuspense<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
  spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadCardSuspense<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
  spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -536,7 +538,7 @@ export function useReadCardSuspense<TData = Awaited<ReturnType<typeof readCard>>
 
 export function useReadCardSuspense<TData = Awaited<ReturnType<typeof readCard>>, TError = unknown>(
  spaceCode: string,
-    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, }
+    guestBookCardId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readCard>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -590,15 +592,15 @@ export const deleteCard = async (spaceCode: string,
 
 
 export const getDeleteCardMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCard>>, TError,{spaceCode: string;guestBookCardId: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCard>>, TError,{spaceCode: string;guestBookCardId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCard>>, TError,{spaceCode: string;guestBookCardId: number}, TContext> => {
 
 const mutationKey = ['deleteCard'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -606,7 +608,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCard>>, {spaceCode: string;guestBookCardId: number}> = (props) => {
           const {spaceCode,guestBookCardId} = props ?? {};
 
-          return  deleteCard(spaceCode,guestBookCardId,)
+          return  deleteCard(spaceCode,guestBookCardId,requestOptions)
         }
 
 
@@ -624,7 +626,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 방명록 카드 삭제
  */
 export const useDeleteCard = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCard>>, TError,{spaceCode: string;guestBookCardId: number}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCard>>, TError,{spaceCode: string;guestBookCardId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCard>>,
         TError,
@@ -679,16 +681,16 @@ export const getReadUnreadGuestBookQueryKey = (spaceCode: string,) => {
     }
 
     
-export const getReadUnreadGuestBookQueryOptions = <TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+export const getReadUnreadGuestBookQueryOptions = <TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getReadUnreadGuestBookQueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readUnreadGuestBook>>> = ({ signal }) => readUnreadGuestBook(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readUnreadGuestBook>>> = ({ signal }) => readUnreadGuestBook(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -708,7 +710,7 @@ export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnr
           TError,
           Awaited<ReturnType<typeof readUnreadGuestBook>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
@@ -718,11 +720,11 @@ export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnr
           TError,
           Awaited<ReturnType<typeof readUnreadGuestBook>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -730,7 +732,7 @@ export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnr
  */
 
 export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -744,16 +746,16 @@ export function useReadUnreadGuestBook<TData = Awaited<ReturnType<typeof readUnr
 
 
 
-export const getReadUnreadGuestBookSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+export const getReadUnreadGuestBookSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getReadUnreadGuestBookQueryKey(spaceCode);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readUnreadGuestBook>>> = ({ signal }) => readUnreadGuestBook(spaceCode, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readUnreadGuestBook>>> = ({ signal }) => readUnreadGuestBook(spaceCode, { signal, ...requestOptions });
 
       
 
@@ -767,15 +769,15 @@ export type ReadUnreadGuestBookSuspenseQueryError = unknown
 
 
 export function useReadUnreadGuestBookSuspense<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
- spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+ spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadUnreadGuestBookSuspense<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useReadUnreadGuestBookSuspense<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -783,7 +785,7 @@ export function useReadUnreadGuestBookSuspense<TData = Awaited<ReturnType<typeof
  */
 
 export function useReadUnreadGuestBookSuspense<TData = Awaited<ReturnType<typeof readUnreadGuestBook>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, }
+ spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readUnreadGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -839,15 +841,15 @@ export const deleteCardPhotos = async (spaceCode: string,
 
 
 export const getDeleteCardPhotosMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCardPhotos>>, TError,{spaceCode: string;guestBookCardId: number;data: DeleteGuestBookCardPhotosRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCardPhotos>>, TError,{spaceCode: string;guestBookCardId: number;data: DeleteGuestBookCardPhotosRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof deleteCardPhotos>>, TError,{spaceCode: string;guestBookCardId: number;data: DeleteGuestBookCardPhotosRequest}, TContext> => {
 
 const mutationKey = ['deleteCardPhotos'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -855,7 +857,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCardPhotos>>, {spaceCode: string;guestBookCardId: number;data: DeleteGuestBookCardPhotosRequest}> = (props) => {
           const {spaceCode,guestBookCardId,data} = props ?? {};
 
-          return  deleteCardPhotos(spaceCode,guestBookCardId,data,)
+          return  deleteCardPhotos(spaceCode,guestBookCardId,data,requestOptions)
         }
 
 
@@ -873,7 +875,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 방명록 카드 사진 선택 삭제
  */
 export const useDeleteCardPhotos = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCardPhotos>>, TError,{spaceCode: string;guestBookCardId: number;data: DeleteGuestBookCardPhotosRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCardPhotos>>, TError,{spaceCode: string;guestBookCardId: number;data: DeleteGuestBookCardPhotosRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof deleteCardPhotos>>,
         TError,

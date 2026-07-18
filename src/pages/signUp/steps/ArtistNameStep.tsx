@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
@@ -13,7 +13,7 @@ interface ArtistNameStepProps {
 const ArtistNameStep = ({ onNext }: ArtistNameStepProps) => {
   const [artistName, setArtistName] = useState("");
 
-  const isValid = useMemo(() => validateArtistName(artistName), [artistName]);
+  const isValid = validateArtistName(artistName);
 
   return (
     <ItemLayout

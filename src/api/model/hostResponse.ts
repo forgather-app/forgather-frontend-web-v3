@@ -9,10 +9,10 @@
 export interface HostResponse {
   /** 호스트 ID */
   id?: number;
-  /** 호스트 이름 */
+  /** 호스트 닉네임 */
   name?: string;
   /** 호스트 프로필 사진 URL */
   pictureUrl?: string;
-  /** 약관 동의 여부 */
-  agreedTerms?: boolean;
+  /** 온보딩 완료 여부 */
+  onboardingCompleted?: boolean;
 }

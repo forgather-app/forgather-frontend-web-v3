@@ -29,6 +29,7 @@ import type {
 
 import type {
   KakaoLoginConfirmRequest,
+  OnboardingRequest,
   RefreshRequest
 } from '../model';
 
@@ -36,91 +37,11 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 /**
- * 서비스 이용 약관에 동의합니다. 
- * @summary 서비스 이용 약관 동의
- */
-export type agreeTermsResponse200 = {
-  data: Blob
-  status: 200
-}
-
-export type agreeTermsResponseSuccess = (agreeTermsResponse200) & {
-  headers: Headers;
-};
-;
-
-export type agreeTermsResponse = (agreeTermsResponseSuccess)
-
-export const getAgreeTermsUrl = () => {
-
-
-  
-
-  return `/auth/terms`
-}
-
-export const agreeTerms = async ( options?: RequestInit): Promise<agreeTermsResponse> => {
-  
-  return customFetcher<agreeTermsResponse>(getAgreeTermsUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    
-    
-  }
-);}
-  
-
-
-
-export const getAgreeTermsMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof agreeTerms>>, TError,void, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof agreeTerms>>, TError,void, TContext> => {
-
-const mutationKey = ['agreeTerms'];
-const {mutation: mutationOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof agreeTerms>>, void> = () => {
-          
-
-          return  agreeTerms()
-        }
-
-
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AgreeTermsMutationResult = NonNullable<Awaited<ReturnType<typeof agreeTerms>>>
-    
-    export type AgreeTermsMutationError = unknown
-
-    /**
- * @summary 서비스 이용 약관 동의
- */
-export const useAgreeTerms = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof agreeTerms>>, TError,void, TContext>, }
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof agreeTerms>>,
-        TError,
-        void,
-        TContext
-      > => {
-      return useMutation(getAgreeTermsMutationOptions(options), queryClient);
-    }
-    /**
  * 리프레시 토큰을 사용하여 로그인 세션을 갱신합니다. 로그인 이력이 있다면 재로그인 없이 로그인 세션을 갱신할 수 있습니다.
  * @summary 로그인 세션 갱신
  */
@@ -160,15 +81,15 @@ export const refresh = async (refreshRequest: RefreshRequest, options?: RequestI
 
 
 export const getRefreshMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext> => {
 
 const mutationKey = ['refresh'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -176,7 +97,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof refresh>>, {data: RefreshRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  refresh(data,)
+          return  refresh(data,requestOptions)
         }
 
 
@@ -194,7 +115,7 @@ const {mutation: mutationOptions} = options ?
  * @summary 로그인 세션 갱신
  */
 export const useRefresh = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof refresh>>,
         TError,
@@ -202,6 +123,89 @@ export const useRefresh = <TError = unknown,
         TContext
       > => {
       return useMutation(getRefreshMutationOptions(options), queryClient);
+    }
+    /**
+ * 서비스 닉네임과 약관 동의 이력을 함께 저장합니다.
+ * @summary 온보딩 완료
+ */
+export type submitOnboardingResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type submitOnboardingResponseSuccess = (submitOnboardingResponse200) & {
+  headers: Headers;
+};
+;
+
+export type submitOnboardingResponse = (submitOnboardingResponseSuccess)
+
+export const getSubmitOnboardingUrl = () => {
+
+
+  
+
+  return `/auth/onboarding`
+}
+
+export const submitOnboarding = async (onboardingRequest: OnboardingRequest, options?: RequestInit): Promise<submitOnboardingResponse> => {
+  
+  return customFetcher<submitOnboardingResponse>(getSubmitOnboardingUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      onboardingRequest,)
+  }
+);}
+  
+
+
+
+export const getSubmitOnboardingMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitOnboarding>>, TError,{data: OnboardingRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof submitOnboarding>>, TError,{data: OnboardingRequest}, TContext> => {
+
+const mutationKey = ['submitOnboarding'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitOnboarding>>, {data: OnboardingRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  submitOnboarding(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type SubmitOnboardingMutationResult = NonNullable<Awaited<ReturnType<typeof submitOnboarding>>>
+    export type SubmitOnboardingMutationBody = OnboardingRequest
+    export type SubmitOnboardingMutationError = unknown
+
+    /**
+ * @summary 온보딩 완료
+ */
+export const useSubmitOnboarding = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitOnboarding>>, TError,{data: OnboardingRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof submitOnboarding>>,
+        TError,
+        {data: OnboardingRequest},
+        TContext
+      > => {
+      return useMutation(getSubmitOnboardingMutationOptions(options), queryClient);
     }
     /**
  * Kakao 로그인 후 발급받은 액세스토큰을 전달하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 반환합니다.
@@ -243,15 +247,15 @@ export const kakaoLoginConfirm = async (kakaoLoginConfirmRequest: KakaoLoginConf
 
 
 export const getKakaoLoginConfirmMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof kakaoLoginConfirm>>, TError,{data: KakaoLoginConfirmRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof kakaoLoginConfirm>>, TError,{data: KakaoLoginConfirmRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
 ): UseMutationOptions<Awaited<ReturnType<typeof kakaoLoginConfirm>>, TError,{data: KakaoLoginConfirmRequest}, TContext> => {
 
 const mutationKey = ['kakaoLoginConfirm'];
-const {mutation: mutationOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -259,7 +263,7 @@ const {mutation: mutationOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof kakaoLoginConfirm>>, {data: KakaoLoginConfirmRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  kakaoLoginConfirm(data,)
+          return  kakaoLoginConfirm(data,requestOptions)
         }
 
 
@@ -277,7 +281,7 @@ const {mutation: mutationOptions} = options ?
  * @summary Kakao 로그인 완료
  */
 export const useKakaoLoginConfirm = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof kakaoLoginConfirm>>, TError,{data: KakaoLoginConfirmRequest}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof kakaoLoginConfirm>>, TError,{data: KakaoLoginConfirmRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof kakaoLoginConfirm>>,
         TError,
@@ -332,16 +336,16 @@ export const getGetCurrentUserQueryKey = () => {
     }
 
     
-export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser({ signal, ...requestOptions });
 
       
 
@@ -361,7 +365,7 @@ export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUs
           TError,
           Awaited<ReturnType<typeof getCurrentUser>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
@@ -371,11 +375,11 @@ export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUs
           TError,
           Awaited<ReturnType<typeof getCurrentUser>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -383,7 +387,7 @@ export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUs
  */
 
 export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -397,16 +401,16 @@ export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUs
 
 
 
-export const getGetCurrentUserSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+export const getGetCurrentUserSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser({ signal, ...requestOptions });
 
       
 
@@ -420,15 +424,15 @@ export type GetCurrentUserSuspenseQueryError = unknown
 
 
 export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -436,7 +440,7 @@ export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getC
  */
 
 export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -496,16 +500,16 @@ export const getGetKakaoLoginTokenQueryKey = () => {
     }
 
     
-export const getGetKakaoLoginTokenQueryOptions = <TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+export const getGetKakaoLoginTokenQueryOptions = <TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetKakaoLoginTokenQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getKakaoLoginToken>>> = ({ signal }) => getKakaoLoginToken({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getKakaoLoginToken>>> = ({ signal }) => getKakaoLoginToken({ signal, ...requestOptions });
 
       
 
@@ -525,7 +529,7 @@ export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakao
           TError,
           Awaited<ReturnType<typeof getKakaoLoginToken>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
@@ -535,11 +539,11 @@ export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakao
           TError,
           Awaited<ReturnType<typeof getKakaoLoginToken>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -547,7 +551,7 @@ export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakao
  */
 
 export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -561,16 +565,16 @@ export function useGetKakaoLoginToken<TData = Awaited<ReturnType<typeof getKakao
 
 
 
-export const getGetKakaoLoginTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+export const getGetKakaoLoginTokenSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetKakaoLoginTokenQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getKakaoLoginToken>>> = ({ signal }) => getKakaoLoginToken({ signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getKakaoLoginToken>>> = ({ signal }) => getKakaoLoginToken({ signal, ...requestOptions });
 
       
 
@@ -584,15 +588,15 @@ export type GetKakaoLoginTokenSuspenseQueryError = unknown
 
 
 export function useGetKakaoLoginTokenSuspense<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetKakaoLoginTokenSuspense<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetKakaoLoginTokenSuspense<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -600,7 +604,7 @@ export function useGetKakaoLoginTokenSuspense<TData = Awaited<ReturnType<typeof 
  */
 
 export function useGetKakaoLoginTokenSuspense<TData = Awaited<ReturnType<typeof getKakaoLoginToken>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, }
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getKakaoLoginToken>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

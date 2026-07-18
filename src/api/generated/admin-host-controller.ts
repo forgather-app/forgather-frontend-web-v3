@@ -32,6 +32,8 @@ import { customFetcher } from '../customFetcher';
 
 
 
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
+
 
 
 export type getAllHostsResponse200 = {
@@ -83,16 +85,16 @@ export const getGetAllHostsQueryKey = (params?: GetAllHostsParams,) => {
     }
 
     
-export const getGetAllHostsQueryOptions = <TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(params: GetAllHostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+export const getGetAllHostsQueryOptions = <TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(params: GetAllHostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetAllHostsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllHosts>>> = ({ signal }) => getAllHosts(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllHosts>>> = ({ signal }) => getAllHosts(params, { signal, ...requestOptions });
 
       
 
@@ -112,7 +114,7 @@ export function useGetAllHosts<TData = Awaited<ReturnType<typeof getAllHosts>>, 
           TError,
           Awaited<ReturnType<typeof getAllHosts>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllHosts<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
@@ -122,16 +124,16 @@ export function useGetAllHosts<TData = Awaited<ReturnType<typeof getAllHosts>>, 
           TError,
           Awaited<ReturnType<typeof getAllHosts>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllHosts<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
- params: GetAllHostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+ params: GetAllHostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetAllHosts<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
- params: GetAllHostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+ params: GetAllHostsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -145,16 +147,16 @@ export function useGetAllHosts<TData = Awaited<ReturnType<typeof getAllHosts>>, 
 
 
 
-export const getGetAllHostsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+export const getGetAllHostsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetAllHostsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllHosts>>> = ({ signal }) => getAllHosts(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllHosts>>> = ({ signal }) => getAllHosts(params, { signal, ...requestOptions });
 
       
 
@@ -168,20 +170,20 @@ export type GetAllHostsSuspenseQueryError = unknown
 
 
 export function useGetAllHostsSuspense<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
- params: GetAllHostsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+ params: GetAllHostsParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllHostsSuspense<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
- params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+ params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllHostsSuspense<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
- params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+ params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetAllHostsSuspense<TData = Awaited<ReturnType<typeof getAllHosts>>, TError = unknown>(
- params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, }
+ params: GetAllHostsParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getAllHosts>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -237,16 +239,16 @@ export const getGetHostSpacesQueryKey = (hostId: number,) => {
     }
 
     
-export const getGetHostSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(hostId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+export const getGetHostSpacesQueryOptions = <TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(hostId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHostSpacesQueryKey(hostId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostSpaces>>> = ({ signal }) => getHostSpaces(hostId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostSpaces>>> = ({ signal }) => getHostSpaces(hostId, { signal, ...requestOptions });
 
       
 
@@ -266,7 +268,7 @@ export function useGetHostSpaces<TData = Awaited<ReturnType<typeof getHostSpaces
           TError,
           Awaited<ReturnType<typeof getHostSpaces>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostSpaces<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
@@ -276,16 +278,16 @@ export function useGetHostSpaces<TData = Awaited<ReturnType<typeof getHostSpaces
           TError,
           Awaited<ReturnType<typeof getHostSpaces>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostSpaces<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
- hostId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+ hostId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetHostSpaces<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
- hostId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+ hostId: number, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -299,16 +301,16 @@ export function useGetHostSpaces<TData = Awaited<ReturnType<typeof getHostSpaces
 
 
 
-export const getGetHostSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+export const getGetHostSpacesSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHostSpacesQueryKey(hostId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostSpaces>>> = ({ signal }) => getHostSpaces(hostId, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostSpaces>>> = ({ signal }) => getHostSpaces(hostId, { signal, ...requestOptions });
 
       
 
@@ -322,20 +324,20 @@ export type GetHostSpacesSuspenseQueryError = unknown
 
 
 export function useGetHostSpacesSuspense<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
- hostId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+ hostId: number, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostSpacesSuspense<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
- hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+ hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostSpacesSuspense<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
- hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+ hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetHostSpacesSuspense<TData = Awaited<ReturnType<typeof getHostSpaces>>, TError = unknown>(
- hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, }
+ hostId: number, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostSpaces>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -398,16 +400,16 @@ export const getGetHostsByNameQueryKey = (params?: GetHostsByNameParams,) => {
     }
 
     
-export const getGetHostsByNameQueryOptions = <TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(params: GetHostsByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+export const getGetHostsByNameQueryOptions = <TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(params: GetHostsByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHostsByNameQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostsByName>>> = ({ signal }) => getHostsByName(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostsByName>>> = ({ signal }) => getHostsByName(params, { signal, ...requestOptions });
 
       
 
@@ -427,7 +429,7 @@ export function useGetHostsByName<TData = Awaited<ReturnType<typeof getHostsByNa
           TError,
           Awaited<ReturnType<typeof getHostsByName>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostsByName<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
@@ -437,16 +439,16 @@ export function useGetHostsByName<TData = Awaited<ReturnType<typeof getHostsByNa
           TError,
           Awaited<ReturnType<typeof getHostsByName>>
         > , 'initialData'
-      >, }
+      >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostsByName<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
- params: GetHostsByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+ params: GetHostsByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetHostsByName<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
- params: GetHostsByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+ params: GetHostsByNameParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -460,16 +462,16 @@ export function useGetHostsByName<TData = Awaited<ReturnType<typeof getHostsByNa
 
 
 
-export const getGetHostsByNameSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+export const getGetHostsByNameSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
-const {query: queryOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGetHostsByNameQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostsByName>>> = ({ signal }) => getHostsByName(params, { signal });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getHostsByName>>> = ({ signal }) => getHostsByName(params, { signal, ...requestOptions });
 
       
 
@@ -483,20 +485,20 @@ export type GetHostsByNameSuspenseQueryError = unknown
 
 
 export function useGetHostsByNameSuspense<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
- params: GetHostsByNameParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+ params: GetHostsByNameParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostsByNameSuspense<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
- params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+ params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetHostsByNameSuspense<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
- params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+ params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetHostsByNameSuspense<TData = Awaited<ReturnType<typeof getHostsByName>>, TError = unknown>(
- params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, }
+ params: GetHostsByNameParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getHostsByName>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

@@ -1,4 +1,4 @@
-import type { TermsAgreementState } from "@/constants/terms";
+import type { TermsAgreementState } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
 import FunnelLayout from "@/shared/funnel/FunnelLayout";
 import useFunnel from "@/shared/funnel/useFunnel";
 import ArtistNameStep from "./steps/ArtistNameStep";
@@ -18,20 +18,17 @@ interface SignUpFunnelData {
 
 const INITIAL_DATA: SignUpFunnelData = {
   artistName: { artistName: "" },
-  terms: {
-    terms: {
-      isServiceTermsAgreed: false,
-      isPrivacyPolicyAgreed: false,
-      isMarketingAgreed: false,
-    },
-  },
+  terms: { terms: {} },
 };
 
 type StepType = typeof STEPS;
 type DataType = SignUpFunnelData;
 
 const SignUpFunnel = () => {
-  const { currentStepIndex, onNext, onPrev } = useFunnel<StepType, DataType>({
+  const { currentStepIndex, onNext, onPrev, data } = useFunnel<
+    StepType,
+    DataType
+  >({
     steps: STEPS,
     initialData: INITIAL_DATA,
   });
@@ -47,7 +44,11 @@ const SignUpFunnel = () => {
         <ArtistNameStep onNext={onNext} />
       )}
       {STEPS[currentStepIndex] === "terms" && (
-        <TermsStep initialTerms={INITIAL_DATA.terms.terms} onNext={onNext} />
+        <TermsStep
+          artistName={data.artistName?.artistName ?? ""}
+          initialTerms={INITIAL_DATA.terms.terms}
+          onNext={onNext}
+        />
       )}
     </FunnelLayout>
   );
