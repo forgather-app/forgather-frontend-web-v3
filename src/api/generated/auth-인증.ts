@@ -42,7 +42,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 리프레시 토큰을 사용하여 로그인 세션을 갱신합니다. 로그인 이력이 있다면 재로그인 없이 로그인 세션을 갱신할 수 있습니다.
+ * 요청 바디의 리프레시 토큰을 우선 사용하고, 없으면 쿠키의 리프레시 토큰으로 로그인 세션을 갱신합니다. 갱신된 토큰은 응답 바디와 HttpOnly 쿠키로 반환합니다.
  * @summary 로그인 세션 갱신
  */
 export type refreshResponse200 = {
@@ -208,7 +208,7 @@ export const useSubmitOnboarding = <TError = unknown,
       return useMutation(getSubmitOnboardingMutationOptions(options), queryClient);
     }
     /**
- * Kakao 로그인 후 발급받은 액세스토큰을 전달하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 반환합니다.
+ * Kakao 로그인 후 발급받은 액세스토큰을 전달하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 응답 바디와 HttpOnly 쿠키로 반환합니다.
  * @summary Kakao 로그인 완료
  */
 export type kakaoLoginConfirmResponse200 = {
