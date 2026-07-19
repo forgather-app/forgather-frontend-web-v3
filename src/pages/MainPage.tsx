@@ -9,7 +9,6 @@ const buttonStyle = {
   borderRadius: 8,
 } as const;
 
-
 const PAGE_LINKS = [
   { label: "로그인 페이지 이동 (임시)", to: "/login" },
   { label: "회원가입 페이지 이동 (임시)", to: "/sign-up" },
