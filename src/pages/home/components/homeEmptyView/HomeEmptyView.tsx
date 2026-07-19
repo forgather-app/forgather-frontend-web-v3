@@ -1,11 +1,17 @@
-import EmptyHomeImage from "@/assets/images/empty_home.svg?react";
+import HomeEmptyGraphic from "@/assets/images/home_empty_graphic.svg?react";
 import * as S from "./HomeEmptyView.styles";
 
 const HomeEmptyView = () => {
   return (
-    <S.Wrapper aria-label="스페이스가 없습니다">
-      <EmptyHomeImage aria-hidden />
-      <S.Message>작가님의 첫번째 작품을{"\n"}업로드해보세요!</S.Message>
+    <S.Wrapper>
+      <HomeEmptyGraphic width={240} height={240} aria-hidden />
+      <S.TextGroup>
+        <S.Title>아직 스페이스가 없어요!</S.Title>
+        {/* TODO: 서브텍스트 문구 확정 필요 (디자인 placeholder) */}
+        <S.SubText>
+          {"서브텍스트 서브텍스트\n서브텍스트 서브텍스트 서브텍스트"}
+        </S.SubText>
+      </S.TextGroup>
     </S.Wrapper>
   );
 };
