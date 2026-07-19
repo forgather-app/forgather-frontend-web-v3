@@ -7,6 +7,7 @@ export const validateTerms = (
   state: TermsAgreementState,
   terms: Term[],
 ): boolean =>
+  terms.length > 0 &&
   terms.filter((term) => term.isRequired).every((term) => state[term.id]);
 
 export const isAllTermsAgreed = (
