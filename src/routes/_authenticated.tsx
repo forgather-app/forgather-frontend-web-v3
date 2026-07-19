@@ -25,7 +25,7 @@ function AuthenticatedLayout() {
   // NOTE: BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
   // 실제 응답 바디는 ApiResponseHostResponse (JSON)이므로 캐스팅해서 사용
   const { data, isError, isPending } = useGetCurrentUser({
-    query: { enabled: !!accessToken, retry: false },
+    query: { enabled: !!accessToken && !isSignUpRoute, retry: false },
   });
   const onboardingCompleted = (data as unknown as ApiResponseHostResponse)?.data
     ?.onboardingCompleted;
@@ -35,12 +35,13 @@ function AuthenticatedLayout() {
       navigate({ to: "/login" });
       return;
     }
+    if (isSignUpRoute) return;
     if (isError) {
       showSnackBar("세션이 만료되었어요. 다시 로그인해주세요.", "error");
       navigate({ to: "/login" });
       return;
     }
-    if (!isPending && !onboardingCompleted && !isSignUpRoute) {
+    if (!isPending && !onboardingCompleted) {
       navigate({ to: "/sign-up" });
     }
   }, [
@@ -55,9 +56,7 @@ function AuthenticatedLayout() {
 
   const isAuthorized =
     !!accessToken &&
-    !isError &&
-    !isPending &&
-    (onboardingCompleted || isSignUpRoute);
+    (isSignUpRoute || (!isError && !isPending && onboardingCompleted));
   if (!isAuthorized) return null;
 
   return <Outlet />;
