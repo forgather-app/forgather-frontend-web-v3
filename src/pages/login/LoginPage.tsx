@@ -1,3 +1,4 @@
+import AppleLogo from "@/assets/icons/ic_apple.svg?react";
 import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
 import useKakaoLoginBridge from "@/hooks/@common/useKakaoLoginBridge";
 import CarouselLayout from "@/shared/carousel/CarouselLayout";
@@ -13,6 +14,11 @@ const LoginPage = () => {
     <CarouselLayout
       footer={
         <S.FooterWrapper>
+          {/* TODO: 애플 로그인 기능 연동 */}
+          <S.AppleButton type="button">
+            <AppleLogo aria-hidden="true" />
+            <span>Apple로 로그인</span>
+          </S.AppleButton>
           <S.KakaoButton
             type="button"
             onClick={requestKakaoLogin}
