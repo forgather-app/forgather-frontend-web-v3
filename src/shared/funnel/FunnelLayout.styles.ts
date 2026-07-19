@@ -4,7 +4,7 @@ export const Container = styled.div`
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.layout.sectionGap}px;
+  gap: 35px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
   overflow: hidden;
 `;

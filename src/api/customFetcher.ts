@@ -1,39 +1,21 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "";
+import type { Method } from "axios";
+import { apiClient } from "./apiClient";
 
-export const customFetcher = async <T>({
-  url,
-  method,
-  params,
-  data,
-  headers,
-  signal,
-}: {
-  url: string;
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-  params?: Record<string, string>;
-  data?: unknown;
-  headers?: HeadersInit;
-  signal?: AbortSignal;
-}): Promise<T> => {
-  const queryString = params
-    ? `?${new URLSearchParams(params).toString()}`
-    : "";
+export const customFetcher = async <T>(
+  url: string,
+  options?: RequestInit,
+): Promise<T> => {
+  const { method = "GET", headers, body, signal } = options ?? {};
 
-  const response = await fetch(`${BASE_URL}${url}${queryString}`, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    ...(data ? { body: JSON.stringify(data) } : {}),
-    signal,
+  const response = await apiClient.request<T>({
+    url,
+    method: method as Method,
+    headers: headers as Record<string, string> | undefined,
+    data: body,
+    signal: signal ?? undefined,
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
-
-  return response.json();
+  return response.data;
 };
 
 export default customFetcher;

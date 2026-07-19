@@ -31,11 +31,11 @@ export default defineConfig({
       },
     },
     output: {
-      target: "./src/api/generated.ts",
+      target: "./src/api/generated/index.ts",
       schemas: "./src/api/model",
-      mock: true,
+      mock: false,
       client: "react-query",
-      mode: "single",
+      mode: "tags",
       override: {
         mutator: {
           path: "./src/api/customFetcher.ts",
