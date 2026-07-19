@@ -1,8 +1,8 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import IcBack from "@/assets/icons/ic_back.svg?react";
+import IcCheckmark from "@/assets/icons/ic_checkmark.svg?react";
+import IcChevron from "@/assets/icons/ic_chevron.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
-import IcRectangleCheck from "@/assets/icons/ic_rectangle_check.svg?react";
 import Modal from "@/components/UI/Modal/Modal";
 import { isAllTermsAgreed } from "@/pages/signUp/validate/validateTerms";
 import { MarkdownContent } from "@/styles/@common/Markdown/Markdown.styles";
@@ -58,7 +58,7 @@ const TermsAgreement = ({
               $dimmed={isLoading}
               aria-hidden
             >
-              <IcRectangleCheck width={28} height={28} />
+              <IcCheckmark width={11} height={8} />
             </S.CheckIcon>
           </S.CheckboxWrapper>
         </S.AllAgreeRow>
@@ -80,11 +80,7 @@ const TermsAgreement = ({
                 <S.LabelText>{term.name}</S.LabelText>
                 {term.content && (
                   <S.ChevronIcon aria-hidden="true">
-                    <IcBack
-                      width={16}
-                      height={16}
-                      style={{ transform: "rotate(-90deg)" }}
-                    />
+                    <IcChevron width={6} height={10} />
                   </S.ChevronIcon>
                 )}
               </S.ItemLabel>
@@ -97,7 +93,7 @@ const TermsAgreement = ({
                   aria-label={term.name}
                 />
                 <S.CheckIcon $checked={!!value[term.id]} aria-hidden>
-                  <IcRectangleCheck width={28} height={28} />
+                  <IcCheckmark width={11} height={8} />
                 </S.CheckIcon>
               </S.CheckboxWrapper>
             </S.ItemRow>

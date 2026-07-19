@@ -1,9 +1,5 @@
 import styled from "@emotion/styled";
 
-export const Spacer = styled.div`
-  flex: 1;
-`;
-
 export const StatusWrapper = styled.div`
   display: flex;
   flex-direction: column;

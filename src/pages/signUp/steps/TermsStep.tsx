@@ -71,11 +71,11 @@ const TermsStep = ({
 
   return (
     <ItemLayout
-      text="다음"
+      text="시작하기"
+      variant="tertiary"
       disabled={isLoading || !validateTerms(agreement, terms) || isPending}
       onClick={handleNext}
     >
-      <S.Spacer />
       {isError ? (
         <S.StatusWrapper>
           <S.StatusText>{ERROR_MESSAGES.TERMS_FETCH_FAILED}</S.StatusText>

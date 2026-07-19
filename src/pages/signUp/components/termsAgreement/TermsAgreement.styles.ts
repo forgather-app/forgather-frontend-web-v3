@@ -21,7 +21,7 @@ export const AllAgreeLabel = styled("label", { shouldForwardProp })<{
   $dimmed?: boolean;
 }>`
   ${({ theme }) => ({ ...theme.typography.label })};
-  color: ${({ theme }) => theme.colors.gray.gray50};
+  color: ${({ theme }) => theme.colors.gray.white};
   cursor: pointer;
   opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
 `;
@@ -39,9 +39,8 @@ export const ItemRow = styled.li`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
   border-radius: 8px;
-  padding: 16px;
+  padding: 8px 16px 8px 8px;
 `;
 
 export const ItemLabel = styled("button", { shouldForwardProp })<{
@@ -56,7 +55,7 @@ export const ItemLabel = styled("button", { shouldForwardProp })<{
   padding: 0;
   text-align: left;
   cursor: ${({ $hasModal }) => ($hasModal ? "pointer" : "default")};
-  color: ${({ theme }) => theme.colors.gray.gray50};
+  color: ${({ theme }) => theme.colors.gray.gray100};
   min-width: 0;
 `;
 
@@ -83,7 +82,9 @@ export const ChevronIcon = styled.span`
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  color: ${({ theme }) => theme.colors.gray.gray300};
+  justify-content: center;
+  width: 16px;
+  height: 16px;
 `;
 
 export const CheckboxWrapper = styled.div`
@@ -110,27 +111,24 @@ export const HiddenInput = styled.input`
   height: 100%;
 `;
 
+// 체크 전에는 회색(gray500), 체크 후에는 보라색 배경. 체크마크 아이콘은 항상 표시됩니다.
 export const CheckIcon = styled("span", { shouldForwardProp })<{
   $checked: boolean;
   $dimmed?: boolean;
 }>`
+  position: absolute;
+  inset: 16.67%;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
-  transition: opacity 0.15s;
+  background-color: ${({ theme, $checked }) =>
+    $checked ? theme.colors.main.purple : theme.colors.gray.gray500};
+  transition: background-color 0.15s, opacity 0.15s;
 
-  svg rect {
-    stroke: ${({ theme, $checked }) =>
-      $checked ? theme.colors.main.purple100 : theme.colors.gray.gray300};
-    fill: ${({ theme, $checked }) => ($checked ? theme.colors.main.purple100 : "none")};
-    transition: stroke 0.15s, fill 0.15s;
-  }
-
-  svg path {
-    stroke: ${({ theme, $checked }) =>
-      $checked ? theme.colors.main.purple : theme.colors.gray.gray300};
-    transition: stroke 0.15s;
+  svg {
+    color: ${({ theme }) => theme.colors.gray.gray200};
   }
 `;
 
