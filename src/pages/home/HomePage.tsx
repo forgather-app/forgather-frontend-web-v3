@@ -1,82 +1,85 @@
-import { useState } from "react";
-import IcSpace from "@/assets/icons/ic_space.svg?react";
-import BottomTabBar from "@/components/@common/BottomTabBar/BottomTabBar";
+import IcPerson from "@/assets/icons/ic_person.svg?react";
+import Button from "@/components/@common/Button/Button";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
 import CurrentSpaceSection from "./components/currentSpaceSection/CurrentSpaceSection";
+import HomeCtaBanner from "./components/homeCtaBanner/HomeCtaBanner";
 import HomeEmptyView from "./components/homeEmptyView/HomeEmptyView";
 import * as S from "./HomePage.styles";
 import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
 
 const HomePage = () => {
-  const [activeNavTab, setActiveNavTab] = useState<"홈" | "방명록" | "마이">(
-    "홈",
-  );
-  const [spaces, setSpaces] = useState(MOCK_SPACES);
-
-  const handlePinClick = (spaceId: number) => {
-    setSpaces((prev) =>
-      prev.map((space) =>
-        space.id === spaceId ? { ...space, isPinned: !space.isPinned } : space,
-      ),
-    );
-  };
+  const spaces = MOCK_SPACES;
+  const currentSpace = MOCK_CURRENT_SPACES[0];
+  const isEmpty = spaces.length === 0 && !currentSpace;
 
   return (
     <S.HomePageContainer>
       <S.PageWrapper>
         <S.Header>
-          <S.UserGreeting>
+          <S.UserProfile>
             <S.UserAvatar aria-hidden />
-            <S.UserTextWrapper>
-              <S.UserName>김여름</S.UserName>
-              <S.GreetingText>작가님, 안녕하세요</S.GreetingText>
-            </S.UserTextWrapper>
-          </S.UserGreeting>
+            <S.UserName>김여름</S.UserName>
+          </S.UserProfile>
+          <S.HeaderActions>
+            {/* TODO: 마이페이지 라우트 연결 필요 */}
+            <S.IconButton type="button" aria-label="마이페이지">
+              <IcPerson width={24} height={24} aria-hidden />
+            </S.IconButton>
+            {/* TODO: 스페이스 만들기 라우트 연결 필요 */}
+            <S.IconButton type="button" aria-label="스페이스 만들기">
+              <S.PlusIcon width={24} height={24} aria-hidden />
+            </S.IconButton>
+          </S.HeaderActions>
         </S.Header>
 
         <S.ContentWrapper>
-          {spaces.length === 0 && MOCK_CURRENT_SPACES.length === 0 ? (
+          {isEmpty ? (
             <HomeEmptyView />
           ) : (
             <>
-              {MOCK_CURRENT_SPACES.length > 0 && (
-                <CurrentSpaceSection spaces={MOCK_CURRENT_SPACES} />
+              {currentSpace ? (
+                <CurrentSpaceSection
+                  spaceName={currentSpace.spaceName}
+                  thumbnailUrl={currentSpace.thumbnailUrl}
+                  newGuestBookCount={currentSpace.newGuestBookCount}
+                />
+              ) : (
+                /* TODO: 스페이스 추가 플로우 연결 필요 */
+                <HomeCtaBanner />
               )}
 
-              <S.ContentHeader>
-                <S.SpaceCount>{spaces.length}개</S.SpaceCount>
-                <S.SpaceCountText>의 스페이스</S.SpaceCountText>
-              </S.ContentHeader>
-
-              <S.SpaceList>
-                {spaces.map((space) => (
-                  <SpaceCard
-                    key={space.id}
-                    title={space.title}
-                    exhibitionName={space.exhibitionName}
-                    guestCount={space.guestCount}
-                    backgroundImageUrl={space.backgroundImageUrl}
-                    isPinned={space.isPinned}
-                    onClick={() => {}}
-                    onPinClick={() => handlePinClick(space.id)}
-                  />
-                ))}
-              </S.SpaceList>
+              <S.MySpaceSection $topGap={currentSpace ? 32 : 24}>
+                <S.SectionTitle>나의 스페이스</S.SectionTitle>
+                <S.ListHeader>
+                  <S.SpaceCountGroup>
+                    <S.SpaceCount>{spaces.length}개</S.SpaceCount>
+                    <S.SpaceCountText>의 스페이스</S.SpaceCountText>
+                  </S.SpaceCountGroup>
+                  <S.SortLabel>최신 순</S.SortLabel>
+                </S.ListHeader>
+                <S.SpaceList>
+                  {spaces.map((space) => (
+                    <SpaceCard
+                      key={space.id}
+                      title={space.title}
+                      guestBookCount={space.guestBookCount}
+                      thumbnailUrl={space.thumbnailUrl}
+                      onClick={() => {}}
+                    />
+                  ))}
+                </S.SpaceList>
+              </S.MySpaceSection>
             </>
           )}
         </S.ContentWrapper>
       </S.PageWrapper>
 
-      <S.BottomSection>
-        <S.CreateButtonContainer>
-          <S.CreateButton type="button">
-            <IcSpace width={24} height={24} />
-            <S.CreateButtonText>스페이스 만들기</S.CreateButtonText>
-          </S.CreateButton>
-        </S.CreateButtonContainer>
-        {/* TODO: 탭 클릭 시 해당 라우트(방명록, 마이 등)로 navigate 연결 필요 (현재는 활성 상태만 변경) */}
-        <BottomTabBar activeTab={activeNavTab} onTabChange={setActiveNavTab} />
-      </S.BottomSection>
+      {isEmpty && (
+        <S.BottomCta>
+          {/* TODO: 스페이스 만들기 라우트 연결 필요 */}
+          <Button variant="primary" text="스페이스 만들기" />
+        </S.BottomCta>
+      )}
     </S.HomePageContainer>
   );
 };

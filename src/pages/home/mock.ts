@@ -1,31 +1,10 @@
 export const MOCK_CURRENT_SPACES = [
   {
     id: 1,
-    spaceName: "포게더 : 작가와 방문객이 연결되는 곳",
+    spaceName:
+      "스페이스 이름 최대 두 줄까지 가능합니다. 스페이스 이름 최대 두 줄까지 가능합니다.",
     thumbnailUrl: "https://picsum.photos/400/300?random=10",
-    linkedExhibition: {
-      name: "포게더 시각 디자인 전시회",
-      url: "",
-      period: {
-        startDate: new Date("2026-02-08"),
-        endDate: new Date("2026-02-10"),
-      },
-      location: "홍익대학교 OO관",
-    },
-  },
-  {
-    id: 2,
-    spaceName: "두 번째 스페이스",
-    thumbnailUrl: "https://picsum.photos/400/300?random=11",
-    linkedExhibition: {
-      name: "봄 그룹 전시회",
-      url: "",
-      period: {
-        startDate: new Date("2026-03-01"),
-        endDate: new Date("2026-03-15"),
-      },
-      location: "서울 갤러리",
-    },
+    newGuestBookCount: 6,
   },
 ];
 
@@ -33,25 +12,31 @@ export const MOCK_SPACES = [
   {
     id: 1,
     title: "포게더 : 작가와 방문객이 연결되는 곳",
-    exhibitionName: "포게더 시각 디자인 전시회",
-    guestCount: 12,
-    backgroundImageUrl: "https://picsum.photos/400/200?random=1",
-    isPinned: false,
+    guestBookCount: 12,
+    thumbnailUrl: "https://picsum.photos/400/200?random=1",
   },
   {
     id: 2,
     title: "포게더 : 작가와 방문객이 연결되는 곳",
-    exhibitionName: "포게더 시각 디자인 전시회",
-    guestCount: 8,
-    backgroundImageUrl: "https://picsum.photos/400/200?random=2",
-    isPinned: false,
+    guestBookCount: 8,
+    thumbnailUrl: "",
   },
   {
     id: 3,
     title: "포게더 : 작가와 방문객이 연결되는 곳",
-    exhibitionName: "포게더 시각 디자인 전시회",
-    guestCount: 5,
-    backgroundImageUrl: "https://picsum.photos/400/200?random=3",
-    isPinned: false,
+    guestBookCount: 5,
+    thumbnailUrl: "https://picsum.photos/400/200?random=3",
+  },
+  {
+    id: 4,
+    title: "포게더 : 작가와 방문객이 연결되는 곳",
+    guestBookCount: 1,
+    thumbnailUrl: "",
+  },
+  {
+    id: 5,
+    title: "포게더 : 작가와 방문객이 연결되는 곳",
+    guestBookCount: 0,
+    thumbnailUrl: "",
   },
 ];
