@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 
 export const Wrapper = styled.div`
+  position: relative;
   max-width: ${({ theme }) => theme.layout.maxWidth};
   padding: 0 16px 16px 16px;
   width: 100%;
