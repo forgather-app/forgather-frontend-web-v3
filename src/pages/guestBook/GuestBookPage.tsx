@@ -264,8 +264,8 @@ const GuestBookPage = ({
         <TabMenu
           variant="pill"
           activeTab={activeView === "card" ? "left" : "right"}
-          left={{ text: "카드 보기", onClick: () => setActiveView("card") }}
-          right={{ text: "목록 보기", onClick: () => setActiveView("list") }}
+          left={{ text: "작품", onClick: () => setActiveView("card") }}
+          right={{ text: "방명록", onClick: () => setActiveView("list") }}
         />
       </S.BottomTabWrapper>
     </NavigationBarLayout>

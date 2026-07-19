@@ -6,9 +6,9 @@ type ActiveState = "active" | "inactive";
 
 const containerVariants: Record<Variant, (theme: Theme) => string> = {
   pill: (theme) => `
-    background-color: ${theme.colors.gray.gray400};
-    border-radius: 50px;
-    box-shadow: 0px 0px 40px 0px rgba(17, 17, 17, 0.5);
+    background-color: ${theme.colors.gray.gray600};
+    border-radius: 999px;
+    box-shadow: 0px 0px 20px 0px rgba(17, 17, 17, 0.75);
   `,
   box: (theme) => `
     width: 100%;
@@ -19,8 +19,8 @@ const containerVariants: Record<Variant, (theme: Theme) => string> = {
 
 const indicatorVariants: Record<Variant, (theme: Theme) => string> = {
   pill: (theme) => `
-    background-color: ${theme.colors.gray.white};
-    border-radius: 20px;
+    background-color: ${theme.colors.gray.gray500};
+    border-radius: 999px;
   `,
   box: (theme) => `
     background-color: ${theme.colors.gray.gray500};
@@ -35,11 +35,11 @@ const tabButtonVariants: Record<
   pill: {
     active: (theme) => `
       padding: 8px 16px;
-      color: ${theme.colors.gray.gray600};
+      color: ${theme.colors.gray.white};
     `,
     inactive: (theme) => `
       padding: 8px 16px;
-      color: ${theme.colors.gray.white};
+      color: ${theme.colors.gray.gray300};
     `,
   },
   box: {
@@ -56,7 +56,7 @@ const tabButtonVariants: Record<
 
 export const Container = styled.div<{ variant: Variant }>`
   position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   padding: 4px;
   ${({ variant, theme }) => containerVariants[variant](theme)}
