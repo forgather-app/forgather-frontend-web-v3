@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { TermsAgreementState } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
 import FunnelLayout from "@/shared/funnel/FunnelLayout";
 import useFunnel from "@/shared/funnel/useFunnel";
@@ -44,11 +45,13 @@ const SignUpFunnel = () => {
         <ArtistNameStep onNext={onNext} />
       )}
       {STEPS[currentStepIndex] === "terms" && (
-        <TermsStep
-          artistName={data.artistName?.artistName ?? ""}
-          initialTerms={INITIAL_DATA.terms.terms}
-          onNext={onNext}
-        />
+        <Suspense fallback={null}>
+          <TermsStep
+            artistName={data.artistName?.artistName ?? ""}
+            initialTerms={INITIAL_DATA.terms.terms}
+            onNext={onNext}
+          />
+        </Suspense>
       )}
     </FunnelLayout>
   );

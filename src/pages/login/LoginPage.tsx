@@ -1,7 +1,10 @@
+import { useState } from "react";
 import AppleLogo from "@/assets/icons/ic_apple.svg?react";
 import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
+import Button from "@/components/@common/Button/Button";
 import useKakaoLoginBridge from "@/hooks/@common/useKakaoLoginBridge";
 import CarouselLayout from "@/shared/carousel/CarouselLayout";
+import DevLoginModal from "./components/DevLoginModal/DevLoginModal";
 import OnboardingIllustration1 from "./illustrations/OnboardingIllustration1";
 import OnboardingIllustration2 from "./illustrations/OnboardingIllustration2";
 import * as S from "./LoginPage.styles";
@@ -9,6 +12,7 @@ import OnboardingSlide from "./slides/OnboardingSlide";
 
 const LoginPage = () => {
   const { requestKakaoLogin, isRequesting } = useKakaoLoginBridge();
+  const [isDevLoginOpen, setIsDevLoginOpen] = useState(false);
 
   return (
     <CarouselLayout
@@ -27,6 +31,19 @@ const LoginPage = () => {
             <KakaoLogo aria-hidden="true" />
             <span>카카오로 로그인하기</span>
           </S.KakaoButton>
+          {/* NOTE: 카카오 로그인은 웹뷰 브릿지가 필요해 일반 브라우저에서 테스트 불가.
+              dev 환경에서만 존재하는 BE의 /auth/login/dev로 우회 로그인 제공 */}
+          {import.meta.env.DEV && (
+            <Button
+              variant="underlined"
+              text="[DEV] 아이디/비밀번호로 로그인"
+              onClick={() => setIsDevLoginOpen(true)}
+            />
+          )}
+          <DevLoginModal
+            isOpen={isDevLoginOpen}
+            onClose={() => setIsDevLoginOpen(false)}
+          />
         </S.FooterWrapper>
       }
     >

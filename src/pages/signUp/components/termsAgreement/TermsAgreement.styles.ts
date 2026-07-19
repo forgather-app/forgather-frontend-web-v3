@@ -17,13 +17,10 @@ export const AllAgreeRow = styled.div`
   padding: 16px;
 `;
 
-export const AllAgreeLabel = styled("label", { shouldForwardProp })<{
-  $dimmed?: boolean;
-}>`
+export const AllAgreeLabel = styled.label`
   ${({ theme }) => ({ ...theme.typography.label })};
   color: ${({ theme }) => theme.colors.gray.white};
   cursor: pointer;
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
 `;
 
 export const ItemList = styled.ul`
@@ -114,7 +111,6 @@ export const HiddenInput = styled.input`
 // 체크 전에는 회색(gray500), 체크 후에는 보라색 배경. 체크마크 아이콘은 항상 표시됩니다.
 export const CheckIcon = styled("span", { shouldForwardProp })<{
   $checked: boolean;
-  $dimmed?: boolean;
 }>`
   position: absolute;
   inset: 16.67%;
@@ -122,10 +118,9 @@ export const CheckIcon = styled("span", { shouldForwardProp })<{
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
   background-color: ${({ theme, $checked }) =>
     $checked ? theme.colors.main.purple : theme.colors.gray.gray500};
-  transition: background-color 0.15s, opacity 0.15s;
+  transition: background-color 0.15s;
 
   svg {
     color: ${({ theme }) => theme.colors.gray.gray200};
