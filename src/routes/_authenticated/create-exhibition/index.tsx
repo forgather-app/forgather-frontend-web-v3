@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import CreateExhibitionFunnel from "@/pages/createExhibition/CreateExhibitionFunnel";
 
-export const Route = createFileRoute("/create-exhibition/")({
+export const Route = createFileRoute("/_authenticated/create-exhibition/")({
   component: RouteComponent,
 });
 

@@ -63,6 +63,7 @@ export * from './createSpaceResponse';
 export * from './createV1Body';
 export * from './creatorInfo';
 export * from './deleteGuestBookCardPhotosRequest';
+export * from './devLoginRequest';
 export * from './exhibitionResponse';
 export * from './exhibitionResponseProgressStatus';
 export * from './getAllHostsParams';

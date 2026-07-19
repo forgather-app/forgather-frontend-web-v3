@@ -1,9 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useSubmitOnboarding } from "@/api/generated/auth-인증";
-import { useGetLatestTerms } from "@/api/generated/term-약관";
+import { useGetLatestTermsSuspense } from "@/api/generated/term-약관";
 import type { ApiResponseListTermResponse } from "@/api/model";
-import Button from "@/components/@common/Button/Button";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import TermsAgreement from "@/pages/signUp/components/termsAgreement/TermsAgreement";
@@ -32,12 +31,7 @@ const TermsStep = ({
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: submitOnboarding, isPending } = useSubmitOnboarding();
-  const {
-    data: terms = [],
-    isLoading,
-    isError,
-    refetch,
-  } = useGetLatestTerms<Term[]>({
+  const { data: terms } = useGetLatestTermsSuspense<Term[]>({
     query: {
       select: (response) =>
         // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
@@ -72,27 +66,11 @@ const TermsStep = ({
   return (
     <ItemLayout
       text="다음"
-      disabled={isLoading || !validateTerms(agreement, terms) || isPending}
+      disabled={!validateTerms(agreement, terms) || isPending}
       onClick={handleNext}
     >
       <S.Spacer />
-      {isError ? (
-        <S.StatusWrapper>
-          <S.StatusText>{ERROR_MESSAGES.TERMS_FETCH_FAILED}</S.StatusText>
-          <Button
-            variant="secondary"
-            text="다시 시도"
-            onClick={() => refetch()}
-          />
-        </S.StatusWrapper>
-      ) : (
-        <TermsAgreement
-          terms={terms}
-          value={agreement}
-          onChange={setAgreement}
-          isLoading={isLoading}
-        />
-      )}
+      <TermsAgreement terms={terms} value={agreement} onChange={setAgreement} />
     </ItemLayout>
   );
 };
