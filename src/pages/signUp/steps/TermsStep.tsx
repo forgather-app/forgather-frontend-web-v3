@@ -71,10 +71,14 @@ const TermsStep = ({
 
   return (
     <ItemLayout
-      text="시작하기"
-      variant="tertiary"
-      disabled={isLoading || !validateTerms(agreement, terms) || isPending}
-      onClick={handleNext}
+      button={
+        <Button
+          variant="tertiary"
+          text="시작하기"
+          disabled={isLoading || !validateTerms(agreement, terms) || isPending}
+          onClick={handleNext}
+        />
+      }
     >
       {isError ? (
         <S.StatusWrapper>
