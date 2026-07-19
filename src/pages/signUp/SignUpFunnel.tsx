@@ -8,8 +8,8 @@ import TermsStep from "./steps/TermsStep";
 const STEPS = ["artistName", "terms"] as const;
 
 const TITLE_META = {
-  artistName: "작가님의 닉네임을 알려주세요",
-  terms: "원활한 이용을 위해서\n아래 약관에 동의해주세요",
+  artistName: "닉네임을 입력해주세요",
+  terms: "원활한 이용을 위해\n약관 동의가 필요해요",
 } satisfies Record<(typeof STEPS)[number], string>;
 
 interface SignUpFunnelData {

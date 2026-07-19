@@ -15,6 +15,7 @@ import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedNewGuestbooksRouteImport } from './routes/_authenticated/new-guestbooks'
 import { Route as AuthenticatedSignUpIndexRouteImport } from './routes/_authenticated/sign-up/index'
 import { Route as AuthenticatedCreateExhibitionIndexRouteImport } from './routes/_authenticated/create-exhibition/index'
+import { Route as AuthenticatedSignUpCompleteRouteImport } from './routes/_authenticated/sign-up/complete'
 import { Route as AuthenticatedNewGuestbookGuestbookIdRouteImport } from './routes/_authenticated/new-guestbook/$guestbookId'
 import { Route as AuthenticatedSpacesSpaceIdGuestbookRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook'
 
@@ -50,6 +51,12 @@ const AuthenticatedCreateExhibitionIndexRoute =
     path: '/create-exhibition/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedSignUpCompleteRoute =
+  AuthenticatedSignUpCompleteRouteImport.update({
+    id: '/sign-up/complete',
+    path: '/sign-up/complete',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedNewGuestbookGuestbookIdRoute =
   AuthenticatedNewGuestbookGuestbookIdRouteImport.update({
     id: '/new-guestbook/$guestbookId',
@@ -68,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
   '/login/': typeof LoginIndexRoute
   '/new-guestbook/$guestbookId': typeof AuthenticatedNewGuestbookGuestbookIdRoute
+  '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
   '/sign-up/': typeof AuthenticatedSignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
@@ -77,6 +85,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
   '/new-guestbook/$guestbookId': typeof AuthenticatedNewGuestbookGuestbookIdRoute
+  '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/create-exhibition': typeof AuthenticatedCreateExhibitionIndexRoute
   '/sign-up': typeof AuthenticatedSignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
@@ -88,6 +97,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/_authenticated/new-guestbook/$guestbookId': typeof AuthenticatedNewGuestbookGuestbookIdRoute
+  '/_authenticated/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/_authenticated/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
   '/_authenticated/sign-up/': typeof AuthenticatedSignUpIndexRoute
   '/_authenticated/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/new-guestbooks'
     | '/login/'
     | '/new-guestbook/$guestbookId'
+    | '/sign-up/complete'
     | '/create-exhibition/'
     | '/sign-up/'
     | '/spaces/$spaceId/guestbook'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/new-guestbook/$guestbookId'
+    | '/sign-up/complete'
     | '/create-exhibition'
     | '/sign-up'
     | '/spaces/$spaceId/guestbook'
@@ -118,6 +130,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/login/'
     | '/_authenticated/new-guestbook/$guestbookId'
+    | '/_authenticated/sign-up/complete'
     | '/_authenticated/create-exhibition/'
     | '/_authenticated/sign-up/'
     | '/_authenticated/spaces/$spaceId/guestbook'
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCreateExhibitionIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/sign-up/complete': {
+      id: '/_authenticated/sign-up/complete'
+      path: '/sign-up/complete'
+      fullPath: '/sign-up/complete'
+      preLoaderRoute: typeof AuthenticatedSignUpCompleteRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/new-guestbook/$guestbookId': {
       id: '/_authenticated/new-guestbook/$guestbookId'
       path: '/new-guestbook/$guestbookId'
@@ -193,6 +213,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNewGuestbooksRoute: typeof AuthenticatedNewGuestbooksRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedNewGuestbookGuestbookIdRoute: typeof AuthenticatedNewGuestbookGuestbookIdRoute
+  AuthenticatedSignUpCompleteRoute: typeof AuthenticatedSignUpCompleteRoute
   AuthenticatedCreateExhibitionIndexRoute: typeof AuthenticatedCreateExhibitionIndexRoute
   AuthenticatedSignUpIndexRoute: typeof AuthenticatedSignUpIndexRoute
   AuthenticatedSpacesSpaceIdGuestbookRoute: typeof AuthenticatedSpacesSpaceIdGuestbookRoute
@@ -203,6 +224,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedNewGuestbookGuestbookIdRoute:
     AuthenticatedNewGuestbookGuestbookIdRoute,
+  AuthenticatedSignUpCompleteRoute: AuthenticatedSignUpCompleteRoute,
   AuthenticatedCreateExhibitionIndexRoute:
     AuthenticatedCreateExhibitionIndexRoute,
   AuthenticatedSignUpIndexRoute: AuthenticatedSignUpIndexRoute,

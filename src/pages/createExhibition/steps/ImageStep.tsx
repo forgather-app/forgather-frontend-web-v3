@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import Button from "@/components/@common/Button/Button";
 import ImageInput from "@/components/@common/imageInput/ImageInput";
 import ItemLayout from "@/shared/funnel/ItemLayout";
 
@@ -23,7 +24,15 @@ const ImageStep = ({ onNext }: ImageStepProps) => {
   }, [previewUrl]);
 
   return (
-    <ItemLayout text="다음" disabled={!image} onClick={() => onNext({ image })}>
+    <ItemLayout
+      button={
+        <Button
+          text="다음"
+          disabled={!image}
+          onClick={() => onNext({ image })}
+        />
+      }
+    >
       <ImageInput
         previewImage={previewUrl}
         onChange={(newImage) => changeImage(newImage)}
