@@ -1,110 +1,61 @@
-import { useRef, useState } from "react";
-import CurrentSpaceCard from "@/components/@common/CurrentSpaceCard/CurrentSpaceCard";
+import IcFire from "@/assets/icons/ic_fire.svg?react";
+import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./CurrentSpaceSection.styles";
 
-interface CurrentSpace {
-  /** 스페이스 ID */
-  id: number;
-  /** 스페이스 이름 */
-  spaceName: string;
-  /** 썸네일 이미지 URL */
-  thumbnailUrl?: string;
-  /** 연결된 전시 정보 */
-  linkedExhibition?: {
-    name: string;
-    url: string;
-    period: { startDate: Date; endDate: Date };
-    location: string;
-  };
-}
+const spaceCardFallback = "/images/fallback/space_card.png";
 
 interface CurrentSpaceSectionProps {
-  /** 진행 중인 스페이스 목록 */
-  spaces: CurrentSpace[];
-  /** 방명록 버튼 클릭 핸들러 */
-  onGuestBookClick?: (spaceId: number) => void;
+  /** 스페이스 이름 (최대 두 줄 표시) */
+  spaceName: string;
+  /** 썸네일 이미지 URL. 미전달·빈 문자열 또는 에러 시 fallback 이미지 표시 */
+  thumbnailUrl?: string;
+  /** 새로 작성된 방명록 수. 1 이상이면 방명록 보기 버튼에 배지 표시 */
+  newGuestBookCount?: number;
+  /** 방명록 보기 버튼 클릭 핸들러 */
+  onGuestBookClick?: () => void;
   /** 작품 관리 버튼 클릭 핸들러 */
-  onArtworkManageClick?: (spaceId: number) => void;
-  /** 전시 관리 버튼 클릭 핸들러 */
-  onExhibitionManageClick?: (spaceId: number) => void;
+  onArtworkManageClick?: () => void;
 }
 
-const SWIPE_THRESHOLD = 50;
-
 const CurrentSpaceSection = ({
-  spaces,
+  spaceName,
+  thumbnailUrl,
+  newGuestBookCount = 0,
   onGuestBookClick,
   onArtworkManageClick,
-  onExhibitionManageClick,
 }: CurrentSpaceSectionProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const pointerStartX = useRef<number>(0);
-
-  const handlePointerDown = (e: React.PointerEvent) => {
-    pointerStartX.current = e.clientX;
-  };
-
-  const handlePointerUp = (e: React.PointerEvent) => {
-    const delta = pointerStartX.current - e.clientX;
-    if (delta > SWIPE_THRESHOLD && currentIndex < spaces.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-    } else if (delta < -SWIPE_THRESHOLD && currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
-  };
-
   return (
-    <S.Section>
-      <S.Title>지금 진행 중인 스페이스</S.Title>
+    <S.Card>
+      <S.ImageArea>
+        <S.Thumbnail
+          src={thumbnailUrl || spaceCardFallback}
+          onError={(e) => handleImageError(e, spaceCardFallback)}
+          alt=""
+          aria-hidden
+        />
+        <S.Dim aria-hidden />
+        <S.LabelRow>
+          <IcFire width={20} height={20} aria-hidden />
+          <S.Label>지금 축하받는 스페이스</S.Label>
+        </S.LabelRow>
+        <S.SpaceName>{spaceName}</S.SpaceName>
+      </S.ImageArea>
 
-      <S.CarouselWrapper
-        onPointerDown={handlePointerDown}
-        onPointerUp={handlePointerUp}
-      >
-        <S.Track currentIndex={currentIndex}>
-          {spaces.map((space) => (
-            <S.Slide key={space.id}>
-              {space.linkedExhibition ? (
-                <CurrentSpaceCard
-                  spaceName={space.spaceName}
-                  thumbnailUrl={space.thumbnailUrl}
-                  linkedExhibition={space.linkedExhibition}
-                  onGuestBookClick={() => onGuestBookClick?.(space.id)}
-                  onArtworkManageClick={() => onArtworkManageClick?.(space.id)}
-                  onExhibitionManageClick={() =>
-                    onExhibitionManageClick?.(space.id)
-                  }
-                />
-              ) : (
-                <CurrentSpaceCard
-                  spaceName={space.spaceName}
-                  thumbnailUrl={space.thumbnailUrl}
-                  onGuestBookClick={() => onGuestBookClick?.(space.id)}
-                  onArtworkManageClick={() => onArtworkManageClick?.(space.id)}
-                />
-              )}
-            </S.Slide>
-          ))}
-        </S.Track>
-      </S.CarouselWrapper>
-
-      {spaces.length > 1 && (
-        <S.DotsWrapper role="tablist" aria-label="슬라이드 인디케이터">
-          {spaces.map((_, index) => (
-            <S.Dot
-              // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel indicator
-              key={index}
-              type="button"
-              isActive={index === currentIndex}
-              onClick={() => setCurrentIndex(index)}
-              role="tab"
-              aria-selected={index === currentIndex}
-              aria-label={`${index + 1}번째 슬라이드로 이동`}
-            />
-          ))}
-        </S.DotsWrapper>
-      )}
-    </S.Section>
+      <S.Actions>
+        <S.ActionButton type="button" onClick={onGuestBookClick}>
+          방명록 보기
+          {newGuestBookCount > 0 && (
+            <S.Badge aria-label={`새 방명록 ${newGuestBookCount}개`}>
+              {newGuestBookCount}
+            </S.Badge>
+          )}
+        </S.ActionButton>
+        <S.Divider aria-hidden />
+        <S.ActionButton type="button" onClick={onArtworkManageClick}>
+          작품 관리
+        </S.ActionButton>
+      </S.Actions>
+    </S.Card>
   );
 };
 
