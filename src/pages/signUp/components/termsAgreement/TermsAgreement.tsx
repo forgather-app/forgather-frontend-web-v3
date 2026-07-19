@@ -16,21 +16,18 @@ interface TermsAgreementProps {
   value: TermsAgreementState;
   /** 약관 동의 상태 변경 핸들러 */
   onChange: (state: TermsAgreementState) => void;
-  /** 약관 목록 조회 중 여부. true면 전체 동의 영역을 비활성화하고 흐리게 표시합니다. */
-  isLoading?: boolean;
 }
 
-const TermsAgreement = ({
-  terms,
-  value,
-  onChange,
-  isLoading = false,
-}: TermsAgreementProps) => {
+const TermsAgreement = ({ terms, value, onChange }: TermsAgreementProps) => {
   const [modalTerm, setModalTerm] = useState<Term | null>(null);
 
   const handleAllAgree = () => {
     const next = !isAllTermsAgreed(value, terms);
-    onChange(Object.fromEntries(terms.map((term) => [term.id, next])));
+    const nextState = terms.reduce<TermsAgreementState>((acc, term) => {
+      acc[term.id] = next;
+      return acc;
+    }, {});
+    onChange(nextState);
   };
 
   const handleItemToggle = (id: number) => {
@@ -41,23 +38,16 @@ const TermsAgreement = ({
     <>
       <S.Wrapper>
         <S.AllAgreeRow>
-          <S.AllAgreeLabel htmlFor="terms-all" $dimmed={isLoading}>
-            전체 동의
-          </S.AllAgreeLabel>
+          <S.AllAgreeLabel htmlFor="terms-all">전체 동의</S.AllAgreeLabel>
           <S.CheckboxWrapper>
             <S.HiddenInput
               type="checkbox"
               id="terms-all"
               checked={isAllTermsAgreed(value, terms)}
               onChange={handleAllAgree}
-              disabled={isLoading}
               aria-label="전체 동의"
             />
-            <S.CheckIcon
-              $checked={isAllTermsAgreed(value, terms)}
-              $dimmed={isLoading}
-              aria-hidden
-            >
+            <S.CheckIcon $checked={isAllTermsAgreed(value, terms)} aria-hidden>
               <IcRectangleCheck width={28} height={28} />
             </S.CheckIcon>
           </S.CheckboxWrapper>

@@ -17,13 +17,10 @@ export const AllAgreeRow = styled.div`
   padding: 16px;
 `;
 
-export const AllAgreeLabel = styled("label", { shouldForwardProp })<{
-  $dimmed?: boolean;
-}>`
+export const AllAgreeLabel = styled.label`
   ${({ theme }) => ({ ...theme.typography.label })};
   color: ${({ theme }) => theme.colors.gray.gray50};
   cursor: pointer;
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
 `;
 
 export const ItemList = styled.ul`
@@ -112,13 +109,10 @@ export const HiddenInput = styled.input`
 
 export const CheckIcon = styled("span", { shouldForwardProp })<{
   $checked: boolean;
-  $dimmed?: boolean;
 }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.4 : 1)};
-  transition: opacity 0.15s;
 
   svg rect {
     stroke: ${({ theme, $checked }) =>
