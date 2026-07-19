@@ -60,7 +60,7 @@ const TermsStep = ({
       {
         onSuccess: () => {
           onNext({ terms: agreement });
-          navigate({ to: "/" });
+          navigate({ to: "/sign-up/complete" });
         },
         onError: () => {
           showSnackBar(ERROR_MESSAGES.ONBOARDING_FAILED, "error");

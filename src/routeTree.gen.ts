@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SignUpIndexRouteImport } from './routes/sign-up/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as CreateExhibitionIndexRouteImport } from './routes/create-exhibition/index'
+import { Route as SignUpCompleteRouteImport } from './routes/sign-up/complete'
 import { Route as NewGuestbookGuestbookIdRouteImport } from './routes/new-guestbook/$guestbookId'
 import { Route as SpacesSpaceIdGuestbookRouteImport } from './routes/spaces/$spaceId/guestbook'
 
@@ -42,6 +43,11 @@ const CreateExhibitionIndexRoute = CreateExhibitionIndexRouteImport.update({
   path: '/create-exhibition/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignUpCompleteRoute = SignUpCompleteRouteImport.update({
+  id: '/sign-up/complete',
+  path: '/sign-up/complete',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewGuestbookGuestbookIdRoute = NewGuestbookGuestbookIdRouteImport.update({
   id: '/new-guestbook/$guestbookId',
   path: '/new-guestbook/$guestbookId',
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/new-guestbooks': typeof NewGuestbooksRoute
   '/new-guestbook/$guestbookId': typeof NewGuestbookGuestbookIdRoute
+  '/sign-up/complete': typeof SignUpCompleteRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
   '/login/': typeof LoginIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/new-guestbooks': typeof NewGuestbooksRoute
   '/new-guestbook/$guestbookId': typeof NewGuestbookGuestbookIdRoute
+  '/sign-up/complete': typeof SignUpCompleteRoute
   '/create-exhibition': typeof CreateExhibitionIndexRoute
   '/login': typeof LoginIndexRoute
   '/sign-up': typeof SignUpIndexRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/new-guestbooks': typeof NewGuestbooksRoute
   '/new-guestbook/$guestbookId': typeof NewGuestbookGuestbookIdRoute
+  '/sign-up/complete': typeof SignUpCompleteRoute
   '/create-exhibition/': typeof CreateExhibitionIndexRoute
   '/login/': typeof LoginIndexRoute
   '/sign-up/': typeof SignUpIndexRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/new-guestbooks'
     | '/new-guestbook/$guestbookId'
+    | '/sign-up/complete'
     | '/create-exhibition/'
     | '/login/'
     | '/sign-up/'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/new-guestbooks'
     | '/new-guestbook/$guestbookId'
+    | '/sign-up/complete'
     | '/create-exhibition'
     | '/login'
     | '/sign-up'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/new-guestbooks'
     | '/new-guestbook/$guestbookId'
+    | '/sign-up/complete'
     | '/create-exhibition/'
     | '/login/'
     | '/sign-up/'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NewGuestbooksRoute: typeof NewGuestbooksRoute
   NewGuestbookGuestbookIdRoute: typeof NewGuestbookGuestbookIdRoute
+  SignUpCompleteRoute: typeof SignUpCompleteRoute
   CreateExhibitionIndexRoute: typeof CreateExhibitionIndexRoute
   LoginIndexRoute: typeof LoginIndexRoute
   SignUpIndexRoute: typeof SignUpIndexRoute
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CreateExhibitionIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-up/complete': {
+      id: '/sign-up/complete'
+      path: '/sign-up/complete'
+      fullPath: '/sign-up/complete'
+      preLoaderRoute: typeof SignUpCompleteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/new-guestbook/$guestbookId': {
       id: '/new-guestbook/$guestbookId'
       path: '/new-guestbook/$guestbookId'
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NewGuestbooksRoute: NewGuestbooksRoute,
   NewGuestbookGuestbookIdRoute: NewGuestbookGuestbookIdRoute,
+  SignUpCompleteRoute: SignUpCompleteRoute,
   CreateExhibitionIndexRoute: CreateExhibitionIndexRoute,
   LoginIndexRoute: LoginIndexRoute,
   SignUpIndexRoute: SignUpIndexRoute,

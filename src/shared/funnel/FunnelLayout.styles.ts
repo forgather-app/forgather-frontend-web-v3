@@ -4,7 +4,8 @@ export const Container = styled.div`
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.layout.sectionGap}px;
+  /* TODO: 토큰 없음 - 35px (제목 ~ 콘텐츠 간격, Figma 실측값) */
+  gap: 35px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
   overflow: hidden;
 `;
