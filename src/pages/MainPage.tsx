@@ -10,6 +10,8 @@ const buttonStyle = {
 } as const;
 
 const PAGE_LINKS = [
+  { label: "홈 페이지 이동 (임시)", to: "/home" },
+  { label: "마이 페이지 이동 (임시)", to: "/my-page" },
   { label: "로그인 페이지 이동 (임시)", to: "/login" },
   { label: "회원가입 페이지 이동 (임시)", to: "/sign-up" },
   { label: "전시 생성 페이지 이동 (임시)", to: "/create-exhibition" },
