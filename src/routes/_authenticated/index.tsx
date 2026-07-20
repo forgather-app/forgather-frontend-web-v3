@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import MainPage from "@/pages/MainPage";
+import HomePage from "@/pages/home/HomePage";
 
 export const Route = createFileRoute("/_authenticated/")({
-  component: MainPage,
+  component: HomePage,
 });
