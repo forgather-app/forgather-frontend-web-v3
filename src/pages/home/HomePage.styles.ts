@@ -15,7 +15,6 @@ export const PageWrapper = styled.div`
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 0 16px;
 
   /* 스크롤바 숨기기 */
   scrollbar-width: none;
