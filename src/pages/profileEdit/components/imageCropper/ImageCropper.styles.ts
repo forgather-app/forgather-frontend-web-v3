@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { CROP_WINDOW_SIZE } from "./ImageCropper.constants";
+import { CROP_WINDOW_SIZE } from "@/pages/profileEdit/constants/imageCropper.constants";
 
 export const Backdrop = styled.div`
   position: fixed;

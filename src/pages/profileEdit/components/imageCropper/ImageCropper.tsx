@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/@common/Button/Button";
 import {
+  CROP_MAX_SCALE,
+  CROP_OUTPUT_SIZE,
+  CROP_WHEEL_ZOOM_STEP,
+  CROP_WINDOW_SIZE,
+} from "@/pages/profileEdit/constants/imageCropper.constants";
+import {
   clampScale,
   clampTranslate,
   getCropSourceRect,
   getMinScale,
   type Point,
   type Size,
-} from "./cropGeometry";
-import {
-  CROP_MAX_SCALE,
-  CROP_OUTPUT_SIZE,
-  CROP_WHEEL_ZOOM_STEP,
-  CROP_WINDOW_SIZE,
-} from "./ImageCropper.constants";
+} from "@/pages/profileEdit/utils/cropGeometry";
 import * as S from "./ImageCropper.styles";
 
 interface CropTransform {
