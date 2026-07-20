@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSubmitOnboarding } from "@/api/generated/auth-인증";
 import { useGetLatestTermsSuspense } from "@/api/generated/term-약관";
 import type { ApiResponseListTermResponse } from "@/api/model";
+import Button from "@/components/@common/Button/Button";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import TermsAgreement from "@/pages/signUp/components/termsAgreement/TermsAgreement";
@@ -13,7 +14,6 @@ import {
 } from "@/pages/signUp/components/termsAgreement/TermsAgreement.type";
 import { validateTerms } from "@/pages/signUp/validate/validateTerms";
 import ItemLayout from "@/shared/funnel/ItemLayout";
-import * as S from "./TermsStep.styles";
 
 interface TermsStepProps {
   /** 이전 step(ArtistNameStep)에서 입력한 닉네임 */
@@ -54,7 +54,7 @@ const TermsStep = ({
       {
         onSuccess: () => {
           onNext({ terms: agreement });
-          navigate({ to: "/" });
+          navigate({ to: "/sign-up/complete" });
         },
         onError: () => {
           showSnackBar(ERROR_MESSAGES.ONBOARDING_FAILED, "error");
@@ -65,11 +65,15 @@ const TermsStep = ({
 
   return (
     <ItemLayout
-      text="다음"
-      disabled={!validateTerms(agreement, terms) || isPending}
-      onClick={handleNext}
+      button={
+        <Button
+          variant="tertiary"
+          text="시작하기"
+          disabled={!validateTerms(agreement, terms) || isPending}
+          onClick={handleNext}
+        />
+      }
     >
-      <S.Spacer />
       <TermsAgreement terms={terms} value={agreement} onChange={setAgreement} />
     </ItemLayout>
   );

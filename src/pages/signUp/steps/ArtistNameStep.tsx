@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Button from "@/components/@common/Button/Button";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { validateArtistName } from "@/pages/signUp/validate/validateArtistName";
@@ -17,9 +18,13 @@ const ArtistNameStep = ({ onNext }: ArtistNameStepProps) => {
 
   return (
     <ItemLayout
-      text="다음"
-      disabled={!isValid}
-      onClick={() => onNext({ artistName: artistName.trim() })}
+      button={
+        <Button
+          text="다음"
+          disabled={!isValid}
+          onClick={() => onNext({ artistName: artistName.trim() })}
+        />
+      }
     >
       <S.FieldGroup>
         <S.Label>닉네임</S.Label>
