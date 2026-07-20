@@ -1,4 +1,4 @@
-import IcChevronRight from "@/assets/icons/ic_chevron_right_sm.svg?react";
+import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcModify from "@/assets/icons/ic_modify.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
