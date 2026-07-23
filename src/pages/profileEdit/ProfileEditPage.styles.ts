@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const PageWrapper = styled.div`
+export const PageWrapper = styled.form`
   display: flex;
   flex-direction: column;
   flex: 1;
