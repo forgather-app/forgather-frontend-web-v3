@@ -101,7 +101,7 @@ export const DefaultTyped: Story = {
     variant: "default",
     value: "홍대 앞 전시공간",
     placeholder: "내용을 입력해주세요",
-    maxCount: 10
+    maxCount: 10,
   },
   parameters: {
     docs: {
