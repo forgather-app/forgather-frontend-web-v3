@@ -8,7 +8,9 @@ const countBase = (theme: Theme) => `
   background-color: ${theme.colors.gray.gray600};
   border-radius: 8px;
   padding: 8px 12px;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
 `;
 
 const baseRow = (theme: Theme) => `
@@ -19,11 +21,11 @@ const baseRow = (theme: Theme) => `
 const fieldRowVariants: Record<FieldRowStyleVariant, (theme: Theme) => string> =
   {
     "count-error": (theme) =>
-      `${countBase(theme)} border: 1px solid ${theme.colors.semantic.alertRed}; align-items: flex-start;`,
+      `${countBase(theme)} border: 1px solid ${theme.colors.semantic.alertRed};`,
     "count-active": (theme) =>
-      `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center;`,
+      `${countBase(theme)} border: 1px solid ${theme.colors.main.purple};`,
     "count-idle": (theme) =>
-      `${countBase(theme)} border: 1px solid transparent; align-items: center;`,
+      `${countBase(theme)} border: 1px solid transparent;`,
     "base-error": (theme) =>
       `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.semantic.alertRed};`,
     "base-filled": (theme) =>
@@ -31,7 +33,7 @@ const fieldRowVariants: Record<FieldRowStyleVariant, (theme: Theme) => string> =
     "base-idle": (theme) =>
       `${baseRow(theme)} border-bottom: 1px solid ${theme.colors.gray.gray400};`,
     category: (theme) =>
-      `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; align-items: center; gap: 4px;`,
+      `${countBase(theme)} border: 1px solid ${theme.colors.main.purple}; flex-direction: row; align-items: center; gap: 4px;`,
   };
 
 export const Wrapper = styled.div`
@@ -83,11 +85,10 @@ export const ClearButton = styled.button`
   flex-shrink: 0;
 `;
 
-export const CounterBox = styled.div`
+export const CountRow = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
 `;
 
 export const Counter = styled.span<{ $styleVariant: FieldRowStyleVariant }>`
@@ -96,10 +97,12 @@ export const Counter = styled.span<{ $styleVariant: FieldRowStyleVariant }>`
     $styleVariant === "count-active"
       ? theme.colors.gray.gray200
       : theme.colors.gray.gray300};
+  flex-shrink: 0;
 `;
 
-export const ErrorMessage = styled.span`
+export const ErrorMessage = styled.span<{ $align?: "left" | "right" }>`
   display: block;
+  text-align: ${({ $align = "left" }) => $align};
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.semantic.alertRed};
 `;
