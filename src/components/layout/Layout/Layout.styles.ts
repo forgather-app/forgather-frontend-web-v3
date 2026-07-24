@@ -8,5 +8,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
-  padding: 0;
+  padding: 0 ${({ theme }) => theme.layout.sidePadding}px
+    ${({ theme }) => theme.layout.sidePadding}px;
 `;
