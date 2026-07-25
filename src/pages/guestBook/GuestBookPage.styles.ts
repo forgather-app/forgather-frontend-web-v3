@@ -24,13 +24,6 @@ export const ChipRow = styled.div`
   align-items: center;
 `;
 
-export const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  column-gap: 20px;
-  row-gap: 16px;
-`;
-
 export const GuestListContainer = styled.div`
   display: flex;
   flex-direction: column;

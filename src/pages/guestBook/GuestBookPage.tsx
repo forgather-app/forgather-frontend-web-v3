@@ -2,16 +2,11 @@ import { useRef, useState } from "react";
 import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
-import GuestCard from "@/components/@common/GuestCard/GuestCard";
-import GuestCardStack from "@/components/@common/GuestCardStack/GuestCardStack";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
-import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import Tooltip from "@/components/@common/tooltip/Tooltip";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";
-
-type GuestBookView = "card" | "list";
 
 type GuestBookFilter = "all" | "photo" | "scrap";
 
@@ -136,12 +131,11 @@ const GuestBookPage = ({
   onCardClick,
   onNewStackClick,
 }: GuestBookPageProps) => {
-  const [activeView, setActiveView] = useState<GuestBookView>("card");
   const [activeFilter, setActiveFilter] = useState<GuestBookFilter>("all");
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const isTooltipDismissed = useRef(false);
   // TODO: API 연동 시 서버 상태로 대체
-  const [scrappedIds, setScrappedIds] = useState<Set<number>>(
+  const [scrappedIds] = useState<Set<number>>(
     () => new Set(DUMMY_CARDS.filter((c) => c.isScrapped).map((c) => c.id)),
   );
 
@@ -162,64 +156,6 @@ const GuestBookPage = ({
 
   // TODO: API 응답으로 대체 필요
   const totalCount = filteredCards.length;
-
-  function toggleScrap(id: number) {
-    setScrappedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
-
-  function renderCardView() {
-    return (
-      <S.CardGrid>
-        {hasNewCards && <GuestCardStack onClick={onNewStackClick} />}
-        {filteredCards.map((card) => (
-          <GuestCard
-            key={card.id}
-            author={card.author}
-            text={card.text}
-            isPhotoExist={card.isPhotoExist}
-            onClick={() => onCardClick(card.id)}
-            headerType={{
-              iconType: "scrap",
-              isScrapped: scrappedIds.has(card.id),
-              toggleScrap: () => toggleScrap(card.id),
-            }}
-          />
-        ))}
-      </S.CardGrid>
-    );
-  }
-
-  function renderListView() {
-    return (
-      <S.GuestListContainer>
-        {hasNewCards && <GuestListStack onClick={onNewStackClick} />}
-        {filteredCards.map((card) => (
-          <GuestList
-            key={card.id}
-            nickname={card.author}
-            message={card.text}
-            createdAt={card.createdAt}
-            hasPhoto={card.isPhotoExist}
-            onClick={() => onCardClick(card.id)}
-          />
-        ))}
-      </S.GuestListContainer>
-    );
-  }
-
-  function renderContent() {
-    switch (activeView) {
-      case "card":
-        return renderCardView();
-      case "list":
-        return renderListView();
-    }
-  }
 
   return (
     <NavigationBarLayout title={spaceName} onBackClick={onBack}>
@@ -272,7 +208,19 @@ const GuestBookPage = ({
             </Tooltip>
           </S.TooltipAnchor>
         )}
-        {renderContent()}
+        <S.GuestListContainer>
+          {hasNewCards && <GuestListStack onClick={onNewStackClick} />}
+          {filteredCards.map((card) => (
+            <GuestList
+              key={card.id}
+              nickname={card.author}
+              message={card.text}
+              createdAt={card.createdAt}
+              hasPhoto={card.isPhotoExist}
+              onClick={() => onCardClick(card.id)}
+            />
+          ))}
+        </S.GuestListContainer>
       </S.ContentWrapper>
       <S.BottomSpacer />
       <S.BottomBar>
@@ -283,12 +231,6 @@ const GuestBookPage = ({
         >
           <IcLeftArrow width={24} height={24} />
         </S.FloatingIconButton>
-        <TabMenu
-          variant="pill"
-          activeTab={activeView === "card" ? "left" : "right"}
-          left={{ text: "작품", onClick: () => setActiveView("card") }}
-          right={{ text: "방명록", onClick: () => setActiveView("list") }}
-        />
         <S.FloatingIconButton
           type="button"
           aria-label="링크 공유"
