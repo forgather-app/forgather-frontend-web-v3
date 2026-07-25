@@ -6,10 +6,10 @@ import * as S from "./GuestList.styles";
 interface GuestListProps {
   /** 방문객 닉네임 */
   nickname: string;
-  /** 방명록 메시지 내용 */
-  message: string;
-  /** 방명록 작성 일시 */
-  createdAt: Date;
+  /** 방명록 메시지 내용. 목록 API에 값이 없으면 생략됩니다. */
+  message?: string;
+  /** 방명록 작성 일시. 목록 API에 값이 없으면 생략됩니다. */
+  createdAt?: Date;
   /** 사진 첨부 여부. true이면 닉네임 우측에 사진 아이콘을 표시합니다. */
   hasPhoto?: boolean;
   /** 카드(자세히보기) 클릭 핸들러 */
@@ -38,11 +38,15 @@ const GuestList = ({
         )}
       </S.HeaderRow>
       <S.Body>
-        <S.Message aria-hidden>{message}</S.Message>
+        {message && <S.Message aria-hidden>{message}</S.Message>}
         <S.MetaRow>
           <S.DateTimeGroup aria-hidden>
-            <span>{formatCardDate(createdAt)}</span>
-            <span>{formatCardTime(createdAt)}</span>
+            {createdAt && (
+              <>
+                <span>{formatCardDate(createdAt)}</span>
+                <span>{formatCardTime(createdAt)}</span>
+              </>
+            )}
           </S.DateTimeGroup>
           <S.DetailLink aria-hidden>
             자세히보기
