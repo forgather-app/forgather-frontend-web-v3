@@ -1,4 +1,6 @@
 import { useRef, useState } from "react";
+import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
+import IcLink from "@/assets/icons/ic_link.svg?react";
 import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
 import GuestCard from "@/components/@common/GuestCard/GuestCard";
 import GuestCardStack from "@/components/@common/GuestCardStack/GuestCardStack";
@@ -260,14 +262,29 @@ const GuestBookPage = ({
         {renderContent()}
       </S.ContentWrapper>
       <S.BottomSpacer />
-      <S.BottomTabWrapper>
+      <S.BottomBar>
+        <S.FloatingIconButton
+          type="button"
+          aria-label="뒤로 가기"
+          onClick={onBack}
+        >
+          <IcLeftArrow width={24} height={24} />
+        </S.FloatingIconButton>
         <TabMenu
           variant="pill"
           activeTab={activeView === "card" ? "left" : "right"}
           left={{ text: "작품", onClick: () => setActiveView("card") }}
           right={{ text: "방명록", onClick: () => setActiveView("list") }}
         />
-      </S.BottomTabWrapper>
+        <S.FloatingIconButton
+          type="button"
+          aria-label="링크 공유"
+          // TODO: 링크 공유 기능 연동
+          onClick={() => {}}
+        >
+          <IcLink width={24} height={24} />
+        </S.FloatingIconButton>
+      </S.BottomBar>
     </NavigationBarLayout>
   );
 };
