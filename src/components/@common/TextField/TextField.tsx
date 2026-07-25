@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
 import LinkIcon from "../../../assets/icons/ic_link.svg?react";
 import SearchIcon from "../../../assets/icons/ic_search.svg?react";
+import { theme } from "../../../styles/theme";
 import { getGraphemeLength } from "../../../utils/getGraphemeLength";
 import * as S from "./TextField.styles";
 
@@ -99,7 +100,14 @@ const TextField = ({
         {variant === "search" && (
           <SearchIcon aria-hidden width={20} height={20} />
         )}
-        {variant === "link" && <LinkIcon aria-hidden width={16} height={16} />}
+        {variant === "link" && (
+          <LinkIcon
+            aria-hidden
+            width={16}
+            height={16}
+            color={theme.colors.gray.gray200}
+          />
+        )}
         {variant === "category" && (
           <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
         )}

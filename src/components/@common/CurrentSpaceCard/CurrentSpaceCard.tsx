@@ -134,7 +134,7 @@ const CurrentSpaceCard = (props: CurrentSpaceCardProps) => {
             aria-label={`${linkedExhibition.name} 연결 전시 보기`}
             onClick={handleLinkedExhibitionClick}
           >
-            <IcLink width={14} height={14} fill={theme.colors.gray.gray50} />
+            <IcLink width={14} height={14} color={theme.colors.gray.gray200} />
             <S.LinkedExhibitionName>
               {linkedExhibition.name}
             </S.LinkedExhibitionName>

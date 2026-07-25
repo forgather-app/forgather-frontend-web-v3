@@ -45,6 +45,7 @@ export const ExhibitionLink = styled.div`
   gap: 4px;
   overflow: hidden;
   min-width: 0;
+  color: ${({ theme }) => theme.colors.gray.gray200};
 `;
 
 export const ExhibitionName = styled.span`
