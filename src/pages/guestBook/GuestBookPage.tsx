@@ -36,6 +36,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해요!",
     isPhotoExist: false,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 12, 14, 30),
   },
   {
     id: 2,
@@ -44,6 +45,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 11, 10, 15),
   },
   {
     id: 3,
@@ -52,6 +54,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
     isScrapped: true,
+    createdAt: new Date(2024, 4, 10, 9, 0),
   },
   {
     id: 4,
@@ -60,6 +63,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 9, 18, 45),
   },
   {
     id: 5,
@@ -68,6 +72,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
     isScrapped: true,
+    createdAt: new Date(2024, 4, 8, 13, 20),
   },
   {
     id: 6,
@@ -76,6 +81,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 7, 11, 5),
   },
   {
     id: 7,
@@ -84,6 +90,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 6, 16, 40),
   },
   {
     id: 8,
@@ -92,6 +99,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 5, 20, 10),
   },
   {
     id: 9,
@@ -100,6 +108,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
     isScrapped: true,
+    createdAt: new Date(2024, 4, 4, 8, 55),
   },
   {
     id: 10,
@@ -108,6 +117,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: true,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 3, 19, 30),
   },
   {
     id: 11,
@@ -116,6 +126,7 @@ const DUMMY_CARDS = [
     text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
     isPhotoExist: false,
     isScrapped: false,
+    createdAt: new Date(2024, 4, 2, 12, 0),
   },
 ];
 
@@ -190,7 +201,9 @@ const GuestBookPage = ({
         {filteredCards.map((card) => (
           <GuestList
             key={card.id}
-            title={card.author}
+            nickname={card.author}
+            message={card.text}
+            createdAt={card.createdAt}
             hasPhoto={card.isPhotoExist}
             onClick={() => onCardClick(card.id)}
           />
