@@ -35,10 +35,12 @@ const tabButtonVariants: Record<
   pill: {
     active: (theme) => `
       padding: 8px 16px;
+      min-width: 91px;
       color: ${theme.colors.gray.white};
     `,
     inactive: (theme) => `
       padding: 8px 16px;
+      min-width: 91px;
       color: ${theme.colors.gray.gray300};
     `,
   },
@@ -56,7 +58,8 @@ const tabButtonVariants: Record<
 
 export const Container = styled.div<{ variant: Variant }>`
   position: relative;
-  display: inline-flex;
+  display: inline-grid;
+  grid-template-columns: repeat(2, 1fr);
   align-items: center;
   padding: 4px;
   ${({ variant, theme }) => containerVariants[variant](theme)}
