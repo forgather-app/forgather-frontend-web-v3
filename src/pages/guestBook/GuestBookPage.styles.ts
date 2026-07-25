@@ -1,58 +1,51 @@
 import styled from "@emotion/styled";
 
-export const FilterSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 24px 0;
-  border-top: 1px solid ${({ theme }) => theme.colors.gray.gray600};
+export const ScrollArea = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
-export const CountText = styled.p`
-  ${({ theme }) => ({ ...theme.typography.heading3 })};
+export const TitleRow = styled.div`
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding-top: 24px;
+`;
+
+export const Title = styled.h1`
+  ${({ theme }) => ({ ...theme.typography.title1 })};
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
+export const CountGroup = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.02em;
   color: ${({ theme }) => theme.colors.gray.gray100};
 `;
 
 export const CountNumber = styled.span`
-  ${({ theme }) => ({ ...theme.typography.heading2 })};
-  color: ${({ theme }) => theme.colors.gray.gray50};
+  font-weight: 500;
 `;
 
-export const ChipRow = styled.div`
-  display: flex;
-  gap: 4px;
-  align-items: center;
+export const GuestCardWrapper = styled.div`
+  margin-top: 28px;
 `;
 
 export const GuestListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-`;
-
-export const ContentWrapper = styled.div`
-  position: relative;
-`;
-
-export const TooltipAnchor = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-`;
-
-export const TooltipCount = styled.span`
-  ${({ theme }) => ({ ...theme.typography.caption })};
-  color: ${({ theme }) => theme.colors.gray.gray50};
-`;
-
-export const TooltipSub = styled.span`
-  ${({ theme }) => ({ ...theme.typography.caption })};
-  color: ${({ theme }) => theme.colors.gray.gray300};
-`;
-
-export const TooltipText = styled.div`
-  display: flex;
+  gap: ${({ theme }) => theme.layout.cardGap}px;
+  margin-top: 20px;
 `;
 
 export const BottomSpacer = styled.div`
