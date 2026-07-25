@@ -100,7 +100,7 @@ export const FloatingIconButton = styled.button`
   border-radius: 999px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
   box-shadow: 0px 0px 20px 0px rgba(17, 17, 17, 0.75);
-  color: ${({ theme }) => theme.colors.gray.gray300};
+  color: ${({ theme }) => theme.colors.gray.gray200};
   cursor: pointer;
 
   &:focus-visible {
