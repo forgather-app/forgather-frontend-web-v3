@@ -82,7 +82,7 @@ const useKakaoLoginBridge = () => {
       // NOTE: 웹뷰가 아닌 일반 브라우저에서는 네이티브 로그인이 불가능하므로,
       // 개발 환경에서는 앱에서 실제 로그인 후 저장된 우리 서비스 accessToken을 직접 입력받아
       // BE 호출 없이 세션을 주입할 수 있게 함 (카카오 토큰이 아닌, 로그인이 끝난 뒤 발급된 토큰)
-      if (import.meta.env.DEV) {
+      if (import.meta.env.VITE_ENVIRONMENT === "development") {
         const accessToken = window.prompt(
           "[DEV] 앱에서 로그인 후 저장된 accessToken을 입력하세요",
         );
