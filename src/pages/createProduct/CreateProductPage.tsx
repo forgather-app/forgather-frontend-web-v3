@@ -36,8 +36,8 @@ const CreateProductPage = ({ onBack, onNext }: CreateProductPageProps) => {
   return (
     <S.PageWrapper onSubmit={getSubmitHandler(onNext)} noValidate>
       <NavigationBar title="작품 등록하기" onBackClick={onBack} />
-      <S.Title>{"작품 정보를\n입력해 주세요!"}</S.Title>
       <S.ScrollArea>
+        <S.Title>{"작품 정보를\n입력해 주세요!"}</S.Title>
         <S.FieldGroup>
           <S.LabelRow>
             <S.Label>작품 제목</S.Label>

@@ -8,8 +8,6 @@ export const PageWrapper = styled.form`
 `;
 
 export const Title = styled.h2`
-  flex-shrink: 0;
-  margin-top: 32px;
   ${({ theme }) => ({ ...theme.typography.title1 })};
   color: ${({ theme }) => theme.colors.gray.white};
   white-space: pre-line;
@@ -22,7 +20,7 @@ export const ScrollArea = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-top: 20px;
+  padding-top: 32px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
