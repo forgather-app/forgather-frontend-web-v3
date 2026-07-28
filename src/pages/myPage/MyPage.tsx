@@ -52,10 +52,10 @@ const MyPage = () => {
               href={linkUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="연락처 링크 열기"
+              aria-label="링크 열기"
             >
               <IcLink aria-hidden="true" />
-              contact
+              {linkUrl}
             </S.ContactLink>
           )}
         </S.IntroBlock>
