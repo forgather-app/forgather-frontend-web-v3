@@ -1,11 +1,24 @@
-import { useId } from "react";
+import { useNavigate } from "@tanstack/react-router";
+import { useId, useState } from "react";
 import { Controller } from "react-hook-form";
+import {
+  useGetProfileSuspense,
+  useUpdateProfile,
+} from "@/api/generated/host-호스트";
+import { useIssueHostProfileSignedUrls } from "@/api/generated/upload-파일-업로드";
+import type {
+  ApiResponseHostProfileResponse,
+  ApiResponseIssueSignedUrlResponse,
+} from "@/api/model";
+import { uploadImageToSignedUrl } from "@/api/uploadImageToSignedUrl";
 import IcPlusGray from "@/assets/icons/ic_plus_gray.svg?react";
 import Button from "@/components/@common/Button/Button";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { ERROR_MESSAGES } from "@/constants/error";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import ImageCropper from "./components/imageCropper/ImageCropper";
 import {
   type ProfileEditFormData,
@@ -13,17 +26,21 @@ import {
 } from "./hooks/useProfileEditForm";
 import * as S from "./ProfileEditPage.styles";
 
-export type { ProfileEditFormData } from "./hooks/useProfileEditForm";
-
-interface ProfileEditPageProps {
-  /** 뒤로가기 핸들러 */
-  onBack: () => void;
-  /** 저장하기 클릭 핸들러 */
-  onSave: (data: ProfileEditFormData) => void;
-}
-
-const ProfileEditPage = ({ onBack, onSave }: ProfileEditPageProps) => {
+const ProfileEditPage = () => {
+  const navigate = useNavigate();
+  const { showSnackBar } = useSnackBar();
   const imageInputId = useId();
+  const [isSaving, setIsSaving] = useState(false);
+
+  const { data: profile } = useGetProfileSuspense({
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseHostProfileResponse).data,
+    },
+  });
+  const { mutateAsync: issueSignedUrls } = useIssueHostProfileSignedUrls();
+  const { mutateAsync: updateProfile } = useUpdateProfile();
+
   const {
     control,
     nicknameRules,
@@ -36,11 +53,55 @@ const ProfileEditPage = ({ onBack, onSave }: ProfileEditPageProps) => {
     getSubmitHandler,
     handleImageChange,
     handleCropSave,
-  } = useProfileEditForm();
+  } = useProfileEditForm({
+    nickname: profile?.nickname ?? "",
+    introduction: profile?.introduction ?? "",
+    linkUrl: profile?.linkUrl ?? "",
+    pictureUrl: profile?.pictureUrl ?? "",
+  });
+
+  const uploadProfileImage = async (image: Blob) => {
+    const fileName = `${crypto.randomUUID()}.webp`;
+    const signedUrlsResponse = await issueSignedUrls({
+      data: { uploadFiles: [{ fileName, size: image.size }] },
+    });
+    const signedUrl = (
+      signedUrlsResponse as unknown as ApiResponseIssueSignedUrlResponse
+    ).data?.signedUrls?.[fileName];
+    if (!signedUrl) throw new Error("업로드 URL을 발급받지 못했습니다");
+
+    return uploadImageToSignedUrl(signedUrl, image, fileName);
+  };
+
+  const handleSave = async (formData: ProfileEditFormData) => {
+    setIsSaving(true);
+    try {
+      const pictureUrl = formData.profileImage
+        ? await uploadProfileImage(formData.profileImage)
+        : undefined;
+
+      await updateProfile({
+        data: {
+          nickname: formData.nickname,
+          introduction: formData.introduction,
+          linkUrl: formData.linkUrl,
+          ...(pictureUrl && { pictureUrl }),
+        },
+      });
+      navigate({ to: "/my-page" });
+    } catch {
+      showSnackBar(ERROR_MESSAGES.PROFILE_UPDATE_FAILED, "error");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
-    <S.PageWrapper onSubmit={getSubmitHandler(onSave)} noValidate>
-      <NavigationBar title="프로필 설정" onBackClick={onBack} />
+    <S.PageWrapper onSubmit={getSubmitHandler(handleSave)} noValidate>
+      <NavigationBar
+        title="프로필 설정"
+        onBackClick={() => navigate({ to: "/my-page" })}
+      />
       <S.ScrollArea>
         <S.ProfileGroup>
           <S.ProfileLabel>프로필</S.ProfileLabel>
@@ -126,7 +187,7 @@ const ProfileEditPage = ({ onBack, onSave }: ProfileEditPageProps) => {
         </S.FieldList>
       </S.ScrollArea>
       <S.Footer>
-        <Button text="저장하기" type="submit" disabled={!isValid} />
+        <Button text="저장하기" type="submit" disabled={!isValid || isSaving} />
       </S.Footer>
       {cropSourceUrl && (
         <ImageCropper imageUrl={cropSourceUrl} onSave={handleCropSave} />
