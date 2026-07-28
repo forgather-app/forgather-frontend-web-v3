@@ -15,6 +15,7 @@ const PAGE_LINKS = [
   { label: "로그인 페이지 이동 (임시)", to: "/login" },
   { label: "회원가입 페이지 이동 (임시)", to: "/sign-up" },
   { label: "전시 생성 페이지 이동 (임시)", to: "/create-exhibition" },
+  { label: "작품 추가하기 페이지 이동 (임시)", to: "/create-product" },
   { label: "방명록 목록 페이지 이동 (임시)", to: "/new-guestbooks" },
   {
     label: "방명록 개별 페이지 이동 (임시)",
