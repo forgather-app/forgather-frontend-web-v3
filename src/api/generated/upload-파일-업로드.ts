@@ -317,6 +317,104 @@ export const useIssueGuestbookPreSignedUrls = <TError = unknown,
       return useMutation(getIssueGuestbookPreSignedUrlsMutationOptions(options), queryClient);
     }
     /**
+ * 로그인한 호스트가 자신의 프로필 사진 업로드용 presigned URL을 발급받습니다. 프로필 사진은 한 장만 발급할 수 있습니다.
+
+── 발급된 presigned URL 사용 시 주의사항 ──
+업로드 파일은 이미지만 허용됩니다. (확장자: webp)
+
+1. Content-Type 고정
+   각 URL에는 파일 확장자로부터 결정된 Content-Type이 서명에 포함됩니다.
+   PUT 요청 시 동일한 Content-Type 헤더를 보내야 합니다.
+   (webp → image/webp)
+
+2. Content-Length 고정
+   각 URL에는 요청 시 보낸 size(바이트)가 서명에 포함됩니다.
+   PUT 요청 본문은 정확히 그 바이트 수여야 합니다. (파일당 최대 20MB)
+
+3. Content-Type 또는 크기가 일치하지 않으면 S3가 403(SignatureDoesNotMatch)을 반환합니다.
+
+ * @summary 프로필 사진 업로드 URL 발급
+ */
+export type issueHostProfileSignedUrlsResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type issueHostProfileSignedUrlsResponseSuccess = (issueHostProfileSignedUrlsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type issueHostProfileSignedUrlsResponse = (issueHostProfileSignedUrlsResponseSuccess)
+
+export const getIssueHostProfileSignedUrlsUrl = () => {
+
+
+  
+
+  return `/hosts/me/profile/upload/signed-urls`
+}
+
+export const issueHostProfileSignedUrls = async (issuePreSignedUrlRequest: IssuePreSignedUrlRequest, options?: RequestInit): Promise<issueHostProfileSignedUrlsResponse> => {
+  
+  return customFetcher<issueHostProfileSignedUrlsResponse>(getIssueHostProfileSignedUrlsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      issuePreSignedUrlRequest,)
+  }
+);}
+  
+
+
+
+export const getIssueHostProfileSignedUrlsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueHostProfileSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof issueHostProfileSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext> => {
+
+const mutationKey = ['issueHostProfileSignedUrls'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof issueHostProfileSignedUrls>>, {data: IssuePreSignedUrlRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  issueHostProfileSignedUrls(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type IssueHostProfileSignedUrlsMutationResult = NonNullable<Awaited<ReturnType<typeof issueHostProfileSignedUrls>>>
+    export type IssueHostProfileSignedUrlsMutationBody = IssuePreSignedUrlRequest
+    export type IssueHostProfileSignedUrlsMutationError = unknown
+
+    /**
+ * @summary 프로필 사진 업로드 URL 발급
+ */
+export const useIssueHostProfileSignedUrls = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueHostProfileSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof issueHostProfileSignedUrls>>,
+        TError,
+        {data: IssuePreSignedUrlRequest},
+        TContext
+      > => {
+      return useMutation(getIssueHostProfileSignedUrlsMutationOptions(options), queryClient);
+    }
+    /**
  * 로그인한 호스트가 전시 사진 업로드용 presigned URL을 발급받습니다.
 
 ── 발급된 presigned URL 사용 시 주의사항 ──
