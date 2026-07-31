@@ -1,0 +1,87 @@
+import IcPerson from "@/assets/icons/ic_person.svg?react";
+import Button from "@/components/@common/Button/Button";
+import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
+import CurrentSpaceSection from "./components/currentSpaceSection/CurrentSpaceSection";
+import HomeCtaBanner from "./components/homeCtaBanner/HomeCtaBanner";
+import HomeEmptyView from "./components/homeEmptyView/HomeEmptyView";
+import * as S from "./HomePage.styles";
+import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
+
+const HomePage = () => {
+  const spaces = MOCK_SPACES;
+  const currentSpace = MOCK_CURRENT_SPACES[0];
+  const isEmpty = spaces.length === 0 && !currentSpace;
+
+  return (
+    <S.HomePageContainer>
+      <S.PageWrapper>
+        <S.Header>
+          <S.UserProfile>
+            <S.UserAvatar aria-hidden />
+            <S.UserName>김여름</S.UserName>
+          </S.UserProfile>
+          <S.HeaderActions>
+            {/* TODO: 마이페이지 라우트 연결 필요 */}
+            <S.IconButton type="button" aria-label="마이페이지">
+              <IcPerson width={24} height={24} aria-hidden />
+            </S.IconButton>
+            {/* TODO: 스페이스 만들기 라우트 연결 필요 */}
+            <S.IconButton type="button" aria-label="스페이스 만들기">
+              <S.PlusIcon width={24} height={24} aria-hidden />
+            </S.IconButton>
+          </S.HeaderActions>
+        </S.Header>
+
+        <S.ContentWrapper>
+          {isEmpty ? (
+            <HomeEmptyView />
+          ) : (
+            <>
+              {currentSpace ? (
+                <CurrentSpaceSection
+                  spaceName={currentSpace.spaceName}
+                  thumbnailUrl={currentSpace.thumbnailUrl}
+                  newGuestBookCount={currentSpace.newGuestBookCount}
+                />
+              ) : (
+                /* TODO: 스페이스 추가 플로우 연결 필요 */
+                <HomeCtaBanner />
+              )}
+
+              <S.MySpaceSection $topGap={currentSpace ? 32 : 24}>
+                <S.SectionTitle>나의 스페이스</S.SectionTitle>
+                <S.ListHeader>
+                  <S.SpaceCountGroup>
+                    <S.SpaceCount>{spaces.length}개</S.SpaceCount>
+                    <S.SpaceCountText>의 스페이스</S.SpaceCountText>
+                  </S.SpaceCountGroup>
+                  <S.SortLabel>최신 순</S.SortLabel>
+                </S.ListHeader>
+                <S.SpaceList>
+                  {spaces.map((space) => (
+                    <SpaceCard
+                      key={space.id}
+                      title={space.title}
+                      guestBookCount={space.guestBookCount}
+                      thumbnailUrl={space.thumbnailUrl}
+                      onClick={() => {}}
+                    />
+                  ))}
+                </S.SpaceList>
+              </S.MySpaceSection>
+            </>
+          )}
+        </S.ContentWrapper>
+      </S.PageWrapper>
+
+      {isEmpty && (
+        <S.BottomCta>
+          {/* TODO: 스페이스 만들기 라우트 연결 필요 */}
+          <Button variant="primary" text="스페이스 만들기" />
+        </S.BottomCta>
+      )}
+    </S.HomePageContainer>
+  );
+};
+
+export default HomePage;

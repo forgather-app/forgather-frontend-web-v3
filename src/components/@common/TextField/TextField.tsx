@@ -94,6 +94,27 @@ const TextField = ({
       } as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const inputElement = (
+    <S.Input
+      {...rest}
+      $variant={variant}
+      type={variant === "search" ? "search" : "text"}
+      value={value}
+      placeholder={placeholder ?? DEFAULT_PLACEHOLDER[variant]}
+      onChange={onChange}
+      onFocus={(e) => {
+        setIsFocused(true);
+        onFocus?.(e);
+      }}
+      onBlur={(e) => {
+        setIsFocused(false);
+        onBlur?.(e);
+      }}
+      aria-invalid={hasError || undefined}
+      aria-describedby={hasError ? errorId : undefined}
+    />
+  );
+
   return (
     <S.Wrapper>
       <S.FieldRow $styleVariant={styleVariant}>
@@ -145,11 +166,34 @@ const TextField = ({
               {graphemeCount} / {maxCount}자
             </S.Counter>
             {hasError && (
-              <S.ErrorMessage id={errorId} role="alert">
+              <S.ErrorMessage id={errorId} role="alert" $align="right">
                 {errorMessage}
               </S.ErrorMessage>
             )}
-          </S.CounterBox>
+          </>
+        ) : (
+          <>
+            {variant === "search" && (
+              <SearchIcon aria-hidden width={20} height={20} />
+            )}
+            {variant === "link" && (
+              <LinkIcon aria-hidden width={16} height={16} />
+            )}
+            {variant === "category" && (
+              <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
+            )}
+            {inputElement}
+            {showClear && (
+              <S.ClearButton
+                type="button"
+                aria-label="입력 내용 지우기"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={handleClear}
+              >
+                <ClearIcon aria-hidden width={20} height={20} />
+              </S.ClearButton>
+            )}
+          </>
         )}
       </S.FieldRow>
       {variant === "link" && hasError && (
