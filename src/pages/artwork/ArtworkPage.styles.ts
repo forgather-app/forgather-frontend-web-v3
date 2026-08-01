@@ -88,7 +88,7 @@ export const AddButton = styled.button`
   flex-shrink: 0;
   width: 40px;
   height: 40px;
-  color: ${({ theme }) => theme.colors.gray.white};
+  color: ${({ theme }) => theme.colors.gray.gray400};
 `;
 
 export const CarouselWrapper = styled.div`
