@@ -14,6 +14,10 @@ export const ScrollArea = styled.div`
   min-height: 0;
   overflow-y: auto;
   padding: 24px 0 40px;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const SlideContent = styled.div`
