@@ -8,9 +8,18 @@ interface SwiperActionProps {
   swiperElement: React.ReactNode[];
   /** 슬라이드 양옆에 보이게 할 여유 공간 비율(요소 너비 대비) */
   sidePeekRatio?: number;
+  /** 외부에서 현재 인덱스를 제어하고 싶을 때 전달 (예: 라우트 파라미터와 동기화) */
+  activeIndex?: number;
+  /** 드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다 */
+  onIndexChange?: (index: number) => void;
 }
 
-const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
+const SwiperAction = ({
+  swiperElement,
+  sidePeekRatio,
+  activeIndex,
+  onIndexChange,
+}: SwiperActionProps) => {
   const springPreset: Transition = {
     type: "spring",
     stiffness: 450,
@@ -48,7 +57,7 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
       threshold.current = Math.floor(
         (containerWidthRef.current - 2 * padding) / STANDARD,
       );
-      x.set(calculateLocation(0));
+      x.set(calculateLocation(activeIndex ?? 0));
     };
     updateLayout();
 
@@ -56,8 +65,21 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
     return () => window.removeEventListener("resize", updateLayout);
   }, []);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(activeIndex ?? 0);
   const [styleGap, setStyleGap] = useState(0);
+
+  // activeIndex(제어 모드)가 외부에서(예: 헤더의 이전/다음 버튼) 바뀌면 동일한 위치로 스냅합니다.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: currentIndex는 내부 변경 여부 비교용으로만 사용
+  useEffect(() => {
+    if (activeIndex === undefined || activeIndex === currentIndex) return;
+    setCurrentIndex(activeIndex);
+    animate(x, calculateLocation(activeIndex), springPreset);
+  }, [activeIndex]);
+
+  const changeIndex = (index: number) => {
+    setCurrentIndex(index);
+    onIndexChange?.(index);
+  };
 
   const calculateLocation = (index: number) => {
     const slice = sidePeekRatio ? elementWidthRef.current * sidePeekRatio : 0;
@@ -82,13 +104,13 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
 
     if (ableToMoveLeft && currentIndex < swiperElement.length - 1) {
       const nextIndex = currentIndex + 1;
-      setCurrentIndex(nextIndex);
+      changeIndex(nextIndex);
       animate(x, calculateLocation(nextIndex), springPreset);
       return;
     }
     if (ableToMoveRight && currentIndex > 0) {
       const nextIndex = currentIndex - 1;
-      setCurrentIndex(nextIndex);
+      changeIndex(nextIndex);
       animate(x, calculateLocation(nextIndex), springPreset);
       return;
     }
@@ -98,14 +120,14 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
   const moveToRight = () => {
     const next = currentIndex + 1;
     if (next >= swiperElement.length) return;
-    setCurrentIndex(next);
+    changeIndex(next);
     updateLocation(next);
   };
 
   const moveToLeft = () => {
     const prev = currentIndex - 1;
     if (prev < 0) return;
-    setCurrentIndex(prev);
+    changeIndex(prev);
     updateLocation(prev);
   };
 
