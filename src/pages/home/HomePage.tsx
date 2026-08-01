@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import IcPerson from "@/assets/icons/ic_person.svg?react";
 import Button from "@/components/@common/Button/Button";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
@@ -8,6 +9,7 @@ import * as S from "./HomePage.styles";
 import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const spaces = MOCK_SPACES;
   const currentSpace = MOCK_CURRENT_SPACES[0];
   const isEmpty = spaces.length === 0 && !currentSpace;
@@ -31,6 +33,18 @@ const HomePage = () => {
             </S.IconButton>
           </S.HeaderActions>
         </S.Header>
+
+        {/* TODO: 방명록 상세 페이지 확인용 임시 진입점 — 실제 카드 클릭 진입 플로우 연동 후 제거 */}
+        <Button
+          variant="underlined"
+          text="방명록 상세 보기 (dev)"
+          onClick={() =>
+            navigate({
+              to: "/new-guestbook/$guestbookId",
+              params: { guestbookId: "2" },
+            })
+          }
+        />
 
         <S.ContentWrapper>
           {isEmpty ? (
