@@ -6,7 +6,7 @@ export const Wrapper = styled.div`
   flex: 1;
   min-height: 0;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
-  width: 100%;
+  padding: 0 16px;
 `;
 
 export const ScrollArea = styled.div`
