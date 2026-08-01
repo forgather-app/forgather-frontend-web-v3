@@ -24,3 +24,8 @@ export const cardFlip = keyframes`
   from { transform: rotateY(0deg); }
   to { transform: rotateY(180deg); }
 `;
+
+export const subtleFloat = keyframes`
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.015); }
+`;

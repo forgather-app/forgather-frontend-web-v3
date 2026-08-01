@@ -61,7 +61,7 @@ const GuestBookPage = ({
 
       {hasNewCards && (
         <S.GuestCardWrapper>
-          <GuestListStack onClick={onNewStackClick} />
+          <GuestListStack count={unreadCount} onClick={onNewStackClick} />
         </S.GuestCardWrapper>
       )}
 
