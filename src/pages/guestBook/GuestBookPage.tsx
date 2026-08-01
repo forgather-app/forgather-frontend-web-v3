@@ -1,3 +1,9 @@
+import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
+import type {
+  ApiResponseGuestBookResponse,
+  GuestBookCardSimpleResponse,
+  GuestBookResponse,
+} from "@/api/model";
 import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import GuestList from "@/components/@common/GuestList/GuestList";
@@ -16,108 +22,29 @@ interface GuestBookPageProps {
   onNewStackClick: () => void;
 }
 
-const DUMMY_CARDS = [
-  {
-    id: 1,
-    isNew: true,
-    author: "김이름",
-    text: "졸업 전시 축하해요!",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 12, 14, 30),
-  },
-  {
-    id: 2,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 11, 10, 15),
-  },
-  {
-    id: 3,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    createdAt: new Date(2024, 4, 10, 9, 0),
-  },
-  {
-    id: 4,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 9, 18, 45),
-  },
-  {
-    id: 5,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    createdAt: new Date(2024, 4, 8, 13, 20),
-  },
-  {
-    id: 6,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 7, 11, 5),
-  },
-  {
-    id: 7,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 6, 16, 40),
-  },
-  {
-    id: 8,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    createdAt: new Date(2024, 4, 5, 20, 10),
-  },
-  {
-    id: 9,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 4, 8, 55),
-  },
-  {
-    id: 10,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    createdAt: new Date(2024, 4, 3, 19, 30),
-  },
-  {
-    id: 11,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    createdAt: new Date(2024, 4, 2, 12, 0),
-  },
-];
-
 const GuestBookPage = ({
+  spaceId,
   onBack,
   onCardClick,
   onNewStackClick,
 }: GuestBookPageProps) => {
-  const newCards = DUMMY_CARDS.filter((card) => card.isNew);
-  const hasNewCards = newCards.length > 0;
-  const regularCards = DUMMY_CARDS.filter((card) => !card.isNew);
+  const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
+    spaceId,
+    {
+      query: {
+        select: (response) =>
+          // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
+      },
+    },
+  );
 
-  // TODO: API 응답으로 대체 필요
-  const totalCount = regularCards.length;
+  const guestBookCards = (guestBook.guestBookCards ?? []).filter(
+    (card): card is GuestBookCardSimpleResponse & { id: number } =>
+      card.id !== undefined,
+  );
+  const hasNewCards = (guestBook.unreadCount ?? 0) > 0;
+  const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
   return (
     <S.ScrollArea>
@@ -135,13 +62,12 @@ const GuestBookPage = ({
       )}
 
       <S.GuestListContainer>
-        {regularCards.map((card) => (
+        {guestBookCards.map((card) => (
           <GuestList
             key={card.id}
-            nickname={card.author}
-            message={card.text}
-            createdAt={card.createdAt}
-            hasPhoto={card.isPhotoExist}
+            nickname={card.nickname ?? ""}
+            // TODO: 목록 API(GuestBookCardSimpleResponse)에 message/createdAt이 없어 상세 API 스펙 보완 전까지 비워둠
+            hasPhoto={card.containsPhoto}
             onClick={() => onCardClick(card.id)}
           />
         ))}
