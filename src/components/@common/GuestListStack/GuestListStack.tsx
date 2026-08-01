@@ -12,36 +12,41 @@ interface GuestListStackProps {
 // 뒤쪽(깊은) 레이어부터 나열 — 렌더 순서대로 쌓여 앞쪽 레이어와 Container가 위에 겹침
 const PEEK_DEPTHS: S.PeekDepth[] = [2, 1];
 
-const GuestListStack = ({ count = 1, onClick }: GuestListStackProps) => {
+interface PeekLayerProps {
+  depth: S.PeekDepth;
+}
+
+const PeekLayer = ({ depth }: PeekLayerProps) => {
   const prefersReducedMotion = useReducedMotion();
-  const peekLayerCount = Math.min(Math.max(count - 1, 0), PEEK_DEPTHS.length);
-  const peekDepths = PEEK_DEPTHS.slice(PEEK_DEPTHS.length - peekLayerCount);
+  const { top, rotate } = S.peekLayerVariants[depth];
+
+  return (
+    <S.PeekLayer
+      $depth={depth}
+      aria-hidden
+      style={{ top, rotate, transformOrigin: "bottom center" }}
+      animate={
+        prefersReducedMotion
+          ? undefined
+          : { y: [0, -3, 0], scale: [1, 1.015, 1] }
+      }
+      transition={{
+        duration: 3 + depth,
+        delay: depth * 0.4,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    />
+  );
+};
+
+const GuestListStack = ({ count = 1, onClick }: GuestListStackProps) => {
+  const showPeekLayers = count >= 2;
 
   return (
     <S.Wrapper>
-      {peekDepths.map((depth) => {
-        const { top, rotate } = S.peekLayerVariants[depth];
-
-        return (
-          <S.PeekLayer
-            key={depth}
-            $depth={depth}
-            aria-hidden
-            style={{ top, rotate, transformOrigin: "bottom center" }}
-            animate={
-              prefersReducedMotion
-                ? undefined
-                : { y: [0, -3, 0], scale: [1, 1.015, 1] }
-            }
-            transition={{
-              duration: 3 + depth,
-              delay: depth * 0.4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        );
-      })}
+      {showPeekLayers &&
+        PEEK_DEPTHS.map((depth) => <PeekLayer key={depth} depth={depth} />)}
       <S.Container
         type="button"
         onClick={onClick}

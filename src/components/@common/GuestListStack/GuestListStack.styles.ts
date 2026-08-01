@@ -36,6 +36,8 @@ export const PeekLayer = styled(motion.div, { shouldForwardProp })<{
   height: 120px;
   border-radius: 8px;
   background: ${({ $depth }) => peekLayerVariants[$depth].gradient};
+  /* semantic.black(#111111) 75% opacity */
+  box-shadow: 0px 0px 12px 0px rgba(17, 17, 17, 0.75);
 `;
 
 export const Container = styled.button`
