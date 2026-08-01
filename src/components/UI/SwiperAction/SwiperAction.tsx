@@ -148,9 +148,9 @@ const SwiperAction = ({ swiperElement }: SwiperActionProps) => {
     >
       {currentIndex !== 0 && (
         <VisuallyHidden
+          type="button"
           tabIndex={0}
           aria-label="이전으로 이동"
-          aria-hidden={currentIndex === 0}
           onClick={moveToLeft}
         />
       )}
@@ -166,6 +166,7 @@ const SwiperAction = ({ swiperElement }: SwiperActionProps) => {
               }
             }}
             aria-hidden={currentIndex !== index}
+            inert={currentIndex !== index}
           >
             {element}
           </S.Slide>
@@ -173,9 +174,9 @@ const SwiperAction = ({ swiperElement }: SwiperActionProps) => {
       </S.Track>
       {currentIndex !== swiperElement.length - 1 && (
         <VisuallyHidden
+          type="button"
           tabIndex={0}
           aria-label="다음으로 이동"
-          aria-hidden={currentIndex === swiperElement.length - 1}
           onClick={moveToRight}
         />
       )}
