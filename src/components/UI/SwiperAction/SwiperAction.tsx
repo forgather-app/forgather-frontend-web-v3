@@ -1,5 +1,5 @@
 import { animate, type Transition, useMotionValue } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { VisuallyHidden } from "@/styles/@common/VisuallyHidden/VisuallyHidden.styles";
 import * as S from "./SwiperAction.styles";
 
@@ -67,6 +67,17 @@ const SwiperAction = ({
 
   const [currentIndex, setCurrentIndex] = useState(activeIndex ?? 0);
   const [styleGap, setStyleGap] = useState(0);
+  const [trackHeight, setTrackHeight] = useState<number>();
+
+  // 트랙은 모든 슬라이드를 한 줄에 렌더링하므로(드래그를 위해 필요),
+  // 아무 처리도 하지 않으면 컨테이너 높이가 가장 높은 슬라이드에 맞춰집니다.
+  // 현재 보이는 슬라이드의 실제 높이로만 맞추기 위해 매번 다시 측정합니다.
+  useLayoutEffect(() => {
+    const activeSlide = trackRef.current?.children[currentIndex];
+    if (activeSlide instanceof HTMLElement) {
+      setTrackHeight(activeSlide.scrollHeight);
+    }
+  });
 
   // activeIndex(제어 모드)가 외부에서(예: 헤더의 이전/다음 버튼) 바뀌면 동일한 위치로 스냅합니다.
   // biome-ignore lint/correctness/useExhaustiveDependencies: currentIndex는 내부 변경 여부 비교용으로만 사용
@@ -199,7 +210,7 @@ const SwiperAction = ({
           onClick={moveToLeft}
         />
       )}
-      <S.Track ref={trackRef} style={{ x, gap: styleGap }}>
+      <S.Track ref={trackRef} style={{ x, gap: styleGap, height: trackHeight }}>
         {swiperElement.map((element, index) => (
           <S.Slide
             // biome-ignore lint/suspicious/noArrayIndexKey: 현재로썬 index만 사용 가능함
