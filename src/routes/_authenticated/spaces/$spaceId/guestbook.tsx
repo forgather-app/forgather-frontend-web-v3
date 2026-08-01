@@ -16,8 +16,6 @@ function RouteComponent() {
     <Suspense fallback={null}>
       <GuestBookPage
         spaceId={spaceId}
-        onBack={() => navigate({ to: ".." })}
-        onArtworkTabClick={() => navigate({ to: ".." })}
         onCardClick={(guestbookId) =>
           navigate({
             to: "/new-guestbook/$guestbookId",

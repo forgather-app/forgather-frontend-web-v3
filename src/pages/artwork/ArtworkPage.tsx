@@ -1,8 +1,6 @@
+import { useState } from "react";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
-import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
-import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
-import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import * as S from "./ArtworkPage.styles";
@@ -14,10 +12,6 @@ interface Artwork {
 }
 
 interface ArtworkPageProps {
-  /** 뒤로가기 핸들러 */
-  onBack: () => void;
-  /** 방명록 탭 클릭 핸들러 */
-  onGuestBookTabClick: () => void;
   /** 전시 정보 수정 버튼 클릭 핸들러 */
   onEditClick?: () => void;
   /** 작품 추가 버튼 클릭 핸들러 */
@@ -43,12 +37,12 @@ const DUMMY_ARTWORKS: Artwork[] = [
 ];
 
 const ArtworkPage = ({
-  onBack,
-  onGuestBookTabClick,
   onEditClick = () => {},
   onAddArtworkClick = () => {},
   onArtworkClick = () => {},
 }: ArtworkPageProps) => {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+
   return (
     <S.ScrollArea>
       <S.TitleRow>
@@ -62,9 +56,16 @@ const ArtworkPage = ({
         </S.EditButton>
       </S.TitleRow>
 
-      <S.DescriptionRow>
-        <S.Description>{DUMMY_EXHIBITION.description}</S.Description>
-        <S.MoreButton type="button">더보기</S.MoreButton>
+      <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
+        <S.Description $isExpanded={isDescriptionExpanded}>
+          {DUMMY_EXHIBITION.description}
+        </S.Description>
+        <S.MoreButton
+          type="button"
+          onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+        >
+          {isDescriptionExpanded ? "접기" : "더보기"}
+        </S.MoreButton>
       </S.DescriptionRow>
 
       <S.Divider />
@@ -94,28 +95,6 @@ const ArtworkPage = ({
       </S.CarouselWrapper>
 
       <S.BottomSpacer />
-      <S.BottomBar>
-        <S.FloatingIconButton
-          type="button"
-          aria-label="뒤로 가기"
-          onClick={onBack}
-        >
-          <IcLeftArrow width={24} height={24} />
-        </S.FloatingIconButton>
-        <TabMenu
-          variant="pill"
-          activeTab="left"
-          left={{ text: "작품", onClick: () => {} }}
-          right={{ text: "방명록", onClick: onGuestBookTabClick }}
-        />
-        <S.FloatingIconButton
-          type="button"
-          aria-label="링크 공유"
-          onClick={() => {}}
-        >
-          <IcLink width={24} height={24} />
-        </S.FloatingIconButton>
-      </S.BottomBar>
     </S.ScrollArea>
   );
 };

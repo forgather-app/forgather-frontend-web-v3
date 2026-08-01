@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const ScrollArea = styled.div`
   flex: 1;
@@ -38,22 +39,28 @@ export const EditButton = styled.button`
   color: ${({ theme }) => theme.colors.gray.white};
 `;
 
-export const DescriptionRow = styled.div`
+export const DescriptionRow = styled("div", { shouldForwardProp })<{
+  $isExpanded: boolean;
+}>`
   display: flex;
+  flex-direction: ${({ $isExpanded }) => ($isExpanded ? "column" : "row")};
   align-items: flex-end;
   gap: 4px;
   margin-top: 16px;
 `;
 
-export const Description = styled.p`
+export const Description = styled("p", { shouldForwardProp })<{
+  $isExpanded: boolean;
+}>`
   flex: 1;
+  width: 100%;
   min-width: 0;
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: ${({ $isExpanded }) => ($isExpanded ? "unset" : 2)};
   -webkit-box-orient: vertical;
 `;
 
@@ -92,6 +99,7 @@ export const AddButton = styled.button`
 `;
 
 export const CarouselWrapper = styled.div`
+  width: fit-content;
   margin-top: 16px;
 `;
 
@@ -106,38 +114,4 @@ export const BottomSpacer = styled.div`
     ${({ theme }) => theme.colors.gray.gray700} 50%
   );
   pointer-events: none;
-`;
-
-export const BottomBar = styled.div`
-  position: fixed;
-  bottom: 34px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: ${({ theme }) => theme.layout.maxWidth};
-  padding: 0 24px;
-  z-index: ${({ theme }) => theme.layout.zIndex.bottomSheet};
-`;
-
-export const FloatingIconButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 999px;
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
-  box-shadow: 0px 0px 20px 0px rgba(17, 17, 17, 0.75);
-  color: ${({ theme }) => theme.colors.gray.gray200};
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: 2px solid ${({ theme }) => theme.colors.main.purple};
-    outline-offset: 2px;
-  }
 `;
