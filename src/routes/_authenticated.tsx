@@ -1,6 +1,7 @@
 import {
   createFileRoute,
   Outlet,
+  useLocation,
   useMatches,
   useNavigate,
 } from "@tanstack/react-router";
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { showSnackBar } = useSnackBar();
   const accessToken = getAccessToken();
   const isSignUpRoute = useMatches().some(
@@ -32,13 +34,13 @@ function AuthenticatedLayout() {
 
   useEffect(() => {
     if (!accessToken) {
-      navigate({ to: "/login" });
+      navigate({ to: "/login", search: { redirectTo: location.href } });
       return;
     }
     if (isSignUpRoute) return;
     if (isError) {
       showSnackBar("세션이 만료되었어요. 다시 로그인해주세요.", "error");
-      navigate({ to: "/login" });
+      navigate({ to: "/login", search: { redirectTo: location.href } });
       return;
     }
     if (!isPending && !onboardingCompleted) {
@@ -52,6 +54,7 @@ function AuthenticatedLayout() {
     isSignUpRoute,
     navigate,
     showSnackBar,
+    location.href,
   ]);
 
   const isAuthorized =

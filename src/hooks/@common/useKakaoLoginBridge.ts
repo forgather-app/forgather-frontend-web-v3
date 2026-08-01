@@ -16,7 +16,7 @@ interface KakaoTokenMessage {
   };
 }
 
-const useKakaoLoginBridge = () => {
+const useKakaoLoginBridge = (redirectTo?: string) => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
@@ -39,7 +39,7 @@ const useKakaoLoginBridge = () => {
               (response as unknown as ApiResponseLoginResponse).data ?? {};
             setAuthTokens(accessToken, refreshToken);
             showSnackBar("로그인 완료", "alert");
-            navigate({ to: "/" });
+            navigate({ href: redirectTo ?? "/" });
           },
           onError: () => {
             showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");
@@ -48,7 +48,7 @@ const useKakaoLoginBridge = () => {
         },
       );
     },
-    [confirmLogin, navigate, showSnackBar],
+    [confirmLogin, navigate, showSnackBar, redirectTo],
   );
 
   useEffect(() => {
@@ -92,7 +92,7 @@ const useKakaoLoginBridge = () => {
         );
         setAuthTokens(accessToken, refreshToken ?? undefined);
         showSnackBar("로그인 완료", "alert");
-        navigate({ to: "/" });
+        navigate({ href: redirectTo ?? "/" });
         return;
       }
 

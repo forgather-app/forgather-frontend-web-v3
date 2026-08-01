@@ -1,3 +1,4 @@
+import { getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 import AppleLogo from "@/assets/icons/ic_apple.svg?react";
 import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
@@ -10,8 +11,11 @@ import OnboardingIllustration2 from "./illustrations/OnboardingIllustration2";
 import * as S from "./LoginPage.styles";
 import OnboardingSlide from "./slides/OnboardingSlide";
 
+const routeApi = getRouteApi("/login/");
+
 const LoginPage = () => {
-  const { requestKakaoLogin, isRequesting } = useKakaoLoginBridge();
+  const { redirectTo } = routeApi.useSearch();
+  const { requestKakaoLogin, isRequesting } = useKakaoLoginBridge(redirectTo);
   const [isDevLoginOpen, setIsDevLoginOpen] = useState(false);
 
   return (
@@ -44,6 +48,7 @@ const LoginPage = () => {
           <DevLoginModal
             isOpen={isDevLoginOpen}
             onClose={() => setIsDevLoginOpen(false)}
+            redirectTo={redirectTo}
           />
         </S.FooterWrapper>
       }
