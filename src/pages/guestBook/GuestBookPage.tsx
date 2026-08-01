@@ -43,23 +43,9 @@ const GuestBookPage = ({
     (card): card is GuestBookCardSimpleResponse & { id: number } =>
       card.id !== undefined,
   );
-  const hasNewCards = (guestBook.unreadCount ?? 0) > 0;
+  // TODO: 응답의 unreadCount 필드가 항상 undefined로 내려와 카드별 isRead로 직접 계산 — 백엔드 필드 보완 후 guestBook.unreadCount로 되돌릴 것
+  const hasNewCards = guestBookCards.some((card) => card.isRead === false);
   const totalCount = guestBook.totalCount ?? guestBookCards.length;
-
-  // TODO: 디버깅용 - unreadCount 확인 후 제거
-  const computedUnreadCount = guestBookCards.reduce(
-    (count, card) => count + (card.isRead === false ? 1 : 0),
-    0,
-  );
-  console.log("[GuestBookPage] unreadCount 확인", {
-    apiUnreadCount: guestBook.unreadCount,
-    computedUnreadCount,
-    cards: guestBookCards.map((card) => ({
-      id: card.id,
-      nickname: card.nickname,
-      isRead: card.isRead,
-    })),
-  });
 
   return (
     <S.ScrollArea>
