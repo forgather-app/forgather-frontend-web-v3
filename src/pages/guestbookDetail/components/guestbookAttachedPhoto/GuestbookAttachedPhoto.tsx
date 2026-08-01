@@ -8,18 +8,21 @@ export interface GuestbookAttachedPhotoProps {
   currentIndex: number;
   /** 첨부된 전체 사진 개수 */
   totalCount: number;
+  /** 클릭 시 호출되는 콜백. 전체 이미지 라이트박스를 여는 용도로 사용합니다. */
+  onClick: () => void;
 }
 
 const GuestbookAttachedPhoto = ({
   imageUrl,
   currentIndex,
   totalCount,
+  onClick,
 }: GuestbookAttachedPhotoProps) => {
   const [imageError, setImageError] = useState(false);
   const showImage = Boolean(imageUrl) && !imageError;
 
   return (
-    <S.Frame>
+    <S.Frame type="button" onClick={onClick} aria-label="첨부 이미지 전체보기">
       {showImage ? (
         <S.Thumbnail
           src={imageUrl}
