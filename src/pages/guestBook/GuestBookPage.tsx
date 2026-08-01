@@ -1,4 +1,3 @@
-import { withApiVersion } from "@/api/apiVersion";
 import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
   ApiResponseGuestBookResponse,
@@ -37,7 +36,6 @@ const GuestBookPage = ({
           // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
           (response as unknown as ApiResponseGuestBookResponse).data ?? {},
       },
-      request: withApiVersion(2),
     },
   );
 
@@ -45,7 +43,11 @@ const GuestBookPage = ({
     (card): card is GuestBookCardSimpleResponse & { id: number } =>
       card.id !== undefined,
   );
-  const hasNewCards = (guestBook.unreadCount ?? 0) > 0;
+  const unreadCount = guestBookCards.reduce(
+    (count, card) => count + (card.isRead === false ? 1 : 0),
+    0,
+  );
+  const hasNewCards = unreadCount > 0;
   const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
   return (
