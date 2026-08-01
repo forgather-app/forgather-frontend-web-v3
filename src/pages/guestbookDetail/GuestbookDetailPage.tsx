@@ -1,3 +1,13 @@
+import {
+  useReadCard,
+  useReadGuestBookV2Suspense,
+} from "@/api/generated/spaceguestbook-스페이스-방명록";
+import type {
+  ApiResponseGuestBookCardResponse,
+  ApiResponseGuestBookResponse,
+  GuestBookCardResponse,
+  GuestBookResponse,
+} from "@/api/model";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
@@ -5,31 +15,9 @@ import GuestbookAttachedPhoto from "./components/guestbookAttachedPhoto/Guestboo
 import GuestbookDetailHeader from "./components/guestbookDetailHeader/GuestbookDetailHeader";
 import * as S from "./GuestbookDetailPage.styles";
 
-export interface GuestbookPhotoInfo {
-  /** 첨부 이미지 URL. 더미/미연동 상태에서는 생략됩니다. */
-  imageUrl?: string;
-  /** 현재 사진 순번 (1부터 시작) */
-  currentIndex: number;
-  /** 첨부된 전체 사진 개수 */
-  totalCount: number;
-}
-
-export interface GuestbookCardDetail {
-  /** 방명록 카드 ID */
-  id: number;
-  /** 방명록 작성자 닉네임 */
-  nickname: string;
-  /** 방명록 작성 일시 */
-  createdAt: Date;
-  /** 방명록 본문 메시지 */
-  message: string;
-  /** 첨부 사진 정보. 없으면 사진 미첨부 카드입니다. */
-  photo?: GuestbookPhotoInfo;
-}
-
 interface GuestbookDetailPageProps {
-  /** 이전/다음 이동 대상이 되는 방명록 카드 목록 */
-  cards: GuestbookCardDetail[];
+  /** 스페이스 ID */
+  spaceId: string;
   /** 현재 보고 있는 카드 ID */
   currentId: number;
   /** 뒤로가기 핸들러 */
@@ -38,21 +26,61 @@ interface GuestbookDetailPageProps {
   onNavigate: (id: number) => void;
 }
 
+/** 카드 상세(메시지·사진)는 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다 */
+const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
+  useReadCard<GuestBookCardResponse>(spaceId, cardId ?? -1, {
+    query: {
+      enabled: cardId !== undefined,
+      select: (response) =>
+        // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+        (response as unknown as ApiResponseGuestBookCardResponse).data ?? {},
+    },
+  });
+
 const GuestbookDetailPage = ({
-  cards,
+  spaceId,
   currentId,
   onBack,
   onNavigate,
 }: GuestbookDetailPageProps) => {
-  const currentIndex = Math.max(
-    cards.findIndex((card) => card.id === currentId),
-    0,
+  const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
+    spaceId,
+    {
+      query: {
+        select: (response) =>
+          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
+      },
+    },
   );
-  const currentCard = cards[currentIndex];
-  const prevCard = cards[currentIndex - 1];
-  const nextCard = cards[currentIndex + 1];
 
-  if (!currentCard) return null;
+  const cards = guestBook.guestBookCards ?? [];
+  const cardIds = cards
+    .map((card) => card.id)
+    .filter((id): id is number => id !== undefined);
+
+  const currentIndex = Math.max(cardIds.indexOf(currentId), 0);
+  const currentCardId = cardIds[currentIndex];
+  const prevId = cardIds[currentIndex - 1];
+  const nextId = cardIds[currentIndex + 1];
+
+  const prevQuery = useGuestbookCardDetail(spaceId, prevId);
+  const currentQuery = useGuestbookCardDetail(spaceId, currentCardId);
+  const nextQuery = useGuestbookCardDetail(spaceId, nextId);
+
+  if (currentCardId === undefined) return null;
+
+  const getDetail = (id: number): GuestBookCardResponse | undefined => {
+    if (id === prevId) return prevQuery.data;
+    if (id === currentCardId) return currentQuery.data;
+    if (id === nextId) return nextQuery.data;
+    return undefined;
+  };
+
+  const nickname =
+    cards.find((card) => card.id === currentCardId)?.nickname ?? "";
+  const createdAt = currentQuery.data?.createdAt
+    ? new Date(currentQuery.data.createdAt)
+    : undefined;
 
   return (
     <S.Wrapper>
@@ -64,30 +92,52 @@ const GuestbookDetailPage = ({
         onRightIconClick={() => {}}
       />
       <GuestbookDetailHeader
-        nickname={currentCard.nickname}
-        createdAt={currentCard.createdAt}
-        onPrevClick={prevCard ? () => onNavigate(prevCard.id) : undefined}
-        onNextClick={nextCard ? () => onNavigate(nextCard.id) : undefined}
+        nickname={nickname}
+        createdAt={createdAt}
+        onPrevClick={
+          prevId !== undefined ? () => onNavigate(prevId) : undefined
+        }
+        onNextClick={
+          nextId !== undefined ? () => onNavigate(nextId) : undefined
+        }
       />
       <S.ScrollArea>
         <SwiperAction
           activeIndex={currentIndex}
           onIndexChange={(index) => {
-            const target = cards[index];
-            if (target) onNavigate(target.id);
+            const targetId = cardIds[index];
+            if (targetId !== undefined) onNavigate(targetId);
           }}
-          swiperElement={cards.map((card) => (
-            <S.SlideContent key={card.id}>
-              {card.photo && (
-                <GuestbookAttachedPhoto
-                  imageUrl={card.photo.imageUrl}
-                  currentIndex={card.photo.currentIndex}
-                  totalCount={card.photo.totalCount}
-                />
-              )}
-              <S.Message>{card.message}</S.Message>
-            </S.SlideContent>
-          ))}
+          swiperElement={cardIds.map((id) => {
+            const detail = getDetail(id);
+
+            if (!detail) {
+              const simple = cards.find((card) => card.id === id);
+              return (
+                <S.SlideContent key={id}>
+                  {simple?.containsPhoto && <S.SkeletonPhoto aria-hidden />}
+                  <S.SkeletonLine aria-hidden style={{ width: "100%" }} />
+                  <S.SkeletonLine aria-hidden style={{ width: "90%" }} />
+                  <S.SkeletonLine aria-hidden style={{ width: "60%" }} />
+                </S.SlideContent>
+              );
+            }
+
+            const photos = detail.photos ?? [];
+
+            return (
+              <S.SlideContent key={id}>
+                {photos.length > 0 && (
+                  <GuestbookAttachedPhoto
+                    imageUrl={photos[0]?.path}
+                    currentIndex={1}
+                    totalCount={photos.length}
+                  />
+                )}
+                <S.Message>{detail.message}</S.Message>
+              </S.SlideContent>
+            );
+          })}
         />
       </S.ScrollArea>
     </S.Wrapper>

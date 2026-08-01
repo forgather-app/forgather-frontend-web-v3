@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import GuestBookPage from "@/pages/guestBook/GuestBookPage";
 
 export const Route = createFileRoute(
-  "/_authenticated/spaces/$spaceId/guestbook",
+  "/_authenticated/spaces/$spaceId/guestbook/",
 )({
   component: RouteComponent,
 });
@@ -19,8 +19,8 @@ function RouteComponent() {
         onBack={() => navigate({ to: ".." })}
         onCardClick={(guestbookId) =>
           navigate({
-            to: "/new-guestbook/$guestbookId",
-            params: { guestbookId: String(guestbookId) },
+            to: "/spaces/$spaceId/guestbook/$guestbookId",
+            params: { spaceId, guestbookId: String(guestbookId) },
           })
         }
         onNewStackClick={() => navigate({ to: "/new-guestbooks" })}
