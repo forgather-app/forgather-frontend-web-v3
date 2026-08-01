@@ -1,10 +1,6 @@
 import { css } from "@emotion/react";
 
 export const global = css`
-  :root {
-    /* SwiperAction 이식을 위해 추가. theme.layout.sidePadding(16)과 동일하게 유지 */
-    --layout-padding-x: 16px;
-  }
   * {
     box-sizing: border-box;
     font-family: inherit;
