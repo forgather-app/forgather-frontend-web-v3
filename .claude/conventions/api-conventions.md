@@ -10,7 +10,7 @@ API 연동 작업을 하는 모든 작업에서 이 파일을 참조합니다.
 - `src/api/generated.ts`, `src/api/generated/*.ts`, `src/api/model/`은 Orval이 자동 생성합니다. **직접 수정 금지** — 스펙 변경이 필요하면 `npx orval` 재실행으로 반영합니다.
 - 조회(GET)는 생성된 `useSuspenseQuery` 기반 훅을 그대로 사용합니다.
 - 생성/수정/삭제 등 부수효과가 있는 요청은 생성된 `useMutation` 기반 훅(`useXxx`)을 사용합니다.
-- 인증 토큰 첨부(`Authorization` 헤더)는 `src/api/apiClient.ts`의 요청 인터셉터가 전역으로 처리합니다. 컴포넌트에서 토큰을 직접 다루지 않습니다.
+- accessToken은 로그인 응답 바디로 내려오며 `src/api/authToken.ts`가 메모리에 보관, `apiClient.ts`의 요청 인터셉터가 `Authorization` 헤더로 자동 첨부합니다. refreshToken은 서버가 httpOnly 쿠키로 내려주고 `withCredentials: true`로 자동 전송됩니다. 컴포넌트에서 토큰을 직접 다루지 않습니다.
 - 서버 공통 에러 처리(401 재발급, 403 등)는 `apiClient.ts`의 응답 인터셉터에 아직 구현되어 있지 않습니다(TODO). 그 전까지는 **각 mutation 호출부에서 `onError`로 개별 처리**합니다.
 
 ---
