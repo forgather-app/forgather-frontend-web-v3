@@ -1,3 +1,4 @@
+import { useReducedMotion } from "framer-motion";
 import IcSmallLogo from "@/assets/icons/logos/logo_small.svg?react";
 import * as S from "./GuestListStack.styles";
 
@@ -12,14 +13,35 @@ interface GuestListStackProps {
 const PEEK_DEPTHS: S.PeekDepth[] = [2, 1];
 
 const GuestListStack = ({ count = 1, onClick }: GuestListStackProps) => {
+  const prefersReducedMotion = useReducedMotion();
   const peekLayerCount = Math.min(Math.max(count - 1, 0), PEEK_DEPTHS.length);
   const peekDepths = PEEK_DEPTHS.slice(PEEK_DEPTHS.length - peekLayerCount);
 
   return (
     <S.Wrapper>
-      {peekDepths.map((depth) => (
-        <S.PeekLayer key={depth} $depth={depth} aria-hidden />
-      ))}
+      {peekDepths.map((depth) => {
+        const { top, rotate } = S.peekLayerVariants[depth];
+
+        return (
+          <S.PeekLayer
+            key={depth}
+            $depth={depth}
+            aria-hidden
+            style={{ top, rotate, transformOrigin: "bottom center" }}
+            animate={
+              prefersReducedMotion
+                ? undefined
+                : { y: [0, -3, 0], scale: [1, 1.015, 1] }
+            }
+            transition={{
+              duration: 3 + depth,
+              delay: depth * 0.4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
       <S.Container
         type="button"
         onClick={onClick}
