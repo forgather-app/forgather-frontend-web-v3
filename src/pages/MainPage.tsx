@@ -18,11 +18,6 @@ const PAGE_LINKS = [
   { label: "회원가입 페이지 이동 (임시)", to: "/sign-up" },
   { label: "전시 생성 페이지 이동 (임시)", to: "/create-exhibition" },
   { label: "방명록 목록 페이지 이동 (임시)", to: "/new-guestbooks" },
-  {
-    label: "방명록 개별 페이지 이동 (임시)",
-    to: "/new-guestbook/$guestbookId",
-    params: { guestbookId: "1" },
-  },
 ] as const;
 
 function MainPage() {
