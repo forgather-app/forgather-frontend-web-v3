@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import IcPerson from "@/assets/icons/ic_person.svg?react";
 import Button from "@/components/@common/Button/Button";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
@@ -8,6 +9,7 @@ import * as S from "./HomePage.styles";
 import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const spaces = MOCK_SPACES;
   const currentSpace = MOCK_CURRENT_SPACES[0];
   const isEmpty = spaces.length === 0 && !currentSpace;
@@ -42,6 +44,18 @@ const HomePage = () => {
                   spaceName={currentSpace.spaceName}
                   thumbnailUrl={currentSpace.thumbnailUrl}
                   newGuestBookCount={currentSpace.newGuestBookCount}
+                  onGuestBookClick={() =>
+                    navigate({
+                      to: "/spaces/$spaceId/guestbook",
+                      params: { spaceId: String(currentSpace.id) },
+                    })
+                  }
+                  onArtworkManageClick={() =>
+                    navigate({
+                      to: "/spaces/$spaceId",
+                      params: { spaceId: String(currentSpace.id) },
+                    })
+                  }
                 />
               ) : (
                 /* TODO: 스페이스 추가 플로우 연결 필요 */
@@ -64,7 +78,12 @@ const HomePage = () => {
                       title={space.title}
                       guestBookCount={space.guestBookCount}
                       thumbnailUrl={space.thumbnailUrl}
-                      onClick={() => {}}
+                      onClick={() =>
+                        navigate({
+                          to: "/spaces/$spaceId",
+                          params: { spaceId: String(space.id) },
+                        })
+                      }
                     />
                   ))}
                 </S.SpaceList>

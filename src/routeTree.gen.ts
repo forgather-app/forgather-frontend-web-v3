@@ -20,6 +20,7 @@ import { Route as AuthenticatedCreateExhibitionIndexRouteImport } from './routes
 import { Route as AuthenticatedSignUpCompleteRouteImport } from './routes/_authenticated/sign-up/complete'
 import { Route as AuthenticatedNewGuestbookGuestbookIdRouteImport } from './routes/_authenticated/new-guestbook/$guestbookId'
 import { Route as AuthenticatedMyPageEditRouteImport } from './routes/_authenticated/my-page/edit'
+import { Route as AuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/index'
 import { Route as AuthenticatedSpacesSpaceIdGuestbookRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
@@ -82,6 +83,12 @@ const AuthenticatedMyPageEditRoute = AuthenticatedMyPageEditRouteImport.update({
   path: '/my-page/edit',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSpacesSpaceIdIndexRoute =
+  AuthenticatedSpacesSpaceIdIndexRouteImport.update({
+    id: '/spaces/$spaceId/',
+    path: '/spaces/$spaceId/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSpacesSpaceIdGuestbookRoute =
   AuthenticatedSpacesSpaceIdGuestbookRouteImport.update({
     id: '/spaces/$spaceId/guestbook',
@@ -101,6 +108,7 @@ export interface FileRoutesByFullPath {
   '/my-page/': typeof AuthenticatedMyPageIndexRoute
   '/sign-up/': typeof AuthenticatedSignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  '/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
@@ -114,6 +122,7 @@ export interface FileRoutesByTo {
   '/my-page': typeof AuthenticatedMyPageIndexRoute
   '/sign-up': typeof AuthenticatedSignUpIndexRoute
   '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -129,6 +138,7 @@ export interface FileRoutesById {
   '/_authenticated/my-page/': typeof AuthenticatedMyPageIndexRoute
   '/_authenticated/sign-up/': typeof AuthenticatedSignUpIndexRoute
   '/_authenticated/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  '/_authenticated/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -144,6 +154,7 @@ export interface FileRouteTypes {
     | '/my-page/'
     | '/sign-up/'
     | '/spaces/$spaceId/guestbook'
+    | '/spaces/$spaceId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/new-guestbooks'
@@ -157,6 +168,7 @@ export interface FileRouteTypes {
     | '/my-page'
     | '/sign-up'
     | '/spaces/$spaceId/guestbook'
+    | '/spaces/$spaceId'
   id:
     | '__root__'
     | '/_authenticated'
@@ -171,6 +183,7 @@ export interface FileRouteTypes {
     | '/_authenticated/my-page/'
     | '/_authenticated/sign-up/'
     | '/_authenticated/spaces/$spaceId/guestbook'
+    | '/_authenticated/spaces/$spaceId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMyPageEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/spaces/$spaceId/': {
+      id: '/_authenticated/spaces/$spaceId/'
+      path: '/spaces/$spaceId'
+      fullPath: '/spaces/$spaceId/'
+      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/spaces/$spaceId/guestbook': {
       id: '/_authenticated/spaces/$spaceId/guestbook'
       path: '/spaces/$spaceId/guestbook'
@@ -278,6 +298,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMyPageIndexRoute: typeof AuthenticatedMyPageIndexRoute
   AuthenticatedSignUpIndexRoute: typeof AuthenticatedSignUpIndexRoute
   AuthenticatedSpacesSpaceIdGuestbookRoute: typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  AuthenticatedSpacesSpaceIdIndexRoute: typeof AuthenticatedSpacesSpaceIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -294,6 +315,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSignUpIndexRoute: AuthenticatedSignUpIndexRoute,
   AuthenticatedSpacesSpaceIdGuestbookRoute:
     AuthenticatedSpacesSpaceIdGuestbookRoute,
+  AuthenticatedSpacesSpaceIdIndexRoute: AuthenticatedSpacesSpaceIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

@@ -20,6 +20,8 @@ interface GuestBookPageProps {
   onCardClick: (guestbookId: number) => void;
   /** 새 방명록 스택 클릭 핸들러 (새 방명록 목록 페이지로 이동) */
   onNewStackClick: () => void;
+  /** 작품 탭 클릭 핸들러 */
+  onArtworkTabClick: () => void;
 }
 
 const GuestBookPage = ({
@@ -27,6 +29,7 @@ const GuestBookPage = ({
   onBack,
   onCardClick,
   onNewStackClick,
+  onArtworkTabClick,
 }: GuestBookPageProps) => {
   const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
     spaceId,
@@ -84,8 +87,7 @@ const GuestBookPage = ({
         <TabMenu
           variant="pill"
           activeTab="right"
-          // TODO: 작품 탭 페이지 구현 후 연동 필요
-          left={{ text: "작품", onClick: () => {} }}
+          left={{ text: "작품", onClick: onArtworkTabClick }}
           right={{ text: "방명록", onClick: () => {} }}
         />
         <S.FloatingIconButton

@@ -66,6 +66,20 @@ function MainPage() {
           방명록 페이지 이동 (임시)
         </button>
       )}
+      {firstSpaceCode && (
+        <button
+          type="button"
+          onClick={() =>
+            navigate({
+              to: "/spaces/$spaceId",
+              params: { spaceId: firstSpaceCode },
+            })
+          }
+          style={buttonStyle}
+        >
+          스페이스 메인(작품) 페이지 이동 (임시)
+        </button>
+      )}
     </div>
   );
 }
