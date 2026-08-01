@@ -1,11 +1,14 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
+import { setAccessToken } from "@/api/authToken";
 import { useKakaoLoginConfirm } from "@/api/generated/auth-인증";
+import type { ApiResponseLoginResponse } from "@/api/model";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
 // NOTE: RN → Web 메시지 형식
-// { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string } }
+// 성공: { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string } }
+// 취소/실패: { type: 'KAKAO_LOGIN_ERROR' }
 interface KakaoTokenMessage {
   type: "KAKAO_TOKEN";
   payload: {
@@ -13,6 +16,12 @@ interface KakaoTokenMessage {
     id_token?: string;
   };
 }
+
+interface KakaoLoginErrorMessage {
+  type: "KAKAO_LOGIN_ERROR";
+}
+
+type KakaoBridgeMessage = KakaoTokenMessage | KakaoLoginErrorMessage;
 
 const useKakaoLoginBridge = () => {
   const navigate = useNavigate();
@@ -30,8 +39,13 @@ const useKakaoLoginBridge = () => {
           },
         },
         {
-          // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
-          onSuccess: () => {
+          // NOTE: BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
+          // 실제 응답 바디는 ApiResponseLoginResponse (JSON)이므로 캐스팅해서 사용.
+          // refreshToken은 서버가 httpOnly 쿠키로 내려주므로 accessToken만 메모리에 보관
+          onSuccess: (response) => {
+            const { accessToken } =
+              (response as unknown as ApiResponseLoginResponse).data ?? {};
+            setAccessToken(accessToken);
             showSnackBar("로그인 완료", "alert");
             navigate({ to: "/" });
           },
@@ -50,10 +64,16 @@ const useKakaoLoginBridge = () => {
       try {
         const rawData =
           typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (!rawData || rawData.type !== "KAKAO_TOKEN") return;
-        const data = rawData as KakaoTokenMessage;
+        if (!rawData) return;
+        const data = rawData as KakaoBridgeMessage;
 
-        handleKakaoToken(data.payload);
+        if (data.type === "KAKAO_TOKEN") {
+          handleKakaoToken(data.payload);
+          return;
+        }
+        if (data.type === "KAKAO_LOGIN_ERROR") {
+          setIsRequesting(false);
+        }
       } catch (err) {
         // TODO: 원인 파악 후 제거
         console.error("KAKAO_TOKEN parse/handle error", err, e.data);
