@@ -5,7 +5,8 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
 // NOTE: RN → Web 메시지 형식
-// { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string } }
+// 성공: { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string } }
+// 취소/실패: { type: 'KAKAO_LOGIN_ERROR' }
 interface KakaoTokenMessage {
   type: "KAKAO_TOKEN";
   payload: {
@@ -13,6 +14,12 @@ interface KakaoTokenMessage {
     id_token?: string;
   };
 }
+
+interface KakaoLoginErrorMessage {
+  type: "KAKAO_LOGIN_ERROR";
+}
+
+type KakaoBridgeMessage = KakaoTokenMessage | KakaoLoginErrorMessage;
 
 const useKakaoLoginBridge = () => {
   const navigate = useNavigate();
@@ -50,10 +57,16 @@ const useKakaoLoginBridge = () => {
       try {
         const rawData =
           typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (!rawData || rawData.type !== "KAKAO_TOKEN") return;
-        const data = rawData as KakaoTokenMessage;
+        if (!rawData) return;
+        const data = rawData as KakaoBridgeMessage;
 
-        handleKakaoToken(data.payload);
+        if (data.type === "KAKAO_TOKEN") {
+          handleKakaoToken(data.payload);
+          return;
+        }
+        if (data.type === "KAKAO_LOGIN_ERROR") {
+          setIsRequesting(false);
+        }
       } catch (err) {
         // TODO: 원인 파악 후 제거
         console.error("KAKAO_TOKEN parse/handle error", err, e.data);
