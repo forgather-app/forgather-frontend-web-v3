@@ -1,9 +1,8 @@
 import { useId, useState } from "react";
-import ClearIcon from "../../../assets/icons/ic_clear.svg?react";
-import LinkIcon from "../../../assets/icons/ic_link.svg?react";
-import SearchIcon from "../../../assets/icons/ic_search.svg?react";
-import { theme } from "../../../styles/theme";
-import { getGraphemeLength } from "../../../utils/getGraphemeLength";
+import ClearIcon from "@/assets/icons/ic_clear.svg?react";
+import LinkIcon from "@/assets/icons/ic_link.svg?react";
+import SearchIcon from "@/assets/icons/ic_search.svg?react";
+import { getGraphemeLength } from "@/utils/getGraphemeLength";
 import * as S from "./TextField.styles";
 
 export type TextFieldVariant =
@@ -94,62 +93,69 @@ const TextField = ({
       } as React.ChangeEvent<HTMLInputElement>);
   };
 
+  const inputElement = (
+    <S.Input
+      {...rest}
+      $variant={variant}
+      type={variant === "search" ? "search" : "text"}
+      value={value}
+      placeholder={placeholder ?? DEFAULT_PLACEHOLDER[variant]}
+      onChange={onChange}
+      onFocus={(e) => {
+        setIsFocused(true);
+        onFocus?.(e);
+      }}
+      onBlur={(e) => {
+        setIsFocused(false);
+        onBlur?.(e);
+      }}
+      aria-invalid={hasError || undefined}
+      aria-describedby={hasError ? errorId : undefined}
+    />
+  );
+
   return (
     <S.Wrapper>
       <S.FieldRow $styleVariant={styleVariant}>
-        {variant === "search" && (
-          <SearchIcon aria-hidden width={20} height={20} />
-        )}
-        {variant === "link" && (
-          <LinkIcon
-            aria-hidden
-            width={16}
-            height={16}
-            color={theme.colors.gray.gray200}
-          />
-        )}
-        {variant === "category" && (
-          <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
-        )}
-        <S.Input
-          {...rest}
-          $variant={variant}
-          type={variant === "search" ? "search" : "text"}
-          value={value}
-          placeholder={placeholder ?? DEFAULT_PLACEHOLDER[variant]}
-          onChange={onChange}
-          onFocus={(e) => {
-            setIsFocused(true);
-            onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            setIsFocused(false);
-            onBlur?.(e);
-          }}
-          aria-invalid={hasError || undefined}
-          aria-describedby={hasError ? errorId : undefined}
-        />
-        {showClear && (
-          <S.ClearButton
-            type="button"
-            aria-label="입력 내용 지우기"
-            onMouseDown={(e) => e.preventDefault()}
-            onClick={handleClear}
-          >
-            <ClearIcon aria-hidden width={20} height={20} />
-          </S.ClearButton>
-        )}
-        {variant === "count" && maxCount !== undefined && (
-          <S.CounterBox>
-            <S.Counter $styleVariant={styleVariant}>
-              {graphemeCount} / {maxCount}자
-            </S.Counter>
+        {variant === "count" ? (
+          <>
+            <S.CountRow>
+              {inputElement}
+              {maxCount !== undefined && (
+                <S.Counter $styleVariant={styleVariant}>
+                  {graphemeCount} / {maxCount}자
+                </S.Counter>
+              )}
+            </S.CountRow>
             {hasError && (
-              <S.ErrorMessage id={errorId} role="alert">
+              <S.ErrorMessage id={errorId} role="alert" $align="right">
                 {errorMessage}
               </S.ErrorMessage>
             )}
-          </S.CounterBox>
+          </>
+        ) : (
+          <>
+            {variant === "search" && (
+              <SearchIcon aria-hidden width={20} height={20} />
+            )}
+            {variant === "link" && (
+              <LinkIcon aria-hidden width={16} height={16} />
+            )}
+            {variant === "category" && (
+              <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
+            )}
+            {inputElement}
+            {showClear && (
+              <S.ClearButton
+                type="button"
+                aria-label="입력 내용 지우기"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={handleClear}
+              >
+                <ClearIcon aria-hidden width={20} height={20} />
+              </S.ClearButton>
+            )}
+          </>
         )}
       </S.FieldRow>
       {variant === "link" && hasError && (

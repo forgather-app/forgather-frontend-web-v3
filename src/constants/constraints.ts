@@ -6,4 +6,9 @@ export const CONSTRAINTS = {
   SIGN_UP: {
     ARTIST_NAME_MAX_LENGTH: 20,
   },
+
+  PROFILE: {
+    NICKNAME_MAX_LENGTH: 10,
+    INTRO_MAX_LENGTH: 50,
+  },
 };

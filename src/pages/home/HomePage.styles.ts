@@ -1,0 +1,135 @@
+import styled from "@emotion/styled";
+import IcPlus from "@/assets/icons/ic_plus.svg?react";
+
+export const HomePageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.gray.gray700};
+  overflow: hidden;
+`;
+
+export const PageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* 스크롤바 숨기기 */
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0 0;
+`;
+
+export const UserProfile = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+`;
+
+export const UserAvatar = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.semantic.black};
+  flex-shrink: 0;
+`;
+
+export const UserName = styled.h2`
+  ${({ theme }) => ({ ...theme.typography.heading2 })};
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
+export const HeaderActions = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+export const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  color: ${({ theme }) => theme.colors.gray.gray200};
+`;
+
+export const PlusIcon = styled(IcPlus)`
+  path {
+    stroke: ${({ theme }) => theme.colors.gray.gray200};
+  }
+`;
+
+export const ContentWrapper = styled.main`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0 40px;
+`;
+
+export const MySpaceSection = styled.section<{ $topGap: 24 | 32 }>`
+  display: flex;
+  flex-direction: column;
+  margin-top: ${({ $topGap }) => $topGap}px;
+`;
+
+export const SectionTitle = styled.h2`
+  ${({ theme }) => ({ ...theme.typography.heading2 })};
+  color: ${({ theme }) => theme.colors.gray.white};
+  padding-left: 2px;
+  margin-bottom: 16px;
+`;
+
+export const ListHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2px;
+  margin-bottom: 12px;
+`;
+
+export const SpaceCountGroup = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const SpaceCount = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const SpaceCountText = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  /* TODO: 토큰 없음 - 14px/400 */
+  font-weight: 400;
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const SortLabel = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const SpaceList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const BottomCta = styled.div`
+  flex-shrink: 0;
+  padding: 12px 16px;
+  background-color: ${({ theme }) => theme.colors.gray.gray700};
+`;
