@@ -8,21 +8,17 @@ interface GuestListStackProps {
   onClick?: () => void;
 }
 
-const MAX_PEEK_LAYERS = 2;
+// 뒤쪽(깊은) 레이어부터 나열 — 렌더 순서대로 쌓여 앞쪽 레이어와 Container가 위에 겹침
+const PEEK_DEPTHS: S.PeekDepth[] = [2, 1];
 
 const GuestListStack = ({ count = 1, onClick }: GuestListStackProps) => {
-  const peekLayerCount = Math.min(Math.max(count - 1, 0), MAX_PEEK_LAYERS);
+  const peekLayerCount = Math.min(Math.max(count - 1, 0), PEEK_DEPTHS.length);
+  const peekDepths = PEEK_DEPTHS.slice(PEEK_DEPTHS.length - peekLayerCount);
 
   return (
     <S.Wrapper>
-      {/* 뒤쪽(깊은) 레이어부터 렌더링해 앞쪽 레이어와 Container가 그 위에 겹치도록 함 */}
-      {Array.from({ length: peekLayerCount }, (_, index) => (
-        <S.PeekLayer
-          // biome-ignore lint/suspicious/noArrayIndexKey: 고정된 개수의 장식용 레이어라 index만 사용 가능함
-          key={index}
-          $depth={peekLayerCount - index}
-          aria-hidden
-        />
+      {peekDepths.map((depth) => (
+        <S.PeekLayer key={depth} $depth={depth} aria-hidden />
       ))}
       <S.Container
         type="button"
