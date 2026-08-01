@@ -1,8 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { setAuthTokens } from "@/api/authToken";
 import { useKakaoLoginConfirm } from "@/api/generated/auth-인증";
-import type { ApiResponseLoginResponse } from "@/api/model";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
@@ -32,12 +30,8 @@ const useKakaoLoginBridge = () => {
           },
         },
         {
-          // NOTE: BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
-          // 실제 응답 바디는 ApiResponseLoginResponse (JSON)이므로 캐스팅해서 사용
-          onSuccess: (response) => {
-            const { accessToken, refreshToken } =
-              (response as unknown as ApiResponseLoginResponse).data ?? {};
-            setAuthTokens(accessToken, refreshToken);
+          // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
+          onSuccess: () => {
             showSnackBar("로그인 완료", "alert");
             navigate({ to: "/" });
           },
@@ -79,23 +73,9 @@ const useKakaoLoginBridge = () => {
     if (isRequesting) return;
 
     if (!window.ReactNativeWebView) {
-      // NOTE: 웹뷰가 아닌 일반 브라우저에서는 네이티브 로그인이 불가능하므로,
-      // 개발 환경에서는 앱에서 실제 로그인 후 저장된 우리 서비스 accessToken을 직접 입력받아
-      // BE 호출 없이 세션을 주입할 수 있게 함 (카카오 토큰이 아닌, 로그인이 끝난 뒤 발급된 토큰)
-      if (import.meta.env.VITE_ENVIRONMENT === "development") {
-        const accessToken = window.prompt(
-          "[DEV] 앱에서 로그인 후 저장된 accessToken을 입력하세요",
-        );
-        if (!accessToken) return;
-        const refreshToken = window.prompt(
-          "[DEV] refreshToken도 입력하세요 (없으면 취소)",
-        );
-        setAuthTokens(accessToken, refreshToken ?? undefined);
-        showSnackBar("로그인 완료", "alert");
-        navigate({ to: "/" });
-        return;
-      }
-
+      // NOTE: 웹뷰가 아닌 일반 브라우저에서는 네이티브 카카오 로그인이 불가능함.
+      // 인증 토큰이 서버 쿠키로 발급되므로 클라이언트에서 임의 주입이 불가능해짐 —
+      // 개발 환경 테스트는 BE를 직접 호출하는 DevLoginModal("[DEV] 아이디/비밀번호로 로그인")을 이용
       showSnackBar(ERROR_MESSAGES.APP_ONLY_FEATURE, "error");
       return;
     }
