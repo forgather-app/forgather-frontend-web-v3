@@ -28,6 +28,7 @@ export const Content = styled.div`
   padding-bottom: 2px;
   flex: 1;
   min-width: 0;
+  color: ${({ theme }) => theme.colors.gray.gray200};
 `;
 
 export const Title = styled.p`

@@ -12,7 +12,7 @@ const meta: Meta<typeof TabMenu> = {
 두 개의 탭을 전환하는 메뉴 컴포넌트입니다.
 
 **Variant**
-- \`pill\`: 둥근 알약 형태. 어두운 배경 위에서 사용합니다.
+- \`pill\`: 둥근 알약 형태. 어두운 배경(gray600) 위에 활성 탭이 gray500 pill로 표시됩니다.
 - \`box\`: 사각형 세그먼트 형태. 카드·패널 내부에서 사용합니다.
 
 **인터랙션**
@@ -59,8 +59,8 @@ export default meta;
 type Story = StoryObj<typeof TabMenu>;
 
 const defaultArgs = {
-  left: { text: "카드 보기", onClick: () => {} },
-  right: { text: "목록 보기", onClick: () => {} },
+  left: { text: "작품", onClick: () => {} },
+  right: { text: "방명록", onClick: () => {} },
 };
 
 export const PillInteractive: Story = {
@@ -113,7 +113,7 @@ export const Pill: Story = {
     docs: {
       description: {
         story:
-          "어두운 배경 위에서 사용하는 알약 형태 탭입니다. 활성 탭이 흰색 pill로 표시됩니다.",
+          "어두운 배경 위에서 사용하는 알약 형태 탭입니다. 활성 탭이 gray500 pill로 표시됩니다.",
       },
     },
   },
