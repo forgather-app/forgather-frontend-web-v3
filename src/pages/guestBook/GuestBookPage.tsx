@@ -46,6 +46,21 @@ const GuestBookPage = ({
   const hasNewCards = (guestBook.unreadCount ?? 0) > 0;
   const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
+  // TODO: 디버깅용 - unreadCount 확인 후 제거
+  const computedUnreadCount = guestBookCards.reduce(
+    (count, card) => count + (card.isRead === false ? 1 : 0),
+    0,
+  );
+  console.log("[GuestBookPage] unreadCount 확인", {
+    apiUnreadCount: guestBook.unreadCount,
+    computedUnreadCount,
+    cards: guestBookCards.map((card) => ({
+      id: card.id,
+      nickname: card.nickname,
+      isRead: card.isRead,
+    })),
+  });
+
   return (
     <S.ScrollArea>
       <S.TitleRow>

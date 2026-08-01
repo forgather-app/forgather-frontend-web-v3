@@ -30,6 +30,7 @@ const SwiperAction = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
 
+  const [containerWidth, setContainerWidth] = useState(0);
   const elementWidthRef = useRef(0);
   const containerWidthRef = useRef(0);
 
@@ -43,26 +44,31 @@ const SwiperAction = ({
   const MIN_THRESHOLD = 5;
   const STANDARD = 5;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: 첫 마운트시에만 계산
+  // biome-ignore lint/correctness/useExhaustiveDependencies: currentIndex/activeIndex 변경 시 재실행할 필요 없음(위치 보정은 아래 별도 effect에서 처리)
   useEffect(() => {
-    const updateLayout = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const updateLayout = (width: number) => {
       const root = getComputedStyle(document.documentElement);
       const padding = Number(
         root.getPropertyValue("--layout-padding-x").replace("px", ""),
       );
 
-      elementWidthRef.current = trackRef.current?.children[0].clientWidth ?? 0;
-      containerWidthRef.current = containerRef.current?.clientWidth ?? 0;
+      elementWidthRef.current = width;
+      containerWidthRef.current = width;
+      setContainerWidth(width);
 
-      threshold.current = Math.floor(
-        (containerWidthRef.current - 2 * padding) / STANDARD,
-      );
+      threshold.current = Math.floor((width - 2 * padding) / STANDARD);
       x.set(calculateLocation(activeIndex ?? 0));
     };
-    updateLayout();
 
-    window.addEventListener("resize", updateLayout);
-    return () => window.removeEventListener("resize", updateLayout);
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry) updateLayout(entry.contentRect.width);
+    });
+    observer.observe(container);
+
+    return () => observer.disconnect();
   }, []);
 
   const [currentIndex, setCurrentIndex] = useState(activeIndex ?? 0);
@@ -215,6 +221,7 @@ const SwiperAction = ({
           <S.Slide
             // biome-ignore lint/suspicious/noArrayIndexKey: 현재로썬 index만 사용 가능함
             key={index}
+            style={{ width: containerWidth || "100%" }}
             onClickCapture={(e) => {
               if (shouldPreventClick.current) {
                 e.stopPropagation();

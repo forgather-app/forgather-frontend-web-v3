@@ -21,6 +21,5 @@ export const Slide = styled.div`
   overflow: hidden;
   flex-shrink: 0;
   user-select: none;
-  width: 100%;
   height: 100%;
 `;
