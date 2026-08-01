@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { withApiVersion } from "@/api/apiVersion";
 import { useGetV3 } from "@/api/generated/product-전시-작품";
 import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type {
@@ -56,6 +57,8 @@ const ArtworkPage = ({
       select: (response) =>
         (response as unknown as ApiResponseProductsResponse).data ?? {},
     },
+    // 작품 목록 조회는 x-api-version: 3 헤더가 있어야 정상 라우팅됨
+    request: withApiVersion(3),
   });
 
   if (isSpaceError || isProductsError) {
