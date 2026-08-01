@@ -23,6 +23,12 @@ const PAGE_LINKS = [
     to: "/new-guestbook/$guestbookId",
     params: { guestbookId: "1" },
   },
+  {
+    label: "스페이스 메인(작품) 페이지 이동 (임시, spaceCode 하드코딩)",
+    to: "/spaces/$spaceId",
+    // TODO: 현재 로그인 계정에 연결된 실제 스페이스가 없어 테스트용으로 하드코딩. 계정에 스페이스가 생기면 firstSpaceCode 방식으로 교체
+    params: { spaceId: "fqvtn394y0" },
+  },
 ] as const;
 
 function MainPage() {

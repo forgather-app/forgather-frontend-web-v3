@@ -1,17 +1,22 @@
 import { useState } from "react";
+import { useGetV3 } from "@/api/generated/product-전시-작품";
+import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
+import type {
+  ApiResponseProductsResponse,
+  ApiResponseSpaceResponse,
+  ProductsResponse,
+  SpaceResponse,
+} from "@/api/model";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
+import Button from "@/components/@common/Button/Button";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import * as S from "./ArtworkPage.styles";
 
-interface Artwork {
-  id: number;
-  title: string;
-  imageUrl?: string;
-}
-
 interface ArtworkPageProps {
+  /** 스페이스 ID */
+  spaceId: string;
   /** 전시 정보 수정 버튼 클릭 핸들러 */
   onEditClick?: () => void;
   /** 작품 추가 버튼 클릭 핸들러 */
@@ -20,33 +25,71 @@ interface ArtworkPageProps {
   onArtworkClick?: (artworkId: number) => void;
 }
 
-const DUMMY_EXHIBITION = {
-  title: "포게더 : 작가와 방문객이 연결되는 곳",
-  description:
-    "전시 제목을 작성해주세요전시 제목을 작성해주세요전시 제목을 작성해주세요전시 제목을 작성해주 전시 제목을 작성해주세요전시 제목을 작성해주세요전시 제목을 작성해주...",
-};
-
-const DUMMY_ARTWORKS: Artwork[] = [
-  {
-    id: 1,
-    title:
-      "작품 제목이 들어가는 곳입니다. 최대 2줄까지 작성 가능 이후 텍스트는 생략됩니",
-  },
-  { id: 2, title: "작품 제목이 들어가는 곳입니다." },
-  { id: 3, title: "작품 제목이 들어가는 곳입니다." },
-];
-
 const ArtworkPage = ({
+  spaceId,
   onEditClick = () => {},
   onAddArtworkClick = () => {},
   onArtworkClick = () => {},
 }: ArtworkPageProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
+  const {
+    data: space,
+    isPending: isSpacePending,
+    isError: isSpaceError,
+    refetch: refetchSpace,
+  } = useGetSpaceInformation<SpaceResponse>(spaceId, {
+    query: {
+      select: (response) =>
+        // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+        (response as unknown as ApiResponseSpaceResponse).data ?? {},
+    },
+  });
+
+  const {
+    data: products,
+    isPending: isProductsPending,
+    isError: isProductsError,
+    refetch: refetchProducts,
+  } = useGetV3<ProductsResponse>(spaceId, {
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseProductsResponse).data ?? {},
+    },
+  });
+
+  if (isSpaceError || isProductsError) {
+    // TODO: 403(권한 없음)과 404(존재하지 않음) 등 에러 종류별로 메시지/처리 분기 필요 — 지금은 모든 에러를 동일한 폴백으로 처리
+    return (
+      <S.ScrollArea>
+        <S.ErrorState>
+          <S.ErrorMessage>정보를 불러오지 못했어요.</S.ErrorMessage>
+          <Button
+            variant="secondary"
+            text="다시 시도"
+            onClick={() => {
+              refetchSpace();
+              refetchProducts();
+            }}
+          />
+        </S.ErrorState>
+      </S.ScrollArea>
+    );
+  }
+
+  if (isSpacePending || isProductsPending) {
+    return <S.ScrollArea />;
+  }
+
+  const artworks = (products.products ?? []).filter(
+    (product): product is typeof product & { id: number } =>
+      product.id !== undefined,
+  );
+
   return (
     <S.ScrollArea>
       <S.TitleRow>
-        <S.Title>{DUMMY_EXHIBITION.title}</S.Title>
+        <S.Title>{space.name}</S.Title>
         <S.EditButton
           type="button"
           aria-label="전시 정보 수정"
@@ -58,7 +101,7 @@ const ArtworkPage = ({
 
       <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
         <S.Description $isExpanded={isDescriptionExpanded}>
-          {DUMMY_EXHIBITION.description}
+          {space.description}
         </S.Description>
         <S.MoreButton
           type="button"
@@ -83,11 +126,11 @@ const ArtworkPage = ({
 
       <S.CarouselWrapper>
         <SwiperAction
-          swiperElement={DUMMY_ARTWORKS.map((artwork) => (
+          swiperElement={artworks.map((artwork) => (
             <ArtworkCard
               key={artwork.id}
-              title={artwork.title}
-              imageUrl={artwork.imageUrl}
+              title={artwork.title ?? ""}
+              imageUrl={artwork.firstPhoto?.path}
               onClick={() => onArtworkClick(artwork.id)}
             />
           ))}
