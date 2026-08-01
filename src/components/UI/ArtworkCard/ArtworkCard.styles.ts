@@ -13,14 +13,14 @@ export const Card = styled.div`
 export const TitleBox = styled.div`
   width: 100%;
   padding: 16px;
-  border: 1px solid rgba(65, 72, 85, 0.8); /* TODO: 토큰 없음 - border rgba(65, 72, 85, 0.8) */
+  border: 1px solid rgba(65, 72, 85, 0.8);
   border-radius: 16px 16px 0 0;
   background: ${({ theme }) => theme.colors.gradient.grayFill};
 `;
 
 export const Title = styled.p`
   ${({ theme }) => ({ ...theme.typography.body1 })};
-  line-height: 1.4; /* TODO: 토큰 없음 - line-height 140% (body1은 160%) */
+  line-height: 1.4;
   color: ${({ theme }) => theme.colors.gray.white};
   overflow: hidden;
   text-overflow: ellipsis;
