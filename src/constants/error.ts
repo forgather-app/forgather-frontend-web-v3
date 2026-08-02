@@ -4,4 +4,5 @@ export const ERROR_MESSAGES = {
   ONBOARDING_FAILED:
     "일시적인 오류로 회원가입하지 못했어요. 잠시 후 다시 시도해 주세요",
   APP_ONLY_FEATURE: "앱 환경에서만 이용할 수 있습니다",
+  DOWNLOAD_FAILED: "이미지를 다운로드하지 못했어요. 잠시 후 다시 시도해 주세요",
 } as const;
