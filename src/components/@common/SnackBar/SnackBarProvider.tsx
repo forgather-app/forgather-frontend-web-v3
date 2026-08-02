@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import SnackBar from "./SnackBar/SnackBar";
 import { SnackBarContext } from "./SnackBarContext";
 
@@ -26,15 +27,17 @@ const SnackBarProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <SnackBarContext.Provider value={{ showSnackBar }}>
       {children}
-      {snackBar && (
-        <FixedContainer>
-          <SnackBar
-            message={snackBar.message}
-            iconType={snackBar.iconType}
-            onClose={() => setSnackBar(null)}
-          />
-        </FixedContainer>
-      )}
+      {snackBar &&
+        createPortal(
+          <FixedContainer>
+            <SnackBar
+              message={snackBar.message}
+              iconType={snackBar.iconType}
+              onClose={() => setSnackBar(null)}
+            />
+          </FixedContainer>,
+          document.body,
+        )}
     </SnackBarContext.Provider>
   );
 };
