@@ -15,7 +15,14 @@ interface SaveImageErrorMessage {
   type: "SAVE_IMAGE_ERROR";
 }
 
-type SaveImageBridgeMessage = SaveImageSuccessMessage | SaveImageErrorMessage;
+interface SaveImagePermissionDeniedMessage {
+  type: "SAVE_IMAGE_PERMISSION_DENIED";
+}
+
+type SaveImageBridgeMessage =
+  | SaveImageSuccessMessage
+  | SaveImageErrorMessage
+  | SaveImagePermissionDeniedMessage;
 
 const useSaveImageBridge = () => {
   const { showSnackBar } = useSnackBar();
@@ -30,6 +37,10 @@ const useSaveImageBridge = () => {
 
         if (data.type === "SAVE_IMAGE_SUCCESS") {
           showSnackBar("이미지를 저장했어요", "alert");
+          return;
+        }
+        if (data.type === "SAVE_IMAGE_PERMISSION_DENIED") {
+          showSnackBar(ERROR_MESSAGES.PHOTO_PERMISSION_DENIED, "error");
           return;
         }
         if (data.type === "SAVE_IMAGE_ERROR") {
