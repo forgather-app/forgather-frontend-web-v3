@@ -103,6 +103,20 @@ export const CarouselWrapper = styled.div`
   margin-top: 16px;
 `;
 
+export const ErrorState = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+`;
+
+export const ErrorMessage = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body3 })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
 export const BottomSpacer = styled.div`
   position: sticky;
   bottom: 0;

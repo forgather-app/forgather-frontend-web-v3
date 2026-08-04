@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { CARD_GAP } from "./SwiperAction.constants";
 
 export const Container = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
   overflow: hidden;
-  touch-action: none;
+  touch-action: pan-y;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
