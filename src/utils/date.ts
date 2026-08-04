@@ -23,3 +23,13 @@ export const formatExhibitionPeriod = (
   startDate: Date,
   endDate: Date,
 ): string => `${formatShortDate(startDate)} - ${formatShortDate(endDate)}`;
+
+export const formatCardDate = (date: Date): string => {
+  const { year, month, day } = parseDateParts(date);
+  return `${String(year).slice(-2)}.${month}.${day}`;
+};
+
+export const formatCardTime = (date: Date): string => {
+  const { hours, minutes } = parseDateParts(date);
+  return `${hours}:${minutes}`;
+};

@@ -32,8 +32,9 @@ const LoginPage = () => {
             <span>카카오로 로그인하기</span>
           </S.KakaoButton>
           {/* NOTE: 카카오 로그인은 웹뷰 브릿지가 필요해 일반 브라우저에서 테스트 불가.
-              dev 환경에서만 존재하는 BE의 /auth/login/dev로 우회 로그인 제공 */}
-          {import.meta.env.DEV && (
+              dev 환경에서만 존재하는 BE의 /auth/login/dev로 우회 로그인 제공.
+              VITE_ENVIRONMENT 기준이므로 npm run dev, npm run build:development 모두 노출됨 */}
+          {import.meta.env.VITE_ENVIRONMENT === "development" && (
             <Button
               variant="underlined"
               text="[DEV] 아이디/비밀번호로 로그인"
