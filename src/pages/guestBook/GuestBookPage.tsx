@@ -1,23 +1,19 @@
-import { useRef, useState } from "react";
-import FilterChip from "@/components/@common/Chip/FilterChip/FilterChip";
-import GuestCard from "@/components/@common/GuestCard/GuestCard";
-import GuestCardStack from "@/components/@common/GuestCardStack/GuestCardStack";
+import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
+import type {
+  ApiResponseGuestBookResponse,
+  GuestBookCardSimpleResponse,
+  GuestBookResponse,
+} from "@/api/model";
+import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
+import IcLink from "@/assets/icons/ic_link.svg?react";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
-import Tooltip from "@/components/@common/tooltip/Tooltip";
-import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import * as S from "./GuestBookPage.styles";
-
-type GuestBookView = "card" | "list";
-
-type GuestBookFilter = "all" | "photo" | "scrap";
 
 interface GuestBookPageProps {
   /** 스페이스 ID */
   spaceId: string;
-  /** 스페이스 이름 */
-  spaceName?: string;
   /** 뒤로가기 핸들러 */
   onBack: () => void;
   /** 일반 방명록 카드 클릭 핸들러 */
@@ -26,249 +22,82 @@ interface GuestBookPageProps {
   onNewStackClick: () => void;
 }
 
-const DUMMY_CARDS = [
-  {
-    id: 1,
-    isNew: true,
-    author: "김이름",
-    text: "졸업 전시 축하해요!",
-    isPhotoExist: false,
-    isScrapped: false,
-  },
-  {
-    id: 2,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    isScrapped: false,
-  },
-  {
-    id: 3,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    isScrapped: true,
-  },
-  {
-    id: 4,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    isScrapped: false,
-  },
-  {
-    id: 5,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    isScrapped: true,
-  },
-  {
-    id: 6,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    isScrapped: false,
-  },
-  {
-    id: 7,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    isScrapped: false,
-  },
-  {
-    id: 8,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    isScrapped: false,
-  },
-  {
-    id: 9,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    isScrapped: true,
-  },
-  {
-    id: 10,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: true,
-    isScrapped: false,
-  },
-  {
-    id: 11,
-    isNew: false,
-    author: "김이름",
-    text: "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업",
-    isPhotoExist: false,
-    isScrapped: false,
-  },
-];
-
 const GuestBookPage = ({
-  spaceName = "스페이스 이름",
+  spaceId,
   onBack,
   onCardClick,
   onNewStackClick,
 }: GuestBookPageProps) => {
-  const [activeView, setActiveView] = useState<GuestBookView>("card");
-  const [activeFilter, setActiveFilter] = useState<GuestBookFilter>("all");
-  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const isTooltipDismissed = useRef(false);
-  // TODO: API 연동 시 서버 상태로 대체
-  const [scrappedIds, setScrappedIds] = useState<Set<number>>(
-    () => new Set(DUMMY_CARDS.filter((c) => c.isScrapped).map((c) => c.id)),
+  const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
+    spaceId,
+    {
+      query: {
+        select: (response) =>
+          // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
+      },
+    },
   );
 
-  const newCards = DUMMY_CARDS.filter((card) => card.isNew);
-  const hasNewCards = newCards.length > 0;
-  const regularCards = DUMMY_CARDS.filter((card) => !card.isNew);
+  const guestBookCards = (guestBook.guestBookCards ?? []).filter(
+    (card): card is GuestBookCardSimpleResponse & { id: number } =>
+      card.id !== undefined,
+  );
+  const hasNewCards = (guestBook.unreadCount ?? 0) > 0;
+  const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
-  const filteredCards = regularCards.filter((card) => {
-    switch (activeFilter) {
-      case "photo":
-        return card.isPhotoExist;
-      case "scrap":
-        return scrappedIds.has(card.id);
-      default:
-        return true;
-    }
-  });
+  return (
+    <S.ScrollArea>
+      <S.TitleRow>
+        <S.Title>방명록</S.Title>
+        <S.CountGroup>
+          총 <S.CountNumber>{totalCount}</S.CountNumber>개의 방명록
+        </S.CountGroup>
+      </S.TitleRow>
 
-  // TODO: API 응답으로 대체 필요
-  const totalCount = filteredCards.length;
+      {hasNewCards && (
+        <S.GuestCardWrapper>
+          <GuestListStack onClick={onNewStackClick} />
+        </S.GuestCardWrapper>
+      )}
 
-  function toggleScrap(id: number) {
-    setScrappedIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  }
-
-  function renderCardView() {
-    return (
-      <S.CardGrid>
-        {hasNewCards && <GuestCardStack onClick={onNewStackClick} />}
-        {filteredCards.map((card) => (
-          <GuestCard
-            key={card.id}
-            author={card.author}
-            text={card.text}
-            isPhotoExist={card.isPhotoExist}
-            onClick={() => onCardClick(card.id)}
-            headerType={{
-              iconType: "scrap",
-              isScrapped: scrappedIds.has(card.id),
-              toggleScrap: () => toggleScrap(card.id),
-            }}
-          />
-        ))}
-      </S.CardGrid>
-    );
-  }
-
-  function renderListView() {
-    return (
       <S.GuestListContainer>
-        {hasNewCards && <GuestListStack onClick={onNewStackClick} />}
-        {filteredCards.map((card) => (
+        {guestBookCards.map((card) => (
           <GuestList
             key={card.id}
-            title={card.author}
-            hasPhoto={card.isPhotoExist}
+            nickname={card.nickname ?? ""}
+            // TODO: 목록 API(GuestBookCardSimpleResponse)에 message/createdAt이 없어 상세 API 스펙 보완 전까지 비워둠
+            hasPhoto={card.containsPhoto}
             onClick={() => onCardClick(card.id)}
           />
         ))}
       </S.GuestListContainer>
-    );
-  }
-
-  function renderContent() {
-    switch (activeView) {
-      case "card":
-        return renderCardView();
-      case "list":
-        return renderListView();
-    }
-  }
-
-  return (
-    <NavigationBarLayout title={spaceName} onBackClick={onBack}>
-      <S.FilterSection>
-        <S.CountText>
-          총 <S.CountNumber>{totalCount}</S.CountNumber>개의 방명록
-        </S.CountText>
-        <S.ChipRow>
-          <FilterChip
-            label="전체"
-            isSelected={activeFilter === "all"}
-            onClick={() => {
-              setActiveFilter("all");
-              setIsTooltipVisible(false);
-            }}
-          />
-          <FilterChip
-            label="이미지 방명록"
-            isSelected={activeFilter === "photo"}
-            onClick={() => {
-              setActiveFilter("photo");
-              if (!isTooltipDismissed.current) setIsTooltipVisible(hasNewCards);
-            }}
-          />
-          <FilterChip
-            label="스크랩"
-            isSelected={activeFilter === "scrap"}
-            onClick={() => {
-              setActiveFilter("scrap");
-              if (!isTooltipDismissed.current) setIsTooltipVisible(hasNewCards);
-            }}
-          />
-        </S.ChipRow>
-      </S.FilterSection>
-
-      <S.ContentWrapper>
-        {isTooltipVisible && (
-          <S.TooltipAnchor>
-            <Tooltip
-              onClose={() => {
-                setIsTooltipVisible(false);
-                isTooltipDismissed.current = true;
-              }}
-              ariaLabel={`${newCards.length}개의 새 방명록`}
-            >
-              <S.TooltipText>
-                <S.TooltipCount>{newCards.length}개</S.TooltipCount>
-                <S.TooltipSub>의 새 방명록</S.TooltipSub>
-              </S.TooltipText>
-            </Tooltip>
-          </S.TooltipAnchor>
-        )}
-        {renderContent()}
-      </S.ContentWrapper>
       <S.BottomSpacer />
-      <S.BottomTabWrapper>
+      <S.BottomBar>
+        <S.FloatingIconButton
+          type="button"
+          aria-label="뒤로 가기"
+          onClick={onBack}
+        >
+          <IcLeftArrow width={24} height={24} />
+        </S.FloatingIconButton>
         <TabMenu
           variant="pill"
-          activeTab={activeView === "card" ? "left" : "right"}
-          left={{ text: "카드 보기", onClick: () => setActiveView("card") }}
-          right={{ text: "목록 보기", onClick: () => setActiveView("list") }}
+          activeTab="right"
+          // TODO: 작품 탭 페이지 구현 후 연동 필요
+          left={{ text: "작품", onClick: () => {} }}
+          right={{ text: "방명록", onClick: () => {} }}
         />
-      </S.BottomTabWrapper>
-    </NavigationBarLayout>
+        <S.FloatingIconButton
+          type="button"
+          aria-label="링크 공유"
+          // TODO: 링크 공유 기능 연동
+          onClick={() => {}}
+        >
+          <IcLink width={24} height={24} />
+        </S.FloatingIconButton>
+      </S.BottomBar>
+    </S.ScrollArea>
   );
 };
 

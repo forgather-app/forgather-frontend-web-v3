@@ -1,0 +1,109 @@
+import { useNavigate } from "@tanstack/react-router";
+import { Controller } from "react-hook-form";
+import IcLock from "@/assets/icons/ic_lock.svg?react";
+import Button from "@/components/@common/Button/Button";
+import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
+import TextArea from "@/components/@common/TextArea/TextArea";
+import TextField from "@/components/@common/TextField/TextField";
+import Toggle from "@/components/@common/Toggle/Toggle";
+import { CONSTRAINTS } from "@/constants/constraints";
+import * as S from "./CreateSpacePage.styles";
+import {
+  type CreateSpaceFormData,
+  useCreateSpaceForm,
+} from "./hooks/useCreateSpaceForm";
+
+const CreateSpacePage = () => {
+  const navigate = useNavigate();
+  const {
+    control,
+    spaceNameRules,
+    descriptionRules,
+    spaceNameError,
+    descriptionError,
+    isValid,
+    isGuestBookPrivate,
+    setIsGuestBookPrivate,
+    getSubmitHandler,
+  } = useCreateSpaceForm();
+
+  // TODO: 다음 스텝(이미지 등) 또는 스페이스 생성 API 연동 준비되면 연결
+  const handleNext = (_data: CreateSpaceFormData) => {};
+
+  return (
+    <S.Container onSubmit={getSubmitHandler(handleNext)} noValidate>
+      <NavigationBar
+        title="새 스페이스"
+        onBackClick={() => window.history.back()}
+        rightContent="나중에 하기"
+        onRightClick={() => navigate({ to: "/" })}
+      />
+      <S.Title>스페이스를 소개해주세요!</S.Title>
+      <S.Main>
+        <S.FieldGroup>
+          <S.FieldLabelRow>
+            <S.Label>스페이스명</S.Label>
+            <S.RequiredDot aria-hidden="true" />
+          </S.FieldLabelRow>
+          <Controller
+            control={control}
+            name="spaceName"
+            rules={spaceNameRules}
+            render={({ field }) => (
+              <TextField
+                variant="count"
+                value={field.value}
+                maxCount={CONSTRAINTS.CREATE_SPACE.NAME_MAX_LENGTH}
+                placeholder="작품 제목을 작성해주세요."
+                errorMessage={spaceNameError}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-label="스페이스명"
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        <S.FieldGroup>
+          <S.FieldLabelRow>
+            <S.Label>스페이스 소개</S.Label>
+          </S.FieldLabelRow>
+          <Controller
+            control={control}
+            name="description"
+            rules={descriptionRules}
+            render={({ field }) => (
+              <TextArea
+                value={field.value}
+                maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
+                placeholder="작품에 대한 설명을 작성해주세요."
+                errorMessage={descriptionError}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-label="스페이스 소개"
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        <S.ToggleRow>
+          <S.ToggleLabelGroup>
+            <IcLock aria-hidden="true" width={20} height={20} />
+            <S.ToggleLabel>방명록 나만 보기</S.ToggleLabel>
+          </S.ToggleLabelGroup>
+          <Toggle
+            checked={isGuestBookPrivate}
+            onChange={setIsGuestBookPrivate}
+            ariaLabel="방명록 나만 보기"
+          />
+        </S.ToggleRow>
+      </S.Main>
+
+      <S.Footer>
+        <Button text="다음" type="submit" disabled={!isValid} />
+      </S.Footer>
+    </S.Container>
+  );
+};
+
+export default CreateSpacePage;
