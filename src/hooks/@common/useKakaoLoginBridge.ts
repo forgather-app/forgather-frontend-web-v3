@@ -21,7 +21,7 @@ interface KakaoLoginErrorMessage {
 
 type KakaoBridgeMessage = KakaoTokenMessage | KakaoLoginErrorMessage;
 
-const useKakaoLoginBridge = () => {
+const useKakaoLoginBridge = (redirectTo?: string) => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
@@ -43,7 +43,7 @@ const useKakaoLoginBridge = () => {
           // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
           onSuccess: () => {
             showSnackBar("로그인 완료", "alert");
-            navigate({ to: "/" });
+            navigate({ href: redirectTo ?? "/" });
           },
           onError: () => {
             showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");
@@ -52,7 +52,7 @@ const useKakaoLoginBridge = () => {
         },
       );
     },
-    [confirmLogin, navigate, showSnackBar],
+    [confirmLogin, navigate, showSnackBar, redirectTo],
   );
 
   useEffect(() => {
