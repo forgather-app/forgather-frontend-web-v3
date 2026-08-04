@@ -21,7 +21,7 @@ export const TitleBox = styled.div`
 
 export const Title = styled.p`
   ${({ theme }) => ({ ...theme.typography.body1 })};
-  line-height: 1.4; /* TODO: 토큰 없음 - line-height 140% (body1은 160%) */
+  line-height: 1.4;
   min-height: 2.8em; /* 1줄 제목이어도 카드 높이가 2줄 기준으로 통일되도록 고정 */
   color: ${({ theme }) => theme.colors.gray.white};
   overflow: hidden;

@@ -1,19 +1,11 @@
 import axios from "axios";
-import { getAccessToken } from "./authToken";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
+  // NOTE: 인증 토큰은 서버가 쿠키로 내려주므로, withCredentials로 요청마다 자동 전송됨
   withCredentials: true,
-});
-
-apiClient.interceptors.request.use((config) => {
-  const accessToken = getAccessToken();
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return config;
 });
 
 apiClient.interceptors.response.use(

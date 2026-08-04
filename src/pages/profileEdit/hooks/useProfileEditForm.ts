@@ -23,6 +23,17 @@ interface ProfileEditFormValues {
   linkUrl: string;
 }
 
+export interface ProfileEditFormDefaultValues {
+  /** 닉네임 */
+  nickname: string;
+  /** 한 줄 소개 */
+  introduction: string;
+  /** 링크 URL */
+  linkUrl: string;
+  /** 기존 프로필 이미지 URL (없으면 빈 문자열) */
+  pictureUrl: string;
+}
+
 /** 닉네임 필드 검증 규칙 — 필수 입력(blur 후 노출) + 최대 글자 수(실시간 노출) */
 const nicknameRules = {
   validate: {
@@ -37,15 +48,20 @@ const introductionRules = {
 };
 
 /** 프로필 수정 폼 상태(react-hook-form) 및 이미지 크롭 플로우를 관리하는 훅 */
-export const useProfileEditForm = () => {
+export const useProfileEditForm = (
+  defaultValues?: ProfileEditFormDefaultValues,
+) => {
   const {
     control,
     handleSubmit,
     formState: { errors, touchedFields, isValid },
   } = useForm<ProfileEditFormValues>({
     mode: "onChange",
-    // TODO: API 연동 시 기존 프로필 값으로 초기화
-    defaultValues: { nickname: "", introduction: "", linkUrl: "" },
+    defaultValues: {
+      nickname: defaultValues?.nickname ?? "",
+      introduction: defaultValues?.introduction ?? "",
+      linkUrl: defaultValues?.linkUrl ?? "",
+    },
   });
 
   const [profileImage, setProfileImage] = useState<Blob | null>(null);
@@ -53,15 +69,18 @@ export const useProfileEditForm = () => {
   const [cropSourceUrl, setCropSourceUrl] = useState<string | null>(null);
 
   const previewUrl = useMemo(
-    () => (profileImage ? URL.createObjectURL(profileImage) : null),
-    [profileImage],
+    () =>
+      profileImage
+        ? URL.createObjectURL(profileImage)
+        : defaultValues?.pictureUrl || null,
+    [profileImage, defaultValues?.pictureUrl],
   );
 
   useEffect(() => {
     return () => {
-      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      if (profileImage && previewUrl) URL.revokeObjectURL(previewUrl);
     };
-  }, [previewUrl]);
+  }, [previewUrl, profileImage]);
 
   useEffect(() => {
     return () => {

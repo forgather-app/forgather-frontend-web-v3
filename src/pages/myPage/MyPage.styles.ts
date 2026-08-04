@@ -19,8 +19,14 @@ export const Avatar = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  /* TODO: 토큰 없음 - #D9D9D9 (프로필 이미지 placeholder) */
   background-color: #d9d9d9;
+`;
+
+export const AvatarImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 export const NameRow = styled.div`
