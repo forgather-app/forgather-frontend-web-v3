@@ -42,9 +42,9 @@ const MyPage = ({
     <NavigationBarLayout
       title="마이페이지"
       onBackClick={onBack}
-      rightIcon={<IcModify aria-hidden="true" />}
-      rightIconAriaLabel="프로필 수정"
-      onRightIconClick={onEditProfile}
+      rightContent={<IcModify aria-hidden="true" />}
+      rightAriaLabel="프로필 수정"
+      onRightClick={onEditProfile}
     >
       <S.ProfileSection>
         <S.ProfileRow>
