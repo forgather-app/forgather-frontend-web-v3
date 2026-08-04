@@ -34,6 +34,18 @@ const HomePage = () => {
           </S.HeaderActions>
         </S.Header>
 
+        {/* TODO: 방명록 상세 페이지 확인용 임시 진입점 — 실제 카드 클릭 진입 플로우 연동 후 제거 */}
+        <Button
+          variant="underlined"
+          text="방명록 상세 보기 (dev)"
+          onClick={() =>
+            navigate({
+              to: "/new-guestbook/$guestbookId",
+              params: { guestbookId: "2" },
+            })
+          }
+        />
+
         <S.ContentWrapper>
           {isEmpty ? (
             <HomeEmptyView />

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import ArtworkCard from "../components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "../components/UI/SwiperAction/SwiperAction";
 import { theme } from "../styles/theme";
@@ -35,6 +36,20 @@ const meta: Meta<typeof SwiperAction> = {
       description: "슬라이드로 전달되는 요소 리스트",
       table: { type: { summary: "React.ReactNode[]" } },
     },
+    sidePeekRatio: {
+      description:
+        "슬라이드 양옆에 보이게 할 여유 공간 비율(요소 너비 대비). activeIndex와 함께 쓰는 controlled 모드에서만 적용됩니다",
+      table: { type: { summary: "number | undefined" } },
+    },
+    activeIndex: {
+      description:
+        "외부에서 현재 인덱스를 제어하고 싶을 때 전달 (예: 라우트 파라미터와 동기화). 전달 시 슬라이드가 컨테이너 전체 폭을 차지하는 controlled 모드로 전환됩니다",
+      table: { type: { summary: "number | undefined" } },
+    },
+    onIndexChange: {
+      description: "드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다",
+      table: { type: { summary: "(index: number) => void" } },
+    },
   },
 };
 
@@ -70,5 +85,38 @@ export const Default: Story = {
   },
   args: {
     swiperElement: artworkCards,
+  },
+};
+
+const messageSlides = [
+  <div key="1" style={{ padding: 24, color: theme.colors.gray.white }}>
+    첫 번째 방명록 메시지입니다.
+  </div>,
+  <div key="2" style={{ padding: 24, color: theme.colors.gray.white }}>
+    두 번째 방명록 메시지입니다. 내용이 조금 더 길어질 수도 있어요.
+  </div>,
+  <div key="3" style={{ padding: 24, color: theme.colors.gray.white }}>
+    세 번째 방명록 메시지입니다.
+  </div>,
+];
+
+export const Controlled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "activeIndex/onIndexChange를 전달한 controlled 모드입니다. 슬라이드가 컨테이너 전체 폭을 차지하며 가운데 정렬되고, 현재 슬라이드의 실제 높이에 맞춰 트랙 높이가 조절됩니다.",
+      },
+    },
+  },
+  render: () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    return (
+      <SwiperAction
+        swiperElement={messageSlides}
+        activeIndex={activeIndex}
+        onIndexChange={setActiveIndex}
+      />
+    );
   },
 };

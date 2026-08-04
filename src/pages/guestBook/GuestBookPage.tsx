@@ -1,3 +1,4 @@
+import { withApiVersion } from "@/api/apiVersion";
 import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
   ApiResponseGuestBookResponse,
@@ -30,6 +31,7 @@ const GuestBookPage = ({
           // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
           (response as unknown as ApiResponseGuestBookResponse).data ?? {},
       },
+      request: withApiVersion(2),
     },
   );
 
@@ -56,15 +58,17 @@ const GuestBookPage = ({
       )}
 
       <S.GuestListContainer>
-        {guestBookCards.map((card) => (
-          <GuestList
-            key={card.id}
-            nickname={card.nickname ?? ""}
-            // TODO: 목록 API(GuestBookCardSimpleResponse)에 message/createdAt이 없어 상세 API 스펙 보완 전까지 비워둠
-            hasPhoto={card.containsPhoto}
-            onClick={() => onCardClick(card.id)}
-          />
-        ))}
+        {guestBookCards.map(
+          (card) =>
+            card.isRead && (
+              <GuestList
+                key={card.id}
+                nickname={card.nickname ?? ""}
+                hasPhoto={card.containsPhoto}
+                onClick={() => onCardClick(card.id)}
+              />
+            ),
+        )}
       </S.GuestListContainer>
       <S.BottomSpacer />
     </S.ScrollArea>
