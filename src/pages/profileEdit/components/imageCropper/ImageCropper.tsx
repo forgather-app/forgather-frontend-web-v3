@@ -187,7 +187,7 @@ const ImageCropper = ({ imageUrl, onSave }: ImageCropperProps) => {
       (blob) => {
         if (blob) onSave(blob);
       },
-      "image/jpeg",
+      "image/webp",
       0.92,
     );
   };

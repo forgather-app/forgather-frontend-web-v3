@@ -1,8 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useId, useState } from "react";
-import { setAuthTokens } from "@/api/authToken";
 import { useDevLogin } from "@/api/generated/auth-개발용-임시-로그인";
-import type { ApiResponseLoginResponse } from "@/api/model";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import { ERROR_MESSAGES } from "@/constants/error";
@@ -32,12 +30,8 @@ const DevLoginModal = ({ isOpen, onClose, redirectTo }: DevLoginModalProps) => {
     devLogin(
       { data: { loginId, password } },
       {
-        // NOTE: BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
-        // 실제 응답 바디는 ApiResponseLoginResponse (JSON)이므로 캐스팅해서 사용
-        onSuccess: (response) => {
-          const { accessToken, refreshToken } =
-            (response as unknown as ApiResponseLoginResponse).data ?? {};
-          setAuthTokens(accessToken, refreshToken);
+        // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
+        onSuccess: () => {
           showSnackBar("로그인 완료", "alert");
           onClose();
           navigate({ href: redirectTo ?? "/" });

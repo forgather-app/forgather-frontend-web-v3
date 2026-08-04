@@ -3,6 +3,7 @@ import { useState } from "react";
 import AppleLogo from "@/assets/icons/ic_apple.svg?react";
 import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
 import Button from "@/components/@common/Button/Button";
+import useAppleLoginBridge from "@/hooks/@common/useAppleLoginBridge";
 import useKakaoLoginBridge from "@/hooks/@common/useKakaoLoginBridge";
 import CarouselLayout from "@/shared/carousel/CarouselLayout";
 import DevLoginModal from "./components/DevLoginModal/DevLoginModal";
@@ -15,22 +16,28 @@ const routeApi = getRouteApi("/login/");
 
 const LoginPage = () => {
   const { redirectTo } = routeApi.useSearch();
-  const { requestKakaoLogin, isRequesting } = useKakaoLoginBridge(redirectTo);
+  const { requestAppleLogin, isRequesting: isAppleRequesting } =
+    useAppleLoginBridge(redirectTo);
+  const { requestKakaoLogin, isRequesting: isKakaoRequesting } =
+    useKakaoLoginBridge(redirectTo);
   const [isDevLoginOpen, setIsDevLoginOpen] = useState(false);
 
   return (
     <CarouselLayout
       footer={
         <S.FooterWrapper>
-          {/* TODO: 애플 로그인 기능 연동 */}
-          <S.AppleButton type="button">
+          <S.AppleButton
+            type="button"
+            onClick={requestAppleLogin}
+            disabled={isAppleRequesting}
+          >
             <AppleLogo aria-hidden="true" />
             <span>Apple로 로그인</span>
           </S.AppleButton>
           <S.KakaoButton
             type="button"
             onClick={requestKakaoLogin}
-            disabled={isRequesting}
+            disabled={isKakaoRequesting}
           >
             <KakaoLogo aria-hidden="true" />
             <span>카카오로 로그인하기</span>
