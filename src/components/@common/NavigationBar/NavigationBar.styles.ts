@@ -12,16 +12,28 @@ export const Slot = styled.div<{ $align: "start" | "end" }>`
   display: flex;
   align-items: center;
   justify-self: ${({ $align }) => $align};
-  ${({ $align }) => $align === "start" && "margin-left: -12px;"}
-  ${({ $align }) => $align === "end" && "margin-right: -12px;"}
 `;
 
-export const IconButton = styled.button`
+export const IconButton = styled.button<{ $align: "start" | "end" }>`
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 8px 0;
   color: ${({ theme }) => theme.colors.gray.gray100};
+  ${({ $align }) => $align === "start" && "margin-left: -12px;"}
+  ${({ $align }) => $align === "end" && "margin-right: -12px;"}
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.main.purple};
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+`;
+
+export const TextButton = styled.button`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+  padding: 8px 0;
 
   &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.colors.main.purple};

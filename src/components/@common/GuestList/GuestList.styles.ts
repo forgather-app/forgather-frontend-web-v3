@@ -2,73 +2,99 @@ import styled from "@emotion/styled";
 
 export const Card = styled.button`
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  align-items: flex-start;
   width: 100%;
   box-sizing: border-box;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: left;
   background: linear-gradient(
-    185.96deg,
-    #292d32 6.05%,
+    193deg,
+    #292d32 6%,
     ${({ theme }) => theme.colors.gray.gray600} 57%
   );
 `;
 
-export const TitleGroup = styled.div`
+export const HeaderRow = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+`;
+
+export const Nickname = styled.p`
+  ${({ theme }) => ({ ...theme.typography.label })};
+  color: ${({ theme }) => theme.colors.gray.white};
   flex: 1;
   min-width: 0;
-  text-align: left;
-`;
-
-export const TitleBold = styled.span`
-  ${({ theme }) => ({ ...theme.typography.body1 })};
-  color: ${({ theme }) => theme.colors.gray.gray50};
-  display: block;
-  min-width: 0;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
-export const TitleRegular = styled.span`
-  ${({ theme }) => ({ ...theme.typography.body4 })};
-  color: ${({ theme }) => theme.colors.gray.gray200};
-  white-space: nowrap;
+export const PhotoIconWrapper = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
 `;
 
-export const Actions = styled.div`
+export const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  width: 100%;
+`;
+
+export const Message = styled.p`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  /* TODO: 토큰 없음 - line-height 150% (subBody 토큰은 160%) */
+  line-height: 150%;
+  color: ${({ theme }) => theme.colors.gray.gray100};
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+export const MetaRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
+export const DateTimeGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-shrink: 0;
-`;
-
-export const PhotoIconWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  background: ${({ theme }) => theme.colors.gray.gray500};
-  border-radius: 100px;
-  overflow: hidden;
-  flex-shrink: 0;
+  ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.gray.gray300};
+  white-space: nowrap;
 `;
 
-export const ChevronWrapper = styled.div`
+export const DetailLink = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  gap: 2px;
+  ${({ theme }) => ({ ...theme.typography.caption })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+  white-space: nowrap;
+`;
+
+export const ChevronWrapper = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
   transform: scaleX(-1);
 `;
