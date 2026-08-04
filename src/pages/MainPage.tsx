@@ -25,6 +25,16 @@ const PAGE_LINKS = [
     to: "/new-guestbook/$guestbookId",
     params: { guestbookId: "1" },
   },
+  {
+    label: "방명록 페이지 이동 (임시)",
+    to: "/spaces/$spaceId/guestbook",
+    params: { spaceId: "1" },
+  },
+  {
+    label: "방명록 작성 페이지 이동 (임시)",
+    to: "/spaces/$spaceId/guestbook/write",
+    params: { spaceId: "1" },
+  },
 ] as const;
 
 function MainPage() {

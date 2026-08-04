@@ -1,11 +1,12 @@
 import { Controller } from "react-hook-form";
+import IcPhoto from "@/assets/icons/ic_photo.svg?react";
 import Button from "@/components/@common/Button/Button";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
+import PhotoInput from "@/components/@common/photoInput/PhotoInput";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "./CreateProductPage.styles";
-import PhotoInput from "./components/photoInput/PhotoInput";
 import {
   type CreateProductFormData,
   useCreateProductForm,
@@ -88,6 +89,10 @@ const CreateProductPage = ({ onBack, onNext }: CreateProductPageProps) => {
             photos={photos}
             maxCount={CONSTRAINTS.PRODUCT.MAX_PHOTO_COUNT}
             onChange={setPhotos}
+            icon={<IcPhoto aria-hidden="true" width={24} height={24} />}
+            showCoverBadge
+            addButtonAriaLabel="작품 사진 추가"
+            listAriaLabel="첨부한 작품 사진"
           />
         </S.FieldGroup>
 
