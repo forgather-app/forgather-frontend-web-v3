@@ -1,8 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { setAuthTokens } from "@/api/authToken";
 import { useAppleLoginConfirm } from "@/api/generated/auth-인증";
-import type { ApiResponseLoginResponse } from "@/api/model";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
@@ -40,12 +38,8 @@ const useAppleLoginBridge = () => {
           },
         },
         {
-          // NOTE: BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
-          // 실제 응답 바디는 ApiResponseLoginResponse (JSON)이므로 캐스팅해서 사용
-          onSuccess: (response) => {
-            const { accessToken, refreshToken } =
-              (response as unknown as ApiResponseLoginResponse).data ?? {};
-            setAuthTokens(accessToken, refreshToken);
+          // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
+          onSuccess: () => {
             showSnackBar("로그인 완료", "alert");
             navigate({ to: "/" });
           },

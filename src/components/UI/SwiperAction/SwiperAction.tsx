@@ -1,28 +1,23 @@
-import { animate, type Transition, useMotionValue } from "framer-motion";
+import { animate, useMotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { VisuallyHidden } from "@/styles/@common/VisuallyHidden/VisuallyHidden.styles";
+import {
+  CARD_GAP,
+  MIN_THRESHOLD,
+  PEEK_WIDTH,
+  SPRING_PRESET,
+  THRESHOLD_RATIO,
+} from "./SwiperAction.constants";
 import * as S from "./SwiperAction.styles";
 
 interface SwiperActionProps {
   /** 슬라이드로 전달되는 요소 리스트 */
   swiperElement: React.ReactNode[];
-  /** 슬라이드 양옆에 보이게 할 여유 공간 비율(요소 너비 대비) */
-  sidePeekRatio?: number;
 }
 
-const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
-  const springPreset: Transition = {
-    type: "spring",
-    stiffness: 450,
-    damping: 32,
-    mass: 0.3,
-  };
-
-  const containerRef = useRef<HTMLDivElement>(null);
+const SwiperAction = ({ swiperElement }: SwiperActionProps) => {
   const trackRef = useRef<HTMLDivElement>(null);
-
   const elementWidthRef = useRef(0);
-  const containerWidthRef = useRef(0);
 
   const startX = useRef(0);
   const startY = useRef(0);
@@ -31,23 +26,21 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
   const shouldPreventClick = useRef(false);
 
   const x = useMotionValue(0);
-  const MIN_THRESHOLD = 5;
-  const STANDARD = 5;
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [containerMaxWidth, setContainerMaxWidth] = useState<number>();
+
+  const calculateLocation = (index: number) => {
+    const step = elementWidthRef.current + CARD_GAP;
+    return Math.floor(-step * index);
+  };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 첫 마운트시에만 계산
   useEffect(() => {
     const updateLayout = () => {
-      const root = getComputedStyle(document.documentElement);
-      const padding = Number(
-        root.getPropertyValue("--layout-padding-x").replace("px", ""),
-      );
-
-      elementWidthRef.current = trackRef.current?.children[0].clientWidth ?? 0;
-      containerWidthRef.current = containerRef.current?.clientWidth ?? 0;
-
-      threshold.current = Math.floor(
-        (containerWidthRef.current - 2 * padding) / STANDARD,
-      );
+      elementWidthRef.current = trackRef.current?.children[0]?.clientWidth ?? 0;
+      threshold.current = Math.floor(elementWidthRef.current * THRESHOLD_RATIO);
+      setContainerMaxWidth(elementWidthRef.current + CARD_GAP + PEEK_WIDTH);
       x.set(calculateLocation(0));
     };
     updateLayout();
@@ -56,24 +49,8 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
     return () => window.removeEventListener("resize", updateLayout);
   }, []);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [styleGap, setStyleGap] = useState(0);
-
-  const calculateLocation = (index: number) => {
-    const slice = sidePeekRatio ? elementWidthRef.current * sidePeekRatio : 0;
-    const gap =
-      (containerWidthRef.current - (elementWidthRef.current + slice * 2)) / 2;
-    const start = gap + slice;
-
-    setStyleGap(gap);
-
-    const move = elementWidthRef.current + gap;
-
-    return Math.floor(start - move * index);
-  };
-
   const updateLocation = (index: number) => {
-    animate(x, calculateLocation(index), springPreset);
+    animate(x, calculateLocation(index), SPRING_PRESET);
   };
 
   const snapToIndex = (diffX: number) => {
@@ -83,16 +60,16 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
     if (ableToMoveLeft && currentIndex < swiperElement.length - 1) {
       const nextIndex = currentIndex + 1;
       setCurrentIndex(nextIndex);
-      animate(x, calculateLocation(nextIndex), springPreset);
+      animate(x, calculateLocation(nextIndex), SPRING_PRESET);
       return;
     }
     if (ableToMoveRight && currentIndex > 0) {
       const nextIndex = currentIndex - 1;
       setCurrentIndex(nextIndex);
-      animate(x, calculateLocation(nextIndex), springPreset);
+      animate(x, calculateLocation(nextIndex), SPRING_PRESET);
       return;
     }
-    animate(x, calculateLocation(currentIndex), springPreset);
+    animate(x, calculateLocation(currentIndex), SPRING_PRESET);
   };
 
   const moveToRight = () => {
@@ -158,12 +135,12 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
 
   const handlePointerLeave = () => {
     isDragging.current = false;
-    animate(x, calculateLocation(currentIndex), springPreset);
+    animate(x, calculateLocation(currentIndex), SPRING_PRESET);
   };
 
   return (
     <S.Container
-      ref={containerRef}
+      style={containerMaxWidth ? { maxWidth: containerMaxWidth } : undefined}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerMove={handlePointerMove}
@@ -177,7 +154,7 @@ const SwiperAction = ({ swiperElement, sidePeekRatio }: SwiperActionProps) => {
           onClick={moveToLeft}
         />
       )}
-      <S.Track ref={trackRef} style={{ x, gap: styleGap }}>
+      <S.Track ref={trackRef} style={{ x }}>
         {swiperElement.map((element, index) => (
           <S.Slide
             // biome-ignore lint/suspicious/noArrayIndexKey: 현재로썬 index만 사용 가능함
