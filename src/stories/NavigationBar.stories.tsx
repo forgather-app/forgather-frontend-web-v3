@@ -15,15 +15,21 @@ const meta: Meta<typeof NavigationBar> = {
   },
   argTypes: {
     title: { description: "중앙에 표시되는 타이틀" },
-    rightIcon: { description: "우측에 표시할 SVG 아이콘" },
-    rightIconAriaLabel: { description: "우측 아이콘 버튼의 접근성 레이블" },
+    rightContent: {
+      description:
+        "우측에 표시할 콘텐츠 — SVG 아이콘 또는 텍스트(예: 나중에 하기)",
+    },
+    rightAriaLabel: {
+      description:
+        "rightContent가 아이콘일 때의 접근성 레이블. 텍스트일 때는 불필요",
+    },
     onBackClick: {
       action: "뒤로가기 클릭",
       description: "왼쪽 뒤로가기 버튼을 눌렀을 때 실행되는 핸들러",
     },
-    onRightIconClick: {
-      action: "오른쪽 아이콘 클릭",
-      description: "우측 아이콘 버튼을 눌렀을 때 실행되는 핸들러",
+    onRightClick: {
+      action: "오른쪽 버튼 클릭",
+      description: "우측 버튼(rightContent)을 눌렀을 때 실행되는 핸들러",
     },
   },
 };
@@ -85,8 +91,8 @@ export const DualIconTitle: Story = {
   name: "dual_icon_title",
   args: {
     onBackClick: () => {},
-    rightIcon: <MeatballIcon />,
-    rightIconAriaLabel: "더 보기",
+    rightContent: <MeatballIcon />,
+    rightAriaLabel: "더 보기",
     title: "Title",
   },
 };
@@ -96,8 +102,8 @@ export const DualIcon: Story = {
   name: "dual_icon",
   args: {
     onBackClick: () => {},
-    rightIcon: <MeatballIcon />,
-    rightIconAriaLabel: "더 보기",
+    rightContent: <MeatballIcon />,
+    rightAriaLabel: "더 보기",
   },
 };
 
@@ -105,8 +111,19 @@ export const DualIcon: Story = {
 export const RightIcon: Story = {
   name: "right_Icon",
   args: {
-    rightIcon: <CloseIcon />,
-    rightIconAriaLabel: "닫기",
+    rightContent: <CloseIcon />,
+    rightAriaLabel: "닫기",
+  },
+};
+
+/** dual_text_title 변형 — 뒤로가기 + 오른쪽 텍스트 버튼(스킵) + 중앙 타이틀 */
+export const DualTextTitle: Story = {
+  name: "dual_text_title",
+  args: {
+    onBackClick: () => {},
+    title: "새 스페이스",
+    rightContent: "나중에 하기",
+    onRightClick: () => {},
   },
 };
 
@@ -115,8 +132,8 @@ export const LongTitle: Story = {
   name: "long_title (엣지 케이스)",
   args: {
     onBackClick: () => {},
-    rightIcon: <MeatballIcon />,
-    rightIconAriaLabel: "더 보기",
+    rightContent: <MeatballIcon />,
+    rightAriaLabel: "더 보기",
     title: "전시 방명록",
   },
 };

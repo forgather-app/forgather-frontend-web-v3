@@ -1,4 +1,4 @@
-import type { ReactElement, ReactNode, SVGProps } from "react";
+import type { ReactNode } from "react";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import HeaderScrollLayout from "../HeaderScrollLayout/HeaderScrollLayout";
 
@@ -9,21 +9,21 @@ interface NavigationBarLayoutProps {
   title?: string;
   /** 뒤로가기 버튼 클릭 핸들러 */
   onBackClick?: () => void;
-  /** 오른쪽 아이콘 (32×32 SVG 권장) */
-  rightIcon?: ReactElement<SVGProps<SVGSVGElement>>;
-  /** 오른쪽 아이콘 버튼의 접근성 레이블 */
-  rightIconAriaLabel?: string;
-  /** 오른쪽 아이콘 클릭 핸들러 */
-  onRightIconClick?: () => void;
+  /** 오른쪽에 표시할 콘텐츠 — SVG 아이콘(32×32 권장) 또는 텍스트 */
+  rightContent?: ReactNode;
+  /** rightContent가 아이콘일 때의 접근성 레이블. 텍스트일 때는 불필요합니다 */
+  rightAriaLabel?: string;
+  /** 오른쪽 버튼(rightContent) 클릭 핸들러 */
+  onRightClick?: () => void;
 }
 
 const NavigationBarLayout = ({
   children,
   title,
   onBackClick,
-  rightIcon,
-  rightIconAriaLabel,
-  onRightIconClick,
+  rightContent,
+  rightAriaLabel,
+  onRightClick,
 }: NavigationBarLayoutProps) => {
   return (
     <HeaderScrollLayout
@@ -31,9 +31,9 @@ const NavigationBarLayout = ({
         <NavigationBar
           title={title}
           onBackClick={onBackClick}
-          rightIcon={rightIcon}
-          rightIconAriaLabel={rightIconAriaLabel}
-          onRightIconClick={onRightIconClick}
+          rightContent={rightContent}
+          rightAriaLabel={rightAriaLabel}
+          onRightClick={onRightClick}
         />
       }
     >
