@@ -58,10 +58,12 @@ const GuestbookDetailPage = ({
     <S.Wrapper>
       <NavigationBar
         onBackClick={onBack}
-        rightIcon={<IcVerticalDots width={24} height={24} />}
-        rightIconAriaLabel="더보기"
+        rightContent={
+          <IcVerticalDots width={24} height={24} aria-hidden="true" />
+        }
+        rightAriaLabel="더보기"
         // TODO: 케밥 메뉴(수정/삭제/신고 등) 액션 연동 필요
-        onRightIconClick={() => {}}
+        onRightClick={() => {}}
       />
       <GuestbookDetailHeader
         nickname={currentCard.nickname}

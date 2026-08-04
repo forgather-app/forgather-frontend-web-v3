@@ -5,18 +5,13 @@ import type {
   GuestBookCardSimpleResponse,
   GuestBookResponse,
 } from "@/api/model";
-import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
-import IcLink from "@/assets/icons/ic_link.svg?react";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
-import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import * as S from "./GuestBookPage.styles";
 
 interface GuestBookPageProps {
   /** 스페이스 ID */
   spaceId: string;
-  /** 뒤로가기 핸들러 */
-  onBack: () => void;
   /** 일반 방명록 카드 클릭 핸들러 */
   onCardClick: (guestbookId: number) => void;
   /** 새 방명록 스택 클릭 핸들러 (새 방명록 목록 페이지로 이동) */
@@ -25,7 +20,6 @@ interface GuestBookPageProps {
 
 const GuestBookPage = ({
   spaceId,
-  onBack,
   onCardClick,
   onNewStackClick,
 }: GuestBookPageProps) => {
@@ -77,30 +71,6 @@ const GuestBookPage = ({
         )}
       </S.GuestListContainer>
       <S.BottomSpacer />
-      <S.BottomBar>
-        <S.FloatingIconButton
-          type="button"
-          aria-label="뒤로 가기"
-          onClick={onBack}
-        >
-          <IcLeftArrow width={24} height={24} />
-        </S.FloatingIconButton>
-        <TabMenu
-          variant="pill"
-          activeTab="right"
-          // TODO: 작품 탭 페이지 구현 후 연동 필요
-          left={{ text: "작품", onClick: () => {} }}
-          right={{ text: "방명록", onClick: () => {} }}
-        />
-        <S.FloatingIconButton
-          type="button"
-          aria-label="링크 공유"
-          // TODO: 링크 공유 기능 연동
-          onClick={() => {}}
-        >
-          <IcLink width={24} height={24} />
-        </S.FloatingIconButton>
-      </S.BottomBar>
     </S.ScrollArea>
   );
 };
