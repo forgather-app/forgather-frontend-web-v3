@@ -26,7 +26,7 @@ interface GuestbookDetailPageProps {
   onNavigate: (id: number) => void;
 }
 
-/** 카드 상세(메시지·사진)는 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다 */
+/** 사진은 목록 응답에 없어(containsPhoto만 제공) 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다. 닉네임·메시지·작성일은 목록 응답에 이미 포함돼 있어 개별 조회를 기다릴 필요가 없습니다 */
 const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
   useReadCard<GuestBookCardResponse>(spaceId, cardId ?? -1, {
     query: {
@@ -76,10 +76,10 @@ const GuestbookDetailPage = ({
     return undefined;
   };
 
-  const nickname =
-    cards.find((card) => card.id === currentCardId)?.nickname ?? "";
-  const createdAt = currentQuery.data?.createdAt
-    ? new Date(currentQuery.data.createdAt)
+  const currentSimple = cards.find((card) => card.id === currentCardId);
+  const nickname = currentSimple?.nickname ?? "";
+  const createdAt = currentSimple?.createdAt
+    ? new Date(currentSimple.createdAt)
     : undefined;
 
   return (
@@ -112,15 +112,13 @@ const GuestbookDetailPage = ({
           }}
           swiperElement={cardIds.map((id) => {
             const detail = getDetail(id);
+            const simple = cards.find((card) => card.id === id);
 
             if (!detail) {
-              const simple = cards.find((card) => card.id === id);
               return (
                 <S.SlideContent key={id}>
                   {simple?.containsPhoto && <S.SkeletonPhoto aria-hidden />}
-                  <S.SkeletonLine aria-hidden style={{ width: "100%" }} />
-                  <S.SkeletonLine aria-hidden style={{ width: "90%" }} />
-                  <S.SkeletonLine aria-hidden style={{ width: "60%" }} />
+                  <S.Message>{simple?.message}</S.Message>
                 </S.SlideContent>
               );
             }

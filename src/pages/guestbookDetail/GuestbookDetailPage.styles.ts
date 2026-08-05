@@ -42,11 +42,3 @@ export const SkeletonPhoto = styled.div`
   background-size: 300% 100%;
   animation: ${gradientSweep} 1.5s linear infinite;
 `;
-
-export const SkeletonLine = styled.div`
-  height: 20px;
-  border-radius: 4px;
-  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
-  background-size: 300% 100%;
-  animation: ${gradientSweep} 1.5s linear infinite;
-`;
