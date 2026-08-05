@@ -1,0 +1,131 @@
+import styled from "@emotion/styled";
+import { shouldForwardProp } from "@/utils/shouldForwardProp";
+
+export const ScrollArea = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const TitleRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 24px;
+`;
+
+export const Title = styled.h1`
+  ${({ theme }) => ({ ...theme.typography.title1 })};
+  color: ${({ theme }) => theme.colors.gray.white};
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;
+
+export const EditButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 29px;
+  height: 29px;
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
+export const DescriptionRow = styled("div", { shouldForwardProp })<{
+  $isExpanded: boolean;
+}>`
+  display: flex;
+  flex-direction: ${({ $isExpanded }) => ($isExpanded ? "column" : "row")};
+  align-items: flex-end;
+  gap: 4px;
+  margin-top: 16px;
+`;
+
+export const Description = styled("p", { shouldForwardProp })<{
+  $isExpanded: boolean;
+}>`
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.gray100};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: ${({ $isExpanded }) => ($isExpanded ? "unset" : 2)};
+  -webkit-box-orient: vertical;
+`;
+
+export const MoreButton = styled.button`
+  flex-shrink: 0;
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const Divider = styled.div`
+  height: 8px;
+  margin: 24px calc(-1 * ${({ theme }) => theme.layout.sidePadding}px) 0;
+  background-color: rgba(17, 17, 17, 0.7);
+`;
+
+export const SectionHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+`;
+
+export const SectionTitle = styled.h2`
+  ${({ theme }) => ({ ...theme.typography.heading2 })};
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
+export const AddButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  color: ${({ theme }) => theme.colors.gray.gray400};
+`;
+
+export const CarouselWrapper = styled.div`
+  width: fit-content;
+  margin-top: 16px;
+`;
+
+export const ErrorState = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+`;
+
+export const ErrorMessage = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body3 })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const BottomSpacer = styled.div`
+  position: sticky;
+  bottom: 0;
+  flex-shrink: 0;
+  height: 34px;
+  background: linear-gradient(
+    180deg,
+    rgba(27, 29, 31, 0) 0%,
+    ${({ theme }) => theme.colors.gray.gray700} 50%
+  );
+  pointer-events: none;
+`;
