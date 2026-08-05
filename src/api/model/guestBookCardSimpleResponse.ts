@@ -13,6 +13,10 @@ export interface GuestBookCardSimpleResponse {
   id?: number;
   /** 방문자 닉네임 */
   nickname?: string;
+  /** 메세지 */
+  message?: string;
+  /** 방명록 카드 생성 시각 */
+  createdAt?: string;
   /** 사진 포함 여부 */
   containsPhoto?: boolean;
   /** 호스트 읽음 여부 */
