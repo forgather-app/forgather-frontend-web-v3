@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { gradientSweep } from "@/styles/animations";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -31,4 +32,13 @@ export const SlideContent = styled.div`
 export const Message = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
+`;
+
+export const SkeletonPhoto = styled.div`
+  width: 100%;
+  height: 140px;
+  border-radius: 16px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
 `;

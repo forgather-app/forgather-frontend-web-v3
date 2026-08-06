@@ -14,7 +14,7 @@ function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
   const isGuestBookTab = useMatches().some(
-    (match) => match.routeId === "/_authenticated/spaces/$spaceId/guestbook",
+    (match) => match.routeId === "/_authenticated/spaces/$spaceId/guestbook/",
   );
 
   return (

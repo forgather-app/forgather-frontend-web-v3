@@ -8,6 +8,10 @@ import HomeEmptyView from "./components/homeEmptyView/HomeEmptyView";
 import * as S from "./HomePage.styles";
 import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
 
+// TODO: 방명록 상세 페이지 확인용 개발 진입 버튼 전용 테스트 값 — 실제 스페이스/카드 목록 연동 후 제거
+const DEV_TEST_SPACE_ID = "o6shou1fvq";
+const DEV_TEST_GUESTBOOK_CARD_ID = "2";
+
 const HomePage = () => {
   const navigate = useNavigate();
   const spaces = MOCK_SPACES;
@@ -40,8 +44,11 @@ const HomePage = () => {
           text="방명록 상세 보기 (dev)"
           onClick={() =>
             navigate({
-              to: "/new-guestbook/$guestbookId",
-              params: { guestbookId: "2" },
+              to: "/spaces/$spaceId/guestbook/$guestbookId",
+              params: {
+                spaceId: DEV_TEST_SPACE_ID,
+                guestbookId: DEV_TEST_GUESTBOOK_CARD_ID,
+              },
             })
           }
         />

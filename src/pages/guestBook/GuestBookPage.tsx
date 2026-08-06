@@ -39,7 +39,11 @@ const GuestBookPage = ({
     (card): card is GuestBookCardSimpleResponse & { id: number } =>
       card.id !== undefined,
   );
-  const hasNewCards = (guestBook.unreadCount ?? 0) > 0;
+  const unreadCount = guestBookCards.reduce(
+    (count, card) => count + (card.isRead === false ? 1 : 0),
+    0,
+  );
+  const hasNewCards = unreadCount > 0;
   const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
   return (
@@ -53,7 +57,7 @@ const GuestBookPage = ({
 
       {hasNewCards && (
         <S.GuestCardWrapper>
-          <GuestListStack onClick={onNewStackClick} />
+          <GuestListStack count={unreadCount} onClick={onNewStackClick} />
         </S.GuestCardWrapper>
       )}
 
