@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import {
   useReadCard,
   useReadGuestBookV2Suspense,
@@ -10,6 +11,7 @@ import type {
 } from "@/api/model";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
+import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import GuestbookAttachedPhoto from "./components/guestbookAttachedPhoto/GuestbookAttachedPhoto";
 import GuestbookDetailHeader from "./components/guestbookDetailHeader/GuestbookDetailHeader";
@@ -43,6 +45,18 @@ const GuestbookDetailPage = ({
   onBack,
   onNavigate,
 }: GuestbookDetailPageProps) => {
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  // 닫힘 애니메이션 동안 Modal이 언마운트되지 않으므로, onClose에서 images를 비우면
+  // 잠깐 "n / 0"처럼 잘못된 카운터가 보입니다. 닫을 때는 isOpen만 false로 바꾸고
+  // 마지막으로 열었던 카드 데이터는 그대로 유지합니다.
+  // openId는 열 때마다 증가시켜 ImageLightbox의 key로 사용합니다 — 같은 카드를 다시 열어도
+  // 항상 리마운트되어 첫 번째 이미지부터 시작합니다.
+  const lightboxOpenIdRef = useRef(0);
+  const [lightboxCard, setLightboxCard] = useState<{
+    openId: number;
+    images: string[];
+  } | null>(null);
+
   const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
     spaceId,
     {
@@ -132,6 +146,16 @@ const GuestbookDetailPage = ({
                     imageUrl={photos[0]?.path}
                     currentIndex={1}
                     totalCount={photos.length}
+                    onClick={() => {
+                      lightboxOpenIdRef.current += 1;
+                      setLightboxCard({
+                        openId: lightboxOpenIdRef.current,
+                        images: photos
+                          .map((photo) => photo.path)
+                          .filter((path): path is string => Boolean(path)),
+                      });
+                      setIsLightboxOpen(true);
+                    }}
                   />
                 )}
                 <S.Message>{detail.message}</S.Message>
@@ -140,6 +164,12 @@ const GuestbookDetailPage = ({
           })}
         />
       </S.ScrollArea>
+      <ImageLightbox
+        key={lightboxCard?.openId}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        images={lightboxCard?.images ?? []}
+      />
     </S.Wrapper>
   );
 };
