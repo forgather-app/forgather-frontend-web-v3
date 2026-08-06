@@ -17,7 +17,27 @@ const PAGE_LINKS = [
   { label: "로그인 페이지 이동 (임시)", to: "/login" },
   { label: "회원가입 페이지 이동 (임시)", to: "/sign-up" },
   { label: "전시 생성 페이지 이동 (임시)", to: "/create-exhibition" },
+  { label: "작품 추가하기 페이지 이동 (임시)", to: "/create-product" },
+  { label: "스페이스 생성 페이지 이동 (임시)", to: "/create-space" },
   { label: "방명록 목록 페이지 이동 (임시)", to: "/new-guestbooks" },
+  {
+    label: "스페이스 메인(작품) 페이지 이동 (임시, spaceCode 하드코딩)",
+    to: "/spaces/$spaceId",
+    // TODO: 현재 로그인 계정에 연결된 실제 스페이스가 없어 테스트용으로 하드코딩. 계정에 스페이스가 생기면 firstSpaceCode 방식으로 교체
+    params: { spaceId: "o6shou1fvq" },
+  },
+  {
+    label: "방명록 페이지 이동 (임시, spaceCode 하드코딩)",
+    to: "/spaces/$spaceId/guestbook",
+    // TODO: 현재 로그인 계정에 연결된 실제 스페이스가 없어 테스트용으로 하드코딩. 계정에 스페이스가 생기면 firstSpaceCode 방식으로 교체
+    params: { spaceId: "o6shou1fvq" },
+  },
+  {
+    label: "방명록 작성 페이지 이동 (임시, spaceCode 하드코딩)",
+    to: "/spaces/$spaceId/guestbook/write",
+    // TODO: 현재 로그인 계정에 연결된 실제 스페이스가 없어 테스트용으로 하드코딩. 계정에 스페이스가 생기면 firstSpaceCode 방식으로 교체
+    params: { spaceId: "o6shou1fvq" },
+  },
 ] as const;
 
 function MainPage() {
@@ -59,6 +79,20 @@ function MainPage() {
           style={buttonStyle}
         >
           방명록 페이지 이동 (임시)
+        </button>
+      )}
+      {firstSpaceCode && (
+        <button
+          type="button"
+          onClick={() =>
+            navigate({
+              to: "/spaces/$spaceId",
+              params: { spaceId: firstSpaceCode },
+            })
+          }
+          style={buttonStyle}
+        >
+          스페이스 메인(작품) 페이지 이동 (임시)
         </button>
       )}
     </div>

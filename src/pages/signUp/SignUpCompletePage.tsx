@@ -21,8 +21,10 @@ const SignUpCompletePage = () => {
       </S.GraphicArea>
 
       <S.Footer>
-        {/* TODO: 스페이스 생성 플로우 라우트 준비되면 연동 */}
-        <Button text="스페이스 만들기" />
+        <Button
+          text="스페이스 만들기"
+          onClick={() => navigate({ to: "/create-space" })}
+        />
         <S.SkipButton type="button" onClick={() => navigate({ to: "/" })}>
           나중에 하기
         </S.SkipButton>
