@@ -5,14 +5,26 @@ import ImagePlaceholderGraphic from "@/assets/images/artwork_card_placeholder.sv
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
+import useSaveImageBridge from "@/hooks/@common/useSaveImageBridge";
 import * as S from "./ImageLightbox.styles";
 
-interface LightboxSlideProps {
-  src: string;
-  index: number;
+export interface LightboxImage {
+  /** 이미지 URL */
+  url: string;
+  /** 저장 시 사용할 파일명. 없으면 URL에서 유추합니다. */
+  name?: string;
 }
 
-const LightboxSlide = ({ src, index }: LightboxSlideProps) => {
+const getFilename = (image: LightboxImage, index: number) =>
+  image.name ?? image.url.split("/").pop() ?? `image-${index + 1}`;
+
+interface LightboxSlideProps {
+  image: LightboxImage;
+  index: number;
+  onSave: (image: LightboxImage, index: number) => void;
+}
+
+const LightboxSlide = ({ image, index, onSave }: LightboxSlideProps) => {
   const [imageError, setImageError] = useState(false);
 
   return (
@@ -23,17 +35,17 @@ const LightboxSlide = ({ src, index }: LightboxSlideProps) => {
         </S.PlaceholderWrapper>
       ) : (
         <S.SlideImage
-          src={src}
+          src={image.url}
           alt={`첨부 이미지 ${index + 1}`}
           onError={() => setImageError(true)}
         />
       )}
       <S.DownloadButtonWrapper>
-        {/* TODO: 다운로드 기능 연동 필요 (이번 스코프 아님) */}
         <Button
           variant="icon"
           icon={<IcDownload aria-hidden="true" />}
           aria-label="이미지 다운로드"
+          onClick={() => onSave(image, index)}
         />
       </S.DownloadButtonWrapper>
     </S.ImageSquare>
@@ -45,17 +57,29 @@ interface ImageLightboxProps {
   isOpen: boolean;
   /** 닫기(X) 버튼 클릭 시 호출되는 콜백 */
   onClose: () => void;
-  /** 전체보기할 이미지 URL 목록 */
-  images: string[];
+  /** 전체보기할 이미지 목록 */
+  images: LightboxImage[];
 }
 
 const ImageLightbox = ({ isOpen, onClose, images }: ImageLightboxProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { saveImage, saveImages } = useSaveImageBridge();
 
-  // Root는 모바일 뷰포트에서 화면 전체를 덮어 Modal.Overlay(Backdrop)까지 클릭이 닿지 않으므로,
-  // 이미지 주변 여백을 직접 클릭했을 때만(자식 요소 클릭은 제외) 닫히도록 처리합니다.
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) onClose();
+  };
+
+  const handleSave = (image: LightboxImage, index: number) => {
+    saveImage({ url: image.url, filename: getFilename(image, index) });
+  };
+
+  const handleSaveAll = () => {
+    saveImages(
+      images.map((image, index) => ({
+        url: image.url,
+        filename: getFilename(image, index),
+      })),
+    );
   };
 
   return (
@@ -68,9 +92,14 @@ const ImageLightbox = ({ isOpen, onClose, images }: ImageLightboxProps) => {
         <S.SwiperWrapper onClick={handleBackgroundClick}>
           <SwiperAction
             onIndexChange={setCurrentIndex}
-            swiperElement={images.map((src, index) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel slide
-              <LightboxSlide key={index} src={src} index={index} />
+            swiperElement={images.map((image, index) => (
+              <LightboxSlide
+                // biome-ignore lint/suspicious/noArrayIndexKey: positional carousel slide
+                key={index}
+                image={image}
+                index={index}
+                onSave={handleSave}
+              />
             ))}
           />
         </S.SwiperWrapper>
@@ -92,8 +121,9 @@ const ImageLightbox = ({ isOpen, onClose, images }: ImageLightboxProps) => {
               ))}
             </S.DotsWrapper>
           </S.CounterGroup>
-          {/* TODO: 모두 저장하기 기능 연동 필요 (이번 스코프 아님) */}
-          <S.SaveAllButton type="button">모두 저장하기</S.SaveAllButton>
+          <S.SaveAllButton type="button" onClick={handleSaveAll}>
+            모두 저장하기
+          </S.SaveAllButton>
         </S.FooterPanel>
       </S.Root>
     </Modal>

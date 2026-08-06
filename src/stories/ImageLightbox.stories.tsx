@@ -4,11 +4,26 @@ import ImageLightbox from "../components/UI/ImageLightbox/ImageLightbox";
 import { theme } from "../styles/theme";
 
 const DUMMY_IMAGES = [
-  "https://picsum.photos/seed/forgather-1/720/720",
-  "https://picsum.photos/seed/forgather-2/720/720",
-  "https://picsum.photos/seed/forgather-3/720/720",
-  "https://picsum.photos/seed/forgather-4/720/720",
-  "https://picsum.photos/seed/forgather-5/720/720",
+  {
+    url: "https://picsum.photos/seed/forgather-1/720/720",
+    name: "photo-1.jpg",
+  },
+  {
+    url: "https://picsum.photos/seed/forgather-2/720/720",
+    name: "photo-2.jpg",
+  },
+  {
+    url: "https://picsum.photos/seed/forgather-3/720/720",
+    name: "photo-3.jpg",
+  },
+  {
+    url: "https://picsum.photos/seed/forgather-4/720/720",
+    name: "photo-4.jpg",
+  },
+  {
+    url: "https://picsum.photos/seed/forgather-5/720/720",
+    name: "photo-5.jpg",
+  },
 ];
 
 const meta: Meta<typeof ImageLightbox> = {
@@ -22,14 +37,14 @@ const meta: Meta<typeof ImageLightbox> = {
         component:
           "방명록 상세 페이지에서 첨부 이미지를 클릭했을 때 뜨는 전체 이미지 보기 라이트박스입니다.\n\n" +
           "`Modal`(+`Modal.Overlay`)로 전체 화면을 덮고, `SwiperAction`으로 좌우 스와이프 이미지 전환을 구현합니다. 이미지는 좌우 16px 여백 안에서 1:1 비율로 최대 채워 표시됩니다.\n\n" +
-          "다운로드 아이콘·모두 저장하기 버튼은 이번 스코프에서 UI 훅업 없이 표시만 합니다.",
+          "다운로드 아이콘·모두 저장하기 버튼은 `useSaveImageBridge`로 RN 앱에 저장을 요청합니다. 앱(웹뷰) 밖에서는 안내 스낵바만 표시됩니다.",
       },
     },
   },
   argTypes: {
     isOpen: { description: "라이트박스 열림 여부" },
     onClose: { description: "닫기(X) 버튼 · 배경 클릭 시 호출되는 콜백" },
-    images: { description: "전체보기할 이미지 URL 목록" },
+    images: { description: "전체보기할 이미지 목록 (url, name)" },
   },
 };
 

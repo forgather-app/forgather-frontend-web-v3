@@ -11,8 +11,11 @@ import type {
 } from "@/api/model";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
-import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
+import ImageLightbox, {
+  type LightboxImage,
+} from "@/components/UI/ImageLightbox/ImageLightbox";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
+import { getImageUrl } from "@/utils/getImageUrl";
 import GuestbookAttachedPhoto from "./components/guestbookAttachedPhoto/GuestbookAttachedPhoto";
 import GuestbookDetailHeader from "./components/guestbookDetailHeader/GuestbookDetailHeader";
 import * as S from "./GuestbookDetailPage.styles";
@@ -54,7 +57,7 @@ const GuestbookDetailPage = ({
   const lightboxOpenIdRef = useRef(0);
   const [lightboxCard, setLightboxCard] = useState<{
     openId: number;
-    images: string[];
+    images: LightboxImage[];
   } | null>(null);
 
   const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
@@ -143,7 +146,9 @@ const GuestbookDetailPage = ({
               <S.SlideContent key={id}>
                 {photos.length > 0 && (
                   <GuestbookAttachedPhoto
-                    imageUrl={photos[0]?.path}
+                    imageUrl={
+                      photos[0]?.path ? getImageUrl(photos[0].path) : undefined
+                    }
                     currentIndex={1}
                     totalCount={photos.length}
                     onClick={() => {
@@ -151,8 +156,14 @@ const GuestbookDetailPage = ({
                       setLightboxCard({
                         openId: lightboxOpenIdRef.current,
                         images: photos
-                          .map((photo) => photo.path)
-                          .filter((path): path is string => Boolean(path)),
+                          .filter(
+                            (photo): photo is typeof photo & { path: string } =>
+                              Boolean(photo.path),
+                          )
+                          .map((photo) => ({
+                            url: getImageUrl(photo.path),
+                            name: photo.originalName,
+                          })),
                       });
                       setIsLightboxOpen(true);
                     }}
