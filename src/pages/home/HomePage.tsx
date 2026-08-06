@@ -63,6 +63,18 @@ const HomePage = () => {
                   spaceName={currentSpace.spaceName}
                   thumbnailUrl={currentSpace.thumbnailUrl}
                   newGuestBookCount={currentSpace.newGuestBookCount}
+                  onGuestBookClick={() =>
+                    navigate({
+                      to: "/spaces/$spaceId/guestbook",
+                      params: { spaceId: String(currentSpace.id) },
+                    })
+                  }
+                  onArtworkManageClick={() =>
+                    navigate({
+                      to: "/spaces/$spaceId",
+                      params: { spaceId: String(currentSpace.id) },
+                    })
+                  }
                 />
               ) : (
                 /* TODO: 스페이스 추가 플로우 연결 필요 */
@@ -85,7 +97,12 @@ const HomePage = () => {
                       title={space.title}
                       guestBookCount={space.guestBookCount}
                       thumbnailUrl={space.thumbnailUrl}
-                      onClick={() => {}}
+                      onClick={() =>
+                        navigate({
+                          to: "/spaces/$spaceId",
+                          params: { spaceId: String(space.id) },
+                        })
+                      }
                     />
                   ))}
                 </S.SpaceList>

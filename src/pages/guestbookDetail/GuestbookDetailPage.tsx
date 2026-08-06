@@ -31,7 +31,7 @@ interface GuestbookDetailPageProps {
   onNavigate: (id: number) => void;
 }
 
-/** 카드 상세(메시지·사진)는 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다 */
+/** 사진은 목록 응답에 없어(containsPhoto만 제공) 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다. 닉네임·메시지·작성일은 목록 응답에 이미 포함돼 있어 개별 조회를 기다릴 필요가 없습니다 */
 const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
   useReadCard<GuestBookCardResponse>(spaceId, cardId ?? -1, {
     query: {
@@ -49,6 +49,11 @@ const GuestbookDetailPage = ({
   onNavigate,
 }: GuestbookDetailPageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  // 닫힘 애니메이션 동안 Modal이 언마운트되지 않으므로, onClose에서 images를 비우면
+  // 잠깐 "n / 0"처럼 잘못된 카운터가 보입니다. 닫을 때는 isOpen만 false로 바꾸고
+  // 마지막으로 열었던 카드 데이터는 그대로 유지합니다.
+  // openId는 열 때마다 증가시켜 ImageLightbox의 key로 사용합니다 — 같은 카드를 다시 열어도
+  // 항상 리마운트되어 첫 번째 이미지부터 시작합니다.
   const lightboxOpenIdRef = useRef(0);
   const [lightboxCard, setLightboxCard] = useState<{
     openId: number;
@@ -88,20 +93,22 @@ const GuestbookDetailPage = ({
     return undefined;
   };
 
-  const nickname =
-    cards.find((card) => card.id === currentCardId)?.nickname ?? "";
-  const createdAt = currentQuery.data?.createdAt
-    ? new Date(currentQuery.data.createdAt)
+  const currentSimple = cards.find((card) => card.id === currentCardId);
+  const nickname = currentSimple?.nickname ?? "";
+  const createdAt = currentSimple?.createdAt
+    ? new Date(currentSimple.createdAt)
     : undefined;
 
   return (
     <S.Wrapper>
       <NavigationBar
         onBackClick={onBack}
-        rightIcon={<IcVerticalDots width={24} height={24} />}
-        rightIconAriaLabel="더보기"
+        rightContent={
+          <IcVerticalDots width={24} height={24} aria-hidden="true" />
+        }
+        rightAriaLabel="더보기"
         // TODO: 케밥 메뉴(수정/삭제/신고 등) 액션 연동 필요
-        onRightIconClick={() => {}}
+        onRightClick={() => {}}
       />
       <GuestbookDetailHeader
         nickname={nickname}
@@ -122,15 +129,13 @@ const GuestbookDetailPage = ({
           }}
           swiperElement={cardIds.map((id) => {
             const detail = getDetail(id);
+            const simple = cards.find((card) => card.id === id);
 
             if (!detail) {
-              const simple = cards.find((card) => card.id === id);
               return (
                 <S.SlideContent key={id}>
                   {simple?.containsPhoto && <S.SkeletonPhoto aria-hidden />}
-                  <S.SkeletonLine aria-hidden style={{ width: "100%" }} />
-                  <S.SkeletonLine aria-hidden style={{ width: "90%" }} />
-                  <S.SkeletonLine aria-hidden style={{ width: "60%" }} />
+                  <S.Message>{simple?.message}</S.Message>
                 </S.SlideContent>
               );
             }

@@ -29,6 +29,7 @@ import type {
 
 import type {
   CreateV1Body,
+  FeatureSpacesRequest,
   UpdateV1Body
 } from '../model';
 
@@ -41,6 +42,89 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * 요청한 스페이스들을 '지금 축하받고 있는 스페이스'로 지정합니다. 요청에 포함되지 않은 스페이스의 지정 상태는 변경되지 않습니다.이미 지정된 스페이스가 포함되어 있어도 성공 응답을 반환합니다. 요청 목록에 호스트가 소유하지 않은 스페이스 코드가 하나라도 포함되면 부분 반영 없이 전체가 실패합니다. 존재하지 않는 코드와 다른 호스트의 코드를 구분하지 않고 400으로 응답합니다.응답에는 처리 후 지정된 호스트의 전체 스페이스 코드 목록이 담깁니다.
+ * @summary 축하받는 스페이스 지정
+ */
+export type featureSpacesResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type featureSpacesResponseSuccess = (featureSpacesResponse200) & {
+  headers: Headers;
+};
+;
+
+export type featureSpacesResponse = (featureSpacesResponseSuccess)
+
+export const getFeatureSpacesUrl = () => {
+
+
+  
+
+  return `/spaces/me/featured`
+}
+
+export const featureSpaces = async (featureSpacesRequest: FeatureSpacesRequest, options?: RequestInit): Promise<featureSpacesResponse> => {
+  
+  return customFetcher<featureSpacesResponse>(getFeatureSpacesUrl(),
+  {      
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      featureSpacesRequest,)
+  }
+);}
+  
+
+
+
+export const getFeatureSpacesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof featureSpaces>>, TError,{data: FeatureSpacesRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof featureSpaces>>, TError,{data: FeatureSpacesRequest}, TContext> => {
+
+const mutationKey = ['featureSpaces'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof featureSpaces>>, {data: FeatureSpacesRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  featureSpaces(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type FeatureSpacesMutationResult = NonNullable<Awaited<ReturnType<typeof featureSpaces>>>
+    export type FeatureSpacesMutationBody = FeatureSpacesRequest
+    export type FeatureSpacesMutationError = unknown
+
+    /**
+ * @summary 축하받는 스페이스 지정
+ */
+export const useFeatureSpaces = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof featureSpaces>>, TError,{data: FeatureSpacesRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof featureSpaces>>,
+        TError,
+        {data: FeatureSpacesRequest},
+        TContext
+      > => {
+      return useMutation(getFeatureSpacesMutationOptions(options), queryClient);
+    }
+    /**
  * 새로운 스페이스를 생성합니다.
  * @summary 스페이스 생성
  */

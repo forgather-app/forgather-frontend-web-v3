@@ -12,9 +12,11 @@ interface DevLoginModalProps {
   isOpen: boolean;
   /** 모달을 닫을 때 호출되는 콜백 */
   onClose: () => void;
+  /** 로그인 성공 후 돌아갈 경로 */
+  redirectTo?: string;
 }
 
-const DevLoginModal = ({ isOpen, onClose }: DevLoginModalProps) => {
+const DevLoginModal = ({ isOpen, onClose, redirectTo }: DevLoginModalProps) => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: devLogin, isPending } = useDevLogin();
@@ -32,7 +34,7 @@ const DevLoginModal = ({ isOpen, onClose }: DevLoginModalProps) => {
         onSuccess: () => {
           showSnackBar("로그인 완료", "alert");
           onClose();
-          navigate({ to: "/" });
+          navigate({ href: redirectTo ?? "/" });
         },
         onError: () => {
           showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");

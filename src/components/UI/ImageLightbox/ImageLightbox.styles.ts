@@ -28,6 +28,12 @@ export const SwiperWrapper = styled.div`
 `;
 
 export const ImageSquare = styled.div`
+  /*
+   * width를 SwiperAction이 ResizeObserver로 비동기 측정하는 슬라이드 폭(100%)에 맡기면,
+   * SwiperAction의 높이 고정 로직(useLayoutEffect의 scrollHeight 측정)이 그보다 먼저(동기적으로)
+   * 실행돼 aspect-ratio 기반 높이가 0으로 잠깐 측정되고, 이후 리렌더되지 않아 0에 고정될 수 있다.
+   * 뷰포트 기준 값으로 즉시(동기) 계산되도록 해서 이 레이스 컨디션을 피한다.
+   */
   position: relative;
   width: min(100vw, ${({ theme }) => theme.layout.maxWidth});
   aspect-ratio: 1;

@@ -5,9 +5,9 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
-import type { SpaceResponse } from './spaceResponse';
+import type { HostSpaceItemResponse } from './hostSpaceItemResponse';
 
 export interface HostSpaceResponse {
   /** 호스트 스페이스 목록 */
-  spaces?: SpaceResponse[];
+  spaces?: HostSpaceItemResponse[];
 }
