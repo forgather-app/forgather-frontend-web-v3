@@ -15,6 +15,8 @@ interface SpaceLayoutProps {
   onArtworkTabClick: () => void;
   /** 방명록 탭 클릭 핸들러 */
   onGuestBookTabClick: () => void;
+  /** 링크 공유 버튼 클릭 핸들러 */
+  onShareClick: () => void;
 }
 
 const SpaceLayout = ({
@@ -23,6 +25,7 @@ const SpaceLayout = ({
   onBack,
   onArtworkTabClick,
   onGuestBookTabClick,
+  onShareClick,
 }: SpaceLayoutProps) => {
   return (
     <>
@@ -44,7 +47,7 @@ const SpaceLayout = ({
         <S.FloatingIconButton
           type="button"
           aria-label="링크 공유"
-          onClick={() => {}}
+          onClick={onShareClick}
         >
           <IcLink width={24} height={24} />
         </S.FloatingIconButton>
