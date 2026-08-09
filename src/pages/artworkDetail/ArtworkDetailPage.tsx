@@ -1,5 +1,7 @@
+import { useState } from "react";
 import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
+import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import { MOCK_ARTWORK_DETAIL } from "./ArtworkDetailPage.mock";
 import * as S from "./ArtworkDetailPage.styles";
 
@@ -13,6 +15,7 @@ interface ArtworkDetailPageProps {
 const ArtworkDetailPage = ({ onBack, onMenuClick }: ArtworkDetailPageProps) => {
   const { title, artistName, description, imageUrl, video } =
     MOCK_ARTWORK_DETAIL;
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   return (
     <S.ScrollArea>
@@ -37,7 +40,13 @@ const ArtworkDetailPage = ({ onBack, onMenuClick }: ArtworkDetailPageProps) => {
 
         <S.DescriptionSection>
           <S.Description>{description}</S.Description>
-          <S.ArtworkImage src={imageUrl} alt={title} />
+          <S.ArtworkImageButton
+            type="button"
+            aria-label="작품 이미지 확대보기"
+            onClick={() => setIsLightboxOpen(true)}
+          >
+            <S.ArtworkImage src={imageUrl} alt={title} />
+          </S.ArtworkImageButton>
         </S.DescriptionSection>
 
         <S.VideoSection>
@@ -52,6 +61,12 @@ const ArtworkDetailPage = ({ onBack, onMenuClick }: ArtworkDetailPageProps) => {
           </S.VideoFrame>
         </S.VideoSection>
       </S.Content>
+
+      <ImageLightbox
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+        images={[{ url: imageUrl, name: title }]}
+      />
     </S.ScrollArea>
   );
 };
