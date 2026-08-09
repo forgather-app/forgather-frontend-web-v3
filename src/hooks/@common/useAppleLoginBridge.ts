@@ -41,7 +41,7 @@ const useAppleLoginBridge = (redirectTo?: string) => {
           // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
           onSuccess: () => {
             showSnackBar("로그인 완료", "alert");
-            navigate({ href: redirectTo ?? "/" });
+            navigate({ href: redirectTo ?? "/home" });
           },
           onError: () => {
             showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");
