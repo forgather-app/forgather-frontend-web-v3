@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
+import { gradientSweep } from "@/styles/animations";
 
 export const HomePageContainer = styled.div`
   display: flex;
@@ -41,6 +42,14 @@ export const UserAvatar = styled.div`
   height: 40px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.semantic.black};
+  flex-shrink: 0;
+`;
+
+export const UserAvatarImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
   flex-shrink: 0;
 `;
 
@@ -132,4 +141,32 @@ export const BottomCta = styled.div`
   flex-shrink: 0;
   padding: 12px 16px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
+`;
+
+export const CurrentSpaceSkeleton = styled.div`
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const CurrentSpaceActionsSkeleton = styled.div`
+  width: 100%;
+  height: 52px;
+  margin-top: 8px;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const SpaceCardSkeleton = styled.div`
+  width: 100%;
+  height: 72px;
+  border-radius: 12px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
 `;
