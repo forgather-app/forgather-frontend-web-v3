@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { gradientSweep } from "@/styles/animations";
 import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const ScrollArea = styled.div`
@@ -93,14 +94,44 @@ export const AddButton = styled.button`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  padding: 8px;
+  margin: -8px;
   color: ${({ theme }) => theme.colors.gray.gray400};
 `;
 
 export const CarouselWrapper = styled.div`
-  width: fit-content;
+  width: 100%;
   margin-top: 16px;
+`;
+
+export const CardSkeleton = styled.div`
+  width: 100%;
+  height: 276px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const TitleSkeleton = styled.div`
+  width: 160px;
+  height: 29px;
+  margin-top: 24px;
+  border-radius: 6px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const DescriptionSkeleton = styled.div`
+  width: 100%;
+  height: 44px;
+  margin-top: 16px;
+  border-radius: 6px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
 `;
 
 export const ErrorState = styled.div`
