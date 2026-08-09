@@ -16,8 +16,11 @@ function RouteComponent() {
       spaceId={spaceId}
       artworkId={Number(artworkId)}
       onBack={() => navigate({ to: ".." })}
-      // TODO: 수정하기/삭제하기 드롭다운 메뉴 연동
-      onMenuClick={() => {}}
+      // TODO: 수정하기 페이지 이동 연동
+      onEditClick={() => {}}
+      onDeleteSuccess={() =>
+        navigate({ to: "/spaces/$spaceId", params: { spaceId } })
+      }
     />
   );
 }
