@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import IcPerson from "@/assets/icons/ic_person.svg?react";
 import Button from "@/components/@common/Button/Button";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
@@ -7,7 +8,12 @@ import HomeEmptyView from "./components/homeEmptyView/HomeEmptyView";
 import * as S from "./HomePage.styles";
 import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
 
+// TODO: 방명록 상세 페이지 확인용 개발 진입 버튼 전용 테스트 값 — 실제 스페이스/카드 목록 연동 후 제거
+const DEV_TEST_SPACE_ID = "o6shou1fvq";
+const DEV_TEST_GUESTBOOK_CARD_ID = "2";
+
 const HomePage = () => {
+  const navigate = useNavigate();
   const spaces = MOCK_SPACES;
   const currentSpace = MOCK_CURRENT_SPACES[0];
   const isEmpty = spaces.length === 0 && !currentSpace;
@@ -32,6 +38,21 @@ const HomePage = () => {
           </S.HeaderActions>
         </S.Header>
 
+        {/* TODO: 방명록 상세 페이지 확인용 임시 진입점 — 실제 카드 클릭 진입 플로우 연동 후 제거 */}
+        <Button
+          variant="underlined"
+          text="방명록 상세 보기 (dev)"
+          onClick={() =>
+            navigate({
+              to: "/spaces/$spaceId/guestbook/$guestbookId",
+              params: {
+                spaceId: DEV_TEST_SPACE_ID,
+                guestbookId: DEV_TEST_GUESTBOOK_CARD_ID,
+              },
+            })
+          }
+        />
+
         <S.ContentWrapper>
           {isEmpty ? (
             <HomeEmptyView />
@@ -42,6 +63,18 @@ const HomePage = () => {
                   spaceName={currentSpace.spaceName}
                   thumbnailUrl={currentSpace.thumbnailUrl}
                   newGuestBookCount={currentSpace.newGuestBookCount}
+                  onGuestBookClick={() =>
+                    navigate({
+                      to: "/spaces/$spaceId/guestbook",
+                      params: { spaceId: String(currentSpace.id) },
+                    })
+                  }
+                  onArtworkManageClick={() =>
+                    navigate({
+                      to: "/spaces/$spaceId",
+                      params: { spaceId: String(currentSpace.id) },
+                    })
+                  }
                 />
               ) : (
                 /* TODO: 스페이스 추가 플로우 연결 필요 */
@@ -64,7 +97,12 @@ const HomePage = () => {
                       title={space.title}
                       guestBookCount={space.guestBookCount}
                       thumbnailUrl={space.thumbnailUrl}
-                      onClick={() => {}}
+                      onClick={() =>
+                        navigate({
+                          to: "/spaces/$spaceId",
+                          params: { spaceId: String(space.id) },
+                        })
+                      }
                     />
                   ))}
                 </S.SpaceList>

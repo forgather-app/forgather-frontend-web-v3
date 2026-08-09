@@ -16,12 +16,17 @@ import { Route as AuthenticatedNewGuestbooksRouteImport } from './routes/_authen
 import { Route as AuthenticatedSignUpIndexRouteImport } from './routes/_authenticated/sign-up/index'
 import { Route as AuthenticatedMyPageIndexRouteImport } from './routes/_authenticated/my-page/index'
 import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
+import { Route as AuthenticatedCreateSpaceIndexRouteImport } from './routes/_authenticated/create-space/index'
+import { Route as AuthenticatedCreateProductIndexRouteImport } from './routes/_authenticated/create-product/index'
 import { Route as AuthenticatedCreateExhibitionIndexRouteImport } from './routes/_authenticated/create-exhibition/index'
+import { Route as AuthenticatedSpacesSpaceIdRouteImport } from './routes/_authenticated/spaces/$spaceId'
 import { Route as AuthenticatedSignUpCompleteRouteImport } from './routes/_authenticated/sign-up/complete'
-import { Route as AuthenticatedNewGuestbookGuestbookIdRouteImport } from './routes/_authenticated/new-guestbook/$guestbookId'
 import { Route as AuthenticatedMyPageEditRouteImport } from './routes/_authenticated/my-page/edit'
 import { Route as AuthenticatedArtworksArtworkIdRouteImport } from './routes/_authenticated/artworks/$artworkId'
-import { Route as AuthenticatedSpacesSpaceIdGuestbookRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook'
+import { Route as AuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/index'
+import { Route as SpacesSpaceIdGuestbookWriteRouteImport } from './routes/spaces/$spaceId/guestbook/write'
+import { Route as AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook/index'
+import { Route as AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -60,22 +65,34 @@ const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
   path: '/home/',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedCreateSpaceIndexRoute =
+  AuthenticatedCreateSpaceIndexRouteImport.update({
+    id: '/create-space/',
+    path: '/create-space/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedCreateProductIndexRoute =
+  AuthenticatedCreateProductIndexRouteImport.update({
+    id: '/create-product/',
+    path: '/create-product/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedCreateExhibitionIndexRoute =
   AuthenticatedCreateExhibitionIndexRouteImport.update({
     id: '/create-exhibition/',
     path: '/create-exhibition/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedSpacesSpaceIdRoute =
+  AuthenticatedSpacesSpaceIdRouteImport.update({
+    id: '/spaces/$spaceId',
+    path: '/spaces/$spaceId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSignUpCompleteRoute =
   AuthenticatedSignUpCompleteRouteImport.update({
     id: '/sign-up/complete',
     path: '/sign-up/complete',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedNewGuestbookGuestbookIdRoute =
-  AuthenticatedNewGuestbookGuestbookIdRouteImport.update({
-    id: '/new-guestbook/$guestbookId',
-    path: '/new-guestbook/$guestbookId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedMyPageEditRoute = AuthenticatedMyPageEditRouteImport.update({
@@ -89,11 +106,29 @@ const AuthenticatedArtworksArtworkIdRoute =
     path: '/artworks/$artworkId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedSpacesSpaceIdGuestbookRoute =
-  AuthenticatedSpacesSpaceIdGuestbookRouteImport.update({
-    id: '/spaces/$spaceId/guestbook',
-    path: '/spaces/$spaceId/guestbook',
-    getParentRoute: () => AuthenticatedRoute,
+const AuthenticatedSpacesSpaceIdIndexRoute =
+  AuthenticatedSpacesSpaceIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+  } as any)
+const SpacesSpaceIdGuestbookWriteRoute =
+  SpacesSpaceIdGuestbookWriteRouteImport.update({
+    id: '/spaces/$spaceId/guestbook/write',
+    path: '/spaces/$spaceId/guestbook/write',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedSpacesSpaceIdGuestbookIndexRoute =
+  AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport.update({
+    id: '/guestbook/',
+    path: '/guestbook/',
+    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+  } as any)
+const AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute =
+  AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport.update({
+    id: '/guestbook/$guestbookId',
+    path: '/guestbook/$guestbookId',
+    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -102,13 +137,18 @@ export interface FileRoutesByFullPath {
   '/login/': typeof LoginIndexRoute
   '/artworks/$artworkId': typeof AuthenticatedArtworksArtworkIdRoute
   '/my-page/edit': typeof AuthenticatedMyPageEditRoute
-  '/new-guestbook/$guestbookId': typeof AuthenticatedNewGuestbookGuestbookIdRoute
   '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
+  '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   '/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
+  '/create-product/': typeof AuthenticatedCreateProductIndexRoute
+  '/create-space/': typeof AuthenticatedCreateSpaceIndexRoute
   '/home/': typeof AuthenticatedHomeIndexRoute
   '/my-page/': typeof AuthenticatedMyPageIndexRoute
   '/sign-up/': typeof AuthenticatedSignUpIndexRoute
-  '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  '/spaces/$spaceId/guestbook/write': typeof SpacesSpaceIdGuestbookWriteRoute
+  '/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
+  '/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/spaces/$spaceId/guestbook/': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRoutesByTo {
   '/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
@@ -116,13 +156,17 @@ export interface FileRoutesByTo {
   '/login': typeof LoginIndexRoute
   '/artworks/$artworkId': typeof AuthenticatedArtworksArtworkIdRoute
   '/my-page/edit': typeof AuthenticatedMyPageEditRoute
-  '/new-guestbook/$guestbookId': typeof AuthenticatedNewGuestbookGuestbookIdRoute
   '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/create-exhibition': typeof AuthenticatedCreateExhibitionIndexRoute
+  '/create-product': typeof AuthenticatedCreateProductIndexRoute
+  '/create-space': typeof AuthenticatedCreateSpaceIndexRoute
   '/home': typeof AuthenticatedHomeIndexRoute
   '/my-page': typeof AuthenticatedMyPageIndexRoute
   '/sign-up': typeof AuthenticatedSignUpIndexRoute
-  '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  '/spaces/$spaceId/guestbook/write': typeof SpacesSpaceIdGuestbookWriteRoute
+  '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdIndexRoute
+  '/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -132,13 +176,18 @@ export interface FileRoutesById {
   '/login/': typeof LoginIndexRoute
   '/_authenticated/artworks/$artworkId': typeof AuthenticatedArtworksArtworkIdRoute
   '/_authenticated/my-page/edit': typeof AuthenticatedMyPageEditRoute
-  '/_authenticated/new-guestbook/$guestbookId': typeof AuthenticatedNewGuestbookGuestbookIdRoute
   '/_authenticated/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
+  '/_authenticated/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   '/_authenticated/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
+  '/_authenticated/create-product/': typeof AuthenticatedCreateProductIndexRoute
+  '/_authenticated/create-space/': typeof AuthenticatedCreateSpaceIndexRoute
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/my-page/': typeof AuthenticatedMyPageIndexRoute
   '/_authenticated/sign-up/': typeof AuthenticatedSignUpIndexRoute
-  '/_authenticated/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookRoute
+  '/spaces/$spaceId/guestbook/write': typeof SpacesSpaceIdGuestbookWriteRoute
+  '/_authenticated/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
+  '/_authenticated/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/_authenticated/spaces/$spaceId/guestbook/': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -148,13 +197,18 @@ export interface FileRouteTypes {
     | '/login/'
     | '/artworks/$artworkId'
     | '/my-page/edit'
-    | '/new-guestbook/$guestbookId'
     | '/sign-up/complete'
+    | '/spaces/$spaceId'
     | '/create-exhibition/'
+    | '/create-product/'
+    | '/create-space/'
     | '/home/'
     | '/my-page/'
     | '/sign-up/'
-    | '/spaces/$spaceId/guestbook'
+    | '/spaces/$spaceId/guestbook/write'
+    | '/spaces/$spaceId/'
+    | '/spaces/$spaceId/guestbook/$guestbookId'
+    | '/spaces/$spaceId/guestbook/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/new-guestbooks'
@@ -162,12 +216,16 @@ export interface FileRouteTypes {
     | '/login'
     | '/artworks/$artworkId'
     | '/my-page/edit'
-    | '/new-guestbook/$guestbookId'
     | '/sign-up/complete'
     | '/create-exhibition'
+    | '/create-product'
+    | '/create-space'
     | '/home'
     | '/my-page'
     | '/sign-up'
+    | '/spaces/$spaceId/guestbook/write'
+    | '/spaces/$spaceId'
+    | '/spaces/$spaceId/guestbook/$guestbookId'
     | '/spaces/$spaceId/guestbook'
   id:
     | '__root__'
@@ -177,18 +235,24 @@ export interface FileRouteTypes {
     | '/login/'
     | '/_authenticated/artworks/$artworkId'
     | '/_authenticated/my-page/edit'
-    | '/_authenticated/new-guestbook/$guestbookId'
     | '/_authenticated/sign-up/complete'
+    | '/_authenticated/spaces/$spaceId'
     | '/_authenticated/create-exhibition/'
+    | '/_authenticated/create-product/'
+    | '/_authenticated/create-space/'
     | '/_authenticated/home/'
     | '/_authenticated/my-page/'
     | '/_authenticated/sign-up/'
-    | '/_authenticated/spaces/$spaceId/guestbook'
+    | '/spaces/$spaceId/guestbook/write'
+    | '/_authenticated/spaces/$spaceId/'
+    | '/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
+    | '/_authenticated/spaces/$spaceId/guestbook/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginIndexRoute: typeof LoginIndexRoute
+  SpacesSpaceIdGuestbookWriteRoute: typeof SpacesSpaceIdGuestbookWriteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -242,6 +306,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/create-space/': {
+      id: '/_authenticated/create-space/'
+      path: '/create-space'
+      fullPath: '/create-space/'
+      preLoaderRoute: typeof AuthenticatedCreateSpaceIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/create-product/': {
+      id: '/_authenticated/create-product/'
+      path: '/create-product'
+      fullPath: '/create-product/'
+      preLoaderRoute: typeof AuthenticatedCreateProductIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/create-exhibition/': {
       id: '/_authenticated/create-exhibition/'
       path: '/create-exhibition'
@@ -249,18 +327,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCreateExhibitionIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/spaces/$spaceId': {
+      id: '/_authenticated/spaces/$spaceId'
+      path: '/spaces/$spaceId'
+      fullPath: '/spaces/$spaceId'
+      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/sign-up/complete': {
       id: '/_authenticated/sign-up/complete'
       path: '/sign-up/complete'
       fullPath: '/sign-up/complete'
       preLoaderRoute: typeof AuthenticatedSignUpCompleteRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/new-guestbook/$guestbookId': {
-      id: '/_authenticated/new-guestbook/$guestbookId'
-      path: '/new-guestbook/$guestbookId'
-      fullPath: '/new-guestbook/$guestbookId'
-      preLoaderRoute: typeof AuthenticatedNewGuestbookGuestbookIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/my-page/edit': {
@@ -277,28 +355,70 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedArtworksArtworkIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/spaces/$spaceId/guestbook': {
-      id: '/_authenticated/spaces/$spaceId/guestbook'
-      path: '/spaces/$spaceId/guestbook'
-      fullPath: '/spaces/$spaceId/guestbook'
-      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdGuestbookRouteImport
-      parentRoute: typeof AuthenticatedRoute
+    '/_authenticated/spaces/$spaceId/': {
+      id: '/_authenticated/spaces/$spaceId/'
+      path: '/'
+      fullPath: '/spaces/$spaceId/'
+      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdIndexRouteImport
+      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+    }
+    '/spaces/$spaceId/guestbook/write': {
+      id: '/spaces/$spaceId/guestbook/write'
+      path: '/spaces/$spaceId/guestbook/write'
+      fullPath: '/spaces/$spaceId/guestbook/write'
+      preLoaderRoute: typeof SpacesSpaceIdGuestbookWriteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/spaces/$spaceId/guestbook/': {
+      id: '/_authenticated/spaces/$spaceId/guestbook/'
+      path: '/guestbook'
+      fullPath: '/spaces/$spaceId/guestbook/'
+      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport
+      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+    }
+    '/_authenticated/spaces/$spaceId/guestbook/$guestbookId': {
+      id: '/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
+      path: '/guestbook/$guestbookId'
+      fullPath: '/spaces/$spaceId/guestbook/$guestbookId'
+      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport
+      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
     }
   }
 }
+
+interface AuthenticatedSpacesSpaceIdRouteChildren {
+  AuthenticatedSpacesSpaceIdIndexRoute: typeof AuthenticatedSpacesSpaceIdIndexRoute
+  AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute: typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  AuthenticatedSpacesSpaceIdGuestbookIndexRoute: typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
+}
+
+const AuthenticatedSpacesSpaceIdRouteChildren: AuthenticatedSpacesSpaceIdRouteChildren =
+  {
+    AuthenticatedSpacesSpaceIdIndexRoute: AuthenticatedSpacesSpaceIdIndexRoute,
+    AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute:
+      AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute,
+    AuthenticatedSpacesSpaceIdGuestbookIndexRoute:
+      AuthenticatedSpacesSpaceIdGuestbookIndexRoute,
+  }
+
+const AuthenticatedSpacesSpaceIdRouteWithChildren =
+  AuthenticatedSpacesSpaceIdRoute._addFileChildren(
+    AuthenticatedSpacesSpaceIdRouteChildren,
+  )
 
 interface AuthenticatedRouteChildren {
   AuthenticatedNewGuestbooksRoute: typeof AuthenticatedNewGuestbooksRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedArtworksArtworkIdRoute: typeof AuthenticatedArtworksArtworkIdRoute
   AuthenticatedMyPageEditRoute: typeof AuthenticatedMyPageEditRoute
-  AuthenticatedNewGuestbookGuestbookIdRoute: typeof AuthenticatedNewGuestbookGuestbookIdRoute
   AuthenticatedSignUpCompleteRoute: typeof AuthenticatedSignUpCompleteRoute
+  AuthenticatedSpacesSpaceIdRoute: typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   AuthenticatedCreateExhibitionIndexRoute: typeof AuthenticatedCreateExhibitionIndexRoute
+  AuthenticatedCreateProductIndexRoute: typeof AuthenticatedCreateProductIndexRoute
+  AuthenticatedCreateSpaceIndexRoute: typeof AuthenticatedCreateSpaceIndexRoute
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedMyPageIndexRoute: typeof AuthenticatedMyPageIndexRoute
   AuthenticatedSignUpIndexRoute: typeof AuthenticatedSignUpIndexRoute
-  AuthenticatedSpacesSpaceIdGuestbookRoute: typeof AuthenticatedSpacesSpaceIdGuestbookRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -306,16 +426,15 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedArtworksArtworkIdRoute: AuthenticatedArtworksArtworkIdRoute,
   AuthenticatedMyPageEditRoute: AuthenticatedMyPageEditRoute,
-  AuthenticatedNewGuestbookGuestbookIdRoute:
-    AuthenticatedNewGuestbookGuestbookIdRoute,
   AuthenticatedSignUpCompleteRoute: AuthenticatedSignUpCompleteRoute,
+  AuthenticatedSpacesSpaceIdRoute: AuthenticatedSpacesSpaceIdRouteWithChildren,
   AuthenticatedCreateExhibitionIndexRoute:
     AuthenticatedCreateExhibitionIndexRoute,
+  AuthenticatedCreateProductIndexRoute: AuthenticatedCreateProductIndexRoute,
+  AuthenticatedCreateSpaceIndexRoute: AuthenticatedCreateSpaceIndexRoute,
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedMyPageIndexRoute: AuthenticatedMyPageIndexRoute,
   AuthenticatedSignUpIndexRoute: AuthenticatedSignUpIndexRoute,
-  AuthenticatedSpacesSpaceIdGuestbookRoute:
-    AuthenticatedSpacesSpaceIdGuestbookRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -325,6 +444,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginIndexRoute: LoginIndexRoute,
+  SpacesSpaceIdGuestbookWriteRoute: SpacesSpaceIdGuestbookWriteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

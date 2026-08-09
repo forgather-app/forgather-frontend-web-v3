@@ -28,6 +28,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AppleLoginConfirmRequest,
   KakaoLoginConfirmRequest,
   OnboardingRequest,
   RefreshRequest
@@ -42,6 +43,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * 요청 바디의 리프레시 토큰을 우선 사용하고, 없으면 쿠키의 리프레시 토큰으로 로그인 세션을 갱신합니다. 갱신된 토큰은 응답 바디와 HttpOnly 쿠키로 반환합니다.
  * @summary 로그인 세션 갱신
  */
 export type refreshResponse200 = {
@@ -290,6 +292,89 @@ export const useKakaoLoginConfirm = <TError = unknown,
       return useMutation(getKakaoLoginConfirmMutationOptions(options), queryClient);
     }
     /**
+ * Apple 로그인 후 발급받은 identity token, authorization code, raw nonce와 이름을 전달합니다. 서버는 authorization code를 Apple token endpoint에 교환하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 응답 바디와 HttpOnly 쿠키로 반환합니다.
+ * @summary Apple 로그인 완료
+ */
+export type appleLoginConfirmResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type appleLoginConfirmResponseSuccess = (appleLoginConfirmResponse200) & {
+  headers: Headers;
+};
+;
+
+export type appleLoginConfirmResponse = (appleLoginConfirmResponseSuccess)
+
+export const getAppleLoginConfirmUrl = () => {
+
+
+  
+
+  return `/auth/login/apple/confirm`
+}
+
+export const appleLoginConfirm = async (appleLoginConfirmRequest: AppleLoginConfirmRequest, options?: RequestInit): Promise<appleLoginConfirmResponse> => {
+  
+  return customFetcher<appleLoginConfirmResponse>(getAppleLoginConfirmUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      appleLoginConfirmRequest,)
+  }
+);}
+  
+
+
+
+export const getAppleLoginConfirmMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof appleLoginConfirm>>, TError,{data: AppleLoginConfirmRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof appleLoginConfirm>>, TError,{data: AppleLoginConfirmRequest}, TContext> => {
+
+const mutationKey = ['appleLoginConfirm'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof appleLoginConfirm>>, {data: AppleLoginConfirmRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  appleLoginConfirm(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AppleLoginConfirmMutationResult = NonNullable<Awaited<ReturnType<typeof appleLoginConfirm>>>
+    export type AppleLoginConfirmMutationBody = AppleLoginConfirmRequest
+    export type AppleLoginConfirmMutationError = unknown
+
+    /**
+ * @summary Apple 로그인 완료
+ */
+export const useAppleLoginConfirm = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof appleLoginConfirm>>, TError,{data: AppleLoginConfirmRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof appleLoginConfirm>>,
+        TError,
+        {data: AppleLoginConfirmRequest},
+        TContext
+      > => {
+      return useMutation(getAppleLoginConfirmMutationOptions(options), queryClient);
+    }
+    /**
  * 현재 로그인된 사용자의 정보를 확인합니다. 로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.
  * @summary 내 정보 확인
  */
@@ -454,6 +539,88 @@ export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getC
 
 
 /**
+ * 회원을 탈퇴 처리합니다. 소셜 연결(Kakao/Apple)을 해제하고 계정과 소유 콘텐츠를 삭제합니다. 성공 시 액세스토큰과 리프레시토큰 쿠키를 만료시킵니다. 탈퇴 후 같은 소셜 계정으로 다시 로그인하면 신규 가입으로 처리됩니다.
+ * @summary 회원 탈퇴
+ */
+export type withdrawResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type withdrawResponseSuccess = (withdrawResponse200) & {
+  headers: Headers;
+};
+;
+
+export type withdrawResponse = (withdrawResponseSuccess)
+
+export const getWithdrawUrl = () => {
+
+
+  
+
+  return `/auth/me`
+}
+
+export const withdraw = async ( options?: RequestInit): Promise<withdrawResponse> => {
+  
+  return customFetcher<withdrawResponse>(getWithdrawUrl(),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+  
+
+
+
+export const getWithdrawMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,void, TContext> => {
+
+const mutationKey = ['withdraw'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof withdraw>>, void> = () => {
+          
+
+          return  withdraw(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type WithdrawMutationResult = NonNullable<Awaited<ReturnType<typeof withdraw>>>
+    
+    export type WithdrawMutationError = unknown
+
+    /**
+ * @summary 회원 탈퇴
+ */
+export const useWithdraw = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof withdraw>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getWithdrawMutationOptions(options), queryClient);
+    }
+    /**
  * Kakao 로그인 페이지로 리다이렉트하기 위한 URL을 반환합니다.
  * @summary Kakao 로그인을 위한 토큰 발급
  */

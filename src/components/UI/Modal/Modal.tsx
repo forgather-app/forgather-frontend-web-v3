@@ -51,11 +51,18 @@ const Modal: ModalComponent = ({
   useEffect(() => {
     if (!isOpen) return;
     modalStack.push(modalId);
-    if (modalStack.length === 1) document.body.style.overflow = "hidden";
+    const appRoot = document.getElementById("root");
+    if (modalStack.length === 1) {
+      document.body.style.overflow = "hidden";
+      appRoot?.setAttribute("inert", "");
+    }
     return () => {
       const idx = modalStack.lastIndexOf(modalId);
       if (idx >= 0) modalStack.splice(idx, 1);
-      if (modalStack.length === 0) document.body.style.overflow = "";
+      if (modalStack.length === 0) {
+        document.body.style.overflow = "";
+        appRoot?.removeAttribute("inert");
+      }
     };
   }, [isOpen, modalId]);
 

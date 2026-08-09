@@ -21,10 +21,13 @@ interface KakaoLoginErrorMessage {
 
 type KakaoBridgeMessage = KakaoTokenMessage | KakaoLoginErrorMessage;
 
-const useKakaoLoginBridge = () => {
+const useKakaoLoginBridge = (redirectTo?: string) => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
+  // NOTE: react-query의 isPending은 BE confirmLogin 호출 구간만 커버함.
+  // isRequesting은 RN에 KAKAO_LOGIN을 보낸 시점부터 KAKAO_TOKEN을 받기까지(네이티브 로그인 UI 상호작용 포함)
+  // RN과의 브릿지 통신 전체 구간을 막기 위한 상태라 별도로 필요함
   const [isRequesting, setIsRequesting] = useState(false);
 
   const handleKakaoToken = useCallback(
@@ -40,7 +43,7 @@ const useKakaoLoginBridge = () => {
           // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
           onSuccess: () => {
             showSnackBar("로그인 완료", "alert");
-            navigate({ to: "/" });
+            navigate({ href: redirectTo ?? "/" });
           },
           onError: () => {
             showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");
@@ -49,7 +52,7 @@ const useKakaoLoginBridge = () => {
         },
       );
     },
-    [confirmLogin, navigate, showSnackBar],
+    [confirmLogin, navigate, showSnackBar, redirectTo],
   );
 
   useEffect(() => {
@@ -86,9 +89,6 @@ const useKakaoLoginBridge = () => {
     if (isRequesting) return;
 
     if (!window.ReactNativeWebView) {
-      // NOTE: 웹뷰가 아닌 일반 브라우저에서는 네이티브 카카오 로그인이 불가능함.
-      // 인증 토큰이 서버 쿠키로 발급되므로 클라이언트에서 임의 주입이 불가능해짐 —
-      // 개발 환경 테스트는 BE를 직접 호출하는 DevLoginModal("[DEV] 아이디/비밀번호로 로그인")을 이용
       showSnackBar(ERROR_MESSAGES.APP_ONLY_FEATURE, "error");
       return;
     }

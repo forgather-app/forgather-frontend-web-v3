@@ -223,7 +223,7 @@ useEffect(() => {
 
 ## 8. Storybook 작성 규칙
 
-UI 컴포넌트(`src/components/ui/`, `src/components/@common/`)는 반드시 Storybook 스토리를 작성합니다.
+UI 컴포넌트(`src/components/UI/`, `src/components/@common/`)는 반드시 Storybook 스토리를 작성합니다.
 페이지는 선택사항입니다.
 
 ```typescript
