@@ -17,11 +17,14 @@ function RouteComponent() {
       <GuestbookDetailPage
         spaceId={spaceId}
         currentId={Number(guestbookId)}
-        onBack={() => navigate({ to: ".." })}
+        onBack={() =>
+          navigate({ to: "/spaces/$spaceId/guestbook", params: { spaceId } })
+        }
         onNavigate={(id) =>
           navigate({
             to: "/spaces/$spaceId/guestbook/$guestbookId",
             params: { spaceId, guestbookId: String(id) },
+            replace: true,
           })
         }
       />
