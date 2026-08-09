@@ -51,6 +51,14 @@ const SwiperAction = ({
   const [styleGap, setStyleGap] = useState(0);
   const [trackHeight, setTrackHeight] = useState<number>();
 
+  // 다음 슬라이드가 실제로 있을 때만(마지막 슬라이드가 아닐 때만) peek 여백을 예약한다
+  const getContainerMaxWidth = (index: number) => {
+    const hasNextSlide = index < swiperElement.length - 1;
+    return swiperElement.length > 1 && hasNextSlide
+      ? elementWidthRef.current + CARD_GAP + PEEK_WIDTH
+      : elementWidthRef.current;
+  };
+
   const calculateLocation = (index: number) => {
     if (isControlled) {
       const slice = sidePeekRatio ? elementWidthRef.current * sidePeekRatio : 0;
@@ -89,7 +97,7 @@ const SwiperAction = ({
       } else {
         elementWidthRef.current =
           trackRef.current?.children[0]?.clientWidth ?? 0;
-        setContainerMaxWidth(elementWidthRef.current + CARD_GAP + PEEK_WIDTH);
+        setContainerMaxWidth(getContainerMaxWidth(activeIndex ?? currentIndex));
         threshold.current = Math.floor(
           elementWidthRef.current * THRESHOLD_RATIO,
         );
@@ -106,6 +114,15 @@ const SwiperAction = ({
     return () => observer.disconnect();
   }, []);
 
+  // 슬라이드 이동으로 마지막 슬라이드에 도달/이탈하면 peek 여백 예약 여부가 바뀌어야 한다
+  // biome-ignore lint/correctness/useExhaustiveDependencies: elementWidthRef 측정 전(0)에는 재계산할 필요가 없어 가드로 처리
+  useEffect(() => {
+    if (isControlled || elementWidthRef.current === 0) return;
+    // NOTE: 이미 측정된 elementWidthRef를 currentIndex 변화에 맞춰 다시 조합하는 것뿐이라 DOM 재측정은 필요 없음
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setContainerMaxWidth(getContainerMaxWidth(currentIndex));
+  }, [currentIndex, swiperElement.length]);
+
   // controlled 모드는 트랙에 모든 슬라이드를 한 줄로 렌더링하므로(드래그를 위해 필요),
   // 아무 처리도 하지 않으면 컨테이너 높이가 가장 높은 슬라이드에 맞춰집니다.
   // 현재 보이는 슬라이드의 실제 높이로만 맞추기 위해 매번 다시 측정합니다.
@@ -113,6 +130,8 @@ const SwiperAction = ({
     if (!isControlled) return;
     const activeSlide = trackRef.current?.children[currentIndex];
     if (activeSlide instanceof HTMLElement) {
+      // NOTE: DOM 레이아웃(scrollHeight)을 읽어야만 알 수 있는 값이라 렌더 중 계산이 불가능함
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTrackHeight(activeSlide.scrollHeight);
     }
   });
@@ -121,6 +140,7 @@ const SwiperAction = ({
   // biome-ignore lint/correctness/useExhaustiveDependencies: currentIndex는 내부 변경 여부 비교용으로만 사용
   useEffect(() => {
     if (activeIndex === undefined || activeIndex === currentIndex) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentIndex(activeIndex);
     animate(x, calculateLocation(activeIndex), SPRING_PRESET);
   }, [activeIndex]);
@@ -242,14 +262,24 @@ const SwiperAction = ({
       )}
       <S.Track
         ref={trackRef}
-        style={isControlled ? { x, gap: styleGap, height: trackHeight } : { x }}
+        style={
+          isControlled
+            ? { x, gap: styleGap, height: trackHeight }
+            : // NOTE: 슬라이드가 1개면 peek이 필요 없으므로 Track/Slide도 Container(100%)를 그대로 채운다.
+              // Card의 width: 100%가 실제로 퍼센트 기준을 가지려면 이 체인 전체가 확정 폭을 가져야 한다.
+              { x, width: swiperElement.length === 1 ? "100%" : undefined }
+        }
       >
         {swiperElement.map((element, index) => (
           <S.Slide
             // biome-ignore lint/suspicious/noArrayIndexKey: 현재로썬 index만 사용 가능함
             key={index}
             style={
-              isControlled ? { width: containerWidth || "100%" } : undefined
+              isControlled
+                ? { width: containerWidth || "100%" }
+                : swiperElement.length === 1
+                  ? { width: "100%" }
+                  : undefined
             }
             onClickCapture={(e) => {
               if (shouldPreventClick.current) {
