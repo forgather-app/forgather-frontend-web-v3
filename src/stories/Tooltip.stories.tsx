@@ -10,7 +10,8 @@ const meta: Meta<typeof Tooltip> = {
     docs: {
       description: {
         component:
-          "범용 툴팁 컴포넌트. children으로 내용을 자유롭게 구성하고, onClose 전달 시 X 버튼이 노출됩니다. 상단 화살표 위치는 왼쪽으로 오프셋되어 있습니다.",
+          "범용 툴팁 컴포넌트. children으로 내용을 자유롭게 구성하고, onClose 전달 시 X 버튼이 노출됩니다.\n\n" +
+          "`variant='dark'`(기본)는 검정 배경에 화살표가 왼쪽으로 오프셋되어 있고, `variant='gradient'`는 그레이 그라데이션 배경에 화살표가 오른쪽에 위치합니다 (예: 빈 상태 안내 말풍선).",
       },
     },
   },
@@ -67,6 +68,22 @@ export const WithoutClose: Story = {
     <Tooltip ariaLabel="안내 메시지">
       <CountText>안내</CountText>
       <SubText> 텍스트입니다</SubText>
+    </Tooltip>
+  ),
+};
+
+export const Gradient: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "grayscale/500→600 그라데이션 배경, 화살표가 오른쪽에 위치하는 케이스. 빈 상태에서 특정 버튼을 가리킬 때 사용합니다.",
+      },
+    },
+  },
+  render: () => (
+    <Tooltip variant="gradient" ariaLabel="첫번째 작품을 소개해주세요!">
+      <SubText style={{ color: "white" }}>첫번째 작품을 소개해주세요!</SubText>
     </Tooltip>
   ),
 };

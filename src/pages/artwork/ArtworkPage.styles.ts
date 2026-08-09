@@ -86,7 +86,13 @@ export const SectionHeader = styled.div`
 
 export const SectionTitle = styled.h2`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
-  color: ${({ theme }) => theme.colors.gray.white};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const AddButtonWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
 `;
 
 export const AddButton = styled.button`
@@ -97,6 +103,50 @@ export const AddButton = styled.button`
   padding: 8px;
   margin: -8px;
   color: ${({ theme }) => theme.colors.gray.gray400};
+`;
+
+export const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 64px 0;
+`;
+
+export const EmptyStateGraphic = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
+  svg {
+    width: 60%;
+    height: 60%;
+  }
+`;
+
+export const EmptyStateText = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body3 })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+  text-align: center;
+`;
+
+export const EmptyStateTooltipWrapper = styled.div`
+  position: absolute;
+  /* AddButton은 hit-slop용 -8px margin이 있어, 실제 보이는 버튼 오른쪽 끝에 맞추려면 8px 보정이 필요하다 */
+  top: calc(100% + 16px);
+  right: -8px;
+  width: max-content;
+  z-index: ${({ theme }) => theme.layout.zIndex.modalContent};
+`;
+
+export const EmptyStateTooltipText = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.white};
 `;
 
 export const CarouselWrapper = styled.div`

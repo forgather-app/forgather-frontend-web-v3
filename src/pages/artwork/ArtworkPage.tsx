@@ -10,6 +10,8 @@ import type {
 } from "@/api/model";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
+import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
+import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
@@ -128,28 +130,51 @@ const ArtworkPage = ({
       <S.Divider />
 
       <S.SectionHeader>
-        <S.SectionTitle>작품</S.SectionTitle>
-        <S.AddButton
-          type="button"
-          aria-label="작품 추가"
-          onClick={onAddArtworkClick}
-        >
-          <IcPlus width={24} height={24} />
-        </S.AddButton>
+        <S.SectionTitle>작품 {artworks.length}개</S.SectionTitle>
+        <S.AddButtonWrapper>
+          <S.AddButton
+            type="button"
+            aria-label="작품 추가"
+            onClick={onAddArtworkClick}
+          >
+            <IcPlus width={24} height={24} />
+          </S.AddButton>
+          {artworks.length === 0 && (
+            <S.EmptyStateTooltipWrapper>
+              <Tooltip
+                variant="gradient"
+                ariaLabel="첫번째 작품을 소개해주세요!"
+              >
+                <S.EmptyStateTooltipText>
+                  첫번째 작품을 소개해주세요!
+                </S.EmptyStateTooltipText>
+              </Tooltip>
+            </S.EmptyStateTooltipWrapper>
+          )}
+        </S.AddButtonWrapper>
       </S.SectionHeader>
 
-      <S.CarouselWrapper>
-        <SwiperAction
-          swiperElement={artworks.map((artwork) => (
-            <ArtworkCard
-              key={artwork.id}
-              title={artwork.title ?? ""}
-              imageUrl={artwork.firstPhoto?.path}
-              onClick={() => onArtworkClick(artwork.id)}
-            />
-          ))}
-        />
-      </S.CarouselWrapper>
+      {artworks.length === 0 ? (
+        <S.EmptyState>
+          <S.EmptyStateGraphic aria-hidden>
+            <ArtworkPlaceholderGraphic />
+          </S.EmptyStateGraphic>
+          <S.EmptyStateText>아직 등록된 작품이 없어요</S.EmptyStateText>
+        </S.EmptyState>
+      ) : (
+        <S.CarouselWrapper>
+          <SwiperAction
+            swiperElement={artworks.map((artwork) => (
+              <ArtworkCard
+                key={artwork.id}
+                title={artwork.title ?? ""}
+                imageUrl={artwork.firstPhoto?.path}
+                onClick={() => onArtworkClick(artwork.id)}
+              />
+            ))}
+          />
+        </S.CarouselWrapper>
+      )}
 
       <S.BottomSpacer />
     </S.ScrollArea>
