@@ -50,12 +50,6 @@ export const Artist = styled.p`
   color: ${({ theme }) => theme.colors.gray.gray300};
 `;
 
-export const DescriptionSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
 export const Description = styled.p`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray100};
@@ -94,4 +88,18 @@ export const VideoFrame = styled.div`
 export const VideoIframe = styled.iframe`
   width: 100%;
   height: 100%;
+`;
+
+export const ErrorState = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+`;
+
+export const ErrorMessage = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body3 })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
 `;
