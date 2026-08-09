@@ -39,10 +39,7 @@ const GuestBookPage = ({
     (card): card is GuestBookCardSimpleResponse & { id: number } =>
       card.id !== undefined,
   );
-  const unreadCount = guestBookCards.reduce(
-    (count, card) => count + (card.isRead === false ? 1 : 0),
-    0,
-  );
+  const unreadCount = guestBook.unreadCount ?? 0;
   const hasNewCards = unreadCount > 0;
   const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
@@ -62,17 +59,14 @@ const GuestBookPage = ({
       )}
 
       <S.GuestListContainer>
-        {guestBookCards.map(
-          (card) =>
-            card.isRead && (
-              <GuestList
-                key={card.id}
-                nickname={card.nickname ?? ""}
-                hasPhoto={card.containsPhoto}
-                onClick={() => onCardClick(card.id)}
-              />
-            ),
-        )}
+        {guestBookCards.map((card) => (
+          <GuestList
+            key={card.id}
+            nickname={card.nickname ?? ""}
+            hasPhoto={card.containsPhoto}
+            onClick={() => onCardClick(card.id)}
+          />
+        ))}
       </S.GuestListContainer>
       <S.BottomSpacer />
     </S.ScrollArea>
