@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
+import { useGetProfile } from "@/api/generated/host-호스트";
 import { useGetV3 } from "@/api/generated/product-전시-작품";
 import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type {
+  ApiResponseHostProfileResponse,
   ApiResponseProductsResponse,
   ApiResponseSpaceResponse,
   ProductsResponse,
@@ -10,6 +12,7 @@ import type {
 } from "@/api/model";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
+import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
 import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
@@ -17,11 +20,16 @@ import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import * as S from "./ArtworkPage.styles";
 
+/** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
+const CAROUSEL_SIDE_PEEK_RATIO = 0.02;
+
 interface ArtworkPageProps {
   /** 스페이스 ID */
   spaceId: string;
   /** 전시 정보 수정 버튼 클릭 핸들러 */
   onEditClick?: () => void;
+  /** 더보기 메뉴 버튼 클릭 핸들러 */
+  onMoreClick?: () => void;
   /** 작품 추가 버튼 클릭 핸들러 */
   onAddArtworkClick?: () => void;
   /** 작품 카드 클릭 핸들러 */
@@ -31,10 +39,19 @@ interface ArtworkPageProps {
 const ArtworkPage = ({
   spaceId,
   onEditClick = () => {},
+  onMoreClick = () => {},
   onAddArtworkClick = () => {},
   onArtworkClick = () => {},
 }: ArtworkPageProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [activeArtworkIndex, setActiveArtworkIndex] = useState(0);
+
+  const { data: profile } = useGetProfile({
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseHostProfileResponse).data,
+    },
+  });
 
   const {
     data: space,
@@ -72,6 +89,24 @@ const ArtworkPage = ({
   if (isSpacePending || isProductsPending) {
     return (
       <S.ScrollArea>
+        <S.ProfileRow>
+          <S.UserProfile>
+            {profile?.pictureUrl ? (
+              <S.UserAvatarImage src={profile.pictureUrl} alt="" aria-hidden />
+            ) : (
+              <S.UserAvatar aria-hidden />
+            )}
+            <S.UserName>{profile?.nickname ?? ""}</S.UserName>
+          </S.UserProfile>
+          <S.MoreMenuButton
+            type="button"
+            aria-label="더보기"
+            onClick={onMoreClick}
+          >
+            <IcVerticalDots width={28} height={28} />
+          </S.MoreMenuButton>
+        </S.ProfileRow>
+
         <S.TitleSkeleton />
         <S.DescriptionSkeleton />
 
@@ -102,6 +137,24 @@ const ArtworkPage = ({
 
   return (
     <S.ScrollArea>
+      <S.ProfileRow>
+        <S.UserProfile>
+          {profile?.pictureUrl ? (
+            <S.UserAvatarImage src={profile.pictureUrl} alt="" aria-hidden />
+          ) : (
+            <S.UserAvatar aria-hidden />
+          )}
+          <S.UserName>{profile?.nickname ?? ""}</S.UserName>
+        </S.UserProfile>
+        <S.MoreMenuButton
+          type="button"
+          aria-label="더보기"
+          onClick={onMoreClick}
+        >
+          <IcVerticalDots width={28} height={28} />
+        </S.MoreMenuButton>
+      </S.ProfileRow>
+
       <S.TitleRow>
         <S.Title>{space.name}</S.Title>
         <S.EditButton
@@ -164,6 +217,9 @@ const ArtworkPage = ({
       ) : (
         <S.CarouselWrapper>
           <SwiperAction
+            activeIndex={activeArtworkIndex}
+            onIndexChange={setActiveArtworkIndex}
+            sidePeekRatio={CAROUSEL_SIDE_PEEK_RATIO}
             swiperElement={artworks.map((artwork) => (
               <ArtworkCard
                 key={artwork.id}

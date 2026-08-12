@@ -11,12 +11,57 @@ export const ScrollArea = styled.div`
   }
 `;
 
+export const ProfileRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 24px;
+`;
+
+export const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const UserAvatar = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.semantic.black};
+  flex-shrink: 0;
+`;
+
+export const UserAvatarImage = styled.img`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+`;
+
+export const UserName = styled.span`
+  ${({ theme }) => ({ ...theme.typography.heading2 })};
+  color: ${({ theme }) => theme.colors.gray.gray100};
+`;
+
+export const MoreMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin: -6px;
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
 export const TitleRow = styled.div`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 8px;
-  padding-top: 24px;
+  margin-top: 28px;
 `;
 
 export const Title = styled.h1`
