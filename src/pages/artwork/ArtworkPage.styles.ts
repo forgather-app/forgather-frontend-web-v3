@@ -45,6 +45,10 @@ export const UserName = styled.span`
   color: ${({ theme }) => theme.colors.gray.gray100};
 `;
 
+export const MenuWrapper = styled.div`
+  position: relative;
+`;
+
 export const MoreMenuButton = styled.button`
   display: flex;
   align-items: center;
@@ -83,6 +87,16 @@ export const EditButton = styled.button`
   width: 29px;
   height: 29px;
   color: ${({ theme }) => theme.colors.gray.white};
+`;
+
+export const SpaceLink = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+  text-decoration: underline;
 `;
 
 export const DescriptionRow = styled("div", { shouldForwardProp })<{

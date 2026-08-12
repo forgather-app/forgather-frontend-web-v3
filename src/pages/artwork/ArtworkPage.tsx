@@ -11,9 +11,11 @@ import type {
   SpaceResponse,
 } from "@/api/model";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
+import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
+import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
@@ -28,8 +30,10 @@ interface ArtworkPageProps {
   spaceId: string;
   /** 전시 정보 수정 버튼 클릭 핸들러 */
   onEditClick?: () => void;
-  /** 더보기 메뉴 버튼 클릭 핸들러 */
-  onMoreClick?: () => void;
+  /** 더보기 메뉴의 삭제하기 클릭 핸들러 */
+  onDeleteClick?: () => void;
+  /** 더보기 메뉴의 진행 해제하기 클릭 핸들러 */
+  onUnfeatureClick?: () => void;
   /** 작품 추가 버튼 클릭 핸들러 */
   onAddArtworkClick?: () => void;
   /** 작품 카드 클릭 핸들러 */
@@ -39,12 +43,14 @@ interface ArtworkPageProps {
 const ArtworkPage = ({
   spaceId,
   onEditClick = () => {},
-  onMoreClick = () => {},
+  onDeleteClick = () => {},
+  onUnfeatureClick = () => {},
   onAddArtworkClick = () => {},
   onArtworkClick = () => {},
 }: ArtworkPageProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [activeArtworkIndex, setActiveArtworkIndex] = useState(0);
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
 
   const { data: profile } = useGetProfile({
     query: {
@@ -98,13 +104,23 @@ const ArtworkPage = ({
             )}
             <S.UserName>{profile?.nickname ?? ""}</S.UserName>
           </S.UserProfile>
-          <S.MoreMenuButton
-            type="button"
-            aria-label="더보기"
-            onClick={onMoreClick}
-          >
-            <IcVerticalDots width={28} height={28} />
-          </S.MoreMenuButton>
+          <S.MenuWrapper>
+            <S.MoreMenuButton
+              type="button"
+              aria-label="더보기"
+              onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+            >
+              <IcVerticalDots width={28} height={28} />
+            </S.MoreMenuButton>
+            <Dropdown
+              isOpen={isMoreMenuOpen}
+              onClose={() => setIsMoreMenuOpen(false)}
+              items={[
+                { label: "삭제하기", onClick: onDeleteClick },
+                { label: "진행 해제하기", onClick: onUnfeatureClick },
+              ]}
+            />
+          </S.MenuWrapper>
         </S.ProfileRow>
 
         <S.TitleSkeleton />
@@ -146,13 +162,23 @@ const ArtworkPage = ({
           )}
           <S.UserName>{profile?.nickname ?? ""}</S.UserName>
         </S.UserProfile>
-        <S.MoreMenuButton
-          type="button"
-          aria-label="더보기"
-          onClick={onMoreClick}
-        >
-          <IcVerticalDots width={28} height={28} />
-        </S.MoreMenuButton>
+        <S.MenuWrapper>
+          <S.MoreMenuButton
+            type="button"
+            aria-label="더보기"
+            onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+          >
+            <IcVerticalDots width={28} height={28} />
+          </S.MoreMenuButton>
+          <Dropdown
+            isOpen={isMoreMenuOpen}
+            onClose={() => setIsMoreMenuOpen(false)}
+            items={[
+              { label: "삭제하기", onClick: onDeleteClick },
+              { label: "진행 해제하기", onClick: onUnfeatureClick },
+            ]}
+          />
+        </S.MenuWrapper>
       </S.ProfileRow>
 
       <S.TitleRow>
@@ -165,6 +191,18 @@ const ArtworkPage = ({
           <IcEdit width={29} height={29} />
         </S.EditButton>
       </S.TitleRow>
+
+      {space.linkUrl && (
+        <S.SpaceLink
+          href={space.linkUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="링크 열기"
+        >
+          <IcLink aria-hidden="true" />
+          {space.linkName || space.linkUrl}
+        </S.SpaceLink>
+      )}
 
       <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
         <S.Description ref={descriptionRef} $isExpanded={isDescriptionExpanded}>
