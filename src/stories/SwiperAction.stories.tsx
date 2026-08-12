@@ -120,3 +120,25 @@ export const Controlled: Story = {
     );
   },
 };
+
+export const ControlledSidePeek: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "activeIndex/onIndexChange와 sidePeekRatio를 함께 전달한 controlled 모드입니다. 현재 카드가 중앙에서 컨테이너 폭을 채우고, 이전/다음 카드가 좌우에 대칭으로 살짝 보입니다.",
+      },
+    },
+  },
+  render: () => {
+    const [activeIndex, setActiveIndex] = useState(1);
+    return (
+      <SwiperAction
+        swiperElement={artworkCards}
+        activeIndex={activeIndex}
+        onIndexChange={setActiveIndex}
+        sidePeekRatio={0.04}
+      />
+    );
+  },
+};
