@@ -34,7 +34,7 @@ const DevLoginModal = ({ isOpen, onClose, redirectTo }: DevLoginModalProps) => {
         onSuccess: () => {
           showSnackBar("로그인 완료", "alert");
           onClose();
-          navigate({ href: redirectTo ?? "/" });
+          navigate({ href: redirectTo ?? "/home" });
         },
         onError: () => {
           showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");

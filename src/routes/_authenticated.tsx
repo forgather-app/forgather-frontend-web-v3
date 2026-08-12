@@ -25,6 +25,8 @@ function AuthenticatedLayout() {
   // NOTE: 인증 토큰이 서버 쿠키로 발급되어 클라이언트에서 로그인 여부를 직접 읽을 수 없으므로,
   // BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
   // 실제 응답 바디는 ApiResponseHostResponse (JSON)이므로 캐스팅해서 사용
+  // TODO: MyPage/ProfileEditPage/HomePage 등에서 useGetProfile을 각자 호출 중 —
+  // 소비처가 더 늘어나면 이 레이아웃에서 프로필까지 fetch해 Context로 내려주는 방식 고려
   const { data, isError, isPending } = useGetCurrentUser({
     query: { enabled: !isSignUpRoute, retry: false },
   });

@@ -36,7 +36,7 @@ const CreateSpacePage = () => {
         title="새 스페이스"
         onBackClick={() => window.history.back()}
         rightContent="나중에 하기"
-        onRightClick={() => navigate({ to: "/" })}
+        onRightClick={() => navigate({ to: "/home" })}
       />
       <S.Title>스페이스를 소개해주세요!</S.Title>
       <S.Main>

@@ -15,7 +15,7 @@ function RouteComponent() {
     <ArtworkDetailPage
       spaceId={spaceId}
       artworkId={Number(artworkId)}
-      onBack={() => navigate({ to: ".." })}
+      onBack={() => navigate({ to: "/spaces/$spaceId", params: { spaceId } })}
       // TODO: 수정하기 페이지 이동 연동
       onEditClick={() => {}}
       onDeleteSuccess={() =>
