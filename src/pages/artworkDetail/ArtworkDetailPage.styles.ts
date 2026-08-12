@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { gradientSweep } from "@/styles/animations";
 
 export const ScrollArea = styled.div`
   flex: 1;
@@ -25,6 +26,10 @@ export const IconButton = styled.button`
   padding: 8px;
   margin: 0 -8px;
   color: ${({ theme }) => theme.colors.gray.gray400};
+`;
+
+export const MenuWrapper = styled.div`
+  position: relative;
 `;
 
 export const Content = styled.main`
@@ -88,6 +93,73 @@ export const VideoFrame = styled.div`
 export const VideoIframe = styled.iframe`
   width: 100%;
   height: 100%;
+`;
+
+export const TitleSkeleton = styled.div`
+  width: 160px;
+  height: 26px;
+  border-radius: 6px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const ArtistSkeleton = styled.div`
+  width: 100px;
+  height: 20px;
+  border-radius: 6px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const MediaSkeleton = styled.div`
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 8px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const DescriptionSkeleton = styled.div`
+  width: 100%;
+  height: 80px;
+  border-radius: 6px;
+  background: ${({ theme }) => theme.colors.skeleton.skeleton20};
+  background-size: 300% 100%;
+  animation: ${gradientSweep} 1.5s linear infinite;
+`;
+
+export const ConfirmBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+`;
+
+export const ConfirmTextGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+`;
+
+export const ConfirmTitle = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body1 })};
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
+export const ConfirmSubtitle = styled.p`
+  ${({ theme }) => ({ ...theme.typography.caption })};
+  color: ${({ theme }) => theme.colors.gray.gray200};
+`;
+
+export const ConfirmActions = styled.div`
+  display: flex;
+  gap: 16px;
+  width: 100%;
 `;
 
 export const ErrorState = styled.div`

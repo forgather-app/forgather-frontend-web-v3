@@ -1,11 +1,21 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
-import { useGet } from "@/api/generated/product-전시-작품";
+import {
+  getGetQueryKey,
+  getGetV3QueryKey,
+  useDeleteV2,
+  useGet,
+} from "@/api/generated/product-전시-작품";
 import type { ApiResponseProductResponse, ProductResponse } from "@/api/model";
 import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import Button from "@/components/@common/Button/Button";
+import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
+import Modal from "@/components/UI/Modal/Modal";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
 import * as S from "./ArtworkDetailPage.styles";
@@ -17,22 +27,57 @@ interface ArtworkDetailPageProps {
   artworkId: number;
   /** 뒤로가기 핸들러 */
   onBack: () => void;
-  /** 더보기(케밥) 메뉴 클릭 핸들러 */
-  onMenuClick?: () => void;
+  /** '수정하기' 선택 핸들러 */
+  onEditClick?: () => void;
+  /** 삭제 성공 후 호출되는 핸들러 (예: 목록으로 이동) */
+  onDeleteSuccess?: () => void;
 }
 
 const ArtworkDetailPage = ({
   spaceId,
   artworkId,
   onBack,
-  onMenuClick,
+  onEditClick = () => {},
+  onDeleteSuccess = () => {},
 }: ArtworkDetailPageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const { showSnackBar } = useSnackBar();
+  const queryClient = useQueryClient();
+  const { mutate: deleteArtwork } = useDeleteV2({
+    request: withApiVersion(1),
+  });
+
+  const handleConfirmDelete = () => {
+    deleteArtwork(
+      { spaceCode: spaceId, productId: artworkId },
+      {
+        onSuccess: () => {
+          setIsDeleteConfirmOpen(false);
+          showSnackBar("작품을 삭제했어요", "alert");
+          // 목록/상세 캐시를 무효화해 뒤로가기 등으로 재접근해도 삭제된 상태가 바로 반영되게 한다
+          queryClient.invalidateQueries({
+            queryKey: getGetV3QueryKey(spaceId),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getGetQueryKey(spaceId, artworkId),
+          });
+          onDeleteSuccess();
+        },
+        onError: () => {
+          setIsDeleteConfirmOpen(false);
+          showSnackBar("작품 삭제에 실패했어요", "error");
+        },
+      },
+    );
+  };
 
   const {
     data: artwork,
     isPending,
     isError,
+    error,
     refetch,
   } = useGet<ProductResponse>(spaceId, artworkId, {
     query: {
@@ -44,22 +89,52 @@ const ArtworkDetailPage = ({
   });
 
   if (isError) {
+    const isNotFound = isAxiosError(error) && error.response?.status === 404;
+
     return (
       <S.ScrollArea>
         <S.ErrorState>
-          <S.ErrorMessage>정보를 불러오지 못했어요.</S.ErrorMessage>
-          <Button
-            variant="secondary"
-            text="다시 시도"
-            onClick={() => refetch()}
-          />
+          <S.ErrorMessage>
+            {isNotFound ? "잘못된 접근입니다." : "정보를 불러오지 못했어요."}
+          </S.ErrorMessage>
+          {isNotFound ? (
+            <Button variant="secondary" text="돌아가기" onClick={onBack} />
+          ) : (
+            <Button
+              variant="secondary"
+              text="다시 시도"
+              onClick={() => refetch()}
+            />
+          )}
         </S.ErrorState>
       </S.ScrollArea>
     );
   }
 
   if (isPending) {
-    return <S.ScrollArea />;
+    return (
+      <S.ScrollArea>
+        <S.Nav>
+          <S.IconButton type="button" aria-label="뒤로 가기" onClick={onBack}>
+            <IcLeftArrow width={24} height={24} />
+          </S.IconButton>
+          <S.IconButton type="button" aria-label="더보기 메뉴" disabled>
+            <IcVerticalDots width={24} height={24} />
+          </S.IconButton>
+        </S.Nav>
+
+        <S.Content>
+          <S.TitleSection>
+            <S.TitleSkeleton />
+            <S.ArtistSkeleton />
+          </S.TitleSection>
+
+          <S.MediaSkeleton />
+
+          <S.DescriptionSkeleton />
+        </S.Content>
+      </S.ScrollArea>
+    );
   }
 
   const title = artwork.title ?? "";
@@ -103,13 +178,26 @@ const ArtworkDetailPage = ({
         <S.IconButton type="button" aria-label="뒤로 가기" onClick={onBack}>
           <IcLeftArrow width={24} height={24} />
         </S.IconButton>
-        <S.IconButton
-          type="button"
-          aria-label="더보기 메뉴"
-          onClick={onMenuClick}
-        >
-          <IcVerticalDots width={24} height={24} />
-        </S.IconButton>
+        <S.MenuWrapper>
+          <S.IconButton
+            type="button"
+            aria-label="더보기 메뉴"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+          >
+            <IcVerticalDots width={24} height={24} />
+          </S.IconButton>
+          <Dropdown
+            isOpen={isMenuOpen}
+            onClose={() => setIsMenuOpen(false)}
+            items={[
+              {
+                label: "삭제하기",
+                onClick: () => setIsDeleteConfirmOpen(true),
+              },
+              { label: "수정하기", onClick: onEditClick },
+            ]}
+          />
+        </S.MenuWrapper>
       </S.Nav>
 
       <S.Content>
@@ -140,6 +228,35 @@ const ArtworkDetailPage = ({
           images={[{ url: imageUrl, name: title }]}
         />
       )}
+
+      <Modal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+      >
+        <Modal.Overlay />
+        <Modal.Content>
+          <S.ConfirmBody>
+            <S.ConfirmTextGroup>
+              <S.ConfirmTitle>작품을 삭제할까요?</S.ConfirmTitle>
+              <S.ConfirmSubtitle>삭제하면 되돌릴 수 없어요</S.ConfirmSubtitle>
+            </S.ConfirmTextGroup>
+            <S.ConfirmActions>
+              <Button
+                variant="tertiary"
+                text="취소"
+                onClick={() => setIsDeleteConfirmOpen(false)}
+                style={{ flex: 1 }}
+              />
+              <Button
+                variant="primary"
+                text="삭제하기"
+                onClick={handleConfirmDelete}
+                style={{ flex: 1 }}
+              />
+            </S.ConfirmActions>
+          </S.ConfirmBody>
+        </Modal.Content>
+      </Modal>
     </S.ScrollArea>
   );
 };

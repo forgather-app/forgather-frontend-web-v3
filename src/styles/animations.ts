@@ -24,3 +24,13 @@ export const cardFlip = keyframes`
   from { transform: rotateY(0deg); }
   to { transform: rotateY(180deg); }
 `;
+
+export const popIn = keyframes`
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+`;
+
+export const float = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+`;
