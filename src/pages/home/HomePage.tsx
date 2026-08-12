@@ -11,6 +11,8 @@ import { MOCK_CURRENT_SPACES, MOCK_SPACES } from "./mock";
 // TODO: 방명록 상세 페이지 확인용 개발 진입 버튼 전용 테스트 값 — 실제 스페이스/카드 목록 연동 후 제거
 const DEV_TEST_SPACE_ID = "o6shou1fvq";
 const DEV_TEST_GUESTBOOK_CARD_ID = "2";
+// TODO: 작품 상세 페이지 확인용 개발 진입 버튼 전용 테스트 값 — 실제 작품 목록 클릭 진입 플로우 연동 후 제거
+const DEV_TEST_ARTWORK_ID = "1";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -49,6 +51,18 @@ const HomePage = () => {
                 spaceId: DEV_TEST_SPACE_ID,
                 guestbookId: DEV_TEST_GUESTBOOK_CARD_ID,
               },
+            })
+          }
+        />
+
+        {/* TODO: 작품 상세 페이지 확인용 임시 진입점 — 실제 작품 카드 클릭 진입 플로우 연동 후 제거 */}
+        <Button
+          variant="underlined"
+          text="작품 상세 보기 (dev)"
+          onClick={() =>
+            navigate({
+              to: "/artworks/$artworkId",
+              params: { artworkId: DEV_TEST_ARTWORK_ID },
             })
           }
         />
