@@ -10,9 +10,9 @@ import type {
 } from "@/api/model";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
-import Button from "@/components/@common/Button/Button";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
+import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import * as S from "./ArtworkPage.styles";
 
 interface ArtworkPageProps {
@@ -38,7 +38,6 @@ const ArtworkPage = ({
     data: space,
     isPending: isSpacePending,
     isError: isSpaceError,
-    refetch: refetchSpace,
   } = useGetSpaceInformation<SpaceResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -47,11 +46,13 @@ const ArtworkPage = ({
     },
   });
 
+  const { ref: descriptionRef, isTruncated: isDescriptionTruncated } =
+    useIsTruncated<HTMLParagraphElement>([space?.description]);
+
   const {
     data: products,
     isPending: isProductsPending,
     isError: isProductsError,
-    refetch: refetchProducts,
   } = useGetV3<ProductsResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -61,27 +62,35 @@ const ArtworkPage = ({
     request: withApiVersion(3),
   });
 
+  // TODO: 에러 UI 구현
   if (isSpaceError || isProductsError) {
-    // TODO: 403(권한 없음)과 404(존재하지 않음) 등 에러 종류별로 메시지/처리 분기 필요 — 지금은 모든 에러를 동일한 폴백으로 처리
-    return (
-      <S.ScrollArea>
-        <S.ErrorState>
-          <S.ErrorMessage>정보를 불러오지 못했어요.</S.ErrorMessage>
-          <Button
-            variant="secondary"
-            text="다시 시도"
-            onClick={() => {
-              refetchSpace();
-              refetchProducts();
-            }}
-          />
-        </S.ErrorState>
-      </S.ScrollArea>
-    );
+    return;
   }
 
   if (isSpacePending || isProductsPending) {
-    return <S.ScrollArea />;
+    return (
+      <S.ScrollArea>
+        <S.TitleSkeleton />
+        <S.DescriptionSkeleton />
+
+        <S.Divider />
+
+        <S.SectionHeader>
+          <S.SectionTitle>작품</S.SectionTitle>
+          <S.AddButton
+            type="button"
+            aria-label="작품 추가"
+            onClick={onAddArtworkClick}
+          >
+            <IcPlus width={24} height={24} />
+          </S.AddButton>
+        </S.SectionHeader>
+
+        <S.CarouselWrapper>
+          <S.CardSkeleton />
+        </S.CarouselWrapper>
+      </S.ScrollArea>
+    );
   }
 
   const artworks = (products.products ?? []).filter(
@@ -103,15 +112,17 @@ const ArtworkPage = ({
       </S.TitleRow>
 
       <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
-        <S.Description $isExpanded={isDescriptionExpanded}>
+        <S.Description ref={descriptionRef} $isExpanded={isDescriptionExpanded}>
           {space.description}
         </S.Description>
-        <S.MoreButton
-          type="button"
-          onClick={() => setIsDescriptionExpanded((prev) => !prev)}
-        >
-          {isDescriptionExpanded ? "접기" : "더보기"}
-        </S.MoreButton>
+        {isDescriptionTruncated && (
+          <S.MoreButton
+            type="button"
+            onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+          >
+            {isDescriptionExpanded ? "접기" : "더보기"}
+          </S.MoreButton>
+        )}
       </S.DescriptionRow>
 
       <S.Divider />
