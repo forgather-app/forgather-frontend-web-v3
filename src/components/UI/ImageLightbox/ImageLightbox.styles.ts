@@ -30,25 +30,22 @@ export const SwiperWrapper = styled.div`
 export const ImageSquare = styled.div`
   /*
    * width를 SwiperAction이 ResizeObserver로 비동기 측정하는 슬라이드 폭(100%)에 맡기면,
-   * SwiperAction의 높이 고정 로직(useLayoutEffect의 scrollHeight 측정)이 그보다 먼저(동기적으로)
-   * 실행돼 aspect-ratio 기반 높이가 0으로 잠깐 측정되고, 이후 리렌더되지 않아 0에 고정될 수 있다.
-   * 뷰포트 기준 값으로 즉시(동기) 계산되도록 해서 이 레이스 컨디션을 피한다.
+   * 첫 렌더에서 폭이 0으로 측정될 수 있다. 뷰포트 기준 값으로 즉시(동기) 계산되도록 해서
+   * 이 레이스 컨디션을 피한다. 높이는 강제하지 않고 이미지 원본 비율을 따르게 둔다.
    */
   position: relative;
   width: min(100vw, ${({ theme }) => theme.layout.maxWidth});
-  aspect-ratio: 1;
-  overflow: hidden;
 `;
 
 export const SlideImage = styled.img`
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
 `;
 
 export const PlaceholderWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -20,6 +20,11 @@ export const global = css`
     color: inherit;
     cursor: pointer;
   }
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
   html {
     scroll-behavior: smooth;
   }
