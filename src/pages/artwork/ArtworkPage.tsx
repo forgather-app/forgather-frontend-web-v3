@@ -104,23 +104,32 @@ const ArtworkPage = ({
             )}
             <S.UserName>{profile?.nickname ?? ""}</S.UserName>
           </S.UserProfile>
-          <S.MenuWrapper>
-            <S.MoreMenuButton
+          <S.ActionsWrapper>
+            <S.EditButton
               type="button"
-              aria-label="더보기"
-              onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+              aria-label="전시 정보 수정"
+              onClick={onEditClick}
             >
-              <IcVerticalDots width={28} height={28} />
-            </S.MoreMenuButton>
-            <Dropdown
-              isOpen={isMoreMenuOpen}
-              onClose={() => setIsMoreMenuOpen(false)}
-              items={[
-                { label: "삭제하기", onClick: onDeleteClick },
-                { label: "진행 해제하기", onClick: onUnfeatureClick },
-              ]}
-            />
-          </S.MenuWrapper>
+              <IcEdit width={28} height={28} />
+            </S.EditButton>
+            <S.MenuWrapper>
+              <S.MoreMenuButton
+                type="button"
+                aria-label="더보기"
+                onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+              >
+                <IcVerticalDots width={28} height={28} />
+              </S.MoreMenuButton>
+              <Dropdown
+                isOpen={isMoreMenuOpen}
+                onClose={() => setIsMoreMenuOpen(false)}
+                items={[
+                  { label: "삭제하기", onClick: onDeleteClick },
+                  { label: "진행 해제하기", onClick: onUnfeatureClick },
+                ]}
+              />
+            </S.MenuWrapper>
+          </S.ActionsWrapper>
         </S.ProfileRow>
 
         <S.TitleSkeleton />
@@ -162,34 +171,36 @@ const ArtworkPage = ({
           )}
           <S.UserName>{profile?.nickname ?? ""}</S.UserName>
         </S.UserProfile>
-        <S.MenuWrapper>
-          <S.MoreMenuButton
+        <S.ActionsWrapper>
+          <S.EditButton
             type="button"
-            aria-label="더보기"
-            onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+            aria-label="전시 정보 수정"
+            onClick={onEditClick}
           >
-            <IcVerticalDots width={28} height={28} />
-          </S.MoreMenuButton>
-          <Dropdown
-            isOpen={isMoreMenuOpen}
-            onClose={() => setIsMoreMenuOpen(false)}
-            items={[
-              { label: "삭제하기", onClick: onDeleteClick },
-              { label: "진행 해제하기", onClick: onUnfeatureClick },
-            ]}
-          />
-        </S.MenuWrapper>
+            <IcEdit width={28} height={28} />
+          </S.EditButton>
+          <S.MenuWrapper>
+            <S.MoreMenuButton
+              type="button"
+              aria-label="더보기"
+              onClick={() => setIsMoreMenuOpen((prev) => !prev)}
+            >
+              <IcVerticalDots width={28} height={28} />
+            </S.MoreMenuButton>
+            <Dropdown
+              isOpen={isMoreMenuOpen}
+              onClose={() => setIsMoreMenuOpen(false)}
+              items={[
+                { label: "삭제하기", onClick: onDeleteClick },
+                { label: "진행 해제하기", onClick: onUnfeatureClick },
+              ]}
+            />
+          </S.MenuWrapper>
+        </S.ActionsWrapper>
       </S.ProfileRow>
 
       <S.TitleRow>
         <S.Title>{space.name}</S.Title>
-        <S.EditButton
-          type="button"
-          aria-label="전시 정보 수정"
-          onClick={onEditClick}
-        >
-          <IcEdit width={29} height={29} />
-        </S.EditButton>
       </S.TitleRow>
 
       {space.linkUrl && (
@@ -199,7 +210,7 @@ const ArtworkPage = ({
           rel="noopener noreferrer"
           aria-label="링크 열기"
         >
-          <IcLink aria-hidden="true" />
+          <IcLink width={16} height={16} aria-hidden="true" />
           {space.linkName || space.linkUrl}
         </S.SpaceLink>
       )}
