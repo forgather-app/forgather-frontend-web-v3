@@ -1,6 +1,10 @@
-import { css } from "@emotion/react";
+import { css, keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import { shouldForwardProp } from "@/utils/shouldForwardProp";
+
+const flowerPulse = keyframes`
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+`;
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -90,21 +94,16 @@ export const PhoneFrame = styled.div`
   z-index: 2;
 `;
 
-/** 잘리는 하단(GradientFade) 위쪽, 화면에 확실히 보이는 영역에 위치 */
-export const PhoneFlower = styled("div", { shouldForwardProp })<{
-  $isVisible: boolean;
-}>`
+/** 잘리는 하단(GradientFade) 위쪽, 화면에 확실히 보이는 영역에 위치. 사라지지 않고 계속 pumping */
+export const PhoneFlower = styled.div`
   position: absolute;
   top: 100px;
   left: 50%;
   width: 80px;
   height: 80px;
-  transform: translate(-50%, -50%)
-    scale(${({ $isVisible }) => ($isVisible ? 1 : 0)});
-  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
-  transition:
-    transform 1s ease,
-    opacity 1s ease;
+  transform: translate(-50%, -50%);
+  /* OnboardingIllustration1.tsx의 CAROUSEL_STEP_INTERVAL(2100ms)과 주기를 맞춤 */
+  animation: ${flowerPulse} 2.1s ease-in-out infinite;
 
   svg {
     width: 100%;

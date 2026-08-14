@@ -7,10 +7,7 @@ const STEP_SIZE = 65;
 const VISIBLE_RANGE = 2;
 const SIDE_SIZE = 50;
 
-const CAROUSEL_MOVE_DURATION = 1500;
-const PHONE_FLOWER_TRANSITION_DURATION = 1000;
-const PHONE_FLOWER_HOLD_DURATION = 1200;
-const NEXT_STEP_DELAY = 600;
+const CAROUSEL_STEP_INTERVAL = 2100;
 
 const getSignedDist = (i: number, activeIndex: number): number => {
   const raw =
@@ -20,37 +17,13 @@ const getSignedDist = (i: number, activeIndex: number): number => {
 
 const OnboardingIllustration1 = () => {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPhoneFlowerVisible, setIsPhoneFlowerVisible] = useState(false);
 
   useEffect(() => {
-    const timeoutIds: ReturnType<typeof setTimeout>[] = [];
-    const schedule = (fn: () => void, delay: number) => {
-      timeoutIds.push(setTimeout(fn, delay));
-    };
-
-    // 꽃 한 칸 이동 → 이동 종료 후 핸드폰 안 꽃 확대 등장 → 유지 → 축소 소멸 → 다음 이동, 반복
-    const runCycle = () => {
+    const intervalId = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
+    }, CAROUSEL_STEP_INTERVAL);
 
-      schedule(() => {
-        setIsPhoneFlowerVisible(true);
-
-        schedule(() => {
-          setIsPhoneFlowerVisible(false);
-
-          schedule(
-            runCycle,
-            PHONE_FLOWER_TRANSITION_DURATION + NEXT_STEP_DELAY,
-          );
-        }, PHONE_FLOWER_HOLD_DURATION);
-      }, CAROUSEL_MOVE_DURATION);
-    };
-
-    schedule(runCycle, NEXT_STEP_DELAY);
-
-    return () => {
-      timeoutIds.forEach(clearTimeout);
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -85,7 +58,7 @@ const OnboardingIllustration1 = () => {
           })}
         </S.FlowerCarousel>
         <S.PhoneFrame aria-hidden="true">
-          <S.PhoneFlower $isVisible={isPhoneFlowerVisible}>
+          <S.PhoneFlower>
             <LogoSmall />
           </S.PhoneFlower>
         </S.PhoneFrame>
