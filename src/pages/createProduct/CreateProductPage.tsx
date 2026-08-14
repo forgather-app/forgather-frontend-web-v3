@@ -7,21 +7,22 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "./CreateProductPage.styles";
-import {
-  type CreateProductFormData,
-  useCreateProductForm,
-} from "./hooks/useCreateProductForm";
-
-export type { CreateProductFormData } from "./hooks/useCreateProductForm";
+import { useCreateProductForm } from "./hooks/useCreateProductForm";
 
 interface CreateProductPageProps {
+  /** 작품을 등록할 스페이스 코드 */
+  spaceCode: string;
   /** 뒤로가기 핸들러 */
   onBack: () => void;
-  /** 다음 버튼 클릭(폼 제출) 핸들러 */
-  onNext: (data: CreateProductFormData) => void;
+  /** 작품 등록 성공 핸들러 */
+  onSuccess: () => void;
 }
 
-const CreateProductPage = ({ onBack, onNext }: CreateProductPageProps) => {
+const CreateProductPage = ({
+  spaceCode,
+  onBack,
+  onSuccess,
+}: CreateProductPageProps) => {
   const {
     control,
     titleRules,
@@ -31,11 +32,12 @@ const CreateProductPage = ({ onBack, onNext }: CreateProductPageProps) => {
     isValid,
     photos,
     setPhotos,
+    isSubmitting,
     getSubmitHandler,
-  } = useCreateProductForm();
+  } = useCreateProductForm(spaceCode);
 
   return (
-    <S.PageWrapper onSubmit={getSubmitHandler(onNext)} noValidate>
+    <S.PageWrapper onSubmit={getSubmitHandler(onSuccess)} noValidate>
       <NavigationBar title="작품 등록하기" onBackClick={onBack} />
       <S.ScrollArea>
         <S.Title>{"작품 정보를\n입력해 주세요!"}</S.Title>
@@ -115,7 +117,7 @@ const CreateProductPage = ({ onBack, onNext }: CreateProductPageProps) => {
         </S.FieldGroup>
       </S.ScrollArea>
       <S.Footer>
-        <Button text="다음" type="submit" disabled={!isValid} />
+        <Button text="다음" type="submit" disabled={!isValid || isSubmitting} />
       </S.Footer>
     </S.PageWrapper>
   );

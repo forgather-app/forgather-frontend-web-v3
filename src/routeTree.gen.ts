@@ -17,7 +17,6 @@ import { Route as AuthenticatedSignUpIndexRouteImport } from './routes/_authenti
 import { Route as AuthenticatedMyPageIndexRouteImport } from './routes/_authenticated/my-page/index'
 import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
 import { Route as AuthenticatedCreateSpaceIndexRouteImport } from './routes/_authenticated/create-space/index'
-import { Route as AuthenticatedCreateProductIndexRouteImport } from './routes/_authenticated/create-product/index'
 import { Route as AuthenticatedCreateExhibitionIndexRouteImport } from './routes/_authenticated/create-exhibition/index'
 import { Route as AuthenticatedSpacesSpaceIdRouteImport } from './routes/_authenticated/spaces/$spaceId'
 import { Route as AuthenticatedSignUpCompleteRouteImport } from './routes/_authenticated/sign-up/complete'
@@ -25,6 +24,7 @@ import { Route as AuthenticatedMyPageEditRouteImport } from './routes/_authentic
 import { Route as AuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/index'
 import { Route as SpacesSpaceIdGuestbookWriteRouteImport } from './routes/spaces/$spaceId/guestbook/write'
 import { Route as AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook/index'
+import { Route as AuthenticatedSpacesSpaceIdCreateProductIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/create-product/index'
 import { Route as AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
 import { Route as AuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport } from './routes/_authenticated/spaces/$spaceId/artworks/$artworkId'
 
@@ -71,12 +71,6 @@ const AuthenticatedCreateSpaceIndexRoute =
     path: '/create-space/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedCreateProductIndexRoute =
-  AuthenticatedCreateProductIndexRouteImport.update({
-    id: '/create-product/',
-    path: '/create-product/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 const AuthenticatedCreateExhibitionIndexRoute =
   AuthenticatedCreateExhibitionIndexRouteImport.update({
     id: '/create-exhibition/',
@@ -118,6 +112,12 @@ const AuthenticatedSpacesSpaceIdGuestbookIndexRoute =
     path: '/guestbook/',
     getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
   } as any)
+const AuthenticatedSpacesSpaceIdCreateProductIndexRoute =
+  AuthenticatedSpacesSpaceIdCreateProductIndexRouteImport.update({
+    id: '/create-product/',
+    path: '/create-product/',
+    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+  } as any)
 const AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute =
   AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport.update({
     id: '/guestbook/$guestbookId',
@@ -139,7 +139,6 @@ export interface FileRoutesByFullPath {
   '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   '/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
-  '/create-product/': typeof AuthenticatedCreateProductIndexRoute
   '/create-space/': typeof AuthenticatedCreateSpaceIndexRoute
   '/home/': typeof AuthenticatedHomeIndexRoute
   '/my-page/': typeof AuthenticatedMyPageIndexRoute
@@ -148,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
   '/spaces/$spaceId/artworks/$artworkId': typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   '/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/spaces/$spaceId/create-product/': typeof AuthenticatedSpacesSpaceIdCreateProductIndexRoute
   '/spaces/$spaceId/guestbook/': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRoutesByTo {
@@ -157,7 +157,6 @@ export interface FileRoutesByTo {
   '/my-page/edit': typeof AuthenticatedMyPageEditRoute
   '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/create-exhibition': typeof AuthenticatedCreateExhibitionIndexRoute
-  '/create-product': typeof AuthenticatedCreateProductIndexRoute
   '/create-space': typeof AuthenticatedCreateSpaceIndexRoute
   '/home': typeof AuthenticatedHomeIndexRoute
   '/my-page': typeof AuthenticatedMyPageIndexRoute
@@ -166,6 +165,7 @@ export interface FileRoutesByTo {
   '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdIndexRoute
   '/spaces/$spaceId/artworks/$artworkId': typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   '/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/spaces/$spaceId/create-product': typeof AuthenticatedSpacesSpaceIdCreateProductIndexRoute
   '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRoutesById {
@@ -178,7 +178,6 @@ export interface FileRoutesById {
   '/_authenticated/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/_authenticated/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   '/_authenticated/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
-  '/_authenticated/create-product/': typeof AuthenticatedCreateProductIndexRoute
   '/_authenticated/create-space/': typeof AuthenticatedCreateSpaceIndexRoute
   '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
   '/_authenticated/my-page/': typeof AuthenticatedMyPageIndexRoute
@@ -187,6 +186,7 @@ export interface FileRoutesById {
   '/_authenticated/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
   '/_authenticated/spaces/$spaceId/artworks/$artworkId': typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   '/_authenticated/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/_authenticated/spaces/$spaceId/create-product/': typeof AuthenticatedSpacesSpaceIdCreateProductIndexRoute
   '/_authenticated/spaces/$spaceId/guestbook/': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRouteTypes {
@@ -199,7 +199,6 @@ export interface FileRouteTypes {
     | '/sign-up/complete'
     | '/spaces/$spaceId'
     | '/create-exhibition/'
-    | '/create-product/'
     | '/create-space/'
     | '/home/'
     | '/my-page/'
@@ -208,6 +207,7 @@ export interface FileRouteTypes {
     | '/spaces/$spaceId/'
     | '/spaces/$spaceId/artworks/$artworkId'
     | '/spaces/$spaceId/guestbook/$guestbookId'
+    | '/spaces/$spaceId/create-product/'
     | '/spaces/$spaceId/guestbook/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -217,7 +217,6 @@ export interface FileRouteTypes {
     | '/my-page/edit'
     | '/sign-up/complete'
     | '/create-exhibition'
-    | '/create-product'
     | '/create-space'
     | '/home'
     | '/my-page'
@@ -226,6 +225,7 @@ export interface FileRouteTypes {
     | '/spaces/$spaceId'
     | '/spaces/$spaceId/artworks/$artworkId'
     | '/spaces/$spaceId/guestbook/$guestbookId'
+    | '/spaces/$spaceId/create-product'
     | '/spaces/$spaceId/guestbook'
   id:
     | '__root__'
@@ -237,7 +237,6 @@ export interface FileRouteTypes {
     | '/_authenticated/sign-up/complete'
     | '/_authenticated/spaces/$spaceId'
     | '/_authenticated/create-exhibition/'
-    | '/_authenticated/create-product/'
     | '/_authenticated/create-space/'
     | '/_authenticated/home/'
     | '/_authenticated/my-page/'
@@ -246,6 +245,7 @@ export interface FileRouteTypes {
     | '/_authenticated/spaces/$spaceId/'
     | '/_authenticated/spaces/$spaceId/artworks/$artworkId'
     | '/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
+    | '/_authenticated/spaces/$spaceId/create-product/'
     | '/_authenticated/spaces/$spaceId/guestbook/'
   fileRoutesById: FileRoutesById
 }
@@ -313,13 +313,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCreateSpaceIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/create-product/': {
-      id: '/_authenticated/create-product/'
-      path: '/create-product'
-      fullPath: '/create-product/'
-      preLoaderRoute: typeof AuthenticatedCreateProductIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/create-exhibition/': {
       id: '/_authenticated/create-exhibition/'
       path: '/create-exhibition'
@@ -369,6 +362,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport
       parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
     }
+    '/_authenticated/spaces/$spaceId/create-product/': {
+      id: '/_authenticated/spaces/$spaceId/create-product/'
+      path: '/create-product'
+      fullPath: '/spaces/$spaceId/create-product/'
+      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdCreateProductIndexRouteImport
+      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+    }
     '/_authenticated/spaces/$spaceId/guestbook/$guestbookId': {
       id: '/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
       path: '/guestbook/$guestbookId'
@@ -390,6 +390,7 @@ interface AuthenticatedSpacesSpaceIdRouteChildren {
   AuthenticatedSpacesSpaceIdIndexRoute: typeof AuthenticatedSpacesSpaceIdIndexRoute
   AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute: typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute: typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  AuthenticatedSpacesSpaceIdCreateProductIndexRoute: typeof AuthenticatedSpacesSpaceIdCreateProductIndexRoute
   AuthenticatedSpacesSpaceIdGuestbookIndexRoute: typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 
@@ -400,6 +401,8 @@ const AuthenticatedSpacesSpaceIdRouteChildren: AuthenticatedSpacesSpaceIdRouteCh
       AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute,
     AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute:
       AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute,
+    AuthenticatedSpacesSpaceIdCreateProductIndexRoute:
+      AuthenticatedSpacesSpaceIdCreateProductIndexRoute,
     AuthenticatedSpacesSpaceIdGuestbookIndexRoute:
       AuthenticatedSpacesSpaceIdGuestbookIndexRoute,
   }
@@ -416,7 +419,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSignUpCompleteRoute: typeof AuthenticatedSignUpCompleteRoute
   AuthenticatedSpacesSpaceIdRoute: typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   AuthenticatedCreateExhibitionIndexRoute: typeof AuthenticatedCreateExhibitionIndexRoute
-  AuthenticatedCreateProductIndexRoute: typeof AuthenticatedCreateProductIndexRoute
   AuthenticatedCreateSpaceIndexRoute: typeof AuthenticatedCreateSpaceIndexRoute
   AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
   AuthenticatedMyPageIndexRoute: typeof AuthenticatedMyPageIndexRoute
@@ -431,7 +433,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSpacesSpaceIdRoute: AuthenticatedSpacesSpaceIdRouteWithChildren,
   AuthenticatedCreateExhibitionIndexRoute:
     AuthenticatedCreateExhibitionIndexRoute,
-  AuthenticatedCreateProductIndexRoute: AuthenticatedCreateProductIndexRoute,
   AuthenticatedCreateSpaceIndexRoute: AuthenticatedCreateSpaceIndexRoute,
   AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
   AuthenticatedMyPageIndexRoute: AuthenticatedMyPageIndexRoute,

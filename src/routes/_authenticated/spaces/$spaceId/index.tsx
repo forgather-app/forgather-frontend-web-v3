@@ -12,6 +12,9 @@ function RouteComponent() {
   return (
     <ArtworkPage
       spaceId={spaceId}
+      onAddArtworkClick={() =>
+        navigate({ to: "/spaces/$spaceId/create-product", params: { spaceId } })
+      }
       onArtworkClick={(artworkId) =>
         navigate({
           to: "/spaces/$spaceId/artworks/$artworkId",
