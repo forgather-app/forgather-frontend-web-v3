@@ -11,7 +11,7 @@ const meta: Meta<typeof Button> = {
     docs: {
       description: {
         component:
-          "공통 버튼 컴포넌트입니다.\n\n**variant 종류:**\n- `primary` / `secondary` / `tertiary`: 전체 너비 기본 버튼\n- `underlined`: 텍스트 링크형\n- `pill`: 소형 필 버튼 (disabled 시 어두운 배경)\n- `pillWeak`: 소형 필 버튼 (disabled 시 회색 배경)\n- `action`: 아이콘+텍스트 CTA (보라색, shadow)\n- `icon`: 40×40 원형 아이콘 버튼\n\n`pill`·`pillWeak`·`action`은 `icon` prop으로 좌측 아이콘을 추가할 수 있습니다.\n`icon` variant는 `icon` prop만 사용하며 반드시 `aria-label`을 함께 전달해야 합니다.",
+          "공통 버튼 컴포넌트입니다.\n\n**variant 종류:**\n- `primary` / `secondary` / `tertiary`: 전체 너비 기본 버튼\n- `danger`: 위험 액션 버튼 (탈퇴 등 파괴적 동작, 붉은 반투명 배경)\n- `underlined`: 텍스트 링크형\n- `pill`: 소형 필 버튼 (disabled 시 어두운 배경)\n- `pillWeak`: 소형 필 버튼 (disabled 시 회색 배경)\n- `action`: 아이콘+텍스트 CTA (보라색, shadow)\n- `icon`: 40×40 원형 아이콘 버튼\n\n`pill`·`pillWeak`·`action`은 `icon` prop으로 좌측 아이콘을 추가할 수 있습니다.\n`icon` variant는 `icon` prop만 사용하며 반드시 `aria-label`을 함께 전달해야 합니다.",
       },
     },
   },
@@ -22,6 +22,7 @@ const meta: Meta<typeof Button> = {
         "primary",
         "secondary",
         "tertiary",
+        "danger",
         "underlined",
         "pill",
         "pillWeak",
@@ -136,6 +137,37 @@ export const TertiaryDisabled: Story = {
     ),
   ],
   args: { variant: "tertiary", disabled: true, text: "BUTTON" },
+};
+
+export const Danger: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "위험 액션 버튼 (붉은 반투명 배경). 탈퇴하기 등 파괴적 동작에 사용합니다. hover 시 배경이 진해지고, active(pressed) 시 배경이 solid red로 채워집니다.",
+      },
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  args: { variant: "danger", text: "탈퇴하기" },
+};
+
+export const DangerDisabled: Story = {
+  parameters: { docs: { description: { story: "Danger 비활성 상태." } } },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  args: { variant: "danger", disabled: true, text: "탈퇴하기" },
 };
 
 export const Underlined: Story = {
