@@ -41,9 +41,9 @@ export const GrabBar = styled.div`
   cursor: grab;
 `;
 
-export const Content = styled.div`
+export const Content = styled.div<{ $maxHeight?: string }>`
   width: 100%;
-  max-height: 50dvh;
+  max-height: ${({ $maxHeight }) => $maxHeight ?? "50dvh"};
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 
