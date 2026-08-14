@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 const flowerPulse = keyframes`
   0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.1); }
+  50% { transform: translate(-50%, -50%) scale(1.04); }
 `;
 
 export const Wrapper = styled.div`
@@ -20,6 +20,8 @@ export const MessageChip = styled.div`
   position: relative;
   z-index: 1;
   flex-shrink: 0;
+  overflow: hidden;
+  display: grid;
   background: linear-gradient(180deg, #1b1d1f 12.5%, #111 100%);
   border-radius: 8px;
   padding: 10px 16px;
@@ -27,11 +29,18 @@ export const MessageChip = styled.div`
   margin-bottom: 8px;
 `;
 
-export const ChipText = styled.p`
+/** 모든 메시지를 같은 그리드 셀에 겹쳐 쌓아, 가장 넓은/긴 메시지 기준으로 MessageChip 크기가 자동 결정되도록 함 */
+export const ChipText = styled.p<{ $dist: number }>`
   ${({ theme }) => ({ ...theme.typography.subBody })};
+  grid-area: 1 / 1;
   color: ${({ theme }) => theme.colors.gray.gray200};
   text-align: center;
   white-space: pre-line;
+  transform: translateY(${({ $dist }) => $dist * 100}%);
+  opacity: ${({ $dist }) => ($dist === 0 ? 1 : 0)};
+  transition:
+    transform 0.6s ease,
+    opacity 0.6s ease;
 `;
 
 export const SceneGroup = styled.div`
@@ -102,8 +111,8 @@ export const PhoneFlower = styled.div`
   width: 80px;
   height: 80px;
   transform: translate(-50%, -50%);
-  /* OnboardingIllustration1.tsx의 CAROUSEL_STEP_INTERVAL(2100ms)과 주기를 맞춤 */
-  animation: ${flowerPulse} 2.1s ease-in-out infinite;
+  /* OnboardingIllustration1.tsx의 MESSAGE_INTERVAL(3000ms) 기준 주기와 맞춤 */
+  animation: ${flowerPulse} 3s ease-in-out infinite;
 
   svg {
     width: 100%;
