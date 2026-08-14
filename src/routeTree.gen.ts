@@ -21,6 +21,7 @@ import { Route as AuthenticatedCreateProductIndexRouteImport } from './routes/_a
 import { Route as AuthenticatedCreateExhibitionIndexRouteImport } from './routes/_authenticated/create-exhibition/index'
 import { Route as AuthenticatedSpacesSpaceIdRouteImport } from './routes/_authenticated/spaces/$spaceId'
 import { Route as AuthenticatedSignUpCompleteRouteImport } from './routes/_authenticated/sign-up/complete'
+import { Route as AuthenticatedMyPageTermsRouteImport } from './routes/_authenticated/my-page/terms'
 import { Route as AuthenticatedMyPageEditRouteImport } from './routes/_authenticated/my-page/edit'
 import { Route as AuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/index'
 import { Route as SpacesSpaceIdGuestbookWriteRouteImport } from './routes/spaces/$spaceId/guestbook/write'
@@ -95,6 +96,12 @@ const AuthenticatedSignUpCompleteRoute =
     path: '/sign-up/complete',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedMyPageTermsRoute =
+  AuthenticatedMyPageTermsRouteImport.update({
+    id: '/my-page/terms',
+    path: '/my-page/terms',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedMyPageEditRoute = AuthenticatedMyPageEditRouteImport.update({
   id: '/my-page/edit',
   path: '/my-page/edit',
@@ -136,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
   '/login/': typeof LoginIndexRoute
   '/my-page/edit': typeof AuthenticatedMyPageEditRoute
+  '/my-page/terms': typeof AuthenticatedMyPageTermsRoute
   '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   '/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
@@ -155,6 +163,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/login': typeof LoginIndexRoute
   '/my-page/edit': typeof AuthenticatedMyPageEditRoute
+  '/my-page/terms': typeof AuthenticatedMyPageTermsRoute
   '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/create-exhibition': typeof AuthenticatedCreateExhibitionIndexRoute
   '/create-product': typeof AuthenticatedCreateProductIndexRoute
@@ -175,6 +184,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/login/': typeof LoginIndexRoute
   '/_authenticated/my-page/edit': typeof AuthenticatedMyPageEditRoute
+  '/_authenticated/my-page/terms': typeof AuthenticatedMyPageTermsRoute
   '/_authenticated/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
   '/_authenticated/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   '/_authenticated/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/new-guestbooks'
     | '/login/'
     | '/my-page/edit'
+    | '/my-page/terms'
     | '/sign-up/complete'
     | '/spaces/$spaceId'
     | '/create-exhibition/'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/my-page/edit'
+    | '/my-page/terms'
     | '/sign-up/complete'
     | '/create-exhibition'
     | '/create-product'
@@ -234,6 +246,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/login/'
     | '/_authenticated/my-page/edit'
+    | '/_authenticated/my-page/terms'
     | '/_authenticated/sign-up/complete'
     | '/_authenticated/spaces/$spaceId'
     | '/_authenticated/create-exhibition/'
@@ -341,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSignUpCompleteRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/my-page/terms': {
+      id: '/_authenticated/my-page/terms'
+      path: '/my-page/terms'
+      fullPath: '/my-page/terms'
+      preLoaderRoute: typeof AuthenticatedMyPageTermsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/my-page/edit': {
       id: '/_authenticated/my-page/edit'
       path: '/my-page/edit'
@@ -413,6 +433,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedNewGuestbooksRoute: typeof AuthenticatedNewGuestbooksRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedMyPageEditRoute: typeof AuthenticatedMyPageEditRoute
+  AuthenticatedMyPageTermsRoute: typeof AuthenticatedMyPageTermsRoute
   AuthenticatedSignUpCompleteRoute: typeof AuthenticatedSignUpCompleteRoute
   AuthenticatedSpacesSpaceIdRoute: typeof AuthenticatedSpacesSpaceIdRouteWithChildren
   AuthenticatedCreateExhibitionIndexRoute: typeof AuthenticatedCreateExhibitionIndexRoute
@@ -427,6 +448,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedNewGuestbooksRoute: AuthenticatedNewGuestbooksRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedMyPageEditRoute: AuthenticatedMyPageEditRoute,
+  AuthenticatedMyPageTermsRoute: AuthenticatedMyPageTermsRoute,
   AuthenticatedSignUpCompleteRoute: AuthenticatedSignUpCompleteRoute,
   AuthenticatedSpacesSpaceIdRoute: AuthenticatedSpacesSpaceIdRouteWithChildren,
   AuthenticatedCreateExhibitionIndexRoute:

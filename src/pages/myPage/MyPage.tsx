@@ -67,9 +67,7 @@ const MyPage = () => {
         <li>
           <S.MenuButton
             type="button"
-            onClick={() => {
-              // TODO: 이용약관 페이지 연결
-            }}
+            onClick={() => navigate({ to: "/my-page/terms" })}
           >
             서비스 이용 약관
             <IcChevronRight aria-hidden="true" />
