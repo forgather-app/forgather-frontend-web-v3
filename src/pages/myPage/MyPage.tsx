@@ -1,4 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useGetProfileSuspense } from "@/api/generated/host-호스트";
 import type { ApiResponseHostProfileResponse } from "@/api/model";
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
@@ -6,6 +7,7 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcModify from "@/assets/icons/ic_modify.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
+import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
 import * as S from "./MyPage.styles";
 
 // TODO: 버전 관리 방식 확정 시 대체
@@ -13,6 +15,7 @@ const APP_VERSION = "v1.0.0";
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const { data: profile } = useGetProfileSuspense({
     query: {
       select: (response) =>
@@ -104,9 +107,7 @@ const MyPage = () => {
           </S.InquiryButton>
           <S.WithdrawButton
             type="button"
-            onClick={() => {
-              // TODO: 탈퇴 플로우 확정 시 연결
-            }}
+            onClick={() => setIsWithdrawModalOpen(true)}
           >
             탈퇴하기
           </S.WithdrawButton>
@@ -116,6 +117,11 @@ const MyPage = () => {
           <LogoWordmark aria-hidden="true" />
         </S.FooterInfo>
       </S.Footer>
+
+      <WithdrawModal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+      />
     </NavigationBarLayout>
   );
 };

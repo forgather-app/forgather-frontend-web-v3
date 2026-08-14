@@ -13,4 +13,6 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 방명록을 남기지 못했어요. 잠시 후 다시 시도해 주세요",
   PHOTO_UPLOAD_FAILED:
     "일시적인 오류로 사진을 업로드하지 못했어요. 잠시 후 다시 시도해 주세요",
+  WITHDRAW_FAILED:
+    "일시적인 오류로 탈퇴하지 못했어요. 잠시 후 다시 시도해 주세요",
 } as const;
