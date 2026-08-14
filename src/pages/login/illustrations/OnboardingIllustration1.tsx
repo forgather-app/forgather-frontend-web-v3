@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import LogoSmall from "@/assets/icons/logos/logo_small.svg?react";
-import OnboardingImage from "@/assets/images/onboarding_image.svg?react";
 import * as S from "./OnboardingIllustration1.styles";
 
 const FLOWER_COUNT = 8;
-const STEP_SIZE = 87.5;
+const STEP_SIZE = 65;
 const VISIBLE_RANGE = 2;
-const CENTER_SIZE = 69;
-const SIDE_SIZE = 45;
+const SIDE_SIZE = 50;
+
+const CAROUSEL_MOVE_DURATION = 1500;
+const PHONE_FLOWER_TRANSITION_DURATION = 1000;
+const PHONE_FLOWER_HOLD_DURATION = 1200;
+const NEXT_STEP_DELAY = 600;
 
 const getSignedDist = (i: number, activeIndex: number): number => {
   const raw =
@@ -17,13 +20,37 @@ const getSignedDist = (i: number, activeIndex: number): number => {
 
 const OnboardingIllustration1 = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isPhoneFlowerVisible, setIsPhoneFlowerVisible] = useState(false);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
-    }, 2000);
+    const timeoutIds: ReturnType<typeof setTimeout>[] = [];
+    const schedule = (fn: () => void, delay: number) => {
+      timeoutIds.push(setTimeout(fn, delay));
+    };
 
-    return () => clearInterval(intervalId);
+    // 꽃 한 칸 이동 → 이동 종료 후 핸드폰 안 꽃 확대 등장 → 유지 → 축소 소멸 → 다음 이동, 반복
+    const runCycle = () => {
+      setActiveIndex((prev) => (prev + 1) % FLOWER_COUNT);
+
+      schedule(() => {
+        setIsPhoneFlowerVisible(true);
+
+        schedule(() => {
+          setIsPhoneFlowerVisible(false);
+
+          schedule(
+            runCycle,
+            PHONE_FLOWER_TRANSITION_DURATION + NEXT_STEP_DELAY,
+          );
+        }, PHONE_FLOWER_HOLD_DURATION);
+      }, CAROUSEL_MOVE_DURATION);
+    };
+
+    schedule(runCycle, NEXT_STEP_DELAY);
+
+    return () => {
+      timeoutIds.forEach(clearTimeout);
+    };
   }, []);
 
   return (
@@ -34,23 +61,20 @@ const OnboardingIllustration1 = () => {
         </S.ChipText>
       </S.MessageChip>
       <S.SceneGroup>
-        <S.Ring />
-        <S.Circle />
         <S.FlowerCarousel aria-hidden="true">
           {Array.from({ length: FLOWER_COUNT }, (_, i) => {
             const dist = getSignedDist(i, activeIndex);
             const absDist = Math.abs(dist);
             const isCenter = dist === 0;
             const isVisible = absDist <= VISIBLE_RANGE;
-            const size = isCenter ? CENTER_SIZE : SIDE_SIZE;
 
             return (
               <S.FlowerItem
                 key={`${i + 1}-flower`}
                 $isCenter={isCenter}
                 style={{
-                  width: `${size}px`,
-                  height: `${size}px`,
+                  width: `${SIDE_SIZE}px`,
+                  height: `${SIDE_SIZE}px`,
                   transform: `translate(calc(-50% + ${dist * STEP_SIZE}px), -50%)`,
                   opacity: isVisible ? 1 : 0,
                 }}
@@ -60,9 +84,12 @@ const OnboardingIllustration1 = () => {
             );
           })}
         </S.FlowerCarousel>
-        <S.Character>
-          <OnboardingImage />
-        </S.Character>
+        <S.PhoneFrame aria-hidden="true">
+          <S.PhoneFlower $isVisible={isPhoneFlowerVisible}>
+            <LogoSmall />
+          </S.PhoneFlower>
+        </S.PhoneFrame>
+        <S.GradientFade aria-hidden="true" />
       </S.SceneGroup>
     </S.Wrapper>
   );
