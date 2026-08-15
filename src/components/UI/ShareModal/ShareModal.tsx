@@ -1,7 +1,6 @@
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcQr from "@/assets/icons/ic_qr.svg?react";
-import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import * as S from "./ShareModal.styles";
 
@@ -66,14 +65,12 @@ const ShareModal = ({
           </S.Container>
         </Modal.Content>
 
-        <S.CloseButton>
-          <Button
-            variant="icon"
-            icon={<IcClose width={24} height={24} />}
-            aria-label="닫기"
-            onClick={onClose}
-          />
-        </S.CloseButton>
+        <S.CloseButton
+          variant="icon"
+          icon={<IcClose width={32} height={32} />}
+          aria-label="닫기"
+          onClick={onClose}
+        />
       </S.Wrapper>
     </Modal>
   );

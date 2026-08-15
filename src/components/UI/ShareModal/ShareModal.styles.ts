@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import IcKakaoBadge from "@/assets/icons/ic_kakao_badge.svg?react";
 import InviteGraphic from "@/assets/images/invite_graphic.svg?react";
 import InviteGraphicLine from "@/assets/images/invite_graphic_line.svg?react";
+import Button from "@/components/@common/Button/Button";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -11,9 +12,12 @@ export const Wrapper = styled.div`
   gap: ${({ theme }) => theme.layout.sectionGap}px;
 `;
 
-export const CloseButton = styled.div`
+export const CloseButton = styled(Button)`
   position: relative;
   z-index: ${({ theme }) => theme.layout.zIndex.modalContent};
+  width: 64px;
+  height: 64px;
+  padding: 16px;
 `;
 
 export const Container = styled.div`
