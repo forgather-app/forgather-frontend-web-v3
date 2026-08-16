@@ -50,6 +50,11 @@ const meta: Meta<typeof SwiperAction> = {
       description: "드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다",
       table: { type: { summary: "(index: number) => void" } },
     },
+    fillHeight: {
+      description:
+        "true이면 스와이프 인식 영역(hit area)이 부모 컨테이너의 전체 높이를 채웁니다. 콘텐츠가 그보다 길면 콘텐츠 높이에 맞춰 자연스럽게 늘어납니다",
+      table: { type: { summary: "boolean | undefined" } },
+    },
   },
 };
 
@@ -117,6 +122,30 @@ export const Controlled: Story = {
         activeIndex={activeIndex}
         onIndexChange={setActiveIndex}
       />
+    );
+  },
+};
+
+export const FillHeight: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "fillHeight를 전달한 controlled 모드입니다. 스와이프 인식 영역이 부모 컨테이너의 전체 높이(여기서는 400px)를 채워, 카드 콘텐츠 아래 빈 여백에서 드래그해도 슬라이드가 전환됩니다.",
+      },
+    },
+  },
+  render: () => {
+    const [activeIndex, setActiveIndex] = useState(0);
+    return (
+      <div style={{ height: 400 }}>
+        <SwiperAction
+          swiperElement={messageSlides}
+          activeIndex={activeIndex}
+          onIndexChange={setActiveIndex}
+          fillHeight
+        />
+      </div>
     );
   },
 };
