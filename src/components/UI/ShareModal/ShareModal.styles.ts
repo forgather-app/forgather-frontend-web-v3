@@ -9,7 +9,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  gap: ${({ theme }) => theme.layout.sectionGap}px;
+  gap: 40px;
 `;
 
 export const CloseButton = styled(Button)`
@@ -18,6 +18,8 @@ export const CloseButton = styled(Button)`
   width: 64px;
   height: 64px;
   padding: 16px;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  color: ${({ theme }) => theme.colors.gray.gray200};
 `;
 
 export const Container = styled.div`
