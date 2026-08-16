@@ -41,6 +41,27 @@ const GuestBookPage = ({
     request: withApiVersion(2),
   });
 
+  const guestBookCards = (guestBook?.guestBookCards ?? []).filter(
+    (card): card is GuestBookCardSimpleResponse & { id: number } =>
+      card.id !== undefined,
+  );
+  const unreadCount = guestBook?.unreadCount ?? 0;
+  const hasNewCards = unreadCount > 0;
+  const totalCount = guestBook?.totalCount ?? guestBookCards.length;
+
+  const [visibleCount, setVisibleCount] = useState(
+    CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE,
+  );
+  const visibleCards = guestBookCards.slice(0, visibleCount);
+  const hasNextPage = visibleCount < guestBookCards.length;
+
+  const { targetRef } = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage: false,
+    onIntersect: () =>
+      setVisibleCount((prev) => prev + CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE),
+  });
+
   // TODO: 에러 UI 구현
   if (isError) return;
 
@@ -62,27 +83,6 @@ const GuestBookPage = ({
       </S.ScrollArea>
     );
   }
-
-  const guestBookCards = (guestBook.guestBookCards ?? []).filter(
-    (card): card is GuestBookCardSimpleResponse & { id: number } =>
-      card.id !== undefined,
-  );
-  const unreadCount = guestBook.unreadCount ?? 0;
-  const hasNewCards = unreadCount > 0;
-  const totalCount = guestBook.totalCount ?? guestBookCards.length;
-
-  const [visibleCount, setVisibleCount] = useState(
-    CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE,
-  );
-  const visibleCards = guestBookCards.slice(0, visibleCount);
-  const hasNextPage = visibleCount < guestBookCards.length;
-
-  const { targetRef } = useInfiniteScroll({
-    hasNextPage,
-    isFetchingNextPage: false,
-    onIntersect: () =>
-      setVisibleCount((prev) => prev + CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE),
-  });
 
   return (
     <S.ScrollArea>
