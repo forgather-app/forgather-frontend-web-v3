@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
 import { useReadGuestBookV2 } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
@@ -7,6 +8,8 @@ import type {
 } from "@/api/model";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
+import { CONSTRAINTS } from "@/constants/constraints";
+import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import * as S from "./GuestBookPage.styles";
 
 const SKELETON_CARD_COUNT = 4;
@@ -68,6 +71,19 @@ const GuestBookPage = ({
   const hasNewCards = unreadCount > 0;
   const totalCount = guestBook.totalCount ?? guestBookCards.length;
 
+  const [visibleCount, setVisibleCount] = useState(
+    CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE,
+  );
+  const visibleCards = guestBookCards.slice(0, visibleCount);
+  const hasNextPage = visibleCount < guestBookCards.length;
+
+  const { targetRef } = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage: false,
+    onIntersect: () =>
+      setVisibleCount((prev) => prev + CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE),
+  });
+
   return (
     <S.ScrollArea>
       <S.TitleRow>
@@ -84,7 +100,7 @@ const GuestBookPage = ({
       )}
 
       <S.GuestListContainer>
-        {guestBookCards.map((card) => (
+        {visibleCards.map((card) => (
           <GuestList
             key={card.id}
             nickname={card.nickname ?? ""}
@@ -92,6 +108,7 @@ const GuestBookPage = ({
             onClick={() => onCardClick(card.id)}
           />
         ))}
+        {hasNextPage && <S.ScrollSentinel ref={targetRef} />}
       </S.GuestListContainer>
       <S.BottomSpacer />
     </S.ScrollArea>

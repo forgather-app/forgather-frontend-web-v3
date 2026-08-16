@@ -68,6 +68,10 @@ export const GuestListContainer = styled.div`
   margin-top: 20px;
 `;
 
+export const ScrollSentinel = styled.div`
+  height: 1px;
+`;
+
 export const BottomSpacer = styled.div`
   position: sticky;
   bottom: 0;

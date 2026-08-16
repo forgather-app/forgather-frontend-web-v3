@@ -28,4 +28,8 @@ export const CONSTRAINTS = {
     NAME_MAX_LENGTH: 50,
     DESCRIPTION_MAX_LENGTH: 200,
   },
+
+  GUEST_BOOK_LIST: {
+    PAGE_SIZE: 20,
+  },
 };
