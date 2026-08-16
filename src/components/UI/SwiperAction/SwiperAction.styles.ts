@@ -1,11 +1,15 @@
 import styled from "@emotion/styled";
 import { motion } from "framer-motion";
+import { shouldForwardProp } from "@/utils/shouldForwardProp";
 import { CARD_GAP } from "./SwiperAction.constants";
 
-export const Container = styled.div`
+export const Container = styled("div", { shouldForwardProp })<{
+  $fillHeight?: boolean;
+}>`
   position: relative;
   display: flex;
   width: 100%;
+  ${({ $fillHeight }) => $fillHeight && "min-height: 100%;"}
   overflow: hidden;
   /* 세로 스크롤은 브라우저 기본 동작에 맡기고, 가로 드래그만 JS로 판별합니다 */
   touch-action: pan-y;
