@@ -26,7 +26,7 @@ const meta: Meta<typeof ShareModal> = {
     docs: {
       description: {
         component:
-          "스페이스를 초대/공유하기 위한 모달입니다. 카카오톡 공유, 링크 복사, QR 이미지 저장 세 가지 액션을 제공합니다. 카카오톡 공유와 QR 저장은 실제 동작(네이티브 브릿지, QR 생성)이 아직 연결되지 않은 UI 전용 구현입니다.",
+          "스페이스를 초대/공유하기 위한 모달입니다. 카카오톡 공유, 링크 복사, QR 이미지 저장 세 가지 액션을 제공합니다. 실제 동작(카카오톡 네이티브 브릿지, 클립보드 복사, QR 바텀시트 오픈)은 각 핸들러를 통해 호출부(라우트)에서 연결합니다.",
       },
     },
   },
@@ -64,6 +64,7 @@ export const Default: Story = {
   args: {
     isOpen: true,
     onClose: () => {},
+    onKakaoShare: () => {},
     onCopyLink: () => {},
     onSaveQr: () => {},
   },
@@ -83,6 +84,7 @@ export const Interactive: Story = {
       <ShareModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        onKakaoShare={() => {}}
         onCopyLink={() => {}}
         onSaveQr={() => {}}
       />

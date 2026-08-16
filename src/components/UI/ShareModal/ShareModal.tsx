@@ -10,7 +10,7 @@ interface ShareModalProps {
   /** 모달을 닫을 때 호출되는 콜백 */
   onClose: () => void;
   /** 카카오톡으로 보내기 클릭 핸들러 */
-  onKakaoShare?: () => void;
+  onKakaoShare: () => void;
   /** 클립보드에 복사하기 클릭 핸들러 */
   onCopyLink: () => void;
   /** QR 이미지 저장하기 클릭 핸들러 */
@@ -20,7 +20,7 @@ interface ShareModalProps {
 const ShareModal = ({
   isOpen,
   onClose,
-  onKakaoShare = () => {},
+  onKakaoShare,
   onCopyLink,
   onSaveQr,
 }: ShareModalProps) => {

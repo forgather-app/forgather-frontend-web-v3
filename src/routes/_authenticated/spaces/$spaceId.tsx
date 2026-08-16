@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
 import ShareModal from "@/components/UI/ShareModal/ShareModal";
+import useKakaoShareBridge from "@/hooks/@common/useKakaoShareBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import SpaceLayout from "@/pages/space/SpaceLayout";
 
@@ -18,6 +19,7 @@ function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
+  const { requestKakaoShare } = useKakaoShareBridge();
   const matches = useMatches();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
@@ -64,6 +66,14 @@ function RouteComponent() {
       <ShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
+        onKakaoShare={() => {
+          requestKakaoShare({
+            title: "초대장이 도착했어요",
+            description: "방명록을 남길 수 있도록 스페이스를 공유해보세요",
+            link: writeUrl,
+          });
+          setIsShareModalOpen(false);
+        }}
         onCopyLink={async () => {
           await navigator.clipboard.writeText(writeUrl);
           showSnackBar("링크가 클립보드에 복사되었습니다.", "default");
