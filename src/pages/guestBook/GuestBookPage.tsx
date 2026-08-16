@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { withApiVersion } from "@/api/apiVersion";
-import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
+import { customFetcher } from "@/api/customFetcher";
 import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
-  GuestBookResponse,
 } from "@/api/model";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import * as S from "./GuestBookPage.styles";
 
 interface GuestBookPageProps {
@@ -21,42 +21,56 @@ interface GuestBookPageProps {
   onNewStackClick: () => void;
 }
 
+// OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
+// 같은 서버의 다른 엔드포인트(GET /guestbook/me/reports)가 Spring Pageable(0-base page) 컨벤션을 쓰는 것으로 보아 이 엔드포인트도 동일하게 0-base로 가정한다.
+const fetchGuestBookPage = (spaceId: string, page: number) =>
+  customFetcher<ApiResponseGuestBookResponse>(
+    `/spaces/${spaceId}/guestbook?page=${page}&size=${CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE}`,
+    withApiVersion(2),
+  );
+
 const GuestBookPage = ({
   spaceId,
   onCardClick,
   onNewStackClick,
 }: GuestBookPageProps) => {
-  const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
-    spaceId,
-    {
-      query: {
-        select: (response) =>
-          // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
-          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
+  const { showSnackBar } = useSnackBar();
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useSuspenseInfiniteQuery({
+      queryKey: ["guestbook", spaceId, "list"],
+      queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
+      initialPageParam: 0,
+      getNextPageParam: (_lastPage, allPages) => {
+        const totalPages = allPages.at(-1)?.data?.totalPages;
+        if (totalPages === undefined || allPages.length >= totalPages) {
+          return undefined;
+        }
+        return allPages.length;
       },
-      request: withApiVersion(2),
-    },
-  );
+    });
 
-  const guestBookCards = (guestBook.guestBookCards ?? []).filter(
-    (card): card is GuestBookCardSimpleResponse & { id: number } =>
-      card.id !== undefined,
-  );
-  const unreadCount = guestBook.unreadCount ?? 0;
+  const pages = data.pages.map((page) => page.data ?? {});
+  const guestBookCards = pages
+    .flatMap((page) => page.guestBookCards ?? [])
+    .filter(
+      (card): card is GuestBookCardSimpleResponse & { id: number } =>
+        card.id !== undefined,
+    );
+  const unreadCount = pages[0]?.unreadCount ?? 0;
   const hasNewCards = unreadCount > 0;
-  const totalCount = guestBook.totalCount ?? guestBookCards.length;
-
-  const [visibleCount, setVisibleCount] = useState(
-    CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE,
-  );
-  const visibleCards = guestBookCards.slice(0, visibleCount);
-  const hasNextPage = visibleCount < guestBookCards.length;
+  const totalCount = pages[0]?.totalCount ?? guestBookCards.length;
 
   const { targetRef } = useInfiniteScroll({
     hasNextPage,
-    isFetchingNextPage: false,
-    onIntersect: () =>
-      setVisibleCount((prev) => prev + CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE),
+    isFetchingNextPage,
+    onIntersect: () => {
+      fetchNextPage().then((result) => {
+        if (result.isError) {
+          showSnackBar("방명록을 더 불러오지 못했어요", "error");
+        }
+      });
+    },
   });
 
   return (
@@ -75,7 +89,7 @@ const GuestBookPage = ({
       )}
 
       <S.GuestListContainer>
-        {visibleCards.map((card) => (
+        {guestBookCards.map((card) => (
           <GuestList
             key={card.id}
             nickname={card.nickname ?? ""}
