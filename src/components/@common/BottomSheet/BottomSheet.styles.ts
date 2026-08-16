@@ -15,7 +15,7 @@ export const Wrapper = styled.div<{ $isVisible: boolean }>`
 export const Container = styled.div`
   width: 100%;
   min-height: 10px;
-  padding-top: 10px;
+  padding: 16px 0;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
   background: ${({ theme }) => theme.colors.gray.gray700};

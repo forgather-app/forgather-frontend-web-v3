@@ -5,6 +5,7 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useState } from "react";
+import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
 import ShareModal from "@/components/UI/ShareModal/ShareModal";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import SpaceLayout from "@/pages/space/SpaceLayout";
@@ -19,6 +20,7 @@ function RouteComponent() {
   const { showSnackBar } = useSnackBar();
   const matches = useMatches();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
   const isGuestBookTab = matches.some(
     (match) => match.routeId === "/_authenticated/spaces/$spaceId/guestbook/",
   );
@@ -32,6 +34,8 @@ function RouteComponent() {
   if (isDetailRoute) {
     return <Outlet />;
   }
+
+  const writeUrl = `${window.location.origin}/spaces/${spaceId}/guestbook/write`;
 
   return (
     <>
@@ -61,12 +65,23 @@ function RouteComponent() {
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
         onCopyLink={async () => {
-          const writeUrl = `${window.location.origin}/spaces/${spaceId}/guestbook/write`;
           await navigator.clipboard.writeText(writeUrl);
           showSnackBar("링크가 클립보드에 복사되었습니다.", "default");
           setIsShareModalOpen(false);
         }}
+        onSaveQr={() => {
+          setIsShareModalOpen(false);
+          setIsQrSheetOpen(true);
+        }}
       />
+
+      {isQrSheetOpen && (
+        <QrBottomSheetContent
+          isOpen={isQrSheetOpen}
+          onClose={() => setIsQrSheetOpen(false)}
+          qrValue={writeUrl}
+        />
+      )}
     </>
   );
 }

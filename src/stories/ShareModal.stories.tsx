@@ -65,6 +65,7 @@ export const Default: Story = {
     isOpen: true,
     onClose: () => {},
     onCopyLink: () => {},
+    onSaveQr: () => {},
   },
 };
 
@@ -83,6 +84,7 @@ export const Interactive: Story = {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         onCopyLink={() => {}}
+        onSaveQr={() => {}}
       />
     );
   },

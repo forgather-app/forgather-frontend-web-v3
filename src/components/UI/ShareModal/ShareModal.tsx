@@ -14,7 +14,7 @@ interface ShareModalProps {
   /** 클립보드에 복사하기 클릭 핸들러 */
   onCopyLink: () => void;
   /** QR 이미지 저장하기 클릭 핸들러 */
-  onSaveQr?: () => void;
+  onSaveQr: () => void;
 }
 
 const ShareModal = ({
@@ -22,7 +22,7 @@ const ShareModal = ({
   onClose,
   onKakaoShare = () => {},
   onCopyLink,
-  onSaveQr = () => {},
+  onSaveQr,
 }: ShareModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
