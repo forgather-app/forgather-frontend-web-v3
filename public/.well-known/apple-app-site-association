@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appID": "3C38YUT7MY.com.forgatherapp",
+        "paths": ["*"]
+      }
+    ]
+  }
+}
