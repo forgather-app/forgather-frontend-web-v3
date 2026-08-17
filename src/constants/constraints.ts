@@ -28,4 +28,11 @@ export const CONSTRAINTS = {
     NAME_MAX_LENGTH: 50,
     DESCRIPTION_MAX_LENGTH: 200,
   },
+
+  IMAGE: {
+    /** presigned URL 업로드용 webp 변환 시 긴 변 최대 길이(px) */
+    UPLOAD_MAX_DIMENSION: 1920,
+    /** presigned URL 업로드용 webp 변환 품질(0~1) */
+    UPLOAD_QUALITY: 0.9,
+  },
 };
