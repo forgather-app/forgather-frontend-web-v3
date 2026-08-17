@@ -36,4 +36,8 @@ export const CONSTRAINTS = {
     /** presigned URL 업로드용 webp 변환 품질(0~1) */
     UPLOAD_QUALITY: 0.9,
   },
+
+  GUEST_BOOK_LIST: {
+    PAGE_SIZE: 20,
+  },
 };
