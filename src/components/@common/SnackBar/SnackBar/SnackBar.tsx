@@ -14,27 +14,27 @@ import * as S from "./SnackBar.styles";
  * `IconType`에 따라 왼쪽에 아이콘 영역이 표시됩니다.
  * - `'alert'`: 체크 아이콘 (정보/성공 상태)
  * - `'error'`: 경고 아이콘 (에러 상태)
- * - `undefined`: 아이콘 없음
+ * - `'default'` 또는 `undefined`: 아이콘 없음
  *
  * 부모에서 `{show && <SnackBar onClose={...} />}` 패턴으로 마운트/언마운트합니다.
  */
 
-type IconType = "alert" | "error";
+type IconType = "alert" | "error" | "default";
 interface SnackBarProps {
   /** 닫힘 애니메이션 종료 후 호출되는 콜백. 부모에서 컴포넌트를 언마운트합니다. */
   onClose: () => void;
   /** 스낵바에 표시할 메시지 */
   message: string;
-  /** 아이콘 타입. 'alert'는 체크 아이콘, 'error'는 경고 아이콘, undefined면 아이콘 없음 */
+  /** 아이콘 타입. 'alert'는 체크 아이콘, 'error'는 경고 아이콘, 'default'/undefined면 아이콘 없음 */
   iconType?: IconType;
 }
 
-const ICON = {
+const ICON: Partial<Record<IconType, JSX.Element>> = {
   alert: <IcCheck width={24} height={24} color={theme.colors.main.purple100} />,
   error: (
     <IcAlert width={24} height={24} color={theme.colors.semantic.alertRed} />
   ),
-} satisfies Record<IconType, JSX.Element>;
+};
 
 const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
   const snackBarRef = useRef<HTMLDivElement | null>(null);
@@ -66,11 +66,13 @@ const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
     hideSheet();
   };
 
+  const icon = iconType && ICON[iconType];
+
   return (
     <S.Wrapper
       ref={snackBarRef}
       $isVisible={isVisible}
-      $hasIcon={!!iconType}
+      $hasIcon={!!icon}
       $isDissolving={isDissolving}
       onAnimationEnd={alertAnimationEnd}
       onTransitionEnd={alertAnimationEnd}
@@ -83,9 +85,7 @@ const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
       aria-label={message}
     >
       <S.Content>
-        {iconType && (
-          <S.IconArea aria-hidden="true">{ICON[iconType]}</S.IconArea>
-        )}
+        {icon && <S.IconArea aria-hidden="true">{icon}</S.IconArea>}
         <S.Message>{message}</S.Message>
       </S.Content>
       <S.CloseButton

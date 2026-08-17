@@ -14,13 +14,16 @@ const FixedContainer = styled.div`
 
 interface SnackBarState {
   message: string;
-  iconType?: "alert" | "error";
+  iconType?: "alert" | "error" | "default";
 }
 
 const SnackBarProvider = ({ children }: { children: React.ReactNode }) => {
   const [snackBar, setSnackBar] = useState<SnackBarState | null>(null);
 
-  const showSnackBar = (message: string, iconType?: "alert" | "error") => {
+  const showSnackBar = (
+    message: string,
+    iconType?: "alert" | "error" | "default",
+  ) => {
     setSnackBar({ message, iconType });
   };
 
