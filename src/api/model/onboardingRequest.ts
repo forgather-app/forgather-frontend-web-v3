@@ -11,4 +11,6 @@ export interface OnboardingRequest {
   nickname?: string;
   /** 동의한 약관 ID 목록 */
   agreedTermIds?: number[];
+  /** 거부한 약관 ID 목록 */
+  rejectedTermIds?: number[];
 }
