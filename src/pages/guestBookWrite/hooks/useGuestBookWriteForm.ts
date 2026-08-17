@@ -6,6 +6,7 @@ import type {
   ApiResponseIssueSignedUrlResponse,
   WriteGuestBookCardPhotoRequest,
 } from "@/api/model";
+import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
@@ -14,6 +15,7 @@ import {
   validateNicknameMaxLength,
   validateNicknameRequired,
 } from "@/pages/guestBookWrite/validate/guestBookWriteValidation";
+import { convertImageToWebp } from "@/utils/convertImageToWebp";
 
 interface GuestBookWriteFormValues {
   nickname: string;
@@ -32,12 +34,6 @@ const messageRules = {
     required: validateMessageRequired,
     maxLength: validateMessageMaxLength,
   },
-};
-
-/** 파일명에서 확장자(.포함)를 추출. 확장자가 없으면 빈 문자열 */
-const getFileExtension = (fileName: string): string => {
-  const dotIndex = fileName.lastIndexOf(".");
-  return dotIndex === -1 ? "" : fileName.slice(dotIndex);
 };
 
 /** 방명록 작성 폼 상태(react-hook-form) + 사진 업로드 + 작성 API 연동을 관리하는 훅 */
@@ -60,9 +56,19 @@ export const useGuestBookWriteForm = (spaceCode: string) => {
   const uploadPhotos = async (): Promise<WriteGuestBookCardPhotoRequest[]> => {
     if (photos.length === 0) return [];
 
-    const uploadFiles = photos.map((file) => ({
-      fileName: `${crypto.randomUUID()}${getFileExtension(file.name)}`,
-      size: file.size,
+    // NOTE: presigned URL 스펙상 확장자·Content-Type이 webp로 고정 서명되어 있어,
+    // 원본 포맷(모바일 브라우저/HEIC 등)과 무관하게 업로드 전 webp로 변환해야 함
+    const webpPhotos = await Promise.all(
+      photos.map((file) =>
+        convertImageToWebp(file, {
+          maxSize: CONSTRAINTS.IMAGE.UPLOAD_MAX_DIMENSION,
+          quality: CONSTRAINTS.IMAGE.UPLOAD_QUALITY,
+        }),
+      ),
+    );
+    const uploadFiles = webpPhotos.map((blob) => ({
+      fileName: `${crypto.randomUUID()}.webp`,
+      size: blob.size,
     }));
 
     const response = await issuePreSignedUrls({
@@ -76,14 +82,14 @@ export const useGuestBookWriteForm = (spaceCode: string) => {
         ?.signedUrls ?? {};
 
     await Promise.all(
-      photos.map((file, index) => {
+      webpPhotos.map((blob, index) => {
         const uploadFileName = uploadFiles[index].fileName;
         const signedUrl = signedUrls[uploadFileName];
         if (!signedUrl) throw new Error("사진 업로드 URL 발급에 실패했습니다.");
         return fetch(signedUrl, {
           method: "PUT",
-          headers: { "Content-Type": file.type },
-          body: file,
+          headers: { "Content-Type": "image/webp" },
+          body: blob,
         });
       }),
     );
@@ -91,7 +97,7 @@ export const useGuestBookWriteForm = (spaceCode: string) => {
     return photos.map((file, index) => ({
       originalName: file.name,
       uploadFileName: uploadFiles[index].fileName,
-      capacity: file.size,
+      capacity: webpPhotos[index].size,
     }));
   };
 
