@@ -8,6 +8,7 @@ import type {
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { ERROR_MESSAGES } from "@/constants/error";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import * as S from "./GuestBookPage.styles";
@@ -67,7 +68,10 @@ const GuestBookPage = ({
     onIntersect: () => {
       fetchNextPage().then((result) => {
         if (result.isError) {
-          showSnackBar("방명록을 더 불러오지 못했어요", "error");
+          showSnackBar(
+            ERROR_MESSAGES.GUEST_BOOK_LIST_LOAD_MORE_FAILED,
+            "error",
+          );
         }
       });
     },
