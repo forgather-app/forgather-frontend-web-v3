@@ -6,6 +6,7 @@ export const ERROR_MESSAGES = {
   PROFILE_UPDATE_FAILED:
     "일시적인 오류로 프로필을 수정하지 못했어요. 잠시 후 다시 시도해 주세요",
   APP_ONLY_FEATURE: "앱 환경에서만 이용할 수 있습니다",
+  PHOTO_PICKER_FAILED: "사진을 불러오지 못했어요. 잠시 후 다시 시도해 주세요",
   DOWNLOAD_FAILED: "이미지를 다운로드하지 못했어요. 잠시 후 다시 시도해 주세요",
   PHOTO_PERMISSION_DENIED:
     "사진 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요",

@@ -1,5 +1,5 @@
-import { useId } from "react";
 import IcCamera from "@/assets/icons/ic_camera.svg?react";
+import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
 import * as S from "./ImageInput.styles";
 
 interface ImageInputProps {
@@ -10,31 +10,22 @@ interface ImageInputProps {
 }
 
 const ImageInput = ({ previewImage, onChange }: ImageInputProps) => {
-  const inputId = useId();
+  const { requestPhotoPicker } = useNativePhotoPickerBridge();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    onChange?.(file);
-    e.target.value = "";
+  const handleClick = async () => {
+    const [photo] = await requestPhotoPicker(1);
+    onChange?.(photo?.blob ?? null);
   };
 
   return (
-    <>
-      <S.ClickArea htmlFor={inputId} aria-label="이미지 선택">
-        {previewImage && (
-          <S.PreviewImage src={previewImage} alt="선택한 이미지 미리보기" />
-        )}
-        <S.IconCircle>
-          <IcCamera width={24} height={24} fill="none" aria-hidden="true" />
-        </S.IconCircle>
-      </S.ClickArea>
-      <S.InvisibleInput
-        id={inputId}
-        type="file"
-        accept="image/*"
-        onChange={handleChange}
-      />
-    </>
+    <S.ClickArea type="button" onClick={handleClick} aria-label="이미지 선택">
+      {previewImage && (
+        <S.PreviewImage src={previewImage} alt="선택한 이미지 미리보기" />
+      )}
+      <S.IconCircle>
+        <IcCamera width={24} height={24} fill="none" aria-hidden="true" />
+      </S.IconCircle>
+    </S.ClickArea>
   );
 };
 
