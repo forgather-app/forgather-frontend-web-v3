@@ -26,8 +26,10 @@ const CreateProductPage = ({
   const {
     control,
     titleRules,
+    authorNameRules,
     descriptionRules,
     titleError,
+    authorNameError,
     descriptionError,
     isValid,
     photos,
@@ -60,6 +62,28 @@ const CreateProductPage = ({
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-label="작품 제목"
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        {/* TODO: 디자인 교체 필요 — 현재 Figma 시안이 없어 기존 TextField(count variant)로 임시 구현 */}
+        <S.FieldGroup>
+          <S.Label>작가명</S.Label>
+          <Controller
+            control={control}
+            name="authorName"
+            rules={authorNameRules}
+            render={({ field }) => (
+              <TextField
+                variant="count"
+                value={field.value}
+                maxCount={CONSTRAINTS.PRODUCT.AUTHOR_NAME_MAX_LENGTH}
+                placeholder="작가명을 입력해주세요."
+                errorMessage={authorNameError}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-label="작가명"
               />
             )}
           />

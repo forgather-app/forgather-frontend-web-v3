@@ -7,16 +7,21 @@ import type {
   ApiResponseIssueSignedUrlResponse,
   RegisterProductPhotoRequest,
 } from "@/api/model";
+import { uploadImageToSignedUrl } from "@/api/uploadImageToSignedUrl";
+import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
+  validateProductAuthorNameMaxLength,
   validateProductDescriptionMaxLength,
   validateProductTitleMaxLength,
   validateProductTitleRequired,
 } from "@/pages/createProduct/utils/createProductValidation";
+import { convertImageToWebp } from "@/utils/convertImageToWebp";
 
 interface CreateProductFormValues {
   title: string;
+  authorName: string;
   description: string;
   videoUrl: string;
 }
@@ -29,15 +34,14 @@ const titleRules = {
   },
 };
 
+/** 작가명 필드 검증 규칙 — 최대 글자 수(실시간 노출) */
+const authorNameRules = {
+  validate: validateProductAuthorNameMaxLength,
+};
+
 /** 작품 소개 필드 검증 규칙 — 최대 글자 수(실시간 노출) */
 const descriptionRules = {
   validate: validateProductDescriptionMaxLength,
-};
-
-/** 파일명에서 확장자(.포함)를 추출. 확장자가 없으면 빈 문자열 */
-const getFileExtension = (fileName: string): string => {
-  const dotIndex = fileName.lastIndexOf(".");
-  return dotIndex === -1 ? "" : fileName.slice(dotIndex);
 };
 
 /** 작품 등록 폼 상태(react-hook-form) + 사진 업로드 + 등록 API 연동을 관리하는 훅 */
@@ -49,7 +53,12 @@ export const useCreateProductForm = (spaceCode: string) => {
     formState: { errors, touchedFields, isValid },
   } = useForm<CreateProductFormValues>({
     mode: "onChange",
-    defaultValues: { title: "", description: "", videoUrl: "" },
+    defaultValues: {
+      title: "",
+      authorName: "",
+      description: "",
+      videoUrl: "",
+    },
   });
 
   const [photos, setPhotos] = useState<File[]>([]);
@@ -62,9 +71,19 @@ export const useCreateProductForm = (spaceCode: string) => {
   const uploadPhotos = async (): Promise<RegisterProductPhotoRequest[]> => {
     if (photos.length === 0) return [];
 
-    const uploadFiles = photos.map((file) => ({
-      fileName: `${crypto.randomUUID()}${getFileExtension(file.name)}`,
-      size: file.size,
+    // NOTE: presigned URL 스펙상 확장자·Content-Type이 webp로 고정 서명되어 있어,
+    // 원본 포맷(HEIC 등 네이티브 피커 결과 포함)과 무관하게 업로드 전 webp로 변환해야 함
+    const webpPhotos = await Promise.all(
+      photos.map((file) =>
+        convertImageToWebp(file, {
+          maxSize: CONSTRAINTS.IMAGE.UPLOAD_MAX_DIMENSION,
+          quality: CONSTRAINTS.IMAGE.UPLOAD_QUALITY,
+        }),
+      ),
+    );
+    const uploadFiles = webpPhotos.map((blob) => ({
+      fileName: `${crypto.randomUUID()}.webp`,
+      size: blob.size,
     }));
 
     const response = await issuePreSignedUrls({
@@ -78,22 +97,18 @@ export const useCreateProductForm = (spaceCode: string) => {
         ?.signedUrls ?? {};
 
     await Promise.all(
-      photos.map((file, index) => {
+      webpPhotos.map((blob, index) => {
         const uploadFileName = uploadFiles[index].fileName;
         const signedUrl = signedUrls[uploadFileName];
         if (!signedUrl) throw new Error("사진 업로드 URL 발급에 실패했습니다.");
-        return fetch(signedUrl, {
-          method: "PUT",
-          headers: { "Content-Type": file.type },
-          body: file,
-        });
+        return uploadImageToSignedUrl(signedUrl, blob, uploadFileName);
       }),
     );
 
     return photos.map((file, index) => ({
       originalName: file.name,
       uploadFileName: uploadFiles[index].fileName,
-      capacity: file.size,
+      capacity: webpPhotos[index].size,
     }));
   };
 
@@ -102,6 +117,7 @@ export const useCreateProductForm = (spaceCode: string) => {
     errors.title?.type === "required" && !touchedFields.title
       ? undefined
       : errors.title?.message;
+  const authorNameError = errors.authorName?.message;
   const descriptionError = errors.description?.message;
 
   const getSubmitHandler = (onSuccess: () => void) =>
@@ -122,8 +138,12 @@ export const useCreateProductForm = (spaceCode: string) => {
           spaceCode,
           data: {
             title: values.title,
+            category: "",
+            authorName: values.authorName.trim(),
             description: values.description,
-            videoUrl: values.videoUrl.trim() || undefined,
+            videoUrl: values.videoUrl.trim(),
+            // 폼에 사진 → 영상 순서 재정렬 UI가 없어, 화면에 보이는 순서(사진 다음 영상) 그대로 고정 전달
+            isVideoAfterPhoto: true,
             photos: photoRequests,
           },
         },
@@ -138,8 +158,10 @@ export const useCreateProductForm = (spaceCode: string) => {
   return {
     control,
     titleRules,
+    authorNameRules,
     descriptionRules,
     titleError,
+    authorNameError,
     descriptionError,
     isValid,
     photos,
