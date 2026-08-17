@@ -126,26 +126,24 @@ export const Controlled: Story = {
   },
 };
 
-export const FillHeight: Story = {
+export const ControlledSidePeek: Story = {
   parameters: {
     docs: {
       description: {
         story:
-          "fillHeight를 전달한 controlled 모드입니다. 스와이프 인식 영역이 부모 컨테이너의 전체 높이(여기서는 400px)를 채워, 카드 콘텐츠 아래 빈 여백에서 드래그해도 슬라이드가 전환됩니다.",
+          "activeIndex/onIndexChange와 sidePeekRatio를 함께 전달한 controlled 모드입니다. 현재 카드가 중앙에서 컨테이너 폭을 채우고, 이전/다음 카드가 좌우에 대칭으로 살짝 보입니다.",
       },
     },
   },
   render: () => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(1);
     return (
-      <div style={{ height: 400 }}>
-        <SwiperAction
-          swiperElement={messageSlides}
-          activeIndex={activeIndex}
-          onIndexChange={setActiveIndex}
-          fillHeight
-        />
-      </div>
+      <SwiperAction
+        swiperElement={artworkCards}
+        activeIndex={activeIndex}
+        onIndexChange={setActiveIndex}
+        sidePeekRatio={0.04}
+      />
     );
   },
 };
