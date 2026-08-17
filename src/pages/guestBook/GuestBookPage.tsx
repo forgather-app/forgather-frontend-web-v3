@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
-import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
+import { useReadGuestBookV2 } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
@@ -11,6 +11,8 @@ import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import * as S from "./GuestBookPage.styles";
+
+const SKELETON_CARD_COUNT = 4;
 
 interface GuestBookPageProps {
   /** 스페이스 ID */
@@ -26,25 +28,26 @@ const GuestBookPage = ({
   onCardClick,
   onNewStackClick,
 }: GuestBookPageProps) => {
-  const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
-    spaceId,
-    {
-      query: {
-        select: (response) =>
-          // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
-          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
-      },
-      request: withApiVersion(2),
+  const {
+    data: guestBook,
+    isPending,
+    isError,
+  } = useReadGuestBookV2<GuestBookResponse>(spaceId, {
+    query: {
+      select: (response) =>
+        // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+        (response as unknown as ApiResponseGuestBookResponse).data ?? {},
     },
-  );
+    request: withApiVersion(2),
+  });
 
-  const guestBookCards = (guestBook.guestBookCards ?? []).filter(
+  const guestBookCards = (guestBook?.guestBookCards ?? []).filter(
     (card): card is GuestBookCardSimpleResponse & { id: number } =>
       card.id !== undefined,
   );
-  const unreadCount = guestBook.unreadCount ?? 0;
+  const unreadCount = guestBook?.unreadCount ?? 0;
   const hasNewCards = unreadCount > 0;
-  const totalCount = guestBook.totalCount ?? guestBookCards.length;
+  const totalCount = guestBook?.totalCount ?? guestBookCards.length;
 
   const [visibleCount, setVisibleCount] = useState(
     CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE,
@@ -58,6 +61,28 @@ const GuestBookPage = ({
     onIntersect: () =>
       setVisibleCount((prev) => prev + CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE),
   });
+
+  // TODO: 에러 UI 구현
+  if (isError) return;
+
+  if (isPending) {
+    return (
+      <S.ScrollArea>
+        <S.TitleRow>
+          <S.Title>방명록</S.Title>
+          <S.CountSkeleton aria-hidden />
+        </S.TitleRow>
+
+        <S.GuestListContainer>
+          {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 로딩 중 고정 개수 플레이스홀더라 index만 사용 가능함
+            <S.GuestListSkeleton key={index} aria-hidden />
+          ))}
+        </S.GuestListContainer>
+        <S.BottomSpacer />
+      </S.ScrollArea>
+    );
+  }
 
   return (
     <S.ScrollArea>
