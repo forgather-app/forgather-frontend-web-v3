@@ -8,12 +8,14 @@ import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "./CreateSpacePage.styles";
-import {
-  type CreateSpaceFormData,
-  useCreateSpaceForm,
-} from "./hooks/useCreateSpaceForm";
+import { useCreateSpaceForm } from "./hooks/useCreateSpaceForm";
 
-const CreateSpacePage = () => {
+interface CreateSpacePageProps {
+  /** 스페이스 생성 성공 시 호출되는 핸들러 (생성된 스페이스 코드 전달) */
+  onSuccess: (spaceCode: string) => void;
+}
+
+const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
   const navigate = useNavigate();
   const {
     control,
@@ -24,14 +26,12 @@ const CreateSpacePage = () => {
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
+    isSubmitting,
     getSubmitHandler,
   } = useCreateSpaceForm();
 
-  // TODO: 다음 스텝(이미지 등) 또는 스페이스 생성 API 연동 준비되면 연결
-  const handleNext = (_data: CreateSpaceFormData) => {};
-
   return (
-    <S.Container onSubmit={getSubmitHandler(handleNext)} noValidate>
+    <S.Container onSubmit={getSubmitHandler(onSuccess)} noValidate>
       <NavigationBar
         title="새 스페이스"
         onBackClick={() => window.history.back()}
@@ -100,7 +100,7 @@ const CreateSpacePage = () => {
       </S.Main>
 
       <S.Footer>
-        <Button text="다음" type="submit" disabled={!isValid} />
+        <Button text="완료" type="submit" disabled={!isValid || isSubmitting} />
       </S.Footer>
     </S.Container>
   );

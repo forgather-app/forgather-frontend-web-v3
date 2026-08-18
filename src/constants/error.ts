@@ -23,4 +23,6 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 방명록을 더 불러오지 못했어요. 잠시 후 다시 시도해 주세요",
   SPACE_FEATURE_FAILED:
     "일시적인 오류로 스페이스를 등록하지 못했어요. 잠시 후 다시 시도해 주세요",
+  SPACE_CREATE_FAILED:
+    "일시적인 오류로 스페이스를 만들지 못했어요. 잠시 후 다시 시도해 주세요",
 } as const;

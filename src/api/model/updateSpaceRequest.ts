@@ -6,9 +6,6 @@
  * OpenAPI spec version: 2.0.0
  */
 
-/**
- * 스페이스 수정 정보 (JSON, text/plain)
- */
 export interface UpdateSpaceRequest {
   /**
    * 새로운 스페이스 이름
@@ -28,18 +25,6 @@ export interface UpdateSpaceRequest {
    */
   isPublic?: boolean | null;
   /**
-   * 새로운 인스타그램 아이디
-   * @maxLength 30
-   * @nullable
-   */
-  instagramUsername?: string | null;
-  /**
-   * 새로운 이메일
-   * @maxLength 50
-   * @nullable
-   */
-  email?: string | null;
-  /**
    * 새로운 소개 링크 URL (표시 이름과 함께 입력, 빈 쌍으로 삭제)
    * @maxLength 2048
    * @nullable
@@ -51,7 +36,4 @@ export interface UpdateSpaceRequest {
    * @nullable
    */
   linkName?: string | null;
-  /** 스페이스 사진 삭제 여부 */
-  isDeletePhoto?: boolean;
-  deletingPhoto?: boolean;
 }

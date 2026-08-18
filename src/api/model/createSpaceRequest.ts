@@ -6,9 +6,6 @@
  * OpenAPI spec version: 2.0.0
  */
 
-/**
- * 스페이스 생성 정보 (JSON, text/plain)
- */
 export interface CreateSpaceRequest {
   /**
    * 스페이스 이름
@@ -23,18 +20,6 @@ export interface CreateSpaceRequest {
   description?: string | null;
   /** 스페이스 공개 여부 */
   isPublic?: boolean;
-  /**
-   * 스페이스 호스트 인스타그램 아이디
-   * @maxLength 30
-   * @nullable
-   */
-  instagramUsername?: string | null;
-  /**
-   * 스페이스 호스트 이메일
-   * @maxLength 50
-   * @nullable
-   */
-  email?: string | null;
   /**
    * 스페이스 소개 링크 URL (표시 이름과 함께 입력)
    * @maxLength 2048

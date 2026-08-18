@@ -5,6 +5,7 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
+import type { RegisterHostProfilePhotoRequest } from './registerHostProfilePhotoRequest';
 
 /**
  * 프로필 수정 요청. null인 필드는 변경하지 않고, 빈 문자열은 값을 제거한다. (닉네임은 빈 문자열 불가)
@@ -25,9 +26,11 @@ export interface UpdateHostProfileRequest {
    * @nullable
    */
   linkUrl?: string | null;
+  photo?: RegisterHostProfilePhotoRequest | null;
   /**
-   * 프로필 사진 URL (http(s), 최대 255자, 빈 문자열이면 제거)
+   * 프로필 사진 삭제 여부. photo 없이 true면 사진을 제거한다.
    * @nullable
    */
-  pictureUrl?: string | null;
+  isDeletePhoto?: boolean | null;
+  deletingPhoto?: boolean;
 }

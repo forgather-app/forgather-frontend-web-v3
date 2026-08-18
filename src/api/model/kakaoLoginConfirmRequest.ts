@@ -15,6 +15,8 @@ export interface KakaoLoginConfirmRequest {
   refresh_token?: string;
   /** ID 토큰 */
   id_token?: string;
+  /** 카카오 로그인 요청에 사용한 nonce의 원본 문자열. 클라이언트는 이 값을 SHA-256 해싱한 결과를 카카오 SDK에 nonce로 전달해야 한다. */
+  raw_nonce?: string;
   /** 액세스 토큰과 ID 토큰의 만료 시간(초) */
   expires_in?: number;
   /** 인증된 사용자의 정보 조회 권한 범위 */

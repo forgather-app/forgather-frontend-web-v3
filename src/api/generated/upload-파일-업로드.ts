@@ -317,6 +317,106 @@ export const useIssueGuestbookPreSignedUrls = <TError = unknown,
       return useMutation(getIssueGuestbookPreSignedUrlsMutationOptions(options), queryClient);
     }
     /**
+ * [Deprecated] 스페이스 사진은 더 이상 별도로 업로드하지 않습니다. 스페이스 사진은 대표 작품의 첫 번째 사진을 사용하므로 이 API를 호출하지 마세요. 향후 기획 변경에 대비해 엔드포인트만 남겨둡니다.
+
+── 발급된 presigned URL 사용 시 주의사항 ──
+업로드 파일은 이미지만 허용됩니다. (확장자: webp)
+
+1. Content-Type 고정
+   각 URL에는 파일 확장자로부터 결정된 Content-Type이 서명에 포함됩니다.
+   PUT 요청 시 동일한 Content-Type 헤더를 보내야 합니다.
+   (webp → image/webp)
+
+2. Content-Length 고정
+   각 URL에는 요청 시 보낸 size(바이트)가 서명에 포함됩니다.
+   PUT 요청 본문은 정확히 그 바이트 수여야 합니다. (파일당 최대 20MB)
+
+3. Content-Type 또는 크기가 일치하지 않으면 S3가 403(SignatureDoesNotMatch)을 반환합니다.
+
+ * @deprecated
+ * @summary 스페이스 사진 업로드 URL 발급 (deprecated)
+ */
+export type issueSpacePhotoSignedUrlsResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type issueSpacePhotoSignedUrlsResponseSuccess = (issueSpacePhotoSignedUrlsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type issueSpacePhotoSignedUrlsResponse = (issueSpacePhotoSignedUrlsResponseSuccess)
+
+export const getIssueSpacePhotoSignedUrlsUrl = () => {
+
+
+  
+
+  return `/spaces/photos/upload/signed-urls`
+}
+
+export const issueSpacePhotoSignedUrls = async (issuePreSignedUrlRequest: IssuePreSignedUrlRequest, options?: RequestInit): Promise<issueSpacePhotoSignedUrlsResponse> => {
+  
+  return customFetcher<issueSpacePhotoSignedUrlsResponse>(getIssueSpacePhotoSignedUrlsUrl(),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      issuePreSignedUrlRequest,)
+  }
+);}
+  
+
+
+
+export const getIssueSpacePhotoSignedUrlsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueSpacePhotoSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof issueSpacePhotoSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext> => {
+
+const mutationKey = ['issueSpacePhotoSignedUrls'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof issueSpacePhotoSignedUrls>>, {data: IssuePreSignedUrlRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  issueSpacePhotoSignedUrls(data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type IssueSpacePhotoSignedUrlsMutationResult = NonNullable<Awaited<ReturnType<typeof issueSpacePhotoSignedUrls>>>
+    export type IssueSpacePhotoSignedUrlsMutationBody = IssuePreSignedUrlRequest
+    export type IssueSpacePhotoSignedUrlsMutationError = unknown
+
+    /**
+ * @deprecated
+ * @summary 스페이스 사진 업로드 URL 발급 (deprecated)
+ */
+export const useIssueSpacePhotoSignedUrls = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof issueSpacePhotoSignedUrls>>, TError,{data: IssuePreSignedUrlRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof issueSpacePhotoSignedUrls>>,
+        TError,
+        {data: IssuePreSignedUrlRequest},
+        TContext
+      > => {
+      return useMutation(getIssueSpacePhotoSignedUrlsMutationOptions(options), queryClient);
+    }
+    /**
  * 로그인한 호스트가 자신의 프로필 사진 업로드용 presigned URL을 발급받습니다. 프로필 사진은 한 장만 발급할 수 있습니다.
 
 ── 발급된 presigned URL 사용 시 주의사항 ──

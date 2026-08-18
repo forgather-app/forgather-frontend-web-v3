@@ -8,8 +8,8 @@
 
 export interface FeatureSpacesRequest {
   /**
-   * '지금 축하받고 있는 스페이스'로 지정할 스페이스 코드 목록. 최대 100개. 요청에 포함되지 않은 스페이스의 지정 상태는 변경되지 않습니다.
-   * @minItems 0
+   * '지금 축하받고 있는 스페이스'로 지정할 스페이스 코드 목록. 1개 이상 100개 이하. 요청에 포함되지 않은 스페이스의 지정 상태는 변경되지 않습니다.
+   * @minItems 1
    * @maxItems 100
    */
   spaceCodes: string[];

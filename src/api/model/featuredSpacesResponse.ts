@@ -7,6 +7,6 @@
  */
 
 export interface FeaturedSpacesResponse {
-  /** 처리 후 '지금 축하받고 있는 스페이스'로 지정된 호스트의 전체 스페이스 코드 목록. 이번 요청으로 지정한 것뿐 아니라 이전에 지정되어 있던 것도 포함됩니다. */
-  spaceCodes?: string[];
+  /** 처리 후 '지금 축하받고 있는 스페이스'로 지정되어 있는 호스트의 전체 스페이스 코드 목록. 이번 요청으로 지정한 것뿐 아니라 이전에 지정되어 있던 것도 함께 담깁니다. */
+  featuredSpaceCodes?: string[];
 }

@@ -49,9 +49,6 @@ const TermsStep = ({
           agreedTermIds: terms
             .filter((term) => agreement[term.id])
             .map((term) => term.id),
-          rejectedTermIds: terms
-            .filter((term) => !agreement[term.id])
-            .map((term) => term.id),
         },
       },
       {
