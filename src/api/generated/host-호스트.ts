@@ -286,4 +286,167 @@ export const useUpdateProfile = <TError = unknown,
       > => {
       return useMutation(getUpdateProfileMutationOptions(options), queryClient);
     }
+    /**
+ * 호스트 코드로 공개 프로필(닉네임, 한 줄 소개, 링크, 프로필 사진)을 조회합니다. 로그인이 필요하지 않습니다. 존재하지 않는 코드와 탈퇴한 호스트를 구분하지 않고 404로 응답합니다.
+ * @summary 호스트 공개 프로필 조회
+ */
+export type getPublicProfileResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type getPublicProfileResponseSuccess = (getPublicProfileResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getPublicProfileResponse = (getPublicProfileResponseSuccess)
+
+export const getGetPublicProfileUrl = (hostCode: string,) => {
+
+
+  
+
+  return `/hosts/${hostCode}/profile`
+}
+
+export const getPublicProfile = async (hostCode: string, options?: RequestInit): Promise<getPublicProfileResponse> => {
+  
+  return customFetcher<getPublicProfileResponse>(getGetPublicProfileUrl(hostCode),
+  {      
+    ...options,
+    method: 'GET'
     
+    
+  }
+);}
+  
+
+
+
+
+export const getGetPublicProfileQueryKey = (hostCode: string,) => {
+    return [
+    `/hosts/${hostCode}/profile`
+    ] as const;
+    }
+
+    
+export const getGetPublicProfileQueryOptions = <TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(hostCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPublicProfileQueryKey(hostCode);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicProfile>>> = ({ signal }) => getPublicProfile(hostCode, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, enabled: !!(hostCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPublicProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicProfile>>>
+export type GetPublicProfileQueryError = unknown
+
+
+export function useGetPublicProfile<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicProfile>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPublicProfile<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getPublicProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getPublicProfile>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPublicProfile<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 호스트 공개 프로필 조회
+ */
+
+export function useGetPublicProfile<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPublicProfileQueryOptions(hostCode,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetPublicProfileSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(hostCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPublicProfileQueryKey(hostCode);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPublicProfile>>> = ({ signal }) => getPublicProfile(hostCode, { signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetPublicProfileSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getPublicProfile>>>
+export type GetPublicProfileSuspenseQueryError = unknown
+
+
+export function useGetPublicProfileSuspense<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPublicProfileSuspense<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetPublicProfileSuspense<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 호스트 공개 프로필 조회
+ */
+
+export function useGetPublicProfileSuspense<TData = Awaited<ReturnType<typeof getPublicProfile>>, TError = unknown>(
+ hostCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getPublicProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetPublicProfileSuspenseQueryOptions(hostCode,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

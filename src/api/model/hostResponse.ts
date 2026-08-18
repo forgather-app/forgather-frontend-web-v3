@@ -11,8 +11,8 @@ export interface HostResponse {
   id?: number;
   /** 호스트 닉네임 */
   name?: string;
-  /** 호스트 프로필 사진 URL */
-  pictureUrl?: string;
+  /** 호스트 프로필 사진 경로 (미설정 시 null) */
+  photoPath?: string;
   /** 온보딩 완료 여부 */
   onboardingCompleted?: boolean;
 }

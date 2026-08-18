@@ -31,19 +31,19 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * 새로운 전시를 생성합니다.
  * @summary 전시 생성
  */
-export type createResponse200 = {
+export type create1Response200 = {
   data: Blob
   status: 200
 }
 
-export type createResponseSuccess = (createResponse200) & {
+export type create1ResponseSuccess = (create1Response200) & {
   headers: Headers;
 };
 ;
 
-export type createResponse = (createResponseSuccess)
+export type create1Response = (create1ResponseSuccess)
 
-export const getCreateUrl = () => {
+export const getCreate1Url = () => {
 
 
   
@@ -51,9 +51,9 @@ export const getCreateUrl = () => {
   return `/exhibitions`
 }
 
-export const create = async (createExhibitionRequest: CreateExhibitionRequest, options?: RequestInit): Promise<createResponse> => {
+export const create1 = async (createExhibitionRequest: CreateExhibitionRequest, options?: RequestInit): Promise<create1Response> => {
   
-  return customFetcher<createResponse>(getCreateUrl(),
+  return customFetcher<create1Response>(getCreate1Url(),
   {      
     ...options,
     method: 'POST',
@@ -66,11 +66,11 @@ export const create = async (createExhibitionRequest: CreateExhibitionRequest, o
 
 
 
-export const getCreateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext> => {
+export const getCreate1MutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create1>>, TError,{data: CreateExhibitionRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof create1>>, TError,{data: CreateExhibitionRequest}, TContext> => {
 
-const mutationKey = ['create'];
+const mutationKey = ['create1'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -80,10 +80,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof create>>, {data: CreateExhibitionRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof create1>>, {data: CreateExhibitionRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  create(data,requestOptions)
+          return  create1(data,requestOptions)
         }
 
 
@@ -93,21 +93,21 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type CreateMutationResult = NonNullable<Awaited<ReturnType<typeof create>>>
-    export type CreateMutationBody = CreateExhibitionRequest
-    export type CreateMutationError = unknown
+    export type Create1MutationResult = NonNullable<Awaited<ReturnType<typeof create1>>>
+    export type Create1MutationBody = CreateExhibitionRequest
+    export type Create1MutationError = unknown
 
     /**
  * @summary 전시 생성
  */
-export const useCreate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create>>, TError,{data: CreateExhibitionRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+export const useCreate1 = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof create1>>, TError,{data: CreateExhibitionRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof create>>,
+        Awaited<ReturnType<typeof create1>>,
         TError,
         {data: CreateExhibitionRequest},
         TContext
       > => {
-      return useMutation(getCreateMutationOptions(options), queryClient);
+      return useMutation(getCreate1MutationOptions(options), queryClient);
     }
     

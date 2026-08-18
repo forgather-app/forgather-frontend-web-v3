@@ -6,7 +6,9 @@
  * OpenAPI spec version: 2.0.0
  */
 
-export interface HostProfileResponse {
+export interface PublicHostProfileResponse {
+  /** 호스트 공개 코드 */
+  hostCode?: string;
   /** 닉네임 */
   nickname?: string;
   /** 한 줄 소개 */
