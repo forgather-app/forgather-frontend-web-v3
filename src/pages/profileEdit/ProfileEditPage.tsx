@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import {
   useGetProfileSuspense,
@@ -18,7 +18,9 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
+import { getImageUrl } from "@/utils/getImageUrl";
 import ImageCropper from "./components/imageCropper/ImageCropper";
 import {
   type ProfileEditFormData,
@@ -29,7 +31,7 @@ import * as S from "./ProfileEditPage.styles";
 const ProfileEditPage = () => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
-  const imageInputId = useId();
+  const { requestPhotoPicker } = useNativePhotoPickerBridge();
   const [isSaving, setIsSaving] = useState(false);
 
   const { data: profile } = useGetProfileSuspense({
@@ -51,13 +53,13 @@ const ProfileEditPage = () => {
     previewUrl,
     cropSourceUrl,
     getSubmitHandler,
-    handleImageChange,
+    handleImageSelect,
     handleCropSave,
   } = useProfileEditForm({
     nickname: profile?.nickname ?? "",
     introduction: profile?.introduction ?? "",
     linkUrl: profile?.linkUrl ?? "",
-    pictureUrl: profile?.pictureUrl ?? "",
+    pictureUrl: profile?.photoPath ? getImageUrl(profile.photoPath) : "",
   });
 
   const uploadProfileImage = async (image: Blob) => {
@@ -70,13 +72,20 @@ const ProfileEditPage = () => {
     ).data?.signedUrls?.[fileName];
     if (!signedUrl) throw new Error("업로드 URL을 발급받지 못했습니다");
 
-    return uploadImageToSignedUrl(signedUrl, image, fileName);
+    await uploadImageToSignedUrl(signedUrl, image, fileName);
+
+    return { uploadFileName: fileName, capacity: image.size };
+  };
+
+  const handleAvatarClick = async () => {
+    const [photo] = await requestPhotoPicker(1);
+    handleImageSelect(photo?.blob ?? null);
   };
 
   const handleSave = async (formData: ProfileEditFormData) => {
     setIsSaving(true);
     try {
-      const pictureUrl = formData.profileImage
+      const photo = formData.profileImage
         ? await uploadProfileImage(formData.profileImage)
         : undefined;
 
@@ -85,7 +94,7 @@ const ProfileEditPage = () => {
           nickname: formData.nickname,
           introduction: formData.introduction,
           linkUrl: formData.linkUrl,
-          ...(pictureUrl && { pictureUrl }),
+          ...(photo && { photo }),
         },
       });
       navigate({ to: "/my-page" });
@@ -105,7 +114,11 @@ const ProfileEditPage = () => {
       <S.ScrollArea>
         <S.ProfileGroup>
           <S.ProfileLabel>프로필</S.ProfileLabel>
-          <S.AvatarLabel htmlFor={imageInputId} aria-label="프로필 이미지 선택">
+          <S.AvatarLabel
+            type="button"
+            onClick={handleAvatarClick}
+            aria-label="프로필 이미지 선택"
+          >
             {previewUrl ? (
               <S.AvatarPreview
                 src={previewUrl}
@@ -115,12 +128,6 @@ const ProfileEditPage = () => {
               <IcPlusGray aria-hidden="true" />
             )}
           </S.AvatarLabel>
-          <S.HiddenInput
-            id={imageInputId}
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
         </S.ProfileGroup>
 
         <S.FieldList>

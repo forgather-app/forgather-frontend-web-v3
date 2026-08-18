@@ -88,10 +88,8 @@ export const useProfileEditForm = (
     };
   }, [cropSourceUrl]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) setCropSourceUrl(URL.createObjectURL(file));
-    e.target.value = "";
+  const handleImageSelect = (image: Blob | null) => {
+    if (image) setCropSourceUrl(URL.createObjectURL(image));
   };
 
   const handleCropSave = (image: Blob) => {
@@ -121,7 +119,7 @@ export const useProfileEditForm = (
     previewUrl,
     cropSourceUrl,
     getSubmitHandler,
-    handleImageChange,
+    handleImageSelect,
     handleCropSave,
   };
 };

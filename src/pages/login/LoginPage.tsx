@@ -12,7 +12,7 @@ import OnboardingIllustration2 from "./illustrations/OnboardingIllustration2";
 import * as S from "./LoginPage.styles";
 import OnboardingSlide from "./slides/OnboardingSlide";
 
-const routeApi = getRouteApi("/login/");
+const routeApi = getRouteApi("/_appOnly/login/");
 
 const LoginPage = () => {
   const { redirectTo } = routeApi.useSearch();

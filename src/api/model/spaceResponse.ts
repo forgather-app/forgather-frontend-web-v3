@@ -5,7 +5,7 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
-import type { SpacePhotoResponse } from './spacePhotoResponse';
+import type { SpaceHostInfoResponse } from './spaceHostInfoResponse';
 
 export interface SpaceResponse {
   /** 스페이스 ID */
@@ -18,15 +18,19 @@ export interface SpaceResponse {
   description?: string;
   /** 스페이스 공개여부 */
   isPublic?: boolean;
-  /** 스페이스 호스트 인스타그램 아이디 */
-  instagramUsername?: string;
-  /** 스페이스 호스트 이메일 */
-  email?: string;
   /** 스페이스 소개 링크 URL */
   linkUrl?: string;
   /** 스페이스 소개 링크 표시 이름 */
   linkName?: string;
-  spacePhoto?: SpacePhotoResponse;
-  /** 스페이스 방명록 카드 개수 */
-  guestBookCardCount?: number;
+  /**
+   * 스페이스 사진 경로 (대표 작품의 첫 번째 사진). 작품이 없거나 대표 작품에 사진이 없으면 null이며, 기본 사진 노출은 클라이언트가 담당한다.
+   * @nullable
+   */
+  spacePhotoPath?: string | null;
+  /**
+   * 스페이스 방명록 카드 개수. 비공개 스페이스는 호스트 본인에게만 실제 값을 응답하고 그 외에는 null(개수 비공개)로 응답한다.
+   * @nullable
+   */
+  guestBookCardCount?: number | null;
+  host?: SpaceHostInfoResponse;
 }

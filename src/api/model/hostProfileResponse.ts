@@ -13,6 +13,6 @@ export interface HostProfileResponse {
   introduction?: string;
   /** 링크 URL */
   linkUrl?: string;
-  /** 프로필 사진 URL */
-  pictureUrl?: string;
+  /** 프로필 사진 경로 (미설정 시 null) */
+  photoPath?: string;
 }

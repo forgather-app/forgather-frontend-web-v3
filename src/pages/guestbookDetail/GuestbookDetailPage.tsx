@@ -123,6 +123,7 @@ const GuestbookDetailPage = ({
       <S.ScrollArea>
         <SwiperAction
           activeIndex={currentIndex}
+          fillHeight
           onIndexChange={(index) => {
             const targetId = cardIds[index];
             if (targetId !== undefined) onNavigate(targetId);

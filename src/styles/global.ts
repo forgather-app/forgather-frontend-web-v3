@@ -10,6 +10,11 @@ export const global = css`
     font-family: inherit;
     font-synthesis: none;
   }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
   body {
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
     background-color: #f5f5f5;

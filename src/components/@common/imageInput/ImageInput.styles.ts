@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const ClickArea = styled.label`
+export const ClickArea = styled.button`
   position: relative;
   display: flex;
   align-items: center;
@@ -8,7 +8,9 @@ export const ClickArea = styled.label`
   width: 100%;
   aspect-ratio: 1 / 1;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
+  border: none;
   border-radius: 8px;
+  padding: 0;
   overflow: hidden;
   cursor: pointer;
 `;
@@ -26,10 +28,6 @@ export const IconCircle = styled.div`
   background-color: ${({ theme }) => theme.colors.gray.gray500};
   border-radius: 50%;
   opacity: 0.7;
-`;
-
-export const InvisibleInput = styled.input`
-  display: none;
 `;
 
 export const PreviewImage = styled.img`

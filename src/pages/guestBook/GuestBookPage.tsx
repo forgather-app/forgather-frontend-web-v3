@@ -1,47 +1,106 @@
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { withApiVersion } from "@/api/apiVersion";
-import { useReadGuestBookV2Suspense } from "@/api/generated/spaceguestbook-스페이스-방명록";
+import { customFetcher } from "@/api/customFetcher";
 import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
-  GuestBookResponse,
 } from "@/api/model";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
+import { CONSTRAINTS } from "@/constants/constraints";
+import { ERROR_MESSAGES } from "@/constants/error";
+import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import * as S from "./GuestBookPage.styles";
+
+const SKELETON_CARD_COUNT = 4;
 
 interface GuestBookPageProps {
   /** 스페이스 ID */
   spaceId: string;
   /** 일반 방명록 카드 클릭 핸들러 */
   onCardClick: (guestbookId: number) => void;
-  /** 새 방명록 스택 클릭 핸들러 (새 방명록 목록 페이지로 이동) */
-  onNewStackClick: () => void;
 }
 
-const GuestBookPage = ({
-  spaceId,
-  onCardClick,
-  onNewStackClick,
-}: GuestBookPageProps) => {
-  const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
-    spaceId,
-    {
-      query: {
-        select: (response) =>
-          // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
-          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
-      },
-      request: withApiVersion(2),
-    },
+// OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
+// 같은 서버의 다른 엔드포인트(GET /guestbook/me/reports)가 Spring Pageable(0-base page) 컨벤션을 쓰는 것으로 보아 이 엔드포인트도 동일하게 0-base로 가정한다.
+const fetchGuestBookPage = (spaceId: string, page: number) =>
+  customFetcher<ApiResponseGuestBookResponse>(
+    `/spaces/${spaceId}/guestbook?page=${page}&size=${CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE}`,
+    withApiVersion(2),
   );
 
-  const guestBookCards = (guestBook.guestBookCards ?? []).filter(
-    (card): card is GuestBookCardSimpleResponse & { id: number } =>
-      card.id !== undefined,
-  );
-  const unreadCount = guestBook.unreadCount ?? 0;
+const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
+  const { showSnackBar } = useSnackBar();
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+    isError,
+  } = useInfiniteQuery({
+    queryKey: ["guestbook", spaceId, "list"],
+    queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (_lastPage, allPages) => {
+      const totalPages = allPages.at(-1)?.data?.totalPages;
+      if (totalPages === undefined || allPages.length >= totalPages) {
+        return undefined;
+      }
+      return allPages.length;
+    },
+  });
+
+  const pages = data?.pages.map((page) => page.data ?? {}) ?? [];
+  const guestBookCards = pages
+    .flatMap((page) => page.guestBookCards ?? [])
+    .filter(
+      (card): card is GuestBookCardSimpleResponse & { id: number } =>
+        card.id !== undefined,
+    );
+  const unreadCount = pages[0]?.unreadCount ?? 0;
   const hasNewCards = unreadCount > 0;
-  const totalCount = guestBook.totalCount ?? guestBookCards.length;
+  const totalCount = pages[0]?.totalCount ?? guestBookCards.length;
+  const firstUnreadCard = guestBookCards.find((card) => !card.isRead);
+
+  const { targetRef } = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    onIntersect: () => {
+      fetchNextPage().then((result) => {
+        if (result.isError) {
+          showSnackBar(
+            ERROR_MESSAGES.GUEST_BOOK_LIST_LOAD_MORE_FAILED,
+            "error",
+          );
+        }
+      });
+    },
+  });
+
+  // TODO: 에러 UI 구현
+  if (isError) return;
+
+  if (isPending) {
+    return (
+      <S.ScrollArea>
+        <S.TitleRow>
+          <S.Title>방명록</S.Title>
+          <S.CountSkeleton aria-hidden />
+        </S.TitleRow>
+
+        <S.GuestListContainer>
+          {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 로딩 중 고정 개수 플레이스홀더라 index만 사용 가능함
+            <S.GuestListSkeleton key={index} aria-hidden />
+          ))}
+        </S.GuestListContainer>
+        <S.BottomSpacer />
+      </S.ScrollArea>
+    );
+  }
 
   return (
     <S.ScrollArea>
@@ -54,7 +113,14 @@ const GuestBookPage = ({
 
       {hasNewCards && (
         <S.GuestCardWrapper>
-          <GuestListStack count={unreadCount} onClick={onNewStackClick} />
+          <GuestListStack
+            count={unreadCount}
+            onClick={
+              firstUnreadCard
+                ? () => onCardClick(firstUnreadCard.id)
+                : undefined
+            }
+          />
         </S.GuestCardWrapper>
       )}
 
@@ -67,6 +133,7 @@ const GuestBookPage = ({
             onClick={() => onCardClick(card.id)}
           />
         ))}
+        {hasNextPage && <S.ScrollSentinel ref={targetRef} />}
       </S.GuestListContainer>
       <S.BottomSpacer />
     </S.ScrollArea>

@@ -1,29 +1,46 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useGetProfile } from "@/api/generated/host-호스트";
-import { useGetSpacesInformation } from "@/api/generated/space-스페이스";
+import {
+  getGetSpacesInformationQueryKey,
+  useFeatureSpaces,
+  useGetSpacesInformation,
+} from "@/api/generated/space-스페이스";
 import type {
   ApiResponseHostProfileResponse,
   ApiResponseHostSpaceResponse,
   HostSpaceItemResponse,
 } from "@/api/model";
 import IcPerson from "@/assets/icons/ic_person.svg?react";
+import BottomSheet from "@/components/@common/BottomSheet/BottomSheet";
 import Button from "@/components/@common/Button/Button";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
+import { ERROR_MESSAGES } from "@/constants/error";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
+import AddSpaceOptionsSheet from "./components/addSpaceOptionsSheet/AddSpaceOptionsSheet";
+import CurrentSpaceAddSlot from "./components/currentSpaceAddSlot/CurrentSpaceAddSlot";
+import CurrentSpaceCarousel from "./components/currentSpaceCarousel/CurrentSpaceCarousel";
 import CurrentSpaceSection from "./components/currentSpaceSection/CurrentSpaceSection";
+import ExistingSpaceSelectSheet from "./components/existingSpaceSelectSheet/ExistingSpaceSelectSheet";
 import HomeCtaBanner from "./components/homeCtaBanner/HomeCtaBanner";
 import HomeEmptyView from "./components/homeEmptyView/HomeEmptyView";
 import * as S from "./HomePage.styles";
 
+type AddSpaceSheetStep = "options" | "existing" | null;
+
 const getSpaceThumbnailUrl = (
-  spacePhoto?: HostSpaceItemResponse["spacePhoto"],
-) =>
-  spacePhoto?.isExists && spacePhoto.path
-    ? getImageUrl(spacePhoto.path)
-    : undefined;
+  spacePhotoPath?: HostSpaceItemResponse["spacePhotoPath"],
+) => (spacePhotoPath ? getImageUrl(spacePhotoPath) : undefined);
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { showSnackBar } = useSnackBar();
+  const [sheetStep, setSheetStep] = useState<AddSpaceSheetStep>(null);
+  const { mutate: featureSpace, isPending: isFeaturing } = useFeatureSpaces();
+
   // TODO: MyPage/ProfileEditPage에서도 useGetProfile을 각자 호출 중 —
   // 소비처가 더 늘어나면 _authenticated 레이아웃에서 fetch해 Context로 내려주는 방식 고려
   const { data: profile } = useGetProfile({
@@ -54,16 +71,48 @@ const HomePage = () => {
     (space): space is HostSpaceItemResponse & { spaceCode: string } =>
       space.spaceCode !== undefined,
   );
-  const currentSpace = spaces.find((space) => space.isFeatured);
+  const currentSpaces = spaces.filter((space) => space.isFeatured);
   const isEmpty = !isPending && spaces.length === 0;
+  const nonFeaturedSpaces = spaces
+    .filter((space) => !space.isFeatured)
+    .map((space) => ({
+      spaceCode: space.spaceCode,
+      name: space.name ?? "",
+      thumbnailUrl: getSpaceThumbnailUrl(space.spacePhotoPath),
+      guestBookCardCount: space.guestBookCardCount ?? 0,
+    }));
+
+  const handleAddSpaceClick = () => setSheetStep("options");
+
+  const handleSelectExistingSpace = (spaceCode: string) => {
+    featureSpace(
+      { data: { spaceCodes: [spaceCode] } },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: getGetSpacesInformationQueryKey(),
+          });
+          setSheetStep(null);
+          showSnackBar("진행 중인 스페이스로 등록했어요", "alert");
+        },
+        onError: () => {
+          showSnackBar(ERROR_MESSAGES.SPACE_FEATURE_FAILED, "error");
+        },
+      },
+    );
+  };
 
   return (
     <S.HomePageContainer>
       <S.PageWrapper>
         <S.Header>
           <S.UserProfile>
-            {profile?.pictureUrl ? (
-              <S.UserAvatarImage src={profile.pictureUrl} alt="" aria-hidden />
+            {profile?.photoPath ? (
+              <S.UserAvatarImage
+                src={getImageUrl(profile.photoPath)}
+                alt=""
+                aria-hidden
+              />
             ) : (
               <S.UserAvatar aria-hidden />
             )}
@@ -104,31 +153,35 @@ const HomePage = () => {
             <HomeEmptyView />
           ) : (
             <>
-              {currentSpace ? (
-                <CurrentSpaceSection
-                  spaceName={currentSpace.name ?? ""}
-                  thumbnailUrl={getSpaceThumbnailUrl(currentSpace.spacePhoto)}
-                  newGuestBookCount={currentSpace.unreadGuestBookCount}
-                  onGuestBookClick={() =>
-                    navigate({
-                      to: "/spaces/$spaceId/guestbook",
-                      params: { spaceId: currentSpace.spaceCode },
-                    })
-                  }
-                  onArtworkManageClick={() =>
-                    navigate({
-                      to: "/spaces/$spaceId",
-                      params: { spaceId: currentSpace.spaceCode },
-                    })
-                  }
-                />
+              {currentSpaces.length > 0 ? (
+                <CurrentSpaceCarousel>
+                  {currentSpaces.map((space) => (
+                    <CurrentSpaceSection
+                      key={space.spaceCode}
+                      spaceName={space.name ?? ""}
+                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhotoPath)}
+                      newGuestBookCount={space.unreadGuestBookCount}
+                      onGuestBookClick={() =>
+                        navigate({
+                          to: "/spaces/$spaceId/guestbook",
+                          params: { spaceId: space.spaceCode },
+                        })
+                      }
+                      onArtworkManageClick={() =>
+                        navigate({
+                          to: "/spaces/$spaceId",
+                          params: { spaceId: space.spaceCode },
+                        })
+                      }
+                    />
+                  ))}
+                  <CurrentSpaceAddSlot onClick={handleAddSpaceClick} />
+                </CurrentSpaceCarousel>
               ) : (
-                <HomeCtaBanner
-                  onClick={() => navigate({ to: "/create-space" })}
-                />
+                <HomeCtaBanner onClick={handleAddSpaceClick} />
               )}
 
-              <S.MySpaceSection $topGap={currentSpace ? 32 : 24}>
+              <S.MySpaceSection $topGap={currentSpaces.length > 0 ? 32 : 24}>
                 <S.SectionTitle>나의 스페이스</S.SectionTitle>
                 <S.ListHeader>
                   <S.SpaceCountGroup>
@@ -143,7 +196,7 @@ const HomePage = () => {
                       key={space.spaceCode}
                       title={space.name ?? ""}
                       guestBookCount={space.guestBookCardCount ?? 0}
-                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhoto)}
+                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhotoPath)}
                       onClick={() =>
                         navigate({
                           to: "/spaces/$spaceId",
@@ -167,6 +220,27 @@ const HomePage = () => {
             onClick={() => navigate({ to: "/create-space" })}
           />
         </S.BottomCta>
+      )}
+
+      {sheetStep && (
+        <BottomSheet
+          isOpen
+          onClose={() => setSheetStep(null)}
+          maxContentHeight={sheetStep === "existing" ? "85dvh" : undefined}
+        >
+          {sheetStep === "options" ? (
+            <AddSpaceOptionsSheet
+              onSelectNew={() => navigate({ to: "/create-space" })}
+              onSelectExisting={() => setSheetStep("existing")}
+            />
+          ) : (
+            <ExistingSpaceSelectSheet
+              spaces={nonFeaturedSpaces}
+              onSelect={handleSelectExistingSpace}
+              isPending={isFeaturing}
+            />
+          )}
+        </BottomSheet>
       )}
     </S.HomePageContainer>
   );
