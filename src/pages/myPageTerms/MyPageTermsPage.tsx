@@ -1,8 +1,11 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { useGetLatestTermsSuspense } from "@/api/generated/term-약관";
-import type { ApiResponseListTermResponse, TermResponse } from "@/api/model";
+import { useGetMyTermAgreementsSuspense } from "@/api/generated/term-약관";
+import type {
+  ApiResponseListTermAgreementResponse,
+  TermAgreementResponse,
+} from "@/api/model";
 import IcCheckboxInactive from "@/assets/icons/ic_checkbox_inactive.svg?react";
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
@@ -11,18 +14,21 @@ import Modal from "@/components/UI/Modal/Modal";
 import { MarkdownContent } from "@/styles/@common/Markdown/Markdown.styles";
 import * as S from "./MyPageTermsPage.styles";
 
-/** id가 보장된 약관 응답 */
-type Term = TermResponse & { id: number };
+/** id가 보장된 약관 동의 현황 응답 */
+type Term = TermAgreementResponse & { id: number };
 
 const MyPageTermsPage = () => {
   const navigate = useNavigate();
   const [activeTerm, setActiveTerm] = useState<Term | null>(null);
 
-  const { data: terms } = useGetLatestTermsSuspense<Term[]>({
+  const { data: terms } = useGetMyTermAgreementsSuspense<Term[]>({
     query: {
       select: (response) =>
         // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
-        ((response as unknown as ApiResponseListTermResponse).data ?? [])
+        (
+          (response as unknown as ApiResponseListTermAgreementResponse).data ??
+          []
+        )
           .filter((term): term is Term => term.id !== undefined)
           .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
     },
@@ -47,7 +53,7 @@ const MyPageTermsPage = () => {
                 <IcChevronRight aria-hidden="true" />
               </S.TermLabelButton>
               {term.isRequired ? (
-                <S.AgreedLabel>동의함</S.AgreedLabel>
+                term.isAgreed && <S.AgreedLabel>동의함</S.AgreedLabel>
               ) : (
                 // TODO: 마케팅 정보 수신 동의 조회/토글 API 연동 시 실제 동의 상태로 교체
                 <S.CheckboxIconWrapper aria-hidden="true">
