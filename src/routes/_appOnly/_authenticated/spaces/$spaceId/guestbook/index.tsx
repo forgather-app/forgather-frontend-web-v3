@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Suspense } from "react";
 import GuestBookPage from "@/pages/guestBook/GuestBookPage";
 
 export const Route = createFileRoute(
@@ -13,16 +12,14 @@ function RouteComponent() {
   const navigate = useNavigate();
 
   return (
-    <Suspense fallback={null}>
-      <GuestBookPage
-        spaceId={spaceId}
-        onCardClick={(guestbookId) =>
-          navigate({
-            to: "/spaces/$spaceId/guestbook/$guestbookId",
-            params: { spaceId, guestbookId: String(guestbookId) },
-          })
-        }
-      />
-    </Suspense>
+    <GuestBookPage
+      spaceId={spaceId}
+      onCardClick={(guestbookId) =>
+        navigate({
+          to: "/spaces/$spaceId/guestbook/$guestbookId",
+          params: { spaceId, guestbookId: String(guestbookId) },
+        })
+      }
+    />
   );
 }
