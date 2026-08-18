@@ -86,4 +86,20 @@ export const ModalBody = styled.div`
   overflow-y: auto;
   max-height: 324px;
   padding-bottom: 16px;
+
+  scrollbar-width: thin;
+  scrollbar-color: ${({ theme }) => theme.colors.gray.gray400} transparent;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.gray.gray400};
+    border-radius: 999px;
+  }
 `;
