@@ -126,7 +126,7 @@ export const useRefresh = <TError = unknown,
       return useMutation(getRefreshMutationOptions(options), queryClient);
     }
     /**
- * 서비스 닉네임과 약관 동의 이력을 함께 저장합니다.
+ * 서비스 닉네임과 약관 동의 이력을 함께 저장합니다. 이미 온보딩이 완료된 호스트가 다시 호출하면 409 Conflict를 반환합니다.
  * @summary 온보딩 완료
  */
 export type submitOnboardingResponse200 = {
