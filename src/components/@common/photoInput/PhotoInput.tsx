@@ -1,6 +1,7 @@
 import type { ReactElement, SVGProps } from "react";
 import { useEffect, useId, useMemo } from "react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
+import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
 import * as S from "./PhotoInput.styles";
 
 interface PhotoInputProps {
@@ -30,6 +31,8 @@ const PhotoInput = ({
   listAriaLabel = "첨부한 사진",
 }: PhotoInputProps) => {
   const inputId = useId();
+  const { requestPhotoPicker, isNativeAvailable } =
+    useNativePhotoPickerBridge();
   const canAddMore = photos.length < maxCount;
 
   const previewUrls = useMemo(
@@ -43,10 +46,24 @@ const PhotoInput = ({
     };
   }, [previewUrls]);
 
-  const handleAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files ?? []);
+  const addPhotos = (files: File[]) => {
     if (files.length > 0) onChange([...photos, ...files].slice(0, maxCount));
+  };
+
+  // 웹뷰가 아닌 순수 브라우저(예: 방명록 작성 링크를 브라우저로 접근)에서의 폴백 경로
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    addPhotos(Array.from(e.target.files ?? []));
     e.target.value = "";
+  };
+
+  // RN 앱 웹뷰 안에서는 네이티브 갤러리 피커를 사용
+  const handleNativeAdd = async () => {
+    const picked = await requestPhotoPicker(maxCount - photos.length);
+    addPhotos(
+      picked.map(
+        ({ blob, fileName }) => new File([blob], fileName, { type: blob.type }),
+      ),
+    );
   };
 
   const handleRemove = (index: number) => {
@@ -55,20 +72,29 @@ const PhotoInput = ({
 
   return (
     <S.Grid role="list" aria-label={listAriaLabel}>
-      {canAddMore && (
-        <>
-          <S.AddLabel htmlFor={inputId} aria-label={addButtonAriaLabel}>
+      {canAddMore &&
+        (isNativeAvailable ? (
+          <S.AddButton
+            type="button"
+            onClick={handleNativeAdd}
+            aria-label={addButtonAriaLabel}
+          >
             {icon}
-          </S.AddLabel>
-          <S.InvisibleInput
-            id={inputId}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleAdd}
-          />
-        </>
-      )}
+          </S.AddButton>
+        ) : (
+          <>
+            <S.AddLabel htmlFor={inputId} aria-label={addButtonAriaLabel}>
+              {icon}
+            </S.AddLabel>
+            <S.InvisibleInput
+              id={inputId}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileInputChange}
+            />
+          </>
+        ))}
       {photos.map((photo, index) => (
         <S.Thumbnail
           key={`${photo.name}-${photo.lastModified}`}

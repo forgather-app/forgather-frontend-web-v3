@@ -54,7 +54,7 @@ export const LinkLabel = styled.span`
   color: ${({ theme }) => theme.colors.gray.white};
 `;
 
-export const AvatarLabel = styled.label`
+export const AvatarLabel = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,10 +62,12 @@ export const AvatarLabel = styled.label`
   height: 80px;
   border: 1px solid ${({ theme }) => theme.colors.gray.gray400};
   border-radius: 50%;
+  padding: 0;
+  background: none;
   overflow: hidden;
   cursor: pointer;
 
-  &:focus-within {
+  &:focus-visible {
     outline: 2px solid ${({ theme }) => theme.colors.main.purple};
     outline-offset: 2px;
   }
@@ -75,14 +77,6 @@ export const AvatarPreview = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-`;
-
-export const HiddenInput = styled.input`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
 `;
 
 export const Footer = styled.footer`

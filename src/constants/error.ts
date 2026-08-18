@@ -6,6 +6,7 @@ export const ERROR_MESSAGES = {
   PROFILE_UPDATE_FAILED:
     "일시적인 오류로 프로필을 수정하지 못했어요. 잠시 후 다시 시도해 주세요",
   APP_ONLY_FEATURE: "앱 환경에서만 이용할 수 있습니다",
+  PHOTO_PICKER_FAILED: "사진을 불러오지 못했어요. 잠시 후 다시 시도해 주세요",
   DOWNLOAD_FAILED: "이미지를 다운로드하지 못했어요. 잠시 후 다시 시도해 주세요",
   IMAGE_SAVE_FAILED: "이미지를 저장하지 못했어요. 잠시 후 다시 시도해 주세요",
   KAKAO_SHARE_FAILED:
@@ -16,6 +17,8 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 방명록을 남기지 못했어요. 잠시 후 다시 시도해 주세요",
   PHOTO_UPLOAD_FAILED:
     "일시적인 오류로 사진을 업로드하지 못했어요. 잠시 후 다시 시도해 주세요",
+  PRODUCT_REGISTER_FAILED:
+    "일시적인 오류로 작품을 등록하지 못했어요. 잠시 후 다시 시도해 주세요",
   GUEST_BOOK_LIST_LOAD_MORE_FAILED:
     "일시적인 오류로 방명록을 더 불러오지 못했어요. 잠시 후 다시 시도해 주세요",
   SPACE_FEATURE_FAILED:

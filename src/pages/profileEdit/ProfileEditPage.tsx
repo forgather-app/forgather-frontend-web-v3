@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import {
   useGetProfileSuspense,
@@ -18,6 +18,7 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import ImageCropper from "./components/imageCropper/ImageCropper";
 import {
@@ -29,7 +30,7 @@ import * as S from "./ProfileEditPage.styles";
 const ProfileEditPage = () => {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
-  const imageInputId = useId();
+  const { requestPhotoPicker } = useNativePhotoPickerBridge();
   const [isSaving, setIsSaving] = useState(false);
 
   const { data: profile } = useGetProfileSuspense({
@@ -51,7 +52,7 @@ const ProfileEditPage = () => {
     previewUrl,
     cropSourceUrl,
     getSubmitHandler,
-    handleImageChange,
+    handleImageSelect,
     handleCropSave,
   } = useProfileEditForm({
     nickname: profile?.nickname ?? "",
@@ -71,6 +72,11 @@ const ProfileEditPage = () => {
     if (!signedUrl) throw new Error("업로드 URL을 발급받지 못했습니다");
 
     return uploadImageToSignedUrl(signedUrl, image, fileName);
+  };
+
+  const handleAvatarClick = async () => {
+    const [photo] = await requestPhotoPicker(1);
+    handleImageSelect(photo?.blob ?? null);
   };
 
   const handleSave = async (formData: ProfileEditFormData) => {
@@ -105,7 +111,11 @@ const ProfileEditPage = () => {
       <S.ScrollArea>
         <S.ProfileGroup>
           <S.ProfileLabel>프로필</S.ProfileLabel>
-          <S.AvatarLabel htmlFor={imageInputId} aria-label="프로필 이미지 선택">
+          <S.AvatarLabel
+            type="button"
+            onClick={handleAvatarClick}
+            aria-label="프로필 이미지 선택"
+          >
             {previewUrl ? (
               <S.AvatarPreview
                 src={previewUrl}
@@ -115,12 +125,6 @@ const ProfileEditPage = () => {
               <IcPlusGray aria-hidden="true" />
             )}
           </S.AvatarLabel>
-          <S.HiddenInput
-            id={imageInputId}
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
         </S.ProfileGroup>
 
         <S.FieldList>

@@ -65,6 +65,20 @@ export const AddLabel = styled.label`
   cursor: pointer;
 `;
 
+export const AddButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+`;
+
 export const InvisibleInput = styled.input`
   display: none;
 `;

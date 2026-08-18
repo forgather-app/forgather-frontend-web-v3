@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  PRODUCT_AUTHOR_NAME_MAX_LENGTH_ERROR,
   PRODUCT_DESCRIPTION_MAX_LENGTH_ERROR,
   PRODUCT_TITLE_MAX_LENGTH_ERROR,
   PRODUCT_TITLE_REQUIRED_ERROR,
+  validateProductAuthorNameMaxLength,
   validateProductDescriptionMaxLength,
   validateProductTitleMaxLength,
   validateProductTitleRequired,
@@ -33,6 +35,22 @@ describe("validateProductTitleMaxLength", () => {
     expect(validateProductTitleMaxLength("a".repeat(51))).toBe(
       PRODUCT_TITLE_MAX_LENGTH_ERROR,
     );
+  });
+});
+
+describe("validateProductAuthorNameMaxLength", () => {
+  it("35자 이하이면 true를 반환한다", () => {
+    expect(validateProductAuthorNameMaxLength("a".repeat(35))).toBe(true);
+  });
+
+  it("35자를 초과하면 에러 메시지를 반환한다", () => {
+    expect(validateProductAuthorNameMaxLength("a".repeat(36))).toBe(
+      PRODUCT_AUTHOR_NAME_MAX_LENGTH_ERROR,
+    );
+  });
+
+  it("빈 문자열이면 true를 반환한다 (선택 입력)", () => {
+    expect(validateProductAuthorNameMaxLength("")).toBe(true);
   });
 });
 
