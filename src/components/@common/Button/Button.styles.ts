@@ -5,6 +5,7 @@ export type ButtonVariant =
   | "primary"
   | "secondary"
   | "tertiary"
+  | "danger"
   | "underlined"
   | "pill"
   | "pillWeak"
@@ -61,6 +62,28 @@ const variantStyles: Record<ButtonVariant, (theme: Theme) => string> = {
     &:disabled {
       background-color: ${theme.colors.gray.gray400};
       color: ${theme.colors.gray.gray300};
+    }
+  `,
+  danger: (theme) => `
+    background-color: rgba(255, 66, 66, 0.1);
+    color: ${theme.colors.semantic.accent};
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(255, 66, 66, 0.2);
+    }
+
+    &:active:not(:disabled) {
+      background-color: ${theme.colors.semantic.accent};
+      color: ${theme.colors.gray.gray50};
+    }
+
+    &:disabled {
+      background-color: ${theme.colors.gray.gray500};
+      color: ${theme.colors.gray.gray400};
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   `,
   underlined: (theme) => `

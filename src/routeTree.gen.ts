@@ -22,6 +22,7 @@ import { Route as AppOnlyAuthenticatedCreateSpaceIndexRouteImport } from './rout
 import { Route as AppOnlyAuthenticatedCreateExhibitionIndexRouteImport } from './routes/_appOnly/_authenticated/create-exhibition/index'
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId'
 import { Route as AppOnlyAuthenticatedSignUpCompleteRouteImport } from './routes/_appOnly/_authenticated/sign-up/complete'
+import { Route as AppOnlyAuthenticatedMyPageTermsRouteImport } from './routes/_appOnly/_authenticated/my-page/terms'
 import { Route as AppOnlyAuthenticatedMyPageEditRouteImport } from './routes/_appOnly/_authenticated/my-page/edit'
 import { Route as SpacesSpaceIdGuestGuestbookIndexRouteImport } from './routes/spaces/$spaceId/guest/guestbook/index'
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/index'
@@ -104,6 +105,12 @@ const AppOnlyAuthenticatedSignUpCompleteRoute =
     path: '/sign-up/complete',
     getParentRoute: () => AppOnlyAuthenticatedRoute,
   } as any)
+const AppOnlyAuthenticatedMyPageTermsRoute =
+  AppOnlyAuthenticatedMyPageTermsRouteImport.update({
+    id: '/my-page/terms',
+    path: '/my-page/terms',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
 const AppOnlyAuthenticatedMyPageEditRoute =
   AppOnlyAuthenticatedMyPageEditRouteImport.update({
     id: '/my-page/edit',
@@ -170,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/spaces/$spaceId/guest': typeof SpacesSpaceIdGuestRouteWithChildren
   '/login/': typeof AppOnlyLoginIndexRoute
   '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
+  '/my-page/terms': typeof AppOnlyAuthenticatedMyPageTermsRoute
   '/sign-up/complete': typeof AppOnlyAuthenticatedSignUpCompleteRoute
   '/spaces/$spaceId': typeof AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren
   '/create-exhibition/': typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
@@ -192,6 +200,7 @@ export interface FileRoutesByTo {
   '/': typeof AppOnlyAuthenticatedIndexRoute
   '/login': typeof AppOnlyLoginIndexRoute
   '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
+  '/my-page/terms': typeof AppOnlyAuthenticatedMyPageTermsRoute
   '/sign-up/complete': typeof AppOnlyAuthenticatedSignUpCompleteRoute
   '/create-exhibition': typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
   '/create-space': typeof AppOnlyAuthenticatedCreateSpaceIndexRoute
@@ -217,6 +226,7 @@ export interface FileRoutesById {
   '/_appOnly/_authenticated/': typeof AppOnlyAuthenticatedIndexRoute
   '/_appOnly/login/': typeof AppOnlyLoginIndexRoute
   '/_appOnly/_authenticated/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
+  '/_appOnly/_authenticated/my-page/terms': typeof AppOnlyAuthenticatedMyPageTermsRoute
   '/_appOnly/_authenticated/sign-up/complete': typeof AppOnlyAuthenticatedSignUpCompleteRoute
   '/_appOnly/_authenticated/spaces/$spaceId': typeof AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren
   '/_appOnly/_authenticated/create-exhibition/': typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/spaces/$spaceId/guest'
     | '/login/'
     | '/my-page/edit'
+    | '/my-page/terms'
     | '/sign-up/complete'
     | '/spaces/$spaceId'
     | '/create-exhibition/'
@@ -264,6 +275,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/my-page/edit'
+    | '/my-page/terms'
     | '/sign-up/complete'
     | '/create-exhibition'
     | '/create-space'
@@ -288,6 +300,7 @@ export interface FileRouteTypes {
     | '/_appOnly/_authenticated/'
     | '/_appOnly/login/'
     | '/_appOnly/_authenticated/my-page/edit'
+    | '/_appOnly/_authenticated/my-page/terms'
     | '/_appOnly/_authenticated/sign-up/complete'
     | '/_appOnly/_authenticated/spaces/$spaceId'
     | '/_appOnly/_authenticated/create-exhibition/'
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOnlyAuthenticatedSignUpCompleteRouteImport
       parentRoute: typeof AppOnlyAuthenticatedRoute
     }
+    '/_appOnly/_authenticated/my-page/terms': {
+      id: '/_appOnly/_authenticated/my-page/terms'
+      path: '/my-page/terms'
+      fullPath: '/my-page/terms'
+      preLoaderRoute: typeof AppOnlyAuthenticatedMyPageTermsRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
+    }
     '/_appOnly/_authenticated/my-page/edit': {
       id: '/_appOnly/_authenticated/my-page/edit'
       path: '/my-page/edit'
@@ -508,6 +528,7 @@ const AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren =
 interface AppOnlyAuthenticatedRouteChildren {
   AppOnlyAuthenticatedIndexRoute: typeof AppOnlyAuthenticatedIndexRoute
   AppOnlyAuthenticatedMyPageEditRoute: typeof AppOnlyAuthenticatedMyPageEditRoute
+  AppOnlyAuthenticatedMyPageTermsRoute: typeof AppOnlyAuthenticatedMyPageTermsRoute
   AppOnlyAuthenticatedSignUpCompleteRoute: typeof AppOnlyAuthenticatedSignUpCompleteRoute
   AppOnlyAuthenticatedSpacesSpaceIdRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren
   AppOnlyAuthenticatedCreateExhibitionIndexRoute: typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
@@ -520,6 +541,7 @@ interface AppOnlyAuthenticatedRouteChildren {
 const AppOnlyAuthenticatedRouteChildren: AppOnlyAuthenticatedRouteChildren = {
   AppOnlyAuthenticatedIndexRoute: AppOnlyAuthenticatedIndexRoute,
   AppOnlyAuthenticatedMyPageEditRoute: AppOnlyAuthenticatedMyPageEditRoute,
+  AppOnlyAuthenticatedMyPageTermsRoute: AppOnlyAuthenticatedMyPageTermsRoute,
   AppOnlyAuthenticatedSignUpCompleteRoute:
     AppOnlyAuthenticatedSignUpCompleteRoute,
   AppOnlyAuthenticatedSpacesSpaceIdRoute:
