@@ -6,6 +6,7 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcModify from "@/assets/icons/ic_modify.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
+import { getImageUrl } from "@/utils/getImageUrl";
 import * as S from "./MyPage.styles";
 
 // TODO: 버전 관리 방식 확정 시 대체
@@ -20,7 +21,7 @@ const MyPage = () => {
     },
   });
 
-  const pictureUrl = profile?.pictureUrl ?? "";
+  const pictureUrl = profile?.photoPath ? getImageUrl(profile.photoPath) : "";
   const nickname = profile?.nickname ?? "";
   const introduction = profile?.introduction ?? "";
   const linkUrl = profile?.linkUrl ?? "";

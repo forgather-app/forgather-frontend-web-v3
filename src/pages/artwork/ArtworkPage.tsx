@@ -20,6 +20,7 @@ import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
+import { getImageUrl } from "@/utils/getImageUrl";
 import * as S from "./ArtworkPage.styles";
 
 /** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
@@ -97,8 +98,12 @@ const ArtworkPage = ({
       <S.ScrollArea>
         <S.ProfileRow>
           <S.UserProfile>
-            {profile?.pictureUrl ? (
-              <S.UserAvatarImage src={profile.pictureUrl} alt="" aria-hidden />
+            {profile?.photoPath ? (
+              <S.UserAvatarImage
+                src={getImageUrl(profile.photoPath)}
+                alt=""
+                aria-hidden
+              />
             ) : (
               <S.UserAvatar aria-hidden />
             )}
@@ -164,8 +169,12 @@ const ArtworkPage = ({
     <S.ScrollArea>
       <S.ProfileRow>
         <S.UserProfile>
-          {profile?.pictureUrl ? (
-            <S.UserAvatarImage src={profile.pictureUrl} alt="" aria-hidden />
+          {profile?.photoPath ? (
+            <S.UserAvatarImage
+              src={getImageUrl(profile.photoPath)}
+              alt=""
+              aria-hidden
+            />
           ) : (
             <S.UserAvatar aria-hidden />
           )}

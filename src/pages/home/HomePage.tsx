@@ -31,11 +31,8 @@ import * as S from "./HomePage.styles";
 type AddSpaceSheetStep = "options" | "existing" | null;
 
 const getSpaceThumbnailUrl = (
-  spacePhoto?: HostSpaceItemResponse["spacePhoto"],
-) =>
-  spacePhoto?.isExists && spacePhoto.path
-    ? getImageUrl(spacePhoto.path)
-    : undefined;
+  spacePhotoPath?: HostSpaceItemResponse["spacePhotoPath"],
+) => (spacePhotoPath ? getImageUrl(spacePhotoPath) : undefined);
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -81,7 +78,7 @@ const HomePage = () => {
     .map((space) => ({
       spaceCode: space.spaceCode,
       name: space.name ?? "",
-      thumbnailUrl: getSpaceThumbnailUrl(space.spacePhoto),
+      thumbnailUrl: getSpaceThumbnailUrl(space.spacePhotoPath),
       guestBookCardCount: space.guestBookCardCount ?? 0,
     }));
 
@@ -110,8 +107,12 @@ const HomePage = () => {
       <S.PageWrapper>
         <S.Header>
           <S.UserProfile>
-            {profile?.pictureUrl ? (
-              <S.UserAvatarImage src={profile.pictureUrl} alt="" aria-hidden />
+            {profile?.photoPath ? (
+              <S.UserAvatarImage
+                src={getImageUrl(profile.photoPath)}
+                alt=""
+                aria-hidden
+              />
             ) : (
               <S.UserAvatar aria-hidden />
             )}
@@ -158,7 +159,7 @@ const HomePage = () => {
                     <CurrentSpaceSection
                       key={space.spaceCode}
                       spaceName={space.name ?? ""}
-                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhoto)}
+                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhotoPath)}
                       newGuestBookCount={space.unreadGuestBookCount}
                       onGuestBookClick={() =>
                         navigate({
@@ -195,7 +196,7 @@ const HomePage = () => {
                       key={space.spaceCode}
                       title={space.name ?? ""}
                       guestBookCount={space.guestBookCardCount ?? 0}
-                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhoto)}
+                      thumbnailUrl={getSpaceThumbnailUrl(space.spacePhotoPath)}
                       onClick={() =>
                         navigate({
                           to: "/spaces/$spaceId",
