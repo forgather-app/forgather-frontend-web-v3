@@ -50,6 +50,11 @@ const meta: Meta<typeof SwiperAction> = {
       description: "드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다",
       table: { type: { summary: "(index: number) => void" } },
     },
+    fillHeight: {
+      description:
+        "true이면 스와이프 인식 영역(hit area)이 부모 컨테이너의 전체 높이를 채웁니다. 콘텐츠가 그보다 길면 콘텐츠 높이에 맞춰 자연스럽게 늘어납니다",
+      table: { type: { summary: "boolean | undefined" } },
+    },
   },
 };
 
