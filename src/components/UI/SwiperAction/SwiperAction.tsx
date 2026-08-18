@@ -22,6 +22,8 @@ interface SwiperActionProps {
   activeIndex?: number;
   /** 드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다 */
   onIndexChange?: (index: number) => void;
+  /** true이면 스와이프 인식 영역(hit area)이 부모 컨테이너의 전체 높이를 채웁니다. 콘텐츠가 그보다 길면 콘텐츠 높이에 맞춰 자연스럽게 늘어납니다 */
+  fillHeight?: boolean;
 }
 
 const SwiperAction = ({
@@ -29,6 +31,7 @@ const SwiperAction = ({
   sidePeekRatio,
   activeIndex,
   onIndexChange,
+  fillHeight,
 }: SwiperActionProps) => {
   const isControlled = activeIndex !== undefined;
   const effectiveSidePeekRatio =
@@ -210,6 +213,10 @@ const SwiperAction = ({
   const handlePointerDown = (e: React.PointerEvent) => {
     if (swiperElement.length === 0) return;
 
+    // 웹뷰(RN WebView)의 자체 제스처(엣지 스와이프백 등)가 포인터를 가로채도
+    // move/up이 끊기지 않도록 드래그 시작 시점에 포인터를 캡처한다
+    e.currentTarget.setPointerCapture(e.pointerId);
+
     isDragging.current = true;
     startX.current = e.clientX;
     startY.current = e.clientY;
@@ -254,6 +261,7 @@ const SwiperAction = ({
     snapToIndex(diffX);
   };
 
+  // pointercancel(웹뷰 제스처에 의한 포인터 탈취)도 leave와 동일하게 드래그를 취소하고 스냅백한다
   const handlePointerLeave = () => {
     isDragging.current = false;
     animate(x, calculateLocation(currentIndex), SPRING_PRESET);
@@ -262,6 +270,7 @@ const SwiperAction = ({
   return (
     <S.Container
       ref={containerRef}
+      $fillHeight={fillHeight}
       style={
         !isControlled && containerMaxWidth
           ? { maxWidth: containerMaxWidth }
@@ -271,6 +280,7 @@ const SwiperAction = ({
       onPointerUp={handlePointerUp}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
+      onPointerCancel={handlePointerLeave}
     >
       {currentIndex !== 0 && (
         <VisuallyHidden
