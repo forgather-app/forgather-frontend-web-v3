@@ -20,8 +20,6 @@ interface GuestBookPageProps {
   spaceId: string;
   /** 일반 방명록 카드 클릭 핸들러 */
   onCardClick: (guestbookId: number) => void;
-  /** 새 방명록 스택 클릭 핸들러 (새 방명록 목록 페이지로 이동) */
-  onNewStackClick: () => void;
 }
 
 // OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
@@ -32,11 +30,7 @@ const fetchGuestBookPage = (spaceId: string, page: number) =>
     withApiVersion(2),
   );
 
-const GuestBookPage = ({
-  spaceId,
-  onCardClick,
-  onNewStackClick,
-}: GuestBookPageProps) => {
+const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
   const { showSnackBar } = useSnackBar();
 
   const {
@@ -69,6 +63,7 @@ const GuestBookPage = ({
   const unreadCount = pages[0]?.unreadCount ?? 0;
   const hasNewCards = unreadCount > 0;
   const totalCount = pages[0]?.totalCount ?? guestBookCards.length;
+  const firstUnreadCard = guestBookCards.find((card) => !card.isRead);
 
   const { targetRef } = useInfiniteScroll({
     hasNextPage,
@@ -118,7 +113,14 @@ const GuestBookPage = ({
 
       {hasNewCards && (
         <S.GuestCardWrapper>
-          <GuestListStack count={unreadCount} onClick={onNewStackClick} />
+          <GuestListStack
+            count={unreadCount}
+            onClick={
+              firstUnreadCard
+                ? () => onCardClick(firstUnreadCard.id)
+                : undefined
+            }
+          />
         </S.GuestCardWrapper>
       )}
 

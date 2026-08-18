@@ -9,102 +9,79 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedNewGuestbooksRouteImport } from './routes/_authenticated/new-guestbooks'
-import { Route as AuthenticatedSignUpIndexRouteImport } from './routes/_authenticated/sign-up/index'
-import { Route as AuthenticatedMyPageIndexRouteImport } from './routes/_authenticated/my-page/index'
-import { Route as AuthenticatedHomeIndexRouteImport } from './routes/_authenticated/home/index'
-import { Route as AuthenticatedCreateSpaceIndexRouteImport } from './routes/_authenticated/create-space/index'
-import { Route as AuthenticatedCreateProductIndexRouteImport } from './routes/_authenticated/create-product/index'
-import { Route as AuthenticatedCreateExhibitionIndexRouteImport } from './routes/_authenticated/create-exhibition/index'
-import { Route as AuthenticatedSpacesSpaceIdRouteImport } from './routes/_authenticated/spaces/$spaceId'
-import { Route as AuthenticatedSignUpCompleteRouteImport } from './routes/_authenticated/sign-up/complete'
-import { Route as AuthenticatedMyPageEditRouteImport } from './routes/_authenticated/my-page/edit'
-import { Route as AuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/index'
+import { Route as AppOnlyRouteImport } from './routes/_appOnly'
+import { Route as AppOnlyAuthenticatedRouteImport } from './routes/_appOnly/_authenticated'
+import { Route as AppOnlyLoginIndexRouteImport } from './routes/_appOnly/login/index'
+import { Route as AppOnlyAuthenticatedIndexRouteImport } from './routes/_appOnly/_authenticated/index'
+import { Route as AppOnlyAuthenticatedSignUpIndexRouteImport } from './routes/_appOnly/_authenticated/sign-up/index'
+import { Route as AppOnlyAuthenticatedMyPageIndexRouteImport } from './routes/_appOnly/_authenticated/my-page/index'
+import { Route as AppOnlyAuthenticatedHomeIndexRouteImport } from './routes/_appOnly/_authenticated/home/index'
+import { Route as AppOnlyAuthenticatedCreateSpaceIndexRouteImport } from './routes/_appOnly/_authenticated/create-space/index'
+import { Route as AppOnlyAuthenticatedCreateProductIndexRouteImport } from './routes/_appOnly/_authenticated/create-product/index'
+import { Route as AppOnlyAuthenticatedCreateExhibitionIndexRouteImport } from './routes/_appOnly/_authenticated/create-exhibition/index'
 import { Route as SpacesSpaceIdGuestbookWriteRouteImport } from './routes/spaces/$spaceId/guestbook/write'
-import { Route as AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook/index'
-import { Route as AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport } from './routes/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
-import { Route as AuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport } from './routes/_authenticated/spaces/$spaceId/artworks/$artworkId'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId'
+import { Route as AppOnlyAuthenticatedSignUpCompleteRouteImport } from './routes/_appOnly/_authenticated/sign-up/complete'
+import { Route as AppOnlyAuthenticatedMyPageEditRouteImport } from './routes/_appOnly/_authenticated/my-page/edit'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/index'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/guestbook/index'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId'
 
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const AppOnlyRoute = AppOnlyRouteImport.update({
+  id: '/_appOnly',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
+const AppOnlyAuthenticatedRoute = AppOnlyAuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => AppOnlyRoute,
+} as any)
+const AppOnlyLoginIndexRoute = AppOnlyLoginIndexRouteImport.update({
   id: '/login/',
   path: '/login/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppOnlyRoute,
 } as any)
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedNewGuestbooksRoute =
-  AuthenticatedNewGuestbooksRouteImport.update({
-    id: '/new-guestbooks',
-    path: '/new-guestbooks',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSignUpIndexRoute =
-  AuthenticatedSignUpIndexRouteImport.update({
-    id: '/sign-up/',
-    path: '/sign-up/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedMyPageIndexRoute =
-  AuthenticatedMyPageIndexRouteImport.update({
-    id: '/my-page/',
-    path: '/my-page/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedHomeIndexRoute = AuthenticatedHomeIndexRouteImport.update({
-  id: '/home/',
-  path: '/home/',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedCreateSpaceIndexRoute =
-  AuthenticatedCreateSpaceIndexRouteImport.update({
-    id: '/create-space/',
-    path: '/create-space/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedCreateProductIndexRoute =
-  AuthenticatedCreateProductIndexRouteImport.update({
-    id: '/create-product/',
-    path: '/create-product/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedCreateExhibitionIndexRoute =
-  AuthenticatedCreateExhibitionIndexRouteImport.update({
-    id: '/create-exhibition/',
-    path: '/create-exhibition/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSpacesSpaceIdRoute =
-  AuthenticatedSpacesSpaceIdRouteImport.update({
-    id: '/spaces/$spaceId',
-    path: '/spaces/$spaceId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSignUpCompleteRoute =
-  AuthenticatedSignUpCompleteRouteImport.update({
-    id: '/sign-up/complete',
-    path: '/sign-up/complete',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedMyPageEditRoute = AuthenticatedMyPageEditRouteImport.update({
-  id: '/my-page/edit',
-  path: '/my-page/edit',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedSpacesSpaceIdIndexRoute =
-  AuthenticatedSpacesSpaceIdIndexRouteImport.update({
+const AppOnlyAuthenticatedIndexRoute =
+  AppOnlyAuthenticatedIndexRouteImport.update({
     id: '/',
     path: '/',
-    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedSignUpIndexRoute =
+  AppOnlyAuthenticatedSignUpIndexRouteImport.update({
+    id: '/sign-up/',
+    path: '/sign-up/',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedMyPageIndexRoute =
+  AppOnlyAuthenticatedMyPageIndexRouteImport.update({
+    id: '/my-page/',
+    path: '/my-page/',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedHomeIndexRoute =
+  AppOnlyAuthenticatedHomeIndexRouteImport.update({
+    id: '/home/',
+    path: '/home/',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedCreateSpaceIndexRoute =
+  AppOnlyAuthenticatedCreateSpaceIndexRouteImport.update({
+    id: '/create-space/',
+    path: '/create-space/',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedCreateProductIndexRoute =
+  AppOnlyAuthenticatedCreateProductIndexRouteImport.update({
+    id: '/create-product/',
+    path: '/create-product/',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedCreateExhibitionIndexRoute =
+  AppOnlyAuthenticatedCreateExhibitionIndexRouteImport.update({
+    id: '/create-exhibition/',
+    path: '/create-exhibition/',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
   } as any)
 const SpacesSpaceIdGuestbookWriteRoute =
   SpacesSpaceIdGuestbookWriteRouteImport.update({
@@ -112,248 +89,239 @@ const SpacesSpaceIdGuestbookWriteRoute =
     path: '/spaces/$spaceId/guestbook/write',
     getParentRoute: () => rootRouteImport,
   } as any)
-const AuthenticatedSpacesSpaceIdGuestbookIndexRoute =
-  AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport.update({
+const AppOnlyAuthenticatedSpacesSpaceIdRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdRouteImport.update({
+    id: '/spaces/$spaceId',
+    path: '/spaces/$spaceId',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedSignUpCompleteRoute =
+  AppOnlyAuthenticatedSignUpCompleteRouteImport.update({
+    id: '/sign-up/complete',
+    path: '/sign-up/complete',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedMyPageEditRoute =
+  AppOnlyAuthenticatedMyPageEditRouteImport.update({
+    id: '/my-page/edit',
+    path: '/my-page/edit',
+    getParentRoute: () => AppOnlyAuthenticatedRoute,
+  } as any)
+const AppOnlyAuthenticatedSpacesSpaceIdIndexRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
+  } as any)
+const AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRouteImport.update({
     id: '/guestbook/',
     path: '/guestbook/',
-    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+    getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
   } as any)
-const AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute =
-  AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport.update({
+const AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport.update({
     id: '/guestbook/$guestbookId',
     path: '/guestbook/$guestbookId',
-    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+    getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
   } as any)
-const AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute =
-  AuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport.update({
+const AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport.update({
     id: '/artworks/$artworkId',
     path: '/artworks/$artworkId',
-    getParentRoute: () => AuthenticatedSpacesSpaceIdRoute,
+    getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedIndexRoute
-  '/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
-  '/login/': typeof LoginIndexRoute
-  '/my-page/edit': typeof AuthenticatedMyPageEditRoute
-  '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
-  '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
-  '/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
-  '/create-product/': typeof AuthenticatedCreateProductIndexRoute
-  '/create-space/': typeof AuthenticatedCreateSpaceIndexRoute
-  '/home/': typeof AuthenticatedHomeIndexRoute
-  '/my-page/': typeof AuthenticatedMyPageIndexRoute
-  '/sign-up/': typeof AuthenticatedSignUpIndexRoute
+  '/': typeof AppOnlyAuthenticatedIndexRoute
+  '/login/': typeof AppOnlyLoginIndexRoute
+  '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
+  '/sign-up/complete': typeof AppOnlyAuthenticatedSignUpCompleteRoute
+  '/spaces/$spaceId': typeof AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren
   '/spaces/$spaceId/guestbook/write': typeof SpacesSpaceIdGuestbookWriteRoute
-  '/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
-  '/spaces/$spaceId/artworks/$artworkId': typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
-  '/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
-  '/spaces/$spaceId/guestbook/': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  '/create-exhibition/': typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
+  '/create-product/': typeof AppOnlyAuthenticatedCreateProductIndexRoute
+  '/create-space/': typeof AppOnlyAuthenticatedCreateSpaceIndexRoute
+  '/home/': typeof AppOnlyAuthenticatedHomeIndexRoute
+  '/my-page/': typeof AppOnlyAuthenticatedMyPageIndexRoute
+  '/sign-up/': typeof AppOnlyAuthenticatedSignUpIndexRoute
+  '/spaces/$spaceId/': typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
+  '/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
+  '/spaces/$spaceId/guestbook/$guestbookId': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/spaces/$spaceId/guestbook/': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRoutesByTo {
-  '/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
-  '/': typeof AuthenticatedIndexRoute
-  '/login': typeof LoginIndexRoute
-  '/my-page/edit': typeof AuthenticatedMyPageEditRoute
-  '/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
-  '/create-exhibition': typeof AuthenticatedCreateExhibitionIndexRoute
-  '/create-product': typeof AuthenticatedCreateProductIndexRoute
-  '/create-space': typeof AuthenticatedCreateSpaceIndexRoute
-  '/home': typeof AuthenticatedHomeIndexRoute
-  '/my-page': typeof AuthenticatedMyPageIndexRoute
-  '/sign-up': typeof AuthenticatedSignUpIndexRoute
+  '/': typeof AppOnlyAuthenticatedIndexRoute
+  '/login': typeof AppOnlyLoginIndexRoute
+  '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
+  '/sign-up/complete': typeof AppOnlyAuthenticatedSignUpCompleteRoute
   '/spaces/$spaceId/guestbook/write': typeof SpacesSpaceIdGuestbookWriteRoute
-  '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdIndexRoute
-  '/spaces/$spaceId/artworks/$artworkId': typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
-  '/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
-  '/spaces/$spaceId/guestbook': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  '/create-exhibition': typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
+  '/create-product': typeof AppOnlyAuthenticatedCreateProductIndexRoute
+  '/create-space': typeof AppOnlyAuthenticatedCreateSpaceIndexRoute
+  '/home': typeof AppOnlyAuthenticatedHomeIndexRoute
+  '/my-page': typeof AppOnlyAuthenticatedMyPageIndexRoute
+  '/sign-up': typeof AppOnlyAuthenticatedSignUpIndexRoute
+  '/spaces/$spaceId': typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
+  '/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
+  '/spaces/$spaceId/guestbook/$guestbookId': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/spaces/$spaceId/guestbook': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
-  '/_authenticated/new-guestbooks': typeof AuthenticatedNewGuestbooksRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/login/': typeof LoginIndexRoute
-  '/_authenticated/my-page/edit': typeof AuthenticatedMyPageEditRoute
-  '/_authenticated/sign-up/complete': typeof AuthenticatedSignUpCompleteRoute
-  '/_authenticated/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
-  '/_authenticated/create-exhibition/': typeof AuthenticatedCreateExhibitionIndexRoute
-  '/_authenticated/create-product/': typeof AuthenticatedCreateProductIndexRoute
-  '/_authenticated/create-space/': typeof AuthenticatedCreateSpaceIndexRoute
-  '/_authenticated/home/': typeof AuthenticatedHomeIndexRoute
-  '/_authenticated/my-page/': typeof AuthenticatedMyPageIndexRoute
-  '/_authenticated/sign-up/': typeof AuthenticatedSignUpIndexRoute
+  '/_appOnly': typeof AppOnlyRouteWithChildren
+  '/_appOnly/_authenticated': typeof AppOnlyAuthenticatedRouteWithChildren
+  '/_appOnly/_authenticated/': typeof AppOnlyAuthenticatedIndexRoute
+  '/_appOnly/login/': typeof AppOnlyLoginIndexRoute
+  '/_appOnly/_authenticated/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
+  '/_appOnly/_authenticated/sign-up/complete': typeof AppOnlyAuthenticatedSignUpCompleteRoute
+  '/_appOnly/_authenticated/spaces/$spaceId': typeof AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren
   '/spaces/$spaceId/guestbook/write': typeof SpacesSpaceIdGuestbookWriteRoute
-  '/_authenticated/spaces/$spaceId/': typeof AuthenticatedSpacesSpaceIdIndexRoute
-  '/_authenticated/spaces/$spaceId/artworks/$artworkId': typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
-  '/_authenticated/spaces/$spaceId/guestbook/$guestbookId': typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
-  '/_authenticated/spaces/$spaceId/guestbook/': typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  '/_appOnly/_authenticated/create-exhibition/': typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
+  '/_appOnly/_authenticated/create-product/': typeof AppOnlyAuthenticatedCreateProductIndexRoute
+  '/_appOnly/_authenticated/create-space/': typeof AppOnlyAuthenticatedCreateSpaceIndexRoute
+  '/_appOnly/_authenticated/home/': typeof AppOnlyAuthenticatedHomeIndexRoute
+  '/_appOnly/_authenticated/my-page/': typeof AppOnlyAuthenticatedMyPageIndexRoute
+  '/_appOnly/_authenticated/sign-up/': typeof AppOnlyAuthenticatedSignUpIndexRoute
+  '/_appOnly/_authenticated/spaces/$spaceId/': typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
+  '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
+  '/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  '/_appOnly/_authenticated/spaces/$spaceId/guestbook/': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/new-guestbooks'
     | '/login/'
     | '/my-page/edit'
     | '/sign-up/complete'
     | '/spaces/$spaceId'
+    | '/spaces/$spaceId/guestbook/write'
     | '/create-exhibition/'
     | '/create-product/'
     | '/create-space/'
     | '/home/'
     | '/my-page/'
     | '/sign-up/'
-    | '/spaces/$spaceId/guestbook/write'
     | '/spaces/$spaceId/'
     | '/spaces/$spaceId/artworks/$artworkId'
     | '/spaces/$spaceId/guestbook/$guestbookId'
     | '/spaces/$spaceId/guestbook/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/new-guestbooks'
     | '/'
     | '/login'
     | '/my-page/edit'
     | '/sign-up/complete'
+    | '/spaces/$spaceId/guestbook/write'
     | '/create-exhibition'
     | '/create-product'
     | '/create-space'
     | '/home'
     | '/my-page'
     | '/sign-up'
-    | '/spaces/$spaceId/guestbook/write'
     | '/spaces/$spaceId'
     | '/spaces/$spaceId/artworks/$artworkId'
     | '/spaces/$spaceId/guestbook/$guestbookId'
     | '/spaces/$spaceId/guestbook'
   id:
     | '__root__'
-    | '/_authenticated'
-    | '/_authenticated/new-guestbooks'
-    | '/_authenticated/'
-    | '/login/'
-    | '/_authenticated/my-page/edit'
-    | '/_authenticated/sign-up/complete'
-    | '/_authenticated/spaces/$spaceId'
-    | '/_authenticated/create-exhibition/'
-    | '/_authenticated/create-product/'
-    | '/_authenticated/create-space/'
-    | '/_authenticated/home/'
-    | '/_authenticated/my-page/'
-    | '/_authenticated/sign-up/'
+    | '/_appOnly'
+    | '/_appOnly/_authenticated'
+    | '/_appOnly/_authenticated/'
+    | '/_appOnly/login/'
+    | '/_appOnly/_authenticated/my-page/edit'
+    | '/_appOnly/_authenticated/sign-up/complete'
+    | '/_appOnly/_authenticated/spaces/$spaceId'
     | '/spaces/$spaceId/guestbook/write'
-    | '/_authenticated/spaces/$spaceId/'
-    | '/_authenticated/spaces/$spaceId/artworks/$artworkId'
-    | '/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
-    | '/_authenticated/spaces/$spaceId/guestbook/'
+    | '/_appOnly/_authenticated/create-exhibition/'
+    | '/_appOnly/_authenticated/create-product/'
+    | '/_appOnly/_authenticated/create-space/'
+    | '/_appOnly/_authenticated/home/'
+    | '/_appOnly/_authenticated/my-page/'
+    | '/_appOnly/_authenticated/sign-up/'
+    | '/_appOnly/_authenticated/spaces/$spaceId/'
+    | '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId'
+    | '/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
+    | '/_appOnly/_authenticated/spaces/$spaceId/guestbook/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
-  LoginIndexRoute: typeof LoginIndexRoute
+  AppOnlyRoute: typeof AppOnlyRouteWithChildren
   SpacesSpaceIdGuestbookWriteRoute: typeof SpacesSpaceIdGuestbookWriteRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_authenticated': {
-      id: '/_authenticated'
+    '/_appOnly': {
+      id: '/_appOnly'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteImport
+      preLoaderRoute: typeof AppOnlyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login/': {
-      id: '/login/'
+    '/_appOnly/_authenticated': {
+      id: '/_appOnly/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppOnlyAuthenticatedRouteImport
+      parentRoute: typeof AppOnlyRoute
+    }
+    '/_appOnly/login/': {
+      id: '/_appOnly/login/'
       path: '/login'
       fullPath: '/login/'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AppOnlyLoginIndexRouteImport
+      parentRoute: typeof AppOnlyRoute
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
+    '/_appOnly/_authenticated/': {
+      id: '/_appOnly/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
-    '/_authenticated/new-guestbooks': {
-      id: '/_authenticated/new-guestbooks'
-      path: '/new-guestbooks'
-      fullPath: '/new-guestbooks'
-      preLoaderRoute: typeof AuthenticatedNewGuestbooksRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/sign-up/': {
-      id: '/_authenticated/sign-up/'
+    '/_appOnly/_authenticated/sign-up/': {
+      id: '/_appOnly/_authenticated/sign-up/'
       path: '/sign-up'
       fullPath: '/sign-up/'
-      preLoaderRoute: typeof AuthenticatedSignUpIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedSignUpIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
-    '/_authenticated/my-page/': {
-      id: '/_authenticated/my-page/'
+    '/_appOnly/_authenticated/my-page/': {
+      id: '/_appOnly/_authenticated/my-page/'
       path: '/my-page'
       fullPath: '/my-page/'
-      preLoaderRoute: typeof AuthenticatedMyPageIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedMyPageIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
-    '/_authenticated/home/': {
-      id: '/_authenticated/home/'
+    '/_appOnly/_authenticated/home/': {
+      id: '/_appOnly/_authenticated/home/'
       path: '/home'
       fullPath: '/home/'
-      preLoaderRoute: typeof AuthenticatedHomeIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedHomeIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
-    '/_authenticated/create-space/': {
-      id: '/_authenticated/create-space/'
+    '/_appOnly/_authenticated/create-space/': {
+      id: '/_appOnly/_authenticated/create-space/'
       path: '/create-space'
       fullPath: '/create-space/'
-      preLoaderRoute: typeof AuthenticatedCreateSpaceIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedCreateSpaceIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
-    '/_authenticated/create-product/': {
-      id: '/_authenticated/create-product/'
+    '/_appOnly/_authenticated/create-product/': {
+      id: '/_appOnly/_authenticated/create-product/'
       path: '/create-product'
       fullPath: '/create-product/'
-      preLoaderRoute: typeof AuthenticatedCreateProductIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedCreateProductIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
-    '/_authenticated/create-exhibition/': {
-      id: '/_authenticated/create-exhibition/'
+    '/_appOnly/_authenticated/create-exhibition/': {
+      id: '/_appOnly/_authenticated/create-exhibition/'
       path: '/create-exhibition'
       fullPath: '/create-exhibition/'
-      preLoaderRoute: typeof AuthenticatedCreateExhibitionIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/spaces/$spaceId': {
-      id: '/_authenticated/spaces/$spaceId'
-      path: '/spaces/$spaceId'
-      fullPath: '/spaces/$spaceId'
-      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/sign-up/complete': {
-      id: '/_authenticated/sign-up/complete'
-      path: '/sign-up/complete'
-      fullPath: '/sign-up/complete'
-      preLoaderRoute: typeof AuthenticatedSignUpCompleteRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/my-page/edit': {
-      id: '/_authenticated/my-page/edit'
-      path: '/my-page/edit'
-      fullPath: '/my-page/edit'
-      preLoaderRoute: typeof AuthenticatedMyPageEditRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/spaces/$spaceId/': {
-      id: '/_authenticated/spaces/$spaceId/'
-      path: '/'
-      fullPath: '/spaces/$spaceId/'
-      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdIndexRouteImport
-      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedCreateExhibitionIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
     }
     '/spaces/$spaceId/guestbook/write': {
       id: '/spaces/$spaceId/guestbook/write'
@@ -362,89 +330,131 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SpacesSpaceIdGuestbookWriteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/spaces/$spaceId/guestbook/': {
-      id: '/_authenticated/spaces/$spaceId/guestbook/'
+    '/_appOnly/_authenticated/spaces/$spaceId': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId'
+      path: '/spaces/$spaceId'
+      fullPath: '/spaces/$spaceId'
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
+    }
+    '/_appOnly/_authenticated/sign-up/complete': {
+      id: '/_appOnly/_authenticated/sign-up/complete'
+      path: '/sign-up/complete'
+      fullPath: '/sign-up/complete'
+      preLoaderRoute: typeof AppOnlyAuthenticatedSignUpCompleteRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
+    }
+    '/_appOnly/_authenticated/my-page/edit': {
+      id: '/_appOnly/_authenticated/my-page/edit'
+      path: '/my-page/edit'
+      fullPath: '/my-page/edit'
+      preLoaderRoute: typeof AppOnlyAuthenticatedMyPageEditRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedRoute
+    }
+    '/_appOnly/_authenticated/spaces/$spaceId/': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId/'
+      path: '/'
+      fullPath: '/spaces/$spaceId/'
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
+    }
+    '/_appOnly/_authenticated/spaces/$spaceId/guestbook/': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId/guestbook/'
       path: '/guestbook'
       fullPath: '/spaces/$spaceId/guestbook/'
-      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdGuestbookIndexRouteImport
-      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
     }
-    '/_authenticated/spaces/$spaceId/guestbook/$guestbookId': {
-      id: '/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
+    '/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
       path: '/guestbook/$guestbookId'
       fullPath: '/spaces/$spaceId/guestbook/$guestbookId'
-      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport
-      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
     }
-    '/_authenticated/spaces/$spaceId/artworks/$artworkId': {
-      id: '/_authenticated/spaces/$spaceId/artworks/$artworkId'
+    '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId'
       path: '/artworks/$artworkId'
       fullPath: '/spaces/$spaceId/artworks/$artworkId'
-      preLoaderRoute: typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport
-      parentRoute: typeof AuthenticatedSpacesSpaceIdRoute
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
     }
   }
 }
 
-interface AuthenticatedSpacesSpaceIdRouteChildren {
-  AuthenticatedSpacesSpaceIdIndexRoute: typeof AuthenticatedSpacesSpaceIdIndexRoute
-  AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute: typeof AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
-  AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute: typeof AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
-  AuthenticatedSpacesSpaceIdGuestbookIndexRoute: typeof AuthenticatedSpacesSpaceIdGuestbookIndexRoute
+interface AppOnlyAuthenticatedSpacesSpaceIdRouteChildren {
+  AppOnlyAuthenticatedSpacesSpaceIdIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
+  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
+  AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
+  AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
 }
 
-const AuthenticatedSpacesSpaceIdRouteChildren: AuthenticatedSpacesSpaceIdRouteChildren =
+const AppOnlyAuthenticatedSpacesSpaceIdRouteChildren: AppOnlyAuthenticatedSpacesSpaceIdRouteChildren =
   {
-    AuthenticatedSpacesSpaceIdIndexRoute: AuthenticatedSpacesSpaceIdIndexRoute,
-    AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute:
-      AuthenticatedSpacesSpaceIdArtworksArtworkIdRoute,
-    AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute:
-      AuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute,
-    AuthenticatedSpacesSpaceIdGuestbookIndexRoute:
-      AuthenticatedSpacesSpaceIdGuestbookIndexRoute,
+    AppOnlyAuthenticatedSpacesSpaceIdIndexRoute:
+      AppOnlyAuthenticatedSpacesSpaceIdIndexRoute,
+    AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute:
+      AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute,
+    AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute:
+      AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute,
+    AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute:
+      AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute,
   }
 
-const AuthenticatedSpacesSpaceIdRouteWithChildren =
-  AuthenticatedSpacesSpaceIdRoute._addFileChildren(
-    AuthenticatedSpacesSpaceIdRouteChildren,
+const AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren =
+  AppOnlyAuthenticatedSpacesSpaceIdRoute._addFileChildren(
+    AppOnlyAuthenticatedSpacesSpaceIdRouteChildren,
   )
 
-interface AuthenticatedRouteChildren {
-  AuthenticatedNewGuestbooksRoute: typeof AuthenticatedNewGuestbooksRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedMyPageEditRoute: typeof AuthenticatedMyPageEditRoute
-  AuthenticatedSignUpCompleteRoute: typeof AuthenticatedSignUpCompleteRoute
-  AuthenticatedSpacesSpaceIdRoute: typeof AuthenticatedSpacesSpaceIdRouteWithChildren
-  AuthenticatedCreateExhibitionIndexRoute: typeof AuthenticatedCreateExhibitionIndexRoute
-  AuthenticatedCreateProductIndexRoute: typeof AuthenticatedCreateProductIndexRoute
-  AuthenticatedCreateSpaceIndexRoute: typeof AuthenticatedCreateSpaceIndexRoute
-  AuthenticatedHomeIndexRoute: typeof AuthenticatedHomeIndexRoute
-  AuthenticatedMyPageIndexRoute: typeof AuthenticatedMyPageIndexRoute
-  AuthenticatedSignUpIndexRoute: typeof AuthenticatedSignUpIndexRoute
+interface AppOnlyAuthenticatedRouteChildren {
+  AppOnlyAuthenticatedIndexRoute: typeof AppOnlyAuthenticatedIndexRoute
+  AppOnlyAuthenticatedMyPageEditRoute: typeof AppOnlyAuthenticatedMyPageEditRoute
+  AppOnlyAuthenticatedSignUpCompleteRoute: typeof AppOnlyAuthenticatedSignUpCompleteRoute
+  AppOnlyAuthenticatedSpacesSpaceIdRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren
+  AppOnlyAuthenticatedCreateExhibitionIndexRoute: typeof AppOnlyAuthenticatedCreateExhibitionIndexRoute
+  AppOnlyAuthenticatedCreateProductIndexRoute: typeof AppOnlyAuthenticatedCreateProductIndexRoute
+  AppOnlyAuthenticatedCreateSpaceIndexRoute: typeof AppOnlyAuthenticatedCreateSpaceIndexRoute
+  AppOnlyAuthenticatedHomeIndexRoute: typeof AppOnlyAuthenticatedHomeIndexRoute
+  AppOnlyAuthenticatedMyPageIndexRoute: typeof AppOnlyAuthenticatedMyPageIndexRoute
+  AppOnlyAuthenticatedSignUpIndexRoute: typeof AppOnlyAuthenticatedSignUpIndexRoute
 }
 
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedNewGuestbooksRoute: AuthenticatedNewGuestbooksRoute,
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedMyPageEditRoute: AuthenticatedMyPageEditRoute,
-  AuthenticatedSignUpCompleteRoute: AuthenticatedSignUpCompleteRoute,
-  AuthenticatedSpacesSpaceIdRoute: AuthenticatedSpacesSpaceIdRouteWithChildren,
-  AuthenticatedCreateExhibitionIndexRoute:
-    AuthenticatedCreateExhibitionIndexRoute,
-  AuthenticatedCreateProductIndexRoute: AuthenticatedCreateProductIndexRoute,
-  AuthenticatedCreateSpaceIndexRoute: AuthenticatedCreateSpaceIndexRoute,
-  AuthenticatedHomeIndexRoute: AuthenticatedHomeIndexRoute,
-  AuthenticatedMyPageIndexRoute: AuthenticatedMyPageIndexRoute,
-  AuthenticatedSignUpIndexRoute: AuthenticatedSignUpIndexRoute,
+const AppOnlyAuthenticatedRouteChildren: AppOnlyAuthenticatedRouteChildren = {
+  AppOnlyAuthenticatedIndexRoute: AppOnlyAuthenticatedIndexRoute,
+  AppOnlyAuthenticatedMyPageEditRoute: AppOnlyAuthenticatedMyPageEditRoute,
+  AppOnlyAuthenticatedSignUpCompleteRoute:
+    AppOnlyAuthenticatedSignUpCompleteRoute,
+  AppOnlyAuthenticatedSpacesSpaceIdRoute:
+    AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren,
+  AppOnlyAuthenticatedCreateExhibitionIndexRoute:
+    AppOnlyAuthenticatedCreateExhibitionIndexRoute,
+  AppOnlyAuthenticatedCreateProductIndexRoute:
+    AppOnlyAuthenticatedCreateProductIndexRoute,
+  AppOnlyAuthenticatedCreateSpaceIndexRoute:
+    AppOnlyAuthenticatedCreateSpaceIndexRoute,
+  AppOnlyAuthenticatedHomeIndexRoute: AppOnlyAuthenticatedHomeIndexRoute,
+  AppOnlyAuthenticatedMyPageIndexRoute: AppOnlyAuthenticatedMyPageIndexRoute,
+  AppOnlyAuthenticatedSignUpIndexRoute: AppOnlyAuthenticatedSignUpIndexRoute,
 }
 
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
-)
+const AppOnlyAuthenticatedRouteWithChildren =
+  AppOnlyAuthenticatedRoute._addFileChildren(AppOnlyAuthenticatedRouteChildren)
+
+interface AppOnlyRouteChildren {
+  AppOnlyAuthenticatedRoute: typeof AppOnlyAuthenticatedRouteWithChildren
+  AppOnlyLoginIndexRoute: typeof AppOnlyLoginIndexRoute
+}
+
+const AppOnlyRouteChildren: AppOnlyRouteChildren = {
+  AppOnlyAuthenticatedRoute: AppOnlyAuthenticatedRouteWithChildren,
+  AppOnlyLoginIndexRoute: AppOnlyLoginIndexRoute,
+}
+
+const AppOnlyRouteWithChildren =
+  AppOnlyRoute._addFileChildren(AppOnlyRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
-  LoginIndexRoute: LoginIndexRoute,
+  AppOnlyRoute: AppOnlyRouteWithChildren,
   SpacesSpaceIdGuestbookWriteRoute: SpacesSpaceIdGuestbookWriteRoute,
 }
 export const routeTree = rootRouteImport
