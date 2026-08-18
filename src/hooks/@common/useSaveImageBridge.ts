@@ -36,7 +36,7 @@ const useSaveImageBridge = () => {
         const data = rawData as SaveImageBridgeMessage;
 
         if (data.type === "SAVE_IMAGE_SUCCESS") {
-          showSnackBar("이미지를 저장했어요", "alert");
+          showSnackBar("이미지가 갤러리에 저장되었습니다.", "default");
           return;
         }
         if (data.type === "SAVE_IMAGE_PERMISSION_DENIED") {
@@ -44,10 +44,9 @@ const useSaveImageBridge = () => {
           return;
         }
         if (data.type === "SAVE_IMAGE_ERROR") {
-          showSnackBar(ERROR_MESSAGES.DOWNLOAD_FAILED, "error");
+          showSnackBar(ERROR_MESSAGES.IMAGE_SAVE_FAILED, "error");
         }
       } catch (err) {
-        // TODO: 원인 파악 후 제거
         console.error("SAVE_IMAGE parse/handle error", err, e.data);
       }
     };

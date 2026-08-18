@@ -22,6 +22,8 @@ interface SwiperActionProps {
   activeIndex?: number;
   /** 드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다 */
   onIndexChange?: (index: number) => void;
+  /** true이면 스와이프 인식 영역(hit area)이 부모 컨테이너의 전체 높이를 채웁니다. 콘텐츠가 그보다 길면 콘텐츠 높이에 맞춰 자연스럽게 늘어납니다 */
+  fillHeight?: boolean;
 }
 
 const SwiperAction = ({
@@ -29,8 +31,11 @@ const SwiperAction = ({
   sidePeekRatio,
   activeIndex,
   onIndexChange,
+  fillHeight,
 }: SwiperActionProps) => {
   const isControlled = activeIndex !== undefined;
+  const effectiveSidePeekRatio =
+    swiperElement.length > 1 ? sidePeekRatio : undefined;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -48,8 +53,21 @@ const SwiperAction = ({
   const [currentIndex, setCurrentIndex] = useState(activeIndex ?? 0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerMaxWidth, setContainerMaxWidth] = useState<number>();
-  const [styleGap, setStyleGap] = useState(0);
   const [trackHeight, setTrackHeight] = useState<number>();
+
+  // NOTE: peek 모드의 카드 사이 간격은 항상 CARD_GAP으로 고정된 값이라 상태로 들고 있을 필요가 없다.
+  // (이전엔 컨테이너/카드 폭 나눗셈을 역산해 gap을 구했는데, 부동소수점 오차로 0이 아닌 값이 매번 미세하게 달라져
+  // ResizeObserver → 높이 변경 → 재측정 → setState가 무한 반복되는 버그가 있었다)
+  const controlledGap = effectiveSidePeekRatio ? CARD_GAP : 0;
+
+  // NOTE: 정수로 반올림해야 매 렌더 동일한 입력에 대해 항상 동일한 값이 나온다.
+  // (부동소수점 나눗셈 결과를 그대로 쓰면 아주 미세하게 다른 값이 나올 수 있고,
+  // 이 값이 카드 너비 → 텍스트 줄바꿈 → 카드 높이 측정으로 이어져 무한 렌더 루프를 유발할 수 있다)
+  const controlledSlideWidth = effectiveSidePeekRatio
+    ? Math.round(
+        (containerWidth - 2 * controlledGap) / (1 + 2 * effectiveSidePeekRatio),
+      )
+    : containerWidth;
 
   // 다음 슬라이드가 실제로 있을 때만(마지막 슬라이드가 아닐 때만) peek 여백을 예약한다
   const getContainerMaxWidth = (index: number) => {
@@ -61,14 +79,11 @@ const SwiperAction = ({
 
   const calculateLocation = (index: number) => {
     if (isControlled) {
-      const slice = sidePeekRatio ? elementWidthRef.current * sidePeekRatio : 0;
-      const gap =
-        (containerWidthRef.current - (elementWidthRef.current + slice * 2)) / 2;
-      const start = gap + slice;
-
-      setStyleGap(gap);
-
-      const move = elementWidthRef.current + gap;
+      const slice = effectiveSidePeekRatio
+        ? elementWidthRef.current * effectiveSidePeekRatio
+        : 0;
+      const start = controlledGap + slice;
+      const move = elementWidthRef.current + controlledGap;
 
       return Math.floor(start - move * index);
     }
@@ -87,8 +102,13 @@ const SwiperAction = ({
       setContainerWidth(width);
 
       if (isControlled) {
-        // NOTE: controlled 모드는 슬라이드가 컨테이너 전체 폭을 차지하는 풀블리드 레이아웃이라 element 너비 = container 너비
-        elementWidthRef.current = width;
+        // NOTE: sidePeekRatio가 없으면 슬라이드가 컨테이너 전체 폭을 차지하는 풀블리드 레이아웃(element 너비 = container 너비)이고,
+        // 있으면 [slice][gap][element][gap][slice] = container 너비가 되도록 element 너비를 역산한다
+        elementWidthRef.current = effectiveSidePeekRatio
+          ? Math.round(
+              (width - 2 * controlledGap) / (1 + 2 * effectiveSidePeekRatio),
+            )
+          : width;
         const root = getComputedStyle(document.documentElement);
         const padding = Number(
           root.getPropertyValue("--layout-padding-x").replace("px", ""),
@@ -125,16 +145,19 @@ const SwiperAction = ({
 
   // controlled 모드는 트랙에 모든 슬라이드를 한 줄로 렌더링하므로(드래그를 위해 필요),
   // 아무 처리도 하지 않으면 컨테이너 높이가 가장 높은 슬라이드에 맞춰집니다.
-  // 현재 보이는 슬라이드의 실제 높이로만 맞추기 위해 매번 다시 측정합니다.
+  // 슬라이드가 바뀌거나 컨테이너 폭이 바뀔 때만 현재 보이는 슬라이드의 실제 높이로 다시 맞춥니다.
+  // NOTE: deps 없이 매 커밋마다 재측정하면, Slide에 height:100%가 걸려 있어 방금 set한
+  // trackHeight를 그대로 되읽는 자기 자신 참조 루프가 되어 "Maximum update depth exceeded"가 난다.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: swiperElement/activeIndex는 currentIndex로 이미 반영됨
   useLayoutEffect(() => {
     if (!isControlled) return;
     const activeSlide = trackRef.current?.children[currentIndex];
     if (activeSlide instanceof HTMLElement) {
-      // NOTE: DOM 레이아웃(scrollHeight)을 읽어야만 알 수 있는 값이라 렌더 중 계산이 불가능함
+      const height = activeSlide.scrollHeight;
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTrackHeight(activeSlide.scrollHeight);
+      setTrackHeight((prev) => (prev === height ? prev : height));
     }
-  });
+  }, [isControlled, currentIndex, containerWidth]);
 
   // activeIndex(제어 모드)가 외부에서(예: 헤더의 이전/다음 버튼) 바뀌면 동일한 위치로 스냅합니다.
   // biome-ignore lint/correctness/useExhaustiveDependencies: currentIndex는 내부 변경 여부 비교용으로만 사용
@@ -247,6 +270,7 @@ const SwiperAction = ({
   return (
     <S.Container
       ref={containerRef}
+      $fillHeight={fillHeight}
       style={
         !isControlled && containerMaxWidth
           ? { maxWidth: containerMaxWidth }
@@ -270,7 +294,7 @@ const SwiperAction = ({
         ref={trackRef}
         style={
           isControlled
-            ? { x, gap: styleGap, height: trackHeight }
+            ? { x, gap: controlledGap, height: trackHeight }
             : // NOTE: 슬라이드가 1개면 peek이 필요 없으므로 Track/Slide도 Container(100%)를 그대로 채운다.
               // Card의 width: 100%가 실제로 퍼센트 기준을 가지려면 이 체인 전체가 확정 폭을 가져야 한다.
               { x, width: swiperElement.length === 1 ? "100%" : undefined }
@@ -282,7 +306,7 @@ const SwiperAction = ({
             key={index}
             style={
               isControlled
-                ? { width: containerWidth || "100%" }
+                ? { width: controlledSlideWidth || "100%" }
                 : swiperElement.length === 1
                   ? { width: "100%" }
                   : undefined

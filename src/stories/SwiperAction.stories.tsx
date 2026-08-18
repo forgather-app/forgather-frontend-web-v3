@@ -50,6 +50,11 @@ const meta: Meta<typeof SwiperAction> = {
       description: "드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다",
       table: { type: { summary: "(index: number) => void" } },
     },
+    fillHeight: {
+      description:
+        "true이면 스와이프 인식 영역(hit area)이 부모 컨테이너의 전체 높이를 채웁니다. 콘텐츠가 그보다 길면 콘텐츠 높이에 맞춰 자연스럽게 늘어납니다",
+      table: { type: { summary: "boolean | undefined" } },
+    },
   },
 };
 
@@ -116,6 +121,28 @@ export const Controlled: Story = {
         swiperElement={messageSlides}
         activeIndex={activeIndex}
         onIndexChange={setActiveIndex}
+      />
+    );
+  },
+};
+
+export const ControlledSidePeek: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "activeIndex/onIndexChange와 sidePeekRatio를 함께 전달한 controlled 모드입니다. 현재 카드가 중앙에서 컨테이너 폭을 채우고, 이전/다음 카드가 좌우에 대칭으로 살짝 보입니다.",
+      },
+    },
+  },
+  render: () => {
+    const [activeIndex, setActiveIndex] = useState(1);
+    return (
+      <SwiperAction
+        swiperElement={artworkCards}
+        activeIndex={activeIndex}
+        onIndexChange={setActiveIndex}
+        sidePeekRatio={0.04}
       />
     );
   },

@@ -1,4 +1,4 @@
-import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
 import type {
@@ -8,9 +8,12 @@ import type {
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { ERROR_MESSAGES } from "@/constants/error";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import * as S from "./GuestBookPage.styles";
+
+const SKELETON_CARD_COUNT = 4;
 
 interface GuestBookPageProps {
   /** 스페이스 ID */
@@ -36,21 +39,27 @@ const GuestBookPage = ({
 }: GuestBookPageProps) => {
   const { showSnackBar } = useSnackBar();
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useSuspenseInfiniteQuery({
-      queryKey: ["guestbook", spaceId, "list"],
-      queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
-      initialPageParam: 0,
-      getNextPageParam: (_lastPage, allPages) => {
-        const totalPages = allPages.at(-1)?.data?.totalPages;
-        if (totalPages === undefined || allPages.length >= totalPages) {
-          return undefined;
-        }
-        return allPages.length;
-      },
-    });
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+    isError,
+  } = useInfiniteQuery({
+    queryKey: ["guestbook", spaceId, "list"],
+    queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
+    initialPageParam: 0,
+    getNextPageParam: (_lastPage, allPages) => {
+      const totalPages = allPages.at(-1)?.data?.totalPages;
+      if (totalPages === undefined || allPages.length >= totalPages) {
+        return undefined;
+      }
+      return allPages.length;
+    },
+  });
 
-  const pages = data.pages.map((page) => page.data ?? {});
+  const pages = data?.pages.map((page) => page.data ?? {}) ?? [];
   const guestBookCards = pages
     .flatMap((page) => page.guestBookCards ?? [])
     .filter(
@@ -67,11 +76,36 @@ const GuestBookPage = ({
     onIntersect: () => {
       fetchNextPage().then((result) => {
         if (result.isError) {
-          showSnackBar("방명록을 더 불러오지 못했어요", "error");
+          showSnackBar(
+            ERROR_MESSAGES.GUEST_BOOK_LIST_LOAD_MORE_FAILED,
+            "error",
+          );
         }
       });
     },
   });
+
+  // TODO: 에러 UI 구현
+  if (isError) return;
+
+  if (isPending) {
+    return (
+      <S.ScrollArea>
+        <S.TitleRow>
+          <S.Title>방명록</S.Title>
+          <S.CountSkeleton aria-hidden />
+        </S.TitleRow>
+
+        <S.GuestListContainer>
+          {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: 로딩 중 고정 개수 플레이스홀더라 index만 사용 가능함
+            <S.GuestListSkeleton key={index} aria-hidden />
+          ))}
+        </S.GuestListContainer>
+        <S.BottomSpacer />
+      </S.ScrollArea>
+    );
+  }
 
   return (
     <S.ScrollArea>

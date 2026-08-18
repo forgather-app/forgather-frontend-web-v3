@@ -26,6 +26,7 @@ export const Description = styled.p`
 
 export const IllustrationArea = styled.div`
   flex: 1;
+  min-height: 0;
   position: relative;
   overflow: hidden;
 `;
