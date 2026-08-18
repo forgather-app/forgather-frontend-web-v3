@@ -1,4 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 import { useGetProfileSuspense } from "@/api/generated/host-호스트";
 import type { ApiResponseHostProfileResponse } from "@/api/model";
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
@@ -7,6 +8,7 @@ import IcModify from "@/assets/icons/ic_modify.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import { getImageUrl } from "@/utils/getImageUrl";
+import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
 import * as S from "./MyPage.styles";
 
 // TODO: 버전 관리 방식 확정 시 대체
@@ -14,6 +16,7 @@ const APP_VERSION = "v1.0.0";
 
 const MyPage = () => {
   const navigate = useNavigate();
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const { data: profile } = useGetProfileSuspense({
     query: {
       select: (response) =>
@@ -68,9 +71,7 @@ const MyPage = () => {
         <li>
           <S.MenuButton
             type="button"
-            onClick={() => {
-              // TODO: 이용약관 페이지 연결
-            }}
+            onClick={() => navigate({ to: "/my-page/terms" })}
           >
             서비스 이용 약관
             <IcChevronRight aria-hidden="true" />
@@ -107,9 +108,7 @@ const MyPage = () => {
           </S.InquiryButton>
           <S.WithdrawButton
             type="button"
-            onClick={() => {
-              // TODO: 탈퇴 플로우 확정 시 연결
-            }}
+            onClick={() => setIsWithdrawModalOpen(true)}
           >
             탈퇴하기
           </S.WithdrawButton>
@@ -119,6 +118,11 @@ const MyPage = () => {
           <LogoWordmark aria-hidden="true" />
         </S.FooterInfo>
       </S.Footer>
+
+      <WithdrawModal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+      />
     </NavigationBarLayout>
   );
 };

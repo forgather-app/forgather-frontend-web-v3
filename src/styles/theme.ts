@@ -104,6 +104,7 @@ export const theme = {
     },
     semantic: {
       alertRed: "#FF4B4B",
+      accent: "#FF4242",
       black: "#111111",
     },
     button: {

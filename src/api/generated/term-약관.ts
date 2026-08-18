@@ -195,3 +195,167 @@ export function useGetLatestTermsSuspense<TData = Awaited<ReturnType<typeof getL
 
 
 
+/**
+ * 로그인한 호스트의 약관별 동의 상태를 조회합니다. 약관 정보는 항상 타입별 최신 약관 기준이며 노출 순서(sortOrder) 오름차순으로 반환합니다. 약관이 실질적으로 개정되어 기존 동의가 무효화되면 isReagreementRequired가 true가 됩니다. 로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.
+ * @summary 내 약관 동의 현황 조회
+ */
+export type getMyTermAgreementsResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type getMyTermAgreementsResponseSuccess = (getMyTermAgreementsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getMyTermAgreementsResponse = (getMyTermAgreementsResponseSuccess)
+
+export const getGetMyTermAgreementsUrl = () => {
+
+
+  
+
+  return `/terms/me`
+}
+
+export const getMyTermAgreements = async ( options?: RequestInit): Promise<getMyTermAgreementsResponse> => {
+  
+  return customFetcher<getMyTermAgreementsResponse>(getGetMyTermAgreementsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetMyTermAgreementsQueryKey = () => {
+    return [
+    `/terms/me`
+    ] as const;
+    }
+
+    
+export const getGetMyTermAgreementsQueryOptions = <TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyTermAgreementsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyTermAgreements>>> = ({ signal }) => getMyTermAgreements({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyTermAgreementsQueryResult = NonNullable<Awaited<ReturnType<typeof getMyTermAgreements>>>
+export type GetMyTermAgreementsQueryError = unknown
+
+
+export function useGetMyTermAgreements<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyTermAgreements>>,
+          TError,
+          Awaited<ReturnType<typeof getMyTermAgreements>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTermAgreements<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyTermAgreements>>,
+          TError,
+          Awaited<ReturnType<typeof getMyTermAgreements>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTermAgreements<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 내 약관 동의 현황 조회
+ */
+
+export function useGetMyTermAgreements<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyTermAgreementsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetMyTermAgreementsSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMyTermAgreementsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyTermAgreements>>> = ({ signal }) => getMyTermAgreements({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMyTermAgreementsSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getMyTermAgreements>>>
+export type GetMyTermAgreementsSuspenseQueryError = unknown
+
+
+export function useGetMyTermAgreementsSuspense<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTermAgreementsSuspense<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMyTermAgreementsSuspense<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 내 약관 동의 현황 조회
+ */
+
+export function useGetMyTermAgreementsSuspense<TData = Awaited<ReturnType<typeof getMyTermAgreements>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getMyTermAgreements>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMyTermAgreementsSuspenseQueryOptions(options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+

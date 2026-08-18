@@ -6,7 +6,9 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import { CONSTRAINTS } from "@/constants/constraints";
+import GuestBookConfirmModal from "./components/GuestBookConfirmModal/GuestBookConfirmModal";
 import * as S from "./GuestBookWritePage.styles";
+import { useGuestBookSubmit } from "./hooks/useGuestBookSubmit";
 import { useGuestBookWriteForm } from "./hooks/useGuestBookWriteForm";
 
 interface GuestBookWritePageProps {
@@ -32,13 +34,28 @@ const GuestBookWritePage = ({
     isValid,
     photos,
     setPhotos,
-    isSubmitting,
-    getSubmitHandler,
-  } = useGuestBookWriteForm(spaceCode);
+    isConfirmOpen,
+    confirmedValues,
+    openConfirm,
+    closeConfirm,
+  } = useGuestBookWriteForm();
+  const { submit, isSubmitting } = useGuestBookSubmit();
+
+  const handleConfirm = () => {
+    submit(
+      {
+        spaceCode,
+        nickname: confirmedValues.nickname,
+        message: confirmedValues.message,
+        photos,
+      },
+      onSuccess,
+    );
+  };
 
   return (
     <NavigationBarLayout title="방명록 남기기" onBackClick={onBack}>
-      <S.PageWrapper onSubmit={getSubmitHandler(onSuccess)} noValidate>
+      <S.PageWrapper onSubmit={openConfirm} noValidate>
         <S.FieldsWrapper>
           <S.FieldGroup>
             <S.LabelRow>
@@ -112,13 +129,15 @@ const GuestBookWritePage = ({
         </S.FieldsWrapper>
 
         <S.Footer>
-          <Button
-            text="작성하기"
-            type="submit"
-            disabled={!isValid || isSubmitting}
-          />
+          <Button text="작성하기" type="submit" disabled={!isValid} />
         </S.Footer>
       </S.PageWrapper>
+      <GuestBookConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={closeConfirm}
+        onConfirm={handleConfirm}
+        isSubmitting={isSubmitting}
+      />
     </NavigationBarLayout>
   );
 };
