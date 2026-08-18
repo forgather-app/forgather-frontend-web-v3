@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import CreateSpacePage from "@/pages/createSpace/CreateSpacePage";
 
 export const Route = createFileRoute("/_appOnly/_authenticated/create-space/")({
@@ -6,5 +6,16 @@ export const Route = createFileRoute("/_appOnly/_authenticated/create-space/")({
 });
 
 function RouteComponent() {
-  return <CreateSpacePage />;
+  const navigate = useNavigate();
+
+  return (
+    <CreateSpacePage
+      onSuccess={(spaceCode) =>
+        navigate({
+          to: "/spaces/$spaceId",
+          params: { spaceId: spaceCode },
+        })
+      }
+    />
+  );
 }
