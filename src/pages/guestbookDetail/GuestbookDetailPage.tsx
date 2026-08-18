@@ -10,14 +10,14 @@ import type {
   GuestBookResponse,
 } from "@/api/model";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
+import GuestbookAttachedPhoto from "@/components/@common/GuestbookAttachedPhoto/GuestbookAttachedPhoto";
+import GuestbookDetailHeader from "@/components/@common/GuestbookDetailHeader/GuestbookDetailHeader";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ImageLightbox, {
   type LightboxImage,
 } from "@/components/UI/ImageLightbox/ImageLightbox";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { getImageUrl } from "@/utils/getImageUrl";
-import GuestbookAttachedPhoto from "./components/guestbookAttachedPhoto/GuestbookAttachedPhoto";
-import GuestbookDetailHeader from "./components/guestbookDetailHeader/GuestbookDetailHeader";
 import * as S from "./GuestbookDetailPage.styles";
 
 interface GuestbookDetailPageProps {
