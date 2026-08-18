@@ -32,5 +32,7 @@ export interface SpaceResponse {
    * @nullable
    */
   guestBookCardCount?: number | null;
+  /** '지금 축하받고 있는 스페이스'로 지정되었는지 여부 */
+  isFeatured?: boolean;
   host?: SpaceHostInfoResponse;
 }

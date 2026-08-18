@@ -4,9 +4,11 @@ import { withApiVersion } from "@/api/apiVersion";
 import { useGetProfile } from "@/api/generated/host-호스트";
 import { useGetV3 } from "@/api/generated/product-전시-작품";
 import {
+  getGetSpaceInformationQueryKey,
   getGetSpacesInformationQueryKey,
   useDelete,
   useGetSpaceInformation,
+  useUnfeatureSpaces,
 } from "@/api/generated/space-스페이스";
 import type {
   ApiResponseHostProfileResponse,
@@ -26,6 +28,7 @@ import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
+import { ERROR_MESSAGES } from "@/constants/error";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
@@ -41,8 +44,6 @@ interface ArtworkPageProps {
   onEditClick?: () => void;
   /** 스페이스 삭제 성공 후 호출되는 핸들러 (예: 홈으로 이동) */
   onDeleteSuccess?: () => void;
-  /** 더보기 메뉴의 진행 해제하기 클릭 핸들러 */
-  onUnfeatureClick?: () => void;
   /** 작품 추가 버튼 클릭 핸들러 */
   onAddArtworkClick?: () => void;
   /** 작품 카드 클릭 핸들러 */
@@ -53,7 +54,6 @@ const ArtworkPage = ({
   spaceId,
   onEditClick = () => {},
   onDeleteSuccess = () => {},
-  onUnfeatureClick = () => {},
   onAddArtworkClick = () => {},
   onArtworkClick = () => {},
 }: ArtworkPageProps) => {
@@ -64,6 +64,7 @@ const ArtworkPage = ({
   const { showSnackBar } = useSnackBar();
   const queryClient = useQueryClient();
   const { mutate: deleteSpace } = useDelete();
+  const { mutate: unfeatureSpace } = useUnfeatureSpaces();
 
   const handleConfirmDelete = () => {
     deleteSpace(
@@ -80,6 +81,26 @@ const ArtworkPage = ({
         onError: () => {
           setIsDeleteConfirmOpen(false);
           showSnackBar("스페이스 삭제에 실패했어요", "error");
+        },
+      },
+    );
+  };
+
+  const handleUnfeature = () => {
+    unfeatureSpace(
+      { data: { spaceCodes: [spaceId] } },
+      {
+        onSuccess: () => {
+          showSnackBar("진행을 해제했어요", "alert");
+          queryClient.invalidateQueries({
+            queryKey: getGetSpacesInformationQueryKey(),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getGetSpaceInformationQueryKey(spaceId),
+          });
+        },
+        onError: () => {
+          showSnackBar(ERROR_MESSAGES.SPACE_UNFEATURE_FAILED, "error");
         },
       },
     );
@@ -165,7 +186,11 @@ const ArtworkPage = ({
                     label: "삭제하기",
                     onClick: () => setIsDeleteConfirmOpen(true),
                   },
-                  { label: "진행 해제하기", onClick: onUnfeatureClick },
+                  {
+                    label: "진행 해제하기",
+                    onClick: handleUnfeature,
+                    disabled: !space?.isFeatured,
+                  },
                 ]}
               />
             </S.MenuWrapper>
@@ -239,7 +264,11 @@ const ArtworkPage = ({
                   label: "삭제하기",
                   onClick: () => setIsDeleteConfirmOpen(true),
                 },
-                { label: "진행 해제하기", onClick: onUnfeatureClick },
+                {
+                  label: "진행 해제하기",
+                  onClick: handleUnfeature,
+                  disabled: !space?.isFeatured,
+                },
               ]}
             />
           </S.MenuWrapper>
