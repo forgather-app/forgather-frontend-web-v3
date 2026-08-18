@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import GuestBookWritePage from "@/pages/guestBookWrite/GuestBookWritePage";
 
-export const Route = createFileRoute("/spaces/$spaceId/guestbook/write")({
+export const Route = createFileRoute("/spaces/$spaceId/guest/guestbook/write")({
   component: RouteComponent,
 });
 

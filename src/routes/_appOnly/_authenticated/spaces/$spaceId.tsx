@@ -41,7 +41,7 @@ function RouteComponent() {
     return <Outlet />;
   }
 
-  const writeUrl = `${window.location.origin}/spaces/${spaceId}/guestbook/write`;
+  const writeUrl = `${window.location.origin}/spaces/${spaceId}/guest`;
 
   return (
     <>

@@ -110,7 +110,7 @@ export const Default: Story = {
     },
   },
   render: () => (
-    <InteractiveStory qrValue="https://forgather.app/spaces/1/guestbook/write" />
+    <InteractiveStory qrValue="https://forgather.app/spaces/1/guest/guestbook/write" />
   ),
 };
 
