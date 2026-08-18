@@ -1,8 +1,13 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
 import { useGetProfile } from "@/api/generated/host-호스트";
 import { useGetV3 } from "@/api/generated/product-전시-작품";
-import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
+import {
+  getGetSpacesInformationQueryKey,
+  useDelete,
+  useGetSpaceInformation,
+} from "@/api/generated/space-스페이스";
 import type {
   ApiResponseHostProfileResponse,
   ApiResponseProductsResponse,
@@ -15,11 +20,14 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
+import Button from "@/components/@common/Button/Button";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
+import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
 import * as S from "./ArtworkPage.styles";
 
@@ -31,8 +39,8 @@ interface ArtworkPageProps {
   spaceId: string;
   /** 전시 정보 수정 버튼 클릭 핸들러 */
   onEditClick?: () => void;
-  /** 더보기 메뉴의 삭제하기 클릭 핸들러 */
-  onDeleteClick?: () => void;
+  /** 스페이스 삭제 성공 후 호출되는 핸들러 (예: 홈으로 이동) */
+  onDeleteSuccess?: () => void;
   /** 더보기 메뉴의 진행 해제하기 클릭 핸들러 */
   onUnfeatureClick?: () => void;
   /** 작품 추가 버튼 클릭 핸들러 */
@@ -44,7 +52,7 @@ interface ArtworkPageProps {
 const ArtworkPage = ({
   spaceId,
   onEditClick = () => {},
-  onDeleteClick = () => {},
+  onDeleteSuccess = () => {},
   onUnfeatureClick = () => {},
   onAddArtworkClick = () => {},
   onArtworkClick = () => {},
@@ -52,6 +60,30 @@ const ArtworkPage = ({
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [activeArtworkIndex, setActiveArtworkIndex] = useState(0);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const { showSnackBar } = useSnackBar();
+  const queryClient = useQueryClient();
+  const { mutate: deleteSpace } = useDelete();
+
+  const handleConfirmDelete = () => {
+    deleteSpace(
+      { spaceCode: spaceId },
+      {
+        onSuccess: () => {
+          setIsDeleteConfirmOpen(false);
+          showSnackBar("스페이스를 삭제했어요", "alert");
+          queryClient.invalidateQueries({
+            queryKey: getGetSpacesInformationQueryKey(),
+          });
+          onDeleteSuccess();
+        },
+        onError: () => {
+          setIsDeleteConfirmOpen(false);
+          showSnackBar("스페이스 삭제에 실패했어요", "error");
+        },
+      },
+    );
+  };
 
   const { data: profile } = useGetProfile({
     query: {
@@ -129,7 +161,10 @@ const ArtworkPage = ({
                 isOpen={isMoreMenuOpen}
                 onClose={() => setIsMoreMenuOpen(false)}
                 items={[
-                  { label: "삭제하기", onClick: onDeleteClick },
+                  {
+                    label: "삭제하기",
+                    onClick: () => setIsDeleteConfirmOpen(true),
+                  },
                   { label: "진행 해제하기", onClick: onUnfeatureClick },
                 ]}
               />
@@ -200,7 +235,10 @@ const ArtworkPage = ({
               isOpen={isMoreMenuOpen}
               onClose={() => setIsMoreMenuOpen(false)}
               items={[
-                { label: "삭제하기", onClick: onDeleteClick },
+                {
+                  label: "삭제하기",
+                  onClick: () => setIsDeleteConfirmOpen(true),
+                },
                 { label: "진행 해제하기", onClick: onUnfeatureClick },
               ]}
             />
@@ -291,6 +329,35 @@ const ArtworkPage = ({
       )}
 
       <S.BottomSpacer />
+
+      <Modal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+      >
+        <Modal.Overlay />
+        <Modal.Content>
+          <S.ConfirmBody>
+            <S.ConfirmTextGroup>
+              <S.ConfirmTitle>스페이스를 삭제할까요?</S.ConfirmTitle>
+              <S.ConfirmSubtitle>삭제하면 되돌릴 수 없어요</S.ConfirmSubtitle>
+            </S.ConfirmTextGroup>
+            <S.ConfirmActions>
+              <Button
+                variant="tertiary"
+                text="취소"
+                onClick={() => setIsDeleteConfirmOpen(false)}
+                style={{ flex: 1 }}
+              />
+              <Button
+                variant="primary"
+                text="삭제하기"
+                onClick={handleConfirmDelete}
+                style={{ flex: 1 }}
+              />
+            </S.ConfirmActions>
+          </S.ConfirmBody>
+        </Modal.Content>
+      </Modal>
     </S.ScrollArea>
   );
 };
