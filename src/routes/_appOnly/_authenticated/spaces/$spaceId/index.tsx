@@ -16,6 +16,7 @@ function RouteComponent() {
       spaceId={spaceId}
       // TODO: 전시 정보 수정 페이지 이동 연동
       onEditClick={() => {}}
+      onDeleteSuccess={() => navigate({ to: "/home" })}
       onAddArtworkClick={() =>
         navigate({ to: "/spaces/$spaceId/create-product", params: { spaceId } })
       }
