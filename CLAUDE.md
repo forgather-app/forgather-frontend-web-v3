@@ -206,7 +206,7 @@ fill-ing/
 ├── src/
 │   ├── api/             # API 관련 코드
 │   │   ├── customFetcher.ts  # Orval용 커스텀 fetch 함수
-│   │   ├── generated.ts      # Orval 자동 생성 API 클라이언트 (수정 금지, orval 실행 후 생성)
+│   │   ├── generated/        # Orval 자동 생성 API 클라이언트, 태그(도메인)별 파일로 분리 (수정 금지, orval 실행 후 생성)
 │   │   └── model/            # Orval 자동 생성 타입 모델 (수정 금지, orval 실행 후 생성)
 │   ├── assets/          # 이미지, 폰트 등 정적 자산
 │   │   ├── icons/       # SVG 아이콘 (React 컴포넌트로 임포트)
@@ -412,15 +412,15 @@ npx orval
 ```
 
 - **입력**: `https://api.dev.forgather.app/v3/api-docs` (OpenAPI 스펙)
-- **출력**: `src/api/generated.ts` (API 훅), `src/api/model/` (타입 모델)
-- **주의**: `generated.ts`와 `model/` 디렉토리의 파일은 자동 생성되므로 직접 수정하지 않습니다
+- **출력**: `src/api/generated/` (API 훅, 태그(도메인)별 파일로 분리), `src/api/model/` (타입 모델)
+- **주의**: `generated/`와 `model/` 디렉토리의 파일은 자동 생성되므로 직접 수정하지 않습니다
 - **커스텀 fetcher**: `src/api/customFetcher.ts`에서 fetch 로직을 커스터마이징
 
 ```typescript
-// 생성된 훅 사용 예시
-import { useGetSongs } from "@/api/generated";
+// 생성된 훅 사용 예시 (태그별 파일에서 직접 import)
+import { useCreate } from "@/api/generated/space-스페이스";
 
-const { data } = useGetSongs(); // useSuspenseQuery 기반
+const { mutate: createSpace } = useCreate(); // useMutation 기반
 ```
 
 ## 주의사항

@@ -9,23 +9,23 @@ import type {
   GuestBookCardResponse,
   GuestBookResponse,
 } from "@/api/model";
-import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
+import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
 import GuestbookAttachedPhoto from "@/components/@common/GuestbookAttachedPhoto/GuestbookAttachedPhoto";
 import GuestbookDetailHeader from "@/components/@common/GuestbookDetailHeader/GuestbookDetailHeader";
-import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
+import GuestHeader from "@/components/@common/GuestHeader/GuestHeader";
 import ImageLightbox, {
   type LightboxImage,
 } from "@/components/UI/ImageLightbox/ImageLightbox";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { getImageUrl } from "@/utils/getImageUrl";
-import * as S from "./GuestbookDetailPage.styles";
+import * as S from "./GuestGuestbookDetailPage.styles";
 
-interface GuestbookDetailPageProps {
+interface GuestGuestbookDetailPageProps {
   /** 스페이스 ID */
   spaceId: string;
   /** 현재 보고 있는 카드 ID */
   currentId: number;
-  /** 뒤로가기 핸들러 */
+  /** 뒤로가기(방명록 목록으로 이동) 핸들러 */
   onBack: () => void;
   /** 이전/다음 카드로 이동 핸들러 */
   onNavigate: (id: number) => void;
@@ -42,18 +42,13 @@ const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
     },
   });
 
-const GuestbookDetailPage = ({
+const GuestGuestbookDetailPage = ({
   spaceId,
   currentId,
   onBack,
   onNavigate,
-}: GuestbookDetailPageProps) => {
+}: GuestGuestbookDetailPageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  // 닫힘 애니메이션 동안 Modal이 언마운트되지 않으므로, onClose에서 images를 비우면
-  // 잠깐 "n / 0"처럼 잘못된 카운터가 보입니다. 닫을 때는 isOpen만 false로 바꾸고
-  // 마지막으로 열었던 카드 데이터는 그대로 유지합니다.
-  // openId는 열 때마다 증가시켜 ImageLightbox의 key로 사용합니다 — 같은 카드를 다시 열어도
-  // 항상 리마운트되어 첫 번째 이미지부터 시작합니다.
   const lightboxOpenIdRef = useRef(0);
   const [lightboxCard, setLightboxCard] = useState<{
     openId: number;
@@ -101,25 +96,19 @@ const GuestbookDetailPage = ({
 
   return (
     <S.Wrapper>
-      <NavigationBar
-        onBackClick={onBack}
-        rightContent={
-          <IcVerticalDots width={24} height={24} aria-hidden="true" />
-        }
-        rightAriaLabel="더보기"
-        // TODO: 케밥 메뉴(수정/삭제/신고 등) 액션 연동 필요
-        onRightClick={() => {}}
-      />
-      <GuestbookDetailHeader
-        nickname={nickname}
-        createdAt={createdAt}
-        onPrevClick={
-          prevId !== undefined ? () => onNavigate(prevId) : undefined
-        }
-        onNextClick={
-          nextId !== undefined ? () => onNavigate(nextId) : undefined
-        }
-      />
+      <GuestHeader />
+      <S.DetailHeaderWrapper>
+        <GuestbookDetailHeader
+          nickname={nickname}
+          createdAt={createdAt}
+          onPrevClick={
+            prevId !== undefined ? () => onNavigate(prevId) : undefined
+          }
+          onNextClick={
+            nextId !== undefined ? () => onNavigate(nextId) : undefined
+          }
+        />
+      </S.DetailHeaderWrapper>
       <S.ScrollArea>
         <SwiperAction
           activeIndex={currentIndex}
@@ -176,6 +165,14 @@ const GuestbookDetailPage = ({
           })}
         />
       </S.ScrollArea>
+
+      <S.BottomBar>
+        <S.BackButton type="button" onClick={onBack}>
+          <IcLeftArrow width={20} height={20} aria-hidden />
+          뒤로 가기
+        </S.BackButton>
+      </S.BottomBar>
+
       <ImageLightbox
         key={lightboxCard?.openId}
         isOpen={isLightboxOpen}
@@ -186,4 +183,4 @@ const GuestbookDetailPage = ({
   );
 };
 
-export default GuestbookDetailPage;
+export default GuestGuestbookDetailPage;
