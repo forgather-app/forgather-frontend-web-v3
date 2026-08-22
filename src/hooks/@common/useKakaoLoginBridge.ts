@@ -5,13 +5,14 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
 // NOTE: RN → Web 메시지 형식
-// 성공: { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string } }
+// 성공: { type: 'KAKAO_TOKEN', payload: { access_token: string; id_token?: string; nonce?: string } }
 // 취소/실패: { type: 'KAKAO_LOGIN_ERROR' }
 interface KakaoTokenMessage {
   type: "KAKAO_TOKEN";
   payload: {
     access_token: string;
     id_token?: string;
+    nonce?: string;
   };
 }
 
@@ -37,6 +38,7 @@ const useKakaoLoginBridge = (redirectTo?: string) => {
           data: {
             access_token: payload.access_token,
             id_token: payload.id_token,
+            raw_nonce: payload.nonce,
           },
         },
         {
