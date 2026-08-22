@@ -6,6 +6,9 @@ type ActiveState = "active" | "inactive";
 
 const containerVariants: Record<Variant, (theme: Theme) => string> = {
   pill: (theme) => `
+    flex: 1;
+    min-width: 0;
+    max-width: 208px;
     height: 58px;
     background-color: ${theme.colors.gray.gray600};
     border-radius: 999px;
@@ -36,12 +39,12 @@ const tabButtonVariants: Record<
   pill: {
     active: (theme) => `
       padding: 12px 16px;
-      min-width: 91px;
+      min-width: 0;
       color: ${theme.colors.gray.gray50};
     `,
     inactive: (theme) => `
       padding: 12px 16px;
-      min-width: 91px;
+      min-width: 0;
       color: ${theme.colors.gray.gray400};
     `,
   },
