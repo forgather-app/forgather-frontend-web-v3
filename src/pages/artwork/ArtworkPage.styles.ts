@@ -139,12 +139,6 @@ export const MoreButton = styled.button`
   color: ${({ theme }) => theme.colors.gray.gray300};
 `;
 
-export const Divider = styled.div`
-  height: 8px;
-  margin: 24px calc(-1 * ${({ theme }) => theme.layout.sidePadding}px) 0;
-  background-color: rgba(17, 17, 17, 0.7);
-`;
-
 export const SectionHeader = styled.div`
   display: flex;
   align-items: center;
