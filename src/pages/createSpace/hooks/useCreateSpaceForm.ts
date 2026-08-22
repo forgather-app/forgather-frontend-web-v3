@@ -6,6 +6,7 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
   validateSpaceDescriptionMaxLength,
+  validateSpaceLinkNameMaxLength,
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
@@ -13,6 +14,8 @@ import {
 interface CreateSpaceFormValues {
   spaceName: string;
   description: string;
+  linkUrl: string;
+  linkName: string;
 }
 
 const spaceNameRules = {
@@ -26,6 +29,10 @@ const descriptionRules = {
   validate: validateSpaceDescriptionMaxLength,
 };
 
+const linkNameRules = {
+  validate: validateSpaceLinkNameMaxLength,
+};
+
 export const useCreateSpaceForm = () => {
   const { showSnackBar } = useSnackBar();
   const {
@@ -34,7 +41,12 @@ export const useCreateSpaceForm = () => {
     formState: { errors, touchedFields, isValid },
   } = useForm<CreateSpaceFormValues>({
     mode: "onChange",
-    defaultValues: { spaceName: "", description: "" },
+    defaultValues: {
+      spaceName: "",
+      description: "",
+      linkUrl: "",
+      linkName: "",
+    },
   });
 
   const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(false);
@@ -45,6 +57,7 @@ export const useCreateSpaceForm = () => {
       ? undefined
       : errors.spaceName?.message;
   const descriptionError = errors.description?.message;
+  const linkNameError = errors.linkName?.message;
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
     handleSubmit((values) => {
@@ -54,6 +67,8 @@ export const useCreateSpaceForm = () => {
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
+            linkUrl: values.linkUrl.trim(),
+            linkName: values.linkName.trim(),
           },
         },
         {
@@ -81,8 +96,10 @@ export const useCreateSpaceForm = () => {
     control,
     spaceNameRules,
     descriptionRules,
+    linkNameRules,
     spaceNameError,
     descriptionError,
+    linkNameError,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,

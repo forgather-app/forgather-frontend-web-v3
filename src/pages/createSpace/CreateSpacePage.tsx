@@ -21,8 +21,10 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
     control,
     spaceNameRules,
     descriptionRules,
+    linkNameRules,
     spaceNameError,
     descriptionError,
+    linkNameError,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
@@ -81,6 +83,43 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-label="스페이스 소개"
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        <S.FieldGroup>
+          <S.FieldLabelRow>
+            <S.Label>링크</S.Label>
+          </S.FieldLabelRow>
+          <Controller
+            control={control}
+            name="linkUrl"
+            render={({ field }) => (
+              <TextField
+                variant="link"
+                value={field.value}
+                placeholder="전시와 관련된 링크를 첨부해주세요."
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-label="링크 URL"
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="linkName"
+            rules={linkNameRules}
+            render={({ field }) => (
+              <TextField
+                variant="count"
+                value={field.value}
+                maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
+                placeholder="링크 제목을 작성해주세요."
+                errorMessage={linkNameError}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-label="링크 제목"
               />
             )}
           />
