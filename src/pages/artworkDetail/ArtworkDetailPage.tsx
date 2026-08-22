@@ -41,6 +41,7 @@ const ArtworkDetailPage = ({
   onDeleteSuccess = () => {},
 }: ArtworkDetailPageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxStartIndex, setLightboxStartIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const { showSnackBar } = useSnackBar();
@@ -139,9 +140,23 @@ const ArtworkDetailPage = ({
 
   const title = artwork.title ?? "";
   const artistName = artwork.authorName ?? "";
-  const imageUrl = artwork.photos?.[0]?.path
-    ? getImageUrl(artwork.photos[0].path)
-    : undefined;
+  const images = (artwork.photos ?? [])
+    .map((photo) =>
+      photo.path
+        ? {
+            id: photo.id,
+            url: getImageUrl(photo.path),
+            order: photo.order ?? 0,
+          }
+        : null,
+    )
+    .filter((image): image is NonNullable<typeof image> => image !== null)
+    .sort((a, b) => a.order - b.order)
+    .map((image) => ({ id: image.id, url: image.url, name: title }));
+  const lightboxImages = [
+    ...images.slice(lightboxStartIndex),
+    ...images.slice(0, lightboxStartIndex),
+  ];
   const embedUrl = artwork.videoUrl
     ? getYoutubeEmbedUrl(artwork.videoUrl)
     : null;
@@ -162,14 +177,22 @@ const ArtworkDetailPage = ({
     </S.VideoSection>
   );
 
-  const imageSection = imageUrl && (
-    <S.ArtworkImageButton
-      type="button"
-      aria-label="작품 이미지 확대보기"
-      onClick={() => setIsLightboxOpen(true)}
-    >
-      <S.ArtworkImage src={imageUrl} alt={title} />
-    </S.ArtworkImageButton>
+  const imageSection = images.length > 0 && (
+    <S.ImageList>
+      {images.map((image, index) => (
+        <S.ArtworkImageButton
+          key={image.id ?? image.url}
+          type="button"
+          aria-label="작품 이미지 확대보기"
+          onClick={() => {
+            setLightboxStartIndex(index);
+            setIsLightboxOpen(true);
+          }}
+        >
+          <S.ArtworkImage src={image.url} alt={title} />
+        </S.ArtworkImageButton>
+      ))}
+    </S.ImageList>
   );
 
   return (
@@ -221,11 +244,11 @@ const ArtworkDetailPage = ({
         <S.Description>{artwork.description}</S.Description>
       </S.Content>
 
-      {imageUrl && (
+      {images.length > 0 && (
         <ImageLightbox
           isOpen={isLightboxOpen}
           onClose={() => setIsLightboxOpen(false)}
-          images={[{ url: imageUrl, name: title }]}
+          images={lightboxImages}
         />
       )}
 
