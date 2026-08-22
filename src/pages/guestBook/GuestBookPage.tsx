@@ -1,9 +1,11 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
+import { useReadUnreadGuestBook } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
+  GuestBookResponse,
 } from "@/api/model";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
@@ -60,10 +62,25 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
       (card): card is GuestBookCardSimpleResponse & { id: number } =>
         card.id !== undefined,
     );
-  const unreadCount = pages[0]?.unreadCount ?? 0;
-  const hasNewCards = unreadCount > 0;
   const totalCount = pages[0]?.totalCount ?? guestBookCards.length;
-  const firstUnreadCard = guestBookCards.find((card) => !card.isRead);
+
+  const { data: unreadGuestBook } = useReadUnreadGuestBook<GuestBookResponse>(
+    spaceId,
+    {
+      query: {
+        // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+        select: (response) =>
+          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
+      },
+    },
+  );
+  const unreadCards = (unreadGuestBook?.guestBookCards ?? []).filter(
+    (card): card is GuestBookCardSimpleResponse & { id: number } =>
+      card.id !== undefined,
+  );
+  const unreadCount = unreadGuestBook?.unreadCount ?? unreadCards.length;
+  const hasNewCards = unreadCards.length > 0;
+  const firstUnreadCard = unreadCards[0];
 
   const { targetRef } = useInfiniteScroll({
     hasNextPage,
@@ -111,15 +128,11 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.CountGroup>
       </S.TitleRow>
 
-      {hasNewCards && (
+      {hasNewCards && firstUnreadCard && (
         <S.GuestCardWrapper>
           <GuestListStack
             count={unreadCount}
-            onClick={
-              firstUnreadCard
-                ? () => onCardClick(firstUnreadCard.id)
-                : undefined
-            }
+            onClick={() => onCardClick(firstUnreadCard.id)}
           />
         </S.GuestCardWrapper>
       )}
