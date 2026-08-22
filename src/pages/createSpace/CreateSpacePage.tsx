@@ -30,7 +30,10 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
 
   return (
     <S.Container onSubmit={getSubmitHandler(onSuccess)} noValidate>
-      <NavigationBar title="새 스페이스" onBackClick={() => window.history.back()} />
+      <NavigationBar
+        title="새 스페이스"
+        onBackClick={() => window.history.back()}
+      />
       <S.Title>스페이스를 소개해주세요!</S.Title>
       <S.Main>
         <S.FieldGroup>
