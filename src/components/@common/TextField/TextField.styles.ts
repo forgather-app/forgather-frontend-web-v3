@@ -50,7 +50,7 @@ export const FieldRow = styled.div<{ $styleVariant: FieldRowStyleVariant }>`
 `;
 
 export const HashPrefix = styled.span`
-  ${({ theme }) => ({ ...theme.typography.subBody })};
+  ${({ theme }) => ({ ...theme.typography.body3 })};
   color: ${({ theme }) => theme.colors.gray.white};
   flex-shrink: 0;
 `;
@@ -60,10 +60,7 @@ export const Input = styled.input<InputProps>`
   min-width: 0;
   background: transparent;
   border: none;
-  ${({ $variant, theme }) =>
-    $variant === "count" || $variant === "category"
-      ? { ...theme.typography.subBody }
-      : { ...theme.typography.body3 }};
+  ${({ theme }) => ({ ...theme.typography.body3 })};
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 
