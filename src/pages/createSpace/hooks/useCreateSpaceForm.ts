@@ -7,6 +7,7 @@ import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
   validateSpaceDescriptionMaxLength,
   validateSpaceLinkNameMaxLength,
+  validateSpaceLinkUrlFormat,
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
@@ -31,6 +32,10 @@ const descriptionRules = {
 
 const linkNameRules = {
   validate: validateSpaceLinkNameMaxLength,
+};
+
+const linkUrlRules = {
+  validate: validateSpaceLinkUrlFormat,
 };
 
 export const useCreateSpaceForm = () => {
@@ -58,6 +63,7 @@ export const useCreateSpaceForm = () => {
       : errors.spaceName?.message;
   const descriptionError = errors.description?.message;
   const linkNameError = errors.linkName?.message;
+  const linkUrlError = errors.linkUrl?.message;
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
     handleSubmit((values) => {
@@ -97,9 +103,11 @@ export const useCreateSpaceForm = () => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    linkUrlRules,
     spaceNameError,
     descriptionError,
     linkNameError,
+    linkUrlError,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
