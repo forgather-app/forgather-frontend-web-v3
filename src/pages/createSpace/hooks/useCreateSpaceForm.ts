@@ -5,7 +5,6 @@ import type { ApiResponseCreateSpaceResponse } from "@/api/model";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
-  SPACE_LINK_URL_PREFIX,
   validateSpaceDescriptionMaxLength,
   validateSpaceLinkNameMaxLength,
   validateSpaceLinkUrlFormat,
@@ -78,17 +77,13 @@ export const useCreateSpaceForm = () => {
         return;
       }
 
-      const trimmedLinkUrl = values.linkUrl.trim();
-
       createSpace(
         {
           data: {
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
-            linkUrl: trimmedLinkUrl
-              ? `${SPACE_LINK_URL_PREFIX}${trimmedLinkUrl}`
-              : "",
+            linkUrl: values.linkUrl.trim(),
             linkName: values.linkName.trim(),
           },
         },

@@ -8,7 +8,6 @@ import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "./CreateSpacePage.styles";
-import LinkUrlField from "./components/linkUrlField/LinkUrlField";
 import { useCreateSpaceForm } from "./hooks/useCreateSpaceForm";
 
 interface CreateSpacePageProps {
@@ -99,7 +98,8 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
             control={control}
             name="linkUrl"
             render={({ field }) => (
-              <LinkUrlField
+              <TextField
+                variant="link"
                 value={field.value}
                 placeholder="전시와 관련된 링크를 첨부해주세요."
                 errorMessage={linkUrlError}
