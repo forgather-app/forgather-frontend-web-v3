@@ -63,7 +63,9 @@ export const useCreateSpaceForm = () => {
       : errors.spaceName?.message;
   const descriptionError = errors.description?.message;
   const linkNameError = errors.linkName?.message;
-  const linkUrlError = errors.linkUrl?.message;
+  const linkUrlError = touchedFields.linkUrl
+    ? errors.linkUrl?.message
+    : undefined;
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
     handleSubmit((values) => {
