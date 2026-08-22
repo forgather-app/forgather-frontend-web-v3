@@ -1,6 +1,10 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import { useKakaoLoginConfirm } from "@/api/generated/auth-인증";
+import {
+  getGetCurrentUserQueryKey,
+  useKakaoLoginConfirm,
+} from "@/api/generated/auth-인증";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
@@ -24,6 +28,7 @@ type KakaoBridgeMessage = KakaoTokenMessage | KakaoLoginErrorMessage;
 
 const useKakaoLoginBridge = (redirectTo?: string) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { showSnackBar } = useSnackBar();
   const { mutate: confirmLogin } = useKakaoLoginConfirm();
   // NOTE: react-query의 isPending은 BE confirmLogin 호출 구간만 커버함.
@@ -43,8 +48,11 @@ const useKakaoLoginBridge = (redirectTo?: string) => {
         },
         {
           // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
-          onSuccess: () => {
+          onSuccess: async () => {
             showSnackBar("로그인 완료", "alert");
+            await queryClient.invalidateQueries({
+              queryKey: getGetCurrentUserQueryKey(),
+            });
             navigate({ href: redirectTo ?? "/home" });
           },
           onError: () => {
@@ -54,7 +62,7 @@ const useKakaoLoginBridge = (redirectTo?: string) => {
         },
       );
     },
-    [confirmLogin, navigate, showSnackBar, redirectTo],
+    [confirmLogin, navigate, queryClient, showSnackBar, redirectTo],
   );
 
   useEffect(() => {
