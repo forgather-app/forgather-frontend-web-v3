@@ -12,6 +12,7 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import { getImageUrl } from "@/utils/getImageUrl";
 import * as S from "./GuestArtworkPage.styles";
@@ -61,12 +62,17 @@ const GuestArtworkPage = ({
     request: withApiVersion(3),
   });
 
+  const isPending = isSpacePending || isProductsPending;
+  const showSkeleton = useDelayedLoading(isPending);
+
   // TODO: 에러 UI 구현
   if (isSpaceError || isProductsError) {
     return;
   }
 
-  if (isSpacePending || isProductsPending) {
+  if (isPending) {
+    if (!showSkeleton) return null;
+
     return (
       <S.ScrollArea>
         <S.ProfileRow>

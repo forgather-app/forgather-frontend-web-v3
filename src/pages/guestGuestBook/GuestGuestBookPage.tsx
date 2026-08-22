@@ -11,6 +11,7 @@ import type {
 import GuestList from "@/components/@common/GuestList/GuestList";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import PrivateGuestBookOverlay from "./components/privateGuestBookOverlay/PrivateGuestBookOverlay";
@@ -97,10 +98,15 @@ const GuestGuestBookPage = ({
     },
   });
 
+  const isPending = isSpacePending || (isPublic && isGuestBookPending);
+  const showSkeleton = useDelayedLoading(isPending);
+
   // TODO: 에러 UI 구현
   if (isSpaceError) return;
 
-  if (isSpacePending || (isPublic && isGuestBookPending)) {
+  if (isPending) {
+    if (!showSkeleton) return null;
+
     return (
       <S.ScrollArea>
         <S.TitleRow>

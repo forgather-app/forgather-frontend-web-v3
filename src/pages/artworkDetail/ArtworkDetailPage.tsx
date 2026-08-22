@@ -15,6 +15,7 @@ import Button from "@/components/@common/Button/Button";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import Modal from "@/components/UI/Modal/Modal";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
@@ -87,6 +88,7 @@ const ArtworkDetailPage = ({
     },
     request: withApiVersion(1),
   });
+  const showSkeleton = useDelayedLoading(isPending);
 
   if (isError) {
     const isNotFound = isAxiosError(error) && error.response?.status === 404;
@@ -112,6 +114,8 @@ const ArtworkDetailPage = ({
   }
 
   if (isPending) {
+    if (!showSkeleton) return null;
+
     return (
       <S.ScrollArea>
         <S.Nav>

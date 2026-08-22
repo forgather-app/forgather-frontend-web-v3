@@ -29,6 +29,7 @@ import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
@@ -141,12 +142,17 @@ const ArtworkPage = ({
     request: withApiVersion(3),
   });
 
+  const isPending = isSpacePending || isProductsPending;
+  const showSkeleton = useDelayedLoading(isPending);
+
   // TODO: 에러 UI 구현
   if (isSpaceError || isProductsError) {
     return;
   }
 
-  if (isSpacePending || isProductsPending) {
+  if (isPending) {
+    if (!showSkeleton) return null;
+
     return (
       <S.ScrollArea>
         <S.ProfileRow>
