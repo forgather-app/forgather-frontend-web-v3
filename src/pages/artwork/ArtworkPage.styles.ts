@@ -200,7 +200,7 @@ export const EmptyStateIconWrapper = styled.div`
   justify-content: center;
   width: 48px;
   height: 48px;
-  border-radius: 12px;
+  border-radius: 14.4px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
   color: ${({ theme }) => theme.colors.gray.gray200};
 `;
