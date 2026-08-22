@@ -209,6 +209,88 @@ export const useSubmitOnboarding = <TError = unknown,
       return useMutation(getSubmitOnboardingMutationOptions(options), queryClient);
     }
     /**
+ * 액세스토큰과 리프레시토큰 쿠키를 만료시킵니다. 인증 없이 호출할 수 있습니다. stateless JWT 구조이므로 서버 측에서 발급된 토큰을 무효화하지는 않습니다. 클라이언트가 보관 중인 토큰은 직접 폐기해야 합니다.
+ * @summary 로그아웃
+ */
+export type logoutResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type logoutResponseSuccess = (logoutResponse200) & {
+  headers: Headers;
+};
+;
+
+export type logoutResponse = (logoutResponseSuccess)
+
+export const getLogoutUrl = () => {
+
+
+  
+
+  return `/auth/logout`
+}
+
+export const logout = async ( options?: RequestInit): Promise<logoutResponse> => {
+  
+  return customFetcher<logoutResponse>(getLogoutUrl(),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+  
+
+
+
+export const getLogoutMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext> => {
+
+const mutationKey = ['logout'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout>>, void> = () => {
+          
+
+          return  logout(requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type LogoutMutationResult = NonNullable<Awaited<ReturnType<typeof logout>>>
+    
+    export type LogoutMutationError = unknown
+
+    /**
+ * @summary 로그아웃
+ */
+export const useLogout = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof logout>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getLogoutMutationOptions(options), queryClient);
+    }
+    /**
  * Kakao 로그인 후 발급받은 액세스토큰을 전달하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 응답 바디와 HttpOnly 쿠키로 반환합니다.
  * @summary Kakao 로그인 완료
  */

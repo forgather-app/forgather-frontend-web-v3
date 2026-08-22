@@ -6,6 +6,8 @@ export interface DropdownItem {
   label: string;
   /** 클릭 핸들러. 호출 후 드롭다운은 자동으로 닫힙니다 */
   onClick: () => void;
+  /** 비활성화 여부 */
+  disabled?: boolean;
 }
 
 interface DropdownProps {
@@ -47,7 +49,10 @@ const Dropdown = ({ isOpen, onClose, items }: DropdownProps) => {
           key={item.label}
           type="button"
           role="menuitem"
+          disabled={item.disabled}
+          aria-disabled={item.disabled}
           onClick={() => {
+            if (item.disabled) return;
             item.onClick();
             onClose();
           }}

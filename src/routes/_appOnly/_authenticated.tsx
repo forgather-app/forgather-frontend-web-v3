@@ -33,16 +33,24 @@ function AuthenticatedLayout() {
   const onboardingCompleted = (data as unknown as ApiResponseHostResponse)?.data
     ?.onboardingCompleted;
 
+  // NOTE: location.href를 deps에 넣으면 navigate() 호출이 location을 바꾸고,
+  // 그게 다시 effect를 재실행시켜 redirectTo가 자기 자신을 감싸며 무한 navigate되는
+  // 루프가 생긴다. 최신 값만 읽고 deps에서는 제외한다.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: location.href를 deps에 넣으면 navigate가 재귀적으로 트리거되는 루프가 생김
   useEffect(() => {
     if (isSignUpRoute) return;
     if (isError) {
       showSnackBar("세션이 만료되었어요. 다시 로그인해주세요.", "error");
-      navigate({ to: "/login", search: { redirectTo: location.href } });
+      navigate({
+        to: "/login",
+        search: { redirectTo: location.href },
+      });
       return;
     }
     if (!isPending && !onboardingCompleted) {
       navigate({ to: "/sign-up" });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isError,
     isPending,
@@ -50,7 +58,6 @@ function AuthenticatedLayout() {
     isSignUpRoute,
     navigate,
     showSnackBar,
-    location.href,
   ]);
 
   const isAuthorized =

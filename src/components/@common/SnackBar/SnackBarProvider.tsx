@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import SnackBar from "./SnackBar/SnackBar";
 import { SnackBarContext } from "./SnackBarContext";
@@ -20,15 +20,17 @@ interface SnackBarState {
 const SnackBarProvider = ({ children }: { children: React.ReactNode }) => {
   const [snackBar, setSnackBar] = useState<SnackBarState | null>(null);
 
-  const showSnackBar = (
-    message: string,
-    iconType?: "alert" | "error" | "default",
-  ) => {
-    setSnackBar({ message, iconType });
-  };
+  const showSnackBar = useCallback(
+    (message: string, iconType?: "alert" | "error" | "default") => {
+      setSnackBar({ message, iconType });
+    },
+    [],
+  );
+
+  const contextValue = useMemo(() => ({ showSnackBar }), [showSnackBar]);
 
   return (
-    <SnackBarContext.Provider value={{ showSnackBar }}>
+    <SnackBarContext.Provider value={contextValue}>
       {children}
       {snackBar &&
         createPortal(

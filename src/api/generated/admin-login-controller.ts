@@ -27,19 +27,19 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
-export type logoutResponse200 = {
+export type logout1Response200 = {
   data: void
   status: 200
 }
 
-export type logoutResponseSuccess = (logoutResponse200) & {
+export type logout1ResponseSuccess = (logout1Response200) & {
   headers: Headers;
 };
 ;
 
-export type logoutResponse = (logoutResponseSuccess)
+export type logout1Response = (logout1ResponseSuccess)
 
-export const getLogoutUrl = () => {
+export const getLogout1Url = () => {
 
 
   
@@ -47,9 +47,9 @@ export const getLogoutUrl = () => {
   return `/admin/logout`
 }
 
-export const logout = async ( options?: RequestInit): Promise<logoutResponse> => {
+export const logout1 = async ( options?: RequestInit): Promise<logout1Response> => {
   
-  return customFetcher<logoutResponse>(getLogoutUrl(),
+  return customFetcher<logout1Response>(getLogout1Url(),
   {      
     ...options,
     method: 'POST'
@@ -61,11 +61,11 @@ export const logout = async ( options?: RequestInit): Promise<logoutResponse> =>
 
 
 
-export const getLogoutMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext> => {
+export const getLogout1MutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout1>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof logout1>>, TError,void, TContext> => {
 
-const mutationKey = ['logout'];
+const mutationKey = ['logout1'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -75,10 +75,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout>>, void> = () => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof logout1>>, void> = () => {
           
 
-          return  logout(requestOptions)
+          return  logout1(requestOptions)
         }
 
 
@@ -88,19 +88,19 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type LogoutMutationResult = NonNullable<Awaited<ReturnType<typeof logout>>>
+    export type Logout1MutationResult = NonNullable<Awaited<ReturnType<typeof logout1>>>
     
-    export type LogoutMutationError = unknown
+    export type Logout1MutationError = unknown
 
-    export const useLogout = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+    export const useLogout1 = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof logout1>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof logout>>,
+        Awaited<ReturnType<typeof logout1>>,
         TError,
         void,
         TContext
       > => {
-      return useMutation(getLogoutMutationOptions(options), queryClient);
+      return useMutation(getLogout1MutationOptions(options), queryClient);
     }
     export type loginResponse200 = {
   data: void

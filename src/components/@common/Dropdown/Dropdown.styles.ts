@@ -29,4 +29,9 @@ export const Item = styled.button`
   &:not(:last-child) {
     border-bottom: 1px solid ${({ theme }) => theme.colors.gray.gray500};
   }
+
+  &:disabled {
+    color: ${({ theme }) => theme.colors.gray.gray400};
+    cursor: not-allowed;
+  }
 `;

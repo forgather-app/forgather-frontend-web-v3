@@ -19,12 +19,16 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 사진을 업로드하지 못했어요. 잠시 후 다시 시도해 주세요",
   WITHDRAW_FAILED:
     "일시적인 오류로 탈퇴하지 못했어요. 잠시 후 다시 시도해 주세요",
+  LOGOUT_FAILED:
+    "일시적인 오류로 로그아웃하지 못했어요. 잠시 후 다시 시도해 주세요",
   PRODUCT_REGISTER_FAILED:
     "일시적인 오류로 작품을 등록하지 못했어요. 잠시 후 다시 시도해 주세요",
   GUEST_BOOK_LIST_LOAD_MORE_FAILED:
     "일시적인 오류로 방명록을 더 불러오지 못했어요. 잠시 후 다시 시도해 주세요",
   SPACE_FEATURE_FAILED:
     "일시적인 오류로 스페이스를 등록하지 못했어요. 잠시 후 다시 시도해 주세요",
+  SPACE_UNFEATURE_FAILED:
+    "일시적인 오류로 진행을 해제하지 못했어요. 잠시 후 다시 시도해 주세요",
   SPACE_CREATE_FAILED:
     "일시적인 오류로 스페이스를 만들지 못했어요. 잠시 후 다시 시도해 주세요",
 } as const;
