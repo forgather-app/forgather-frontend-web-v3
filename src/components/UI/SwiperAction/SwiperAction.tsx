@@ -93,7 +93,7 @@ const SwiperAction = ({
   };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 컨테이너 크기 변화에만 반응하면 되고, activeIndex 변경은 아래 별도 effect에서 처리
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
@@ -125,6 +125,8 @@ const SwiperAction = ({
 
       x.set(calculateLocation(activeIndex ?? 0));
     };
+
+    updateLayout(container.getBoundingClientRect().width);
 
     const observer = new ResizeObserver(([entry]) => {
       if (entry) updateLayout(entry.contentRect.width);
@@ -220,6 +222,7 @@ const SwiperAction = ({
     isDragging.current = true;
     startX.current = e.clientX;
     startY.current = e.clientY;
+    shouldPreventClick.current = false;
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
