@@ -349,7 +349,11 @@ const ArtworkPage = ({
               <ArtworkCard
                 key={artwork.id}
                 title={artwork.title ?? ""}
-                imageUrl={artwork.firstPhoto?.path}
+                imageUrl={
+                  artwork.firstPhoto?.path
+                    ? getImageUrl(artwork.firstPhoto.path)
+                    : undefined
+                }
                 onClick={() => onArtworkClick(artwork.id)}
               />
             ))}
