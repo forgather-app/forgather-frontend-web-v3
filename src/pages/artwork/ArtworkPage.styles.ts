@@ -5,6 +5,7 @@ import { shouldForwardProp } from "@/utils/shouldForwardProp";
 export const ScrollArea = styled.div`
   flex: 1;
   overflow-y: auto;
+  // NOTE: 좌우 끝까지 이어지도록 수정
   margin: 0 calc(-1 * ${({ theme }) => theme.layout.sidePadding}px);
   padding: 0 ${({ theme }) => theme.layout.sidePadding}px;
   scrollbar-width: none;
