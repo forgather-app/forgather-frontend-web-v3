@@ -5,6 +5,7 @@ import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
 } from "@/api/model";
+import GuestBookEmptyGraphic from "@/assets/images/guestbook_empty_placeholder.svg?react";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
@@ -124,17 +125,26 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.GuestCardWrapper>
       )}
 
-      <S.GuestListContainer>
-        {guestBookCards.map((card) => (
-          <GuestList
-            key={card.id}
-            nickname={card.nickname ?? ""}
-            hasPhoto={card.containsPhoto}
-            onClick={() => onCardClick(card.id)}
-          />
-        ))}
-        {hasNextPage && <S.ScrollSentinel ref={targetRef} />}
-      </S.GuestListContainer>
+      {guestBookCards.length === 0 ? (
+        <S.EmptyState>
+          <S.EmptyStateGraphic aria-hidden>
+            <GuestBookEmptyGraphic />
+          </S.EmptyStateGraphic>
+          <S.EmptyStateText>아직 방명록이 없어요</S.EmptyStateText>
+        </S.EmptyState>
+      ) : (
+        <S.GuestListContainer>
+          {guestBookCards.map((card) => (
+            <GuestList
+              key={card.id}
+              nickname={card.nickname ?? ""}
+              hasPhoto={card.containsPhoto}
+              onClick={() => onCardClick(card.id)}
+            />
+          ))}
+          {hasNextPage && <S.ScrollSentinel ref={targetRef} />}
+        </S.GuestListContainer>
+      )}
       <S.BottomSpacer />
     </S.ScrollArea>
   );
