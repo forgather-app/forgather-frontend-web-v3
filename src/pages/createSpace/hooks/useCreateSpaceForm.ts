@@ -5,6 +5,7 @@ import type { ApiResponseCreateSpaceResponse } from "@/api/model";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
+  SPACE_LINK_URL_PREFIX,
   validateSpaceDescriptionMaxLength,
   validateSpaceLinkNameMaxLength,
   validateSpaceLinkUrlFormat,
@@ -34,10 +35,6 @@ const linkNameRules = {
   validate: validateSpaceLinkNameMaxLength,
 };
 
-const linkUrlRules = {
-  validate: validateSpaceLinkUrlFormat,
-};
-
 export const useCreateSpaceForm = () => {
   const { showSnackBar } = useSnackBar();
   const {
@@ -55,6 +52,9 @@ export const useCreateSpaceForm = () => {
   });
 
   const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(false);
+  const [linkUrlError, setLinkUrlError] = useState<string | undefined>(
+    undefined,
+  );
   const { mutate: createSpace, isPending } = useCreate();
 
   const spaceNameError =
@@ -63,19 +63,32 @@ export const useCreateSpaceForm = () => {
       : errors.spaceName?.message;
   const descriptionError = errors.description?.message;
   const linkNameError = errors.linkName?.message;
-  const linkUrlError = touchedFields.linkUrl
-    ? errors.linkUrl?.message
-    : undefined;
+
+  // linkUrl은 onChange마다 검증하지 않고, blur 시점에만 검증해 에러를 노출함
+  const handleLinkUrlBlur = (value: string) => {
+    const result = validateSpaceLinkUrlFormat(value);
+    setLinkUrlError(result === true ? undefined : result);
+  };
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
     handleSubmit((values) => {
+      const linkUrlValidation = validateSpaceLinkUrlFormat(values.linkUrl);
+      if (linkUrlValidation !== true) {
+        setLinkUrlError(linkUrlValidation);
+        return;
+      }
+
+      const trimmedLinkUrl = values.linkUrl.trim();
+
       createSpace(
         {
           data: {
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
-            linkUrl: values.linkUrl.trim(),
+            linkUrl: trimmedLinkUrl
+              ? `${SPACE_LINK_URL_PREFIX}${trimmedLinkUrl}`
+              : "",
             linkName: values.linkName.trim(),
           },
         },
@@ -105,11 +118,11 @@ export const useCreateSpaceForm = () => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
-    linkUrlRules,
     spaceNameError,
     descriptionError,
     linkNameError,
     linkUrlError,
+    handleLinkUrlBlur,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
