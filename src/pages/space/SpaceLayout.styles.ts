@@ -7,7 +7,7 @@ export const BottomBar = styled.div`
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
   width: 100%;
   max-width: ${({ theme }) => theme.layout.maxWidth};
   padding: 0 24px;
