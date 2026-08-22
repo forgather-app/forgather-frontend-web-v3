@@ -7,7 +7,6 @@ export const Wrapper = styled.div`
   justify-content: center;
   gap: 32px;
   flex: 1;
-  padding-bottom: 120px;
 `;
 
 export const TextGroup = styled.div`
@@ -18,7 +17,7 @@ export const TextGroup = styled.div`
 
 export const Title = styled.p`
   ${({ theme }) => ({ ...theme.typography.heading1 })};
-  color: ${({ theme }) => theme.colors.gray.white};
+  color: ${({ theme }) => theme.colors.gray.gray50};
   text-align: center;
 `;
 
