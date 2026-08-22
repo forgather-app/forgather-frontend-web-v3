@@ -85,17 +85,6 @@ export const Title = styled.h1`
   -webkit-box-orient: vertical;
 `;
 
-export const EditButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  margin: -6px;
-  color: ${({ theme }) => theme.colors.gray.white};
-`;
-
 export const SpaceLink = styled.a`
   display: flex;
   align-items: center;

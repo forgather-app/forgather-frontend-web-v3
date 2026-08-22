@@ -17,7 +17,6 @@ import type {
   ProductsResponse,
   SpaceResponse,
 } from "@/api/model";
-import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
@@ -161,13 +160,6 @@ const ArtworkPage = ({
             <S.UserName>{profile?.nickname ?? ""}</S.UserName>
           </S.UserProfile>
           <S.ActionsWrapper>
-            <S.EditButton
-              type="button"
-              aria-label="전시 정보 수정"
-              onClick={onEditClick}
-            >
-              <IcEdit width={28} height={28} />
-            </S.EditButton>
             <S.MenuWrapper>
               <S.MoreMenuButton
                 type="button"
@@ -180,6 +172,10 @@ const ArtworkPage = ({
                 isOpen={isMoreMenuOpen}
                 onClose={() => setIsMoreMenuOpen(false)}
                 items={[
+                  {
+                    label: "수정하기",
+                    onClick: onEditClick,
+                  },
                   {
                     label: "삭제하기",
                     onClick: () => setIsDeleteConfirmOpen(true),
@@ -239,13 +235,6 @@ const ArtworkPage = ({
           <S.UserName>{profile?.nickname ?? ""}</S.UserName>
         </S.UserProfile>
         <S.ActionsWrapper>
-          <S.EditButton
-            type="button"
-            aria-label="전시 정보 수정"
-            onClick={onEditClick}
-          >
-            <IcEdit width={28} height={28} />
-          </S.EditButton>
           <S.MenuWrapper>
             <S.MoreMenuButton
               type="button"
@@ -258,6 +247,10 @@ const ArtworkPage = ({
               isOpen={isMoreMenuOpen}
               onClose={() => setIsMoreMenuOpen(false)}
               items={[
+                {
+                  label: "수정하기",
+                  onClick: onEditClick,
+                },
                 {
                   label: "삭제하기",
                   onClick: () => setIsDeleteConfirmOpen(true),
