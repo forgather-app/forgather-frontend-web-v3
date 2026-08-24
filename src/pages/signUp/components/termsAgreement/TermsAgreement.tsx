@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import IcCheckmark from "@/assets/icons/ic_checkmark.svg?react";
-import IcChevron from "@/assets/icons/ic_chevron.svg?react";
+import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import Modal from "@/components/UI/Modal/Modal";
 import { isAllTermsAgreed } from "@/pages/signUp/validate/validateTerms";
@@ -70,7 +70,7 @@ const TermsAgreement = ({ terms, value, onChange }: TermsAgreementProps) => {
                 <S.LabelText>{term.name}</S.LabelText>
                 {term.content && (
                   <S.ChevronIcon aria-hidden="true">
-                    <IcChevron width={6} height={10} />
+                    <IcChevronRight width={16} height={16} />
                   </S.ChevronIcon>
                 )}
               </S.ItemLabel>
