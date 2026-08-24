@@ -118,7 +118,11 @@ const MyPage = () => {
           <S.InquiryButton
             type="button"
             onClick={() => {
-              window.open("https://pf.kakao.com/_rHNtn", "_blank", "noopener,noreferrer");
+              window.open(
+                "https://pf.kakao.com/_rHNtn",
+                "_blank",
+                "noopener,noreferrer",
+              );
             }}
           >
             문의하기
