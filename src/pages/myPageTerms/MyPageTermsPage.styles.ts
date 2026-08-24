@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const Gap = styled.div`
   height: 24px;
@@ -41,13 +42,50 @@ export const AgreedLabel = styled.span`
   flex-shrink: 0;
 `;
 
-export const CheckboxIconWrapper = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const CheckboxWrapper = styled.div`
+  position: relative;
   width: 28px;
   height: 28px;
   flex-shrink: 0;
+
+  &:has(input:focus-visible) > span {
+    outline: 2px solid ${({ theme }) => theme.colors.main.purple};
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+`;
+
+export const HiddenInput = styled.input`
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+
+  &:disabled {
+    cursor: default;
+  }
+`;
+
+export const CheckIcon = styled("span", { shouldForwardProp })<{
+  $checked: boolean;
+}>`
+  position: absolute;
+  inset: 16.67%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme, $checked }) =>
+    $checked ? theme.colors.main.purple : theme.colors.gray.gray500};
+  transition: background-color 0.15s;
+
+  svg {
+    color: ${({ theme }) => theme.colors.gray.gray200};
+  }
 `;
 
 export const ModalInner = styled.div`

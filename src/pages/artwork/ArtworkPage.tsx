@@ -168,7 +168,7 @@ const ArtworkPage = ({
               aria-label="전시 정보 수정"
               onClick={onEditClick}
             >
-              <IcEdit width={28} height={28} />
+              <IcEdit />
             </S.EditButton>
             <S.MenuWrapper>
               <S.MoreMenuButton

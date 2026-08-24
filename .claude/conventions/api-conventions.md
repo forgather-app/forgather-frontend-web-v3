@@ -12,7 +12,7 @@ API 연동 작업을 하는 모든 작업에서 이 파일을 참조합니다.
   - 예외: OpenAPI 스펙이 실제 서버 동작(쿼리 파라미터 등)을 누락해 생성된 훅으로 표현이 불가능한 경우, `customFetcher`를 직접 호출하는 커스텀 쿼리로 대체할 수 있습니다. 이 경우 코드에 스펙 누락 사실과 실제 동작 근거를 주석으로 남깁니다 — [`GuestBookPage.tsx`](../../src/pages/guestBook/GuestBookPage.tsx)의 페이지네이션 처리(page/size 쿼리 파라미터 미문서화) 참고.
 - 생성/수정/삭제 등 부수효과가 있는 요청은 생성된 `useMutation` 기반 훅(`useXxx`)을 사용합니다.
 - 인증 토큰 첨부(`Authorization` 헤더)는 `src/api/apiClient.ts`의 요청 인터셉터가 전역으로 처리합니다. 컴포넌트에서 토큰을 직접 다루지 않습니다.
-- 서버 공통 에러 처리(401 재발급, 403 등)는 `apiClient.ts`의 응답 인터셉터에 아직 구현되어 있지 않습니다(TODO). 그 전까지는 **각 mutation 호출부에서 `onError`로 개별 처리**합니다.
+- 401(세션 만료)은 `apiClient.ts`의 응답 인터셉터가 전역으로 처리합니다(`/auth/refresh` 재발급 후 원요청 재시도, 재시도 후에도 실패하면 강제 로그아웃). 403 등 그 외 공통 에러 처리는 아직 구현되어 있지 않습니다(TODO). 그 전까지는 **각 mutation 호출부에서 `onError`로 개별 처리**합니다.
 
 ---
 
@@ -69,7 +69,7 @@ export const ERROR_MESSAGES = {
 
 - 에러 노출은 `src/hooks/@common/useSnackBar.ts`의 `showSnackBar(message, iconType)`를 사용합니다. `iconType`은 `"alert"`(성공/안내) 또는 `"error"`(실패)입니다.
 - `onError`에서는 스낵바 노출만 담당하고, 실패 시 화면 이동이 필요하면(예: 로그인 실패 후 로그인 페이지로 복귀) 함께 `navigate`를 호출합니다.
-- 공통 에러 인터셉터(401 재발급 등)가 도입되기 전까지, 개별 mutation의 `onError`가 유일한 에러 처리 지점입니다. 빠뜨리지 않도록 주의합니다.
+- 401(세션 만료)은 `apiClient.ts` 인터셉터가 전역 처리하므로 개별 mutation에서 별도 처리할 필요가 없습니다. 그 외 에러는 여전히 개별 mutation의 `onError`가 유일한 처리 지점이므로 빠뜨리지 않도록 주의합니다.
 
 ---
 
