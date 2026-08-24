@@ -14,11 +14,6 @@ export interface RegisterProductRequest {
    */
   title: string;
   /**
-   * 작품 카테고리
-   * @maxLength 20
-   */
-  category?: string;
-  /**
    * 작가명
    * @maxLength 35
    */
@@ -27,7 +22,7 @@ export interface RegisterProductRequest {
    * 작품 설명
    * @maxLength 2000
    */
-  description: string;
+  description?: string;
   /**
    * 임베드 영상 링크
    * @maxLength 512

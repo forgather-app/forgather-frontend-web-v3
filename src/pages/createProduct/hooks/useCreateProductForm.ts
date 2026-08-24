@@ -149,7 +149,6 @@ export const useCreateProductForm = (spaceCode: string) => {
           spaceCode,
           data: {
             title: values.title,
-            category: "",
             authorName: values.authorName.trim(),
             description: values.description,
             videoUrl: values.videoUrl.trim(),
