@@ -12,8 +12,6 @@ export interface ProductResponse {
   id?: number;
   /** 작품명 */
   title?: string;
-  /** 작품 카테고리 */
-  category?: string;
   /** 작가명 */
   authorName?: string;
   /** 작품 설명 */
