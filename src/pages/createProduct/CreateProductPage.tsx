@@ -28,9 +28,11 @@ const CreateProductPage = ({
     titleRules,
     authorNameRules,
     descriptionRules,
+    videoUrlRules,
     titleError,
     authorNameError,
     descriptionError,
+    videoUrlError,
     isValid,
     photos,
     setPhotos,
@@ -110,33 +112,36 @@ const CreateProductPage = ({
         </S.FieldGroup>
 
         <S.FieldGroup>
-          <S.Label>{`사진(최대 ${CONSTRAINTS.PRODUCT.MAX_PHOTO_COUNT}장)`}</S.Label>
-          <PhotoInput
-            photos={photos}
-            maxCount={CONSTRAINTS.PRODUCT.MAX_PHOTO_COUNT}
-            onChange={setPhotos}
-            icon={<IcPhoto aria-hidden="true" width={24} height={24} />}
-            showCoverBadge
-            addButtonAriaLabel="작품 사진 추가"
-            listAriaLabel="첨부한 작품 사진"
-          />
-        </S.FieldGroup>
-
-        <S.FieldGroup>
           <S.Label>영상</S.Label>
           <Controller
             control={control}
             name="videoUrl"
+            rules={videoUrlRules}
             render={({ field }) => (
               <TextField
                 variant="link"
                 value={field.value}
+                maxLength={CONSTRAINTS.PRODUCT.VIDEO_URL_MAX_LENGTH}
                 placeholder="유튜브 링크를 입력해주세요"
+                errorMessage={videoUrlError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-label="영상 링크"
               />
             )}
+          />
+        </S.FieldGroup>
+
+        <S.FieldGroup>
+          <S.Label>{`사진(최대 ${CONSTRAINTS.PRODUCT.MAX_PHOTO_COUNT}장)`}</S.Label>
+          <PhotoInput
+            photos={photos}
+            maxCount={CONSTRAINTS.PRODUCT.MAX_PHOTO_COUNT}
+            onChange={setPhotos}
+            icon={<IcPhoto aria-hidden="true" width={40} height={40} />}
+            showCoverBadge
+            addButtonAriaLabel="작품 사진 추가"
+            listAriaLabel="첨부한 작품 사진"
           />
         </S.FieldGroup>
       </S.ScrollArea>

@@ -60,10 +60,12 @@ export const Input = styled.input<InputProps>`
   min-width: 0;
   background: transparent;
   border: none;
-  ${({ $variant, theme }) =>
-    $variant === "count" || $variant === "category"
-      ? { ...theme.typography.subBody }
-      : { ...theme.typography.body3 }};
+  ${({ $variant, theme }) => {
+    if ($variant === "count" || $variant === "category")
+      return { ...theme.typography.subBody };
+    if ($variant === "link") return { ...theme.typography.body4 };
+    return { ...theme.typography.body3 };
+  }};
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 
@@ -100,9 +102,9 @@ export const Counter = styled.span<{ $styleVariant: FieldRowStyleVariant }>`
   flex-shrink: 0;
 `;
 
-export const ErrorMessage = styled.span<{ $align?: "left" | "right" }>`
+export const ErrorMessage = styled.span`
   display: block;
-  text-align: ${({ $align = "left" }) => $align};
+  text-align: left;
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.semantic.alertRed};
 `;

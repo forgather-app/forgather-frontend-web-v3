@@ -16,6 +16,8 @@ import {
   validateProductDescriptionMaxLength,
   validateProductTitleMaxLength,
   validateProductTitleRequired,
+  validateProductVideoUrlFormat,
+  validateProductVideoUrlMaxLength,
 } from "@/pages/createProduct/utils/createProductValidation";
 import { convertImageToWebp } from "@/utils/convertImageToWebp";
 
@@ -42,6 +44,14 @@ const authorNameRules = {
 /** 작품 소개 필드 검증 규칙 — 최대 글자 수(실시간 노출) */
 const descriptionRules = {
   validate: validateProductDescriptionMaxLength,
+};
+
+/** 영상 링크 필드 검증 규칙 — 최대 글자 수 + 유튜브 링크 형식(둘 다 실시간 노출) */
+const videoUrlRules = {
+  validate: {
+    maxLength: validateProductVideoUrlMaxLength,
+    format: validateProductVideoUrlFormat,
+  },
 };
 
 /** 작품 등록 폼 상태(react-hook-form) + 사진 업로드 + 등록 API 연동을 관리하는 훅 */
@@ -119,6 +129,7 @@ export const useCreateProductForm = (spaceCode: string) => {
       : errors.title?.message;
   const authorNameError = errors.authorName?.message;
   const descriptionError = errors.description?.message;
+  const videoUrlError = errors.videoUrl?.message;
 
   const getSubmitHandler = (onSuccess: () => void) =>
     handleSubmit(async (values) => {
@@ -160,9 +171,11 @@ export const useCreateProductForm = (spaceCode: string) => {
     titleRules,
     authorNameRules,
     descriptionRules,
+    videoUrlRules,
     titleError,
     authorNameError,
     descriptionError,
+    videoUrlError,
     isValid,
     photos,
     setPhotos,
