@@ -4,12 +4,13 @@ import * as S from "./HomeEmptyView.styles";
 const HomeEmptyView = () => {
   return (
     <S.Wrapper>
-      <HomeEmptyGraphic width={240} height={240} aria-hidden />
+      <HomeEmptyGraphic width={200} height={200} aria-hidden />
       <S.TextGroup>
         <S.Title>아직 스페이스가 없어요!</S.Title>
-        {/* TODO: 서브텍스트 문구 확정 필요 (디자인 placeholder) */}
         <S.SubText>
-          {"서브텍스트 서브텍스트\n서브텍스트 서브텍스트 서브텍스트"}
+          {
+            "스페이스에서는 작품을 등록하고,\n링크를 공유해 방명록을 받을 수 있어요."
+          }
         </S.SubText>
       </S.TextGroup>
     </S.Wrapper>
