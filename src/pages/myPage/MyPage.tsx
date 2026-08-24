@@ -118,7 +118,7 @@ const MyPage = () => {
           <S.InquiryButton
             type="button"
             onClick={() => {
-              // TODO: 문의 채널 확정 시 연결
+              window.open("https://pf.kakao.com/_rHNtn", "_blank", "noopener,noreferrer");
             }}
           >
             문의하기
