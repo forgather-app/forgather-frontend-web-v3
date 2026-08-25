@@ -153,10 +153,6 @@ const ArtworkDetailPage = ({
     .filter((image): image is NonNullable<typeof image> => image !== null)
     .sort((a, b) => a.order - b.order)
     .map((image) => ({ id: image.id, url: image.url, name: title }));
-  const lightboxImages = [
-    ...images.slice(lightboxStartIndex),
-    ...images.slice(0, lightboxStartIndex),
-  ];
   const embedUrl = artwork.videoUrl
     ? getYoutubeEmbedUrl(artwork.videoUrl)
     : null;
@@ -246,9 +242,11 @@ const ArtworkDetailPage = ({
 
       {images.length > 0 && (
         <ImageLightbox
+          key={lightboxStartIndex}
           isOpen={isLightboxOpen}
           onClose={() => setIsLightboxOpen(false)}
-          images={lightboxImages}
+          images={images}
+          startIndex={lightboxStartIndex}
         />
       )}
 
