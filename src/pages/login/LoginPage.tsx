@@ -61,16 +61,16 @@ const LoginPage = () => {
       }
     >
       <OnboardingSlide
-        title={"마음이 기록되는 곳,\n나만의 스페이스!"}
+        title={"전시의 감동이 기록되는 곳,\n나만의 스페이스!"}
         description={
-          "스페이스를 만들고, 소중한 사람들을 초대해보세요.\n방명록을 오래도록 모아서 볼 수 있어요."
+          "복잡한 준비 없이 링크 하나만으로\n방문객의 축하와 응원을 받아보세요!"
         }
         illustration={<OnboardingIllustration1 />}
       />
       <OnboardingSlide
-        title={"우리 모두의 스페이스,\n그리고 하나의 전시"}
+        title={"전시장 바깥에서 온\n응원까지 빠짐없이."}
         description={
-          "다른 작가님들과 함께 전시를 열고 있나요?\n모두의 스페이스를 하나의 전시로 연결해요!"
+          "직접 방문하지 못하는 분들도\n작품을 관람하고 방명록을 남길 수 있어요."
         }
         illustration={<OnboardingIllustration2 />}
       />

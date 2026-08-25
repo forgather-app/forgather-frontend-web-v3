@@ -56,6 +56,8 @@ export * from './apiResponseReportHistoryResponse';
 export * from './apiResponseReportHistoryResponseCode';
 export * from './apiResponseSpaceResponse';
 export * from './apiResponseSpaceResponseCode';
+export * from './apiResponseTermAgreementResponse';
+export * from './apiResponseTermAgreementResponseCode';
 export * from './apiResponseVoid';
 export * from './apiResponseVoidCode';
 export * from './apiResponseVoidData';
