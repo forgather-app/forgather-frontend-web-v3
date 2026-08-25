@@ -15,6 +15,9 @@ export const global = (theme: Theme) => css`
   #root {
     height: 100%;
   }
+  html {
+    background-color: ${theme.colors.gray.gray700};
+  }
   body {
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
     background-color: ${theme.colors.gray.gray700};
