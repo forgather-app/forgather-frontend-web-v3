@@ -14,11 +14,6 @@ export interface UpdateProductRequest {
    */
   title?: string;
   /**
-   * 작품 카테고리
-   * @maxLength 20
-   */
-  category?: string;
-  /**
    * 작가명
    * @maxLength 35
    */

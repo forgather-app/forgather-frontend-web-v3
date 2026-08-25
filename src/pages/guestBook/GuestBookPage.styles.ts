@@ -2,6 +2,8 @@ import styled from "@emotion/styled";
 import { gradientSweep } from "@/styles/animations";
 
 export const ScrollArea = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow-y: auto;
   scrollbar-width: none;
@@ -66,6 +68,35 @@ export const GuestListContainer = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.layout.cardGap}px;
   margin-top: 20px;
+`;
+
+export const EmptyState = styled.div`
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.layout.sectionGap}px;
+  padding-bottom: 120px;
+`;
+
+export const EmptyStateGraphic = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 164px;
+  height: 164px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+export const EmptyStateText = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body3 })};
+  color: ${({ theme }) => theme.colors.gray.gray300};
+  text-align: center;
 `;
 
 export const ScrollSentinel = styled.div`

@@ -1,10 +1,11 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
 import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
 } from "@/api/model";
+import GuestBookEmptyGraphic from "@/assets/images/guestbook_empty_placeholder.svg?react";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
@@ -31,6 +32,13 @@ const fetchGuestBookPage = (spaceId: string, page: number) =>
     withApiVersion(2),
   );
 
+// 생성된 useReadUnreadGuestBook 훅은 OpenAPI 스펙의 응답 미디어 타입 누락으로 응답 데이터가 Blob으로 잘못 타이핑되어 그대로 사용할 수 없다.
+// 위 방명록 목록 조회(v2)와 동일한 GuestBookResponse 스키마이므로 같은 방식으로 customFetcher를 직접 호출한다.
+const fetchUnreadGuestBook = (spaceId: string) =>
+  customFetcher<ApiResponseGuestBookResponse>(
+    `/spaces/${spaceId}/guestbook/unread`,
+  );
+
 const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
   const { showSnackBar } = useSnackBar();
 
@@ -54,6 +62,15 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     },
   });
 
+  const {
+    data: unreadData,
+    isPending: isUnreadPending,
+    isError: isUnreadError,
+  } = useQuery({
+    queryKey: ["guestbook", spaceId, "unread"],
+    queryFn: () => fetchUnreadGuestBook(spaceId),
+  });
+
   const pages = data?.pages.map((page) => page.data ?? {}) ?? [];
   const guestBookCards = pages
     .flatMap((page) => page.guestBookCards ?? [])
@@ -61,10 +78,16 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
       (card): card is GuestBookCardSimpleResponse & { id: number } =>
         card.id !== undefined,
     );
-  const unreadCount = pages[0]?.unreadCount ?? 0;
+
+  const unreadCount =
+    pages[0]?.unreadCount ?? unreadData?.data?.totalCount ?? 0;
   const hasNewCards = unreadCount > 0;
-  const totalCount = pages[0]?.totalCount ?? guestBookCards.length;
-  const firstUnreadCard = guestBookCards.find((card) => !card.isRead);
+  const readTotalCount = pages[0]?.totalCount ?? guestBookCards.length;
+  const totalCount = readTotalCount + unreadCount;
+  const firstUnreadCard = unreadData?.data?.guestBookCards?.find(
+    (card): card is GuestBookCardSimpleResponse & { id: number } =>
+      card.id !== undefined,
+  );
 
   const { targetRef } = useInfiniteScroll({
     hasNextPage,
@@ -81,12 +104,13 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     },
   });
 
-  const showSkeleton = useDelayedLoading(isPending);
+  const isLoading = isPending || isUnreadPending;
+  const showSkeleton = useDelayedLoading(isLoading);
 
   // TODO: 에러 UI 구현
-  if (isError) return;
+  if (isError || isUnreadError) return;
 
-  if (isPending) {
+  if (isLoading) {
     if (!showSkeleton) return null;
 
     return (
@@ -116,30 +140,35 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.CountGroup>
       </S.TitleRow>
 
-      {hasNewCards && (
+      {hasNewCards && firstUnreadCard && (
         <S.GuestCardWrapper>
           <GuestListStack
             count={unreadCount}
-            onClick={
-              firstUnreadCard
-                ? () => onCardClick(firstUnreadCard.id)
-                : undefined
-            }
+            onClick={() => onCardClick(firstUnreadCard.id)}
           />
         </S.GuestCardWrapper>
       )}
 
-      <S.GuestListContainer>
-        {guestBookCards.map((card) => (
-          <GuestList
-            key={card.id}
-            nickname={card.nickname ?? ""}
-            hasPhoto={card.containsPhoto}
-            onClick={() => onCardClick(card.id)}
-          />
-        ))}
-        {hasNextPage && <S.ScrollSentinel ref={targetRef} />}
-      </S.GuestListContainer>
+      {guestBookCards.length === 0 ? (
+        <S.EmptyState>
+          <S.EmptyStateGraphic aria-hidden>
+            <GuestBookEmptyGraphic />
+          </S.EmptyStateGraphic>
+          <S.EmptyStateText>아직 방명록이 없어요</S.EmptyStateText>
+        </S.EmptyState>
+      ) : (
+        <S.GuestListContainer>
+          {guestBookCards.map((card) => (
+            <GuestList
+              key={card.id}
+              nickname={card.nickname ?? ""}
+              hasPhoto={card.containsPhoto}
+              onClick={() => onCardClick(card.id)}
+            />
+          ))}
+          {hasNextPage && <S.ScrollSentinel ref={targetRef} />}
+        </S.GuestListContainer>
+      )}
       <S.BottomSpacer />
     </S.ScrollArea>
   );

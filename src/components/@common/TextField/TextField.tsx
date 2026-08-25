@@ -128,7 +128,7 @@ const TextField = ({
               )}
             </S.CountRow>
             {hasError && (
-              <S.ErrorMessage id={errorId} role="alert" $align="right">
+              <S.ErrorMessage id={errorId} role="alert">
                 {errorMessage}
               </S.ErrorMessage>
             )}
@@ -139,7 +139,7 @@ const TextField = ({
               <SearchIcon aria-hidden width={20} height={20} />
             )}
             {variant === "link" && (
-              <LinkIcon aria-hidden width={16} height={16} />
+              <LinkIcon aria-hidden width={20} height={20} />
             )}
             {variant === "category" && (
               <S.HashPrefix aria-hidden="true">#</S.HashPrefix>

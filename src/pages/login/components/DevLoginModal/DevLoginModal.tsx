@@ -1,6 +1,8 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useId, useState } from "react";
 import { useDevLogin } from "@/api/generated/auth-개발용-임시-로그인";
+import { getGetCurrentUserQueryKey } from "@/api/generated/auth-인증";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import { ERROR_MESSAGES } from "@/constants/error";
@@ -18,6 +20,7 @@ interface DevLoginModalProps {
 
 const DevLoginModal = ({ isOpen, onClose, redirectTo }: DevLoginModalProps) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { showSnackBar } = useSnackBar();
   const { mutate: devLogin, isPending } = useDevLogin();
   const [loginId, setLoginId] = useState("");
@@ -31,9 +34,12 @@ const DevLoginModal = ({ isOpen, onClose, redirectTo }: DevLoginModalProps) => {
       { data: { loginId, password } },
       {
         // NOTE: 인증 토큰은 서버가 응답 시 쿠키로 내려주므로 별도 저장 불필요
-        onSuccess: () => {
+        onSuccess: async () => {
           showSnackBar("로그인 완료", "alert");
           onClose();
+          await queryClient.invalidateQueries({
+            queryKey: getGetCurrentUserQueryKey(),
+          });
           navigate({ href: redirectTo ?? "/home" });
         },
         onError: () => {

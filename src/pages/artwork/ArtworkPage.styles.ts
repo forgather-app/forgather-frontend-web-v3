@@ -5,6 +5,9 @@ import { shouldForwardProp } from "@/utils/shouldForwardProp";
 export const ScrollArea = styled.div`
   flex: 1;
   overflow-y: auto;
+  // NOTE: 좌우 끝까지 이어지도록 수정
+  margin: 0 calc(-1 * ${({ theme }) => theme.layout.sidePadding}px);
+  padding: 0 ${({ theme }) => theme.layout.sidePadding}px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
@@ -38,6 +41,7 @@ export const UserAvatarImage = styled.img`
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  background-color: ${({ theme }) => theme.colors.semantic.black};
 `;
 
 export const UserName = styled.span`
@@ -84,17 +88,6 @@ export const Title = styled.h1`
   -webkit-box-orient: vertical;
 `;
 
-export const EditButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
-  height: 40px;
-  margin: -6px;
-  color: ${({ theme }) => theme.colors.gray.white};
-`;
-
 export const SpaceLink = styled.a`
   display: flex;
   align-items: center;
@@ -136,12 +129,6 @@ export const MoreButton = styled.button`
   color: ${({ theme }) => theme.colors.gray.gray300};
 `;
 
-export const Divider = styled.div`
-  height: 8px;
-  margin: 24px calc(-1 * ${({ theme }) => theme.layout.sidePadding}px) 0;
-  background-color: rgba(17, 17, 17, 0.7);
-`;
-
 export const SectionHeader = styled.div`
   display: flex;
   align-items: center;
@@ -154,12 +141,6 @@ export const SectionTitle = styled.h2`
   color: ${({ theme }) => theme.colors.gray.gray300};
 `;
 
-export const AddButtonWrapper = styled.div`
-  position: relative;
-  display: flex;
-  flex-shrink: 0;
-`;
-
 export const AddButton = styled.button`
   display: flex;
   align-items: center;
@@ -170,48 +151,50 @@ export const AddButton = styled.button`
   color: ${({ theme }) => theme.colors.gray.gray400};
 `;
 
-export const EmptyState = styled.div`
+export const EmptyState = styled.button`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 64px 0;
+  width: 100%;
+  height: 262px;
+  margin-top: 16px;
+  border-radius: 8px;
 `;
 
-export const EmptyStateGraphic = styled.div`
+export const EmptyStateBorder = styled.svg`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+`;
+
+export const EmptyStateBorderRect = styled.rect`
+  fill: none;
+  stroke: ${({ theme }) => theme.colors.gray.gray500};
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  stroke-linecap: round;
+`;
+
+export const EmptyStateIconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
-  background-color: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-
-  svg {
-    width: 60%;
-    height: 60%;
-  }
+  width: 48px;
+  height: 48px;
+  border-radius: 14.4px;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  color: ${({ theme }) => theme.colors.gray.gray200};
 `;
 
 export const EmptyStateText = styled.p`
   ${({ theme }) => ({ ...theme.typography.body3 })};
   color: ${({ theme }) => theme.colors.gray.gray300};
   text-align: center;
-`;
-
-export const EmptyStateTooltipWrapper = styled.div`
-  position: absolute;
-  /* AddButton은 hit-slop용 -8px margin이 있어, 실제 보이는 버튼 오른쪽 끝에 맞추려면 8px 보정이 필요하다 */
-  top: calc(100% + 16px);
-  right: -8px;
-  width: max-content;
-  z-index: ${({ theme }) => theme.layout.zIndex.modalContent};
-`;
-
-export const EmptyStateTooltipText = styled.span`
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.white};
 `;
 
 export const CarouselWrapper = styled.div`
