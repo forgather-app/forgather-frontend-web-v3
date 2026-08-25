@@ -20,6 +20,8 @@ interface SwiperActionProps {
   sidePeekRatio?: number;
   /** 외부에서 현재 인덱스를 제어하고 싶을 때 전달 (예: 라우트 파라미터와 동기화) */
   activeIndex?: number;
+  /** uncontrolled 모드에서 처음 보여줄 슬라이드 인덱스 (activeIndex와 함께 쓰이지 않음) */
+  initialIndex?: number;
   /** 드래그/스냅으로 인덱스가 바뀔 때마다 호출됩니다 */
   onIndexChange?: (index: number) => void;
   /** true이면 스와이프 인식 영역(hit area)이 부모 컨테이너의 전체 높이를 채웁니다. 콘텐츠가 그보다 길면 콘텐츠 높이에 맞춰 자연스럽게 늘어납니다 */
@@ -30,6 +32,7 @@ const SwiperAction = ({
   swiperElement,
   sidePeekRatio,
   activeIndex,
+  initialIndex,
   onIndexChange,
   fillHeight,
 }: SwiperActionProps) => {
@@ -50,7 +53,9 @@ const SwiperAction = ({
 
   const x = useMotionValue(0);
 
-  const [currentIndex, setCurrentIndex] = useState(activeIndex ?? 0);
+  const [currentIndex, setCurrentIndex] = useState(
+    activeIndex ?? initialIndex ?? 0,
+  );
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerMaxWidth, setContainerMaxWidth] = useState<number>();
   const [trackHeight, setTrackHeight] = useState<number>();
@@ -123,7 +128,7 @@ const SwiperAction = ({
         );
       }
 
-      x.set(calculateLocation(activeIndex ?? 0));
+      x.set(calculateLocation(activeIndex ?? initialIndex ?? 0));
     };
 
     updateLayout(container.getBoundingClientRect().width);
