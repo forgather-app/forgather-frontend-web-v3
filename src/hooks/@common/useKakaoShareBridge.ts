@@ -15,6 +15,8 @@ interface KakaoShareTemplate {
   imageUrl?: string;
   /** 카드 클릭 시 이동할 링크 */
   link: string;
+  /** 공유 카드 버튼 텍스트 */
+  buttonTitle?: string;
 }
 
 interface KakaoShareErrorMessage {
