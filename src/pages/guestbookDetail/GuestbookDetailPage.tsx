@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import {
   useReadCard,
   useReadGuestBookV2Suspense,
+  useReadUnreadGuestBookSuspense,
 } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
   ApiResponseGuestBookCardResponse,
@@ -42,6 +43,10 @@ const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
     },
   });
 
+// TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+const selectGuestBookResponse = (response: unknown): GuestBookResponse =>
+  (response as ApiResponseGuestBookResponse).data ?? {};
+
 const GuestbookDetailPage = ({
   spaceId,
   currentId,
@@ -62,18 +67,24 @@ const GuestbookDetailPage = ({
 
   const { data: guestBook } = useReadGuestBookV2Suspense<GuestBookResponse>(
     spaceId,
-    {
-      query: {
-        select: (response) =>
-          (response as unknown as ApiResponseGuestBookResponse).data ?? {},
-      },
-    },
+    { query: { select: selectGuestBookResponse } },
   );
+  const { data: unreadGuestBook } =
+    useReadUnreadGuestBookSuspense<GuestBookResponse>(spaceId, {
+      query: { select: selectGuestBookResponse },
+    });
 
-  const cards = guestBook.guestBookCards ?? [];
-  const cardIds = cards
-    .map((card) => card.id)
-    .filter((id): id is number => id !== undefined);
+  const cards = [
+    ...(unreadGuestBook.guestBookCards ?? []),
+    ...(guestBook.guestBookCards ?? []),
+  ];
+  const cardIds = Array.from(
+    new Set(
+      cards
+        .map((card) => card.id)
+        .filter((id): id is number => id !== undefined),
+    ),
+  );
 
   const currentIndex = Math.max(cardIds.indexOf(currentId), 0);
   const currentCardId = cardIds[currentIndex];

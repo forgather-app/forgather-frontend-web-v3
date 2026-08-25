@@ -134,15 +134,11 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.CountGroup>
       </S.TitleRow>
 
-      {hasNewCards && (
+      {hasNewCards && firstUnreadCard && (
         <S.GuestCardWrapper>
           <GuestListStack
             count={unreadCount}
-            onClick={
-              firstUnreadCard
-                ? () => onCardClick(firstUnreadCard.id)
-                : undefined
-            }
+            onClick={() => onCardClick(firstUnreadCard.id)}
           />
         </S.GuestCardWrapper>
       )}
