@@ -219,7 +219,7 @@ const ImageCropper = ({ imageUrl, onSave }: ImageCropperProps) => {
         />
         <S.Overlay>
           <S.CropWindow ref={windowRef} aria-hidden="true" />
-          <S.Guide>네모 칸 안에 이미지를 맞춰주세요</S.Guide>
+          <S.Guide>동그라미 안에 이미지를 맞춰주세요</S.Guide>
         </S.Overlay>
       </S.GestureArea>
       <S.Footer>

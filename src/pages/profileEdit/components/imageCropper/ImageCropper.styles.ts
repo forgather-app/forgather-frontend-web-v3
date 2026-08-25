@@ -48,7 +48,7 @@ export const CropWindow = styled.div`
   width: ${CROP_WINDOW_SIZE}px;
   height: ${CROP_WINDOW_SIZE}px;
   border: 1px solid ${({ theme }) => theme.colors.main.purple};
-  border-radius: 16px;
+  border-radius: 50%;
   /* TODO: 토큰 없음 - rgba(17, 17, 17, 0.4) (semantic.black 40% 딤) */
   box-shadow: 0 0 0 100vmax rgba(17, 17, 17, 0.4);
 `;
