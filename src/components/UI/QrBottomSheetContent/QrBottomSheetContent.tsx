@@ -93,7 +93,7 @@ const QrBottomSheetContent = ({
   };
 
   return (
-    <BottomSheet isOpen={isOpen} onClose={onClose}>
+    <BottomSheet isOpen={isOpen} onClose={onClose} maxContentHeight="none">
       <S.Wrapper>
         <S.QrArea>
           {hasError ? (
