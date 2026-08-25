@@ -139,7 +139,9 @@ const TextField = ({
               <SearchIcon aria-hidden width={20} height={20} />
             )}
             {variant === "link" && (
-              <LinkIcon aria-hidden width={20} height={20} />
+              <S.LinkIconWrapper>
+                <LinkIcon aria-hidden width={20} height={20} />
+              </S.LinkIconWrapper>
             )}
             {variant === "category" && (
               <S.HashPrefix aria-hidden="true">#</S.HashPrefix>
