@@ -59,10 +59,17 @@ interface ImageLightboxProps {
   onClose: () => void;
   /** 전체보기할 이미지 목록 */
   images: LightboxImage[];
+  /** 처음 보여줄 이미지의 인덱스 (기본값 0) */
+  startIndex?: number;
 }
 
-const ImageLightbox = ({ isOpen, onClose, images }: ImageLightboxProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+const ImageLightbox = ({
+  isOpen,
+  onClose,
+  images,
+  startIndex = 0,
+}: ImageLightboxProps) => {
+  const [currentIndex, setCurrentIndex] = useState(startIndex);
   const { saveImage, saveImages } = useSaveImageBridge();
 
   const handleBackgroundClick = (e: React.MouseEvent) => {
@@ -91,6 +98,7 @@ const ImageLightbox = ({ isOpen, onClose, images }: ImageLightboxProps) => {
         </S.CloseButton>
         <S.SwiperWrapper onClick={handleBackgroundClick}>
           <SwiperAction
+            initialIndex={startIndex}
             onIndexChange={setCurrentIndex}
             swiperElement={images.map((image, index) => (
               <LightboxSlide
