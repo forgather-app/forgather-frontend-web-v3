@@ -55,6 +55,12 @@ export const HashPrefix = styled.span`
   flex-shrink: 0;
 `;
 
+export const LinkIconWrapper = styled.span`
+  display: inline-flex;
+  flex-shrink: 0;
+  color: ${({ theme }) => theme.colors.gray.gray400};
+`;
+
 export const Input = styled.input<InputProps>`
   flex: 1;
   min-width: 0;
@@ -97,9 +103,9 @@ export const Counter = styled.span<{ $styleVariant: FieldRowStyleVariant }>`
   flex-shrink: 0;
 `;
 
-export const ErrorMessage = styled.span<{ $align?: "left" | "right" }>`
+export const ErrorMessage = styled.span`
   display: block;
-  text-align: ${({ $align = "left" }) => $align};
+  text-align: left;
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.semantic.alertRed};
 `;

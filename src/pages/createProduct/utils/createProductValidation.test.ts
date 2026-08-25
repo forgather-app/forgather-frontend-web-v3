@@ -4,10 +4,14 @@ import {
   PRODUCT_DESCRIPTION_MAX_LENGTH_ERROR,
   PRODUCT_TITLE_MAX_LENGTH_ERROR,
   PRODUCT_TITLE_REQUIRED_ERROR,
+  PRODUCT_VIDEO_URL_FORMAT_ERROR,
+  PRODUCT_VIDEO_URL_MAX_LENGTH_ERROR,
   validateProductAuthorNameMaxLength,
   validateProductDescriptionMaxLength,
   validateProductTitleMaxLength,
   validateProductTitleRequired,
+  validateProductVideoUrlFormat,
+  validateProductVideoUrlMaxLength,
 } from "./createProductValidation";
 
 describe("validateProductTitleRequired", () => {
@@ -63,5 +67,45 @@ describe("validateProductDescriptionMaxLength", () => {
     expect(validateProductDescriptionMaxLength("a".repeat(201))).toBe(
       PRODUCT_DESCRIPTION_MAX_LENGTH_ERROR,
     );
+  });
+});
+
+describe("validateProductVideoUrlMaxLength", () => {
+  it("500자 이하이면 true를 반환한다", () => {
+    expect(validateProductVideoUrlMaxLength("a".repeat(500))).toBe(true);
+  });
+
+  it("500자를 초과하면 에러 메시지를 반환한다", () => {
+    expect(validateProductVideoUrlMaxLength("a".repeat(501))).toBe(
+      PRODUCT_VIDEO_URL_MAX_LENGTH_ERROR,
+    );
+  });
+
+  it("빈 문자열이면 true를 반환한다 (선택 입력)", () => {
+    expect(validateProductVideoUrlMaxLength("")).toBe(true);
+  });
+});
+
+describe("validateProductVideoUrlFormat", () => {
+  it("유튜브 링크이면 true를 반환한다", () => {
+    expect(
+      validateProductVideoUrlFormat(
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      ),
+    ).toBe(true);
+  });
+
+  it("유튜브 링크가 아니면 에러 메시지를 반환한다", () => {
+    expect(validateProductVideoUrlFormat("https://example.com/video")).toBe(
+      PRODUCT_VIDEO_URL_FORMAT_ERROR,
+    );
+  });
+
+  it("빈 문자열이면 true를 반환한다 (선택 입력)", () => {
+    expect(validateProductVideoUrlFormat("")).toBe(true);
+  });
+
+  it("공백 문자로만 이루어진 문자열이면 true를 반환한다 (선택 입력)", () => {
+    expect(validateProductVideoUrlFormat("   ")).toBe(true);
   });
 });

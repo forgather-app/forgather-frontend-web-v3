@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/react-router";
 import { Controller } from "react-hook-form";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
@@ -16,13 +15,16 @@ interface CreateSpacePageProps {
 }
 
 const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
-  const navigate = useNavigate();
   const {
     control,
     spaceNameRules,
     descriptionRules,
+    linkNameRules,
     spaceNameError,
     descriptionError,
+    linkNameError,
+    linkUrlError,
+    handleLinkUrlBlur,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
@@ -35,8 +37,6 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
       <NavigationBar
         title="새 스페이스"
         onBackClick={() => window.history.back()}
-        rightContent="나중에 하기"
-        onRightClick={() => navigate({ to: "/home" })}
       />
       <S.Title>스페이스를 소개해주세요!</S.Title>
       <S.Main>
@@ -81,6 +81,47 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-label="스페이스 소개"
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        <S.FieldGroup>
+          <S.FieldLabelRow>
+            <S.Label>링크</S.Label>
+          </S.FieldLabelRow>
+          <Controller
+            control={control}
+            name="linkUrl"
+            render={({ field }) => (
+              <TextField
+                variant="link"
+                value={field.value}
+                placeholder="전시와 관련된 링크를 첨부해주세요."
+                errorMessage={linkUrlError}
+                onChange={field.onChange}
+                onBlur={() => {
+                  field.onBlur();
+                  handleLinkUrlBlur(field.value);
+                }}
+                aria-label="링크 URL"
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            name="linkName"
+            rules={linkNameRules}
+            render={({ field }) => (
+              <TextField
+                variant="count"
+                value={field.value}
+                maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
+                placeholder="링크 제목을 작성해주세요."
+                errorMessage={linkNameError}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-label="링크 제목"
               />
             )}
           />

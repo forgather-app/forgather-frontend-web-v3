@@ -6,6 +6,8 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
   validateSpaceDescriptionMaxLength,
+  validateSpaceLinkNameMaxLength,
+  validateSpaceLinkUrlFormat,
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
@@ -13,6 +15,8 @@ import {
 interface CreateSpaceFormValues {
   spaceName: string;
   description: string;
+  linkUrl: string;
+  linkName: string;
 }
 
 const spaceNameRules = {
@@ -26,6 +30,10 @@ const descriptionRules = {
   validate: validateSpaceDescriptionMaxLength,
 };
 
+const linkNameRules = {
+  validate: validateSpaceLinkNameMaxLength,
+};
+
 export const useCreateSpaceForm = () => {
   const { showSnackBar } = useSnackBar();
   const {
@@ -34,10 +42,18 @@ export const useCreateSpaceForm = () => {
     formState: { errors, touchedFields, isValid },
   } = useForm<CreateSpaceFormValues>({
     mode: "onChange",
-    defaultValues: { spaceName: "", description: "" },
+    defaultValues: {
+      spaceName: "",
+      description: "",
+      linkUrl: "",
+      linkName: "",
+    },
   });
 
   const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(false);
+  const [linkUrlError, setLinkUrlError] = useState<string | undefined>(
+    undefined,
+  );
   const { mutate: createSpace, isPending } = useCreate();
 
   const spaceNameError =
@@ -45,15 +61,30 @@ export const useCreateSpaceForm = () => {
       ? undefined
       : errors.spaceName?.message;
   const descriptionError = errors.description?.message;
+  const linkNameError = errors.linkName?.message;
+
+  // linkUrl은 onChange마다 검증하지 않고, blur 시점에만 검증해 에러를 노출함
+  const handleLinkUrlBlur = (value: string) => {
+    const result = validateSpaceLinkUrlFormat(value);
+    setLinkUrlError(result === true ? undefined : result);
+  };
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
     handleSubmit((values) => {
+      const linkUrlValidation = validateSpaceLinkUrlFormat(values.linkUrl);
+      if (linkUrlValidation !== true) {
+        setLinkUrlError(linkUrlValidation);
+        return;
+      }
+
       createSpace(
         {
           data: {
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
+            linkUrl: values.linkUrl.trim(),
+            linkName: values.linkName.trim(),
           },
         },
         {
@@ -81,8 +112,12 @@ export const useCreateSpaceForm = () => {
     control,
     spaceNameRules,
     descriptionRules,
+    linkNameRules,
     spaceNameError,
     descriptionError,
+    linkNameError,
+    linkUrlError,
+    handleLinkUrlBlur,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,

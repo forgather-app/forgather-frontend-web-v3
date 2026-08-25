@@ -2,6 +2,13 @@ import type { Theme } from "@emotion/react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
+export const EditIconWrapper = styled.span`
+  display: inline-flex;
+  /* ic_edit.svg의 내부 여백이 좁아 NavigationBar의 우측 정렬 여백(-12px)과
+   * 맞지 않아 아이콘이 화면 오른쪽 끝에서 잘려 보이는 것을 보정합니다. */
+  margin-right: 6px;
+`;
+
 export const ProfileSection = styled.section`
   display: flex;
   flex-direction: column;
@@ -65,12 +72,6 @@ export const ContactLink = styled.a`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray300};
   text-decoration: underline;
-`;
-
-export const Divider = styled.div`
-  height: 12px;
-  margin: 0 -16px;
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 export const MenuList = styled.ul`

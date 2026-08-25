@@ -17,6 +17,7 @@ import BottomSheet from "@/components/@common/BottomSheet/BottomSheet";
 import Button from "@/components/@common/Button/Button";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
 import AddSpaceOptionsSheet from "./components/addSpaceOptionsSheet/AddSpaceOptionsSheet";
@@ -61,6 +62,8 @@ const HomePage = () => {
         [],
     },
   });
+
+  const showSkeleton = useDelayedLoading(isPending);
 
   // TODO: 에러 UI 구현
   if (isError) {
@@ -137,18 +140,20 @@ const HomePage = () => {
         </S.Header>
         <S.ContentWrapper>
           {isPending ? (
-            <>
-              <S.CurrentSpaceSkeleton aria-hidden />
-              <S.CurrentSpaceActionsSkeleton aria-hidden />
-              <S.MySpaceSection $topGap={32}>
-                <S.SectionTitle>나의 스페이스</S.SectionTitle>
-                <S.SpaceList>
-                  <S.SpaceCardSkeleton aria-hidden />
-                  <S.SpaceCardSkeleton aria-hidden />
-                  <S.SpaceCardSkeleton aria-hidden />
-                </S.SpaceList>
-              </S.MySpaceSection>
-            </>
+            showSkeleton ? (
+              <>
+                <S.CurrentSpaceSkeleton aria-hidden />
+                <S.CurrentSpaceActionsSkeleton aria-hidden />
+                <S.MySpaceSection $topGap={32}>
+                  <S.SectionTitle>나의 스페이스</S.SectionTitle>
+                  <S.SpaceList>
+                    <S.SpaceCardSkeleton aria-hidden />
+                    <S.SpaceCardSkeleton aria-hidden />
+                    <S.SpaceCardSkeleton aria-hidden />
+                  </S.SpaceList>
+                </S.MySpaceSection>
+              </>
+            ) : null
           ) : isEmpty ? (
             <HomeEmptyView />
           ) : (
