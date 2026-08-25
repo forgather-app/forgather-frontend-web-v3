@@ -2,6 +2,8 @@ export const CONSTRAINTS = {
   BOTTOM_SHEET_CLOSE_THRESHOLD: 20,
   HEADER_HIDE_SCROLL_THRESHOLD: 10,
   SNACKBAR_CLOSE_THRESHOLD: 80,
+  /** 스켈레톤 UI를 표시하기까지 대기할 시간(ms). 이보다 빨리 로딩이 끝나면 스켈레톤을 보여주지 않는다 */
+  SKELETON_LOADING_DELAY: 200,
 
   SIGN_UP: {
     ARTIST_NAME_MAX_LENGTH: 20,

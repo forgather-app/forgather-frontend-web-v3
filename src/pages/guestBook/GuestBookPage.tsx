@@ -10,6 +10,7 @@ import GuestList from "@/components/@common/GuestList/GuestList";
 import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import * as S from "./GuestBookPage.styles";
@@ -103,10 +104,15 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     },
   });
 
+  const isLoading = isPending || isUnreadPending;
+  const showSkeleton = useDelayedLoading(isLoading);
+
   // TODO: 에러 UI 구현
   if (isError || isUnreadError) return;
 
-  if (isPending || isUnreadPending) {
+  if (isLoading) {
+    if (!showSkeleton) return null;
+
     return (
       <S.ScrollArea>
         <S.TitleRow>
