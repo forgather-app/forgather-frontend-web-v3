@@ -12,8 +12,6 @@ export interface SimpleProductResponse {
   id?: number;
   /** 작품명 */
   title?: string;
-  /** 작품 카테고리 */
-  category?: string;
   /** 임베드 영상 링크 */
   videoUrl?: string;
   firstPhoto?: ProductPhotoResponse;

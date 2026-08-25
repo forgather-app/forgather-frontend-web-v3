@@ -6,6 +6,7 @@ import type { ApiResponseProductResponse, ProductResponse } from "@/api/model";
 import Button from "@/components/@common/Button/Button";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
+import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
 import * as S from "./GuestArtworkDetailPage.styles";
@@ -43,6 +44,7 @@ const GuestArtworkDetailPage = ({
     },
     request: withApiVersion(1),
   });
+  const showSkeleton = useDelayedLoading(isPending);
 
   if (isError) {
     const isNotFound = isAxiosError(error) && error.response?.status === 404;
@@ -69,6 +71,8 @@ const GuestArtworkDetailPage = ({
   }
 
   if (isPending) {
+    if (!showSkeleton) return null;
+
     return (
       <S.ScrollArea>
         <NavigationBar onBackClick={onBack} />

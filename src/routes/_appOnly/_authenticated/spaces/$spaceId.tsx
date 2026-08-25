@@ -34,7 +34,9 @@ function RouteComponent() {
       match.routeId ===
         "/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId" ||
       match.routeId ===
-        "/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId",
+        "/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId" ||
+      match.routeId ===
+        "/_appOnly/_authenticated/spaces/$spaceId/create-product/",
   );
 
   if (isDetailRoute) {

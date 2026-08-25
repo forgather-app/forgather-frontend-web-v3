@@ -6,6 +6,7 @@
  * OpenAPI spec version: 2.0.0
  */
 import {
+  useMutation,
   useQuery,
   useSuspenseQuery
 } from '@tanstack/react-query';
@@ -13,10 +14,13 @@ import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
   UseSuspenseQueryOptions,
@@ -32,6 +36,170 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * 로그인한 호스트가 특정 약관에 동의합니다. 필수·선택 약관 모두 동의할 수 있고, 개정으로 무효화된 동의의 재동의도 이 API로 처리합니다. 이미 동의한 상태면 이력을 추가하지 않고 현재 상태를 그대로 반환합니다. 타입별 최신 약관이 아니거나 온보딩을 마치지 않은 호스트면 400 Bad Request, 존재하지 않거나 삭제된 약관이면 404 Not Found, 로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.
+ * @summary 약관 동의
+ */
+export type agreeTermResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type agreeTermResponseSuccess = (agreeTermResponse200) & {
+  headers: Headers;
+};
+;
+
+export type agreeTermResponse = (agreeTermResponseSuccess)
+
+export const getAgreeTermUrl = (termId: number,) => {
+
+
+  
+
+  return `/terms/${termId}/agreement`
+}
+
+export const agreeTerm = async (termId: number, options?: RequestInit): Promise<agreeTermResponse> => {
+  
+  return customFetcher<agreeTermResponse>(getAgreeTermUrl(termId),
+  {      
+    ...options,
+    method: 'POST'
+    
+    
+  }
+);}
+  
+
+
+
+export const getAgreeTermMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof agreeTerm>>, TError,{termId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof agreeTerm>>, TError,{termId: number}, TContext> => {
+
+const mutationKey = ['agreeTerm'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof agreeTerm>>, {termId: number}> = (props) => {
+          const {termId} = props ?? {};
+
+          return  agreeTerm(termId,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AgreeTermMutationResult = NonNullable<Awaited<ReturnType<typeof agreeTerm>>>
+    
+    export type AgreeTermMutationError = unknown
+
+    /**
+ * @summary 약관 동의
+ */
+export const useAgreeTerm = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof agreeTerm>>, TError,{termId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof agreeTerm>>,
+        TError,
+        {termId: number},
+        TContext
+      > => {
+      return useMutation(getAgreeTermMutationOptions(options), queryClient);
+    }
+    /**
+ * 로그인한 호스트가 특정 약관의 동의를 철회합니다. 선택 약관만 철회할 수 있습니다. 이미 미동의 상태면 이력을 추가하지 않고 현재 상태를 그대로 반환합니다. 필수 약관이거나 타입별 최신 약관이 아니거나 온보딩을 마치지 않은 호스트면 400 Bad Request, 존재하지 않거나 삭제된 약관이면 404 Not Found, 로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.
+ * @summary 약관 동의 철회
+ */
+export type withdrawTermResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type withdrawTermResponseSuccess = (withdrawTermResponse200) & {
+  headers: Headers;
+};
+;
+
+export type withdrawTermResponse = (withdrawTermResponseSuccess)
+
+export const getWithdrawTermUrl = (termId: number,) => {
+
+
+  
+
+  return `/terms/${termId}/agreement`
+}
+
+export const withdrawTerm = async (termId: number, options?: RequestInit): Promise<withdrawTermResponse> => {
+  
+  return customFetcher<withdrawTermResponse>(getWithdrawTermUrl(termId),
+  {      
+    ...options,
+    method: 'DELETE'
+    
+    
+  }
+);}
+  
+
+
+
+export const getWithdrawTermMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdrawTerm>>, TError,{termId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof withdrawTerm>>, TError,{termId: number}, TContext> => {
+
+const mutationKey = ['withdrawTerm'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof withdrawTerm>>, {termId: number}> = (props) => {
+          const {termId} = props ?? {};
+
+          return  withdrawTerm(termId,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type WithdrawTermMutationResult = NonNullable<Awaited<ReturnType<typeof withdrawTerm>>>
+    
+    export type WithdrawTermMutationError = unknown
+
+    /**
+ * @summary 약관 동의 철회
+ */
+export const useWithdrawTerm = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdrawTerm>>, TError,{termId: number}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof withdrawTerm>>,
+        TError,
+        {termId: number},
+        TContext
+      > => {
+      return useMutation(getWithdrawTermMutationOptions(options), queryClient);
+    }
+    /**
  * 비로그인 상태로 온보딩에 필요한 최신 약관 목록을 조회합니다.
  * @summary 최신 약관 목록 조회
  */

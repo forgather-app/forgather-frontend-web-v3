@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/react-router";
 import { Controller } from "react-hook-form";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
@@ -16,7 +15,6 @@ interface CreateSpacePageProps {
 }
 
 const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
-  const navigate = useNavigate();
   const {
     control,
     spaceNameRules,
@@ -39,8 +37,6 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
       <NavigationBar
         title="새 스페이스"
         onBackClick={() => window.history.back()}
-        rightContent="나중에 하기"
-        onRightClick={() => navigate({ to: "/home" })}
       />
       <S.Title>스페이스를 소개해주세요!</S.Title>
       <S.Main>

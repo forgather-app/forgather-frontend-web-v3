@@ -128,7 +128,7 @@ const TextField = ({
               )}
             </S.CountRow>
             {hasError && (
-              <S.ErrorMessage id={errorId} role="alert" $align="right">
+              <S.ErrorMessage id={errorId} role="alert">
                 {errorMessage}
               </S.ErrorMessage>
             )}

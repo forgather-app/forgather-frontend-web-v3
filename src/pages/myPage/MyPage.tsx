@@ -1,12 +1,14 @@
+import { useTheme } from "@emotion/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLogout } from "@/api/generated/auth-인증";
 import { useGetProfileSuspense } from "@/api/generated/host-호스트";
 import type { ApiResponseHostProfileResponse } from "@/api/model";
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
+import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
-import IcModify from "@/assets/icons/ic_modify.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
+import Divider from "@/components/@common/Divider/Divider";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -18,6 +20,7 @@ import * as S from "./MyPage.styles";
 const APP_VERSION = "v1.0.0";
 
 const MyPage = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -38,7 +41,11 @@ const MyPage = () => {
     <NavigationBarLayout
       title="마이페이지"
       onBackClick={() => navigate({ to: ".." })}
-      rightContent={<IcModify aria-hidden="true" />}
+      rightContent={
+        <S.EditIconWrapper>
+          <IcEdit width={32} height={32} aria-hidden="true" />
+        </S.EditIconWrapper>
+      }
       rightAriaLabel="프로필 수정"
       onRightClick={() => navigate({ to: "/my-page/edit" })}
     >
@@ -70,7 +77,7 @@ const MyPage = () => {
         </S.IntroBlock>
       </S.ProfileSection>
 
-      <S.Divider aria-hidden="true" />
+      <Divider color={theme.colors.gray.gray600} height={12} />
 
       <S.MenuList>
         <li>
@@ -114,7 +121,11 @@ const MyPage = () => {
           <S.InquiryButton
             type="button"
             onClick={() => {
-              // TODO: 문의 채널 확정 시 연결
+              window.open(
+                "https://pf.kakao.com/_rHNtn",
+                "_blank",
+                "noopener,noreferrer",
+              );
             }}
           >
             문의하기

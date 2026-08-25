@@ -19,8 +19,9 @@ export const FloatingIconButton = styled.button`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 44px;
-  height: 44px;
+  width: 56px;
+  height: 56px;
+  aspect-ratio: 1 / 1;
   border: none;
   border-radius: 999px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
