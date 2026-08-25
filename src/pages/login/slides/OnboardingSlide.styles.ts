@@ -4,6 +4,7 @@ export const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 40px;
 `;
 
 export const TextSection = styled.div`
