@@ -17,15 +17,12 @@ import type {
   ProductsResponse,
   SpaceResponse,
 } from "@/api/model";
-import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
-import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
 import Button from "@/components/@common/Button/Button";
 import Divider from "@/components/@common/Divider/Divider";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
-import Tooltip from "@/components/@common/tooltip/Tooltip";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
@@ -167,13 +164,6 @@ const ArtworkPage = ({
             <S.UserName>{profile?.nickname ?? ""}</S.UserName>
           </S.UserProfile>
           <S.ActionsWrapper>
-            <S.EditButton
-              type="button"
-              aria-label="전시 정보 수정"
-              onClick={onEditClick}
-            >
-              <IcEdit />
-            </S.EditButton>
             <S.MenuWrapper>
               <S.MoreMenuButton
                 type="button"
@@ -186,6 +176,10 @@ const ArtworkPage = ({
                 isOpen={isMoreMenuOpen}
                 onClose={() => setIsMoreMenuOpen(false)}
                 items={[
+                  {
+                    label: "수정하기",
+                    onClick: onEditClick,
+                  },
                   {
                     label: "삭제하기",
                     onClick: () => setIsDeleteConfirmOpen(true),
@@ -245,13 +239,6 @@ const ArtworkPage = ({
           <S.UserName>{profile?.nickname ?? ""}</S.UserName>
         </S.UserProfile>
         <S.ActionsWrapper>
-          <S.EditButton
-            type="button"
-            aria-label="전시 정보 수정"
-            onClick={onEditClick}
-          >
-            <IcEdit width={28} height={28} />
-          </S.EditButton>
           <S.MenuWrapper>
             <S.MoreMenuButton
               type="button"
@@ -264,6 +251,10 @@ const ArtworkPage = ({
               isOpen={isMoreMenuOpen}
               onClose={() => setIsMoreMenuOpen(false)}
               items={[
+                {
+                  label: "수정하기",
+                  onClick: onEditClick,
+                },
                 {
                   label: "삭제하기",
                   onClick: () => setIsDeleteConfirmOpen(true),
@@ -313,35 +304,30 @@ const ArtworkPage = ({
 
       <S.SectionHeader>
         <S.SectionTitle>작품 {artworks.length}개</S.SectionTitle>
-        <S.AddButtonWrapper>
-          <S.AddButton
-            type="button"
-            aria-label="작품 추가"
-            onClick={onAddArtworkClick}
-          >
-            <IcPlus width={24} height={24} />
-          </S.AddButton>
-          {artworks.length === 0 && (
-            <S.EmptyStateTooltipWrapper>
-              <Tooltip
-                variant="gradient"
-                ariaLabel="첫번째 작품을 소개해주세요!"
-              >
-                <S.EmptyStateTooltipText>
-                  첫번째 작품을 소개해주세요!
-                </S.EmptyStateTooltipText>
-              </Tooltip>
-            </S.EmptyStateTooltipWrapper>
-          )}
-        </S.AddButtonWrapper>
+        <S.AddButton
+          type="button"
+          aria-label="작품 추가"
+          onClick={onAddArtworkClick}
+        >
+          <IcPlus width={24} height={24} />
+        </S.AddButton>
       </S.SectionHeader>
 
       {artworks.length === 0 ? (
-        <S.EmptyState>
-          <S.EmptyStateGraphic aria-hidden>
-            <ArtworkPlaceholderGraphic />
-          </S.EmptyStateGraphic>
-          <S.EmptyStateText>아직 등록된 작품이 없어요</S.EmptyStateText>
+        <S.EmptyState type="button" onClick={onAddArtworkClick}>
+          <S.EmptyStateBorder aria-hidden>
+            <S.EmptyStateBorderRect
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              rx="8"
+            />
+          </S.EmptyStateBorder>
+          <S.EmptyStateIconWrapper aria-hidden>
+            <IcPlus width={28} height={28} />
+          </S.EmptyStateIconWrapper>
+          <S.EmptyStateText>첫번째 작품을 추가해보세요.</S.EmptyStateText>
         </S.EmptyState>
       ) : (
         <S.CarouselWrapper>
