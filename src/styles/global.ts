@@ -1,6 +1,6 @@
-import { css } from "@emotion/react";
+import { css, type Theme } from "@emotion/react";
 
-export const global = css`
+export const global = (theme: Theme) => css`
   :root {
     /* SwiperAction 이식을 위해 추가. theme.layout.sidePadding(16)과 동일하게 유지 */
     --layout-padding-x: 16px;
@@ -15,9 +15,12 @@ export const global = css`
   #root {
     height: 100%;
   }
+  html {
+    background-color: ${theme.colors.gray.gray700};
+  }
   body {
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
-    background-color: #f5f5f5;
+    background-color: ${theme.colors.gray.gray700};
     word-break: break-all;
   }
   a {
