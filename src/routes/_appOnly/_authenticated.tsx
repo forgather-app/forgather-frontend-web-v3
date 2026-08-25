@@ -18,8 +18,8 @@ function AuthenticatedLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { showSnackBar } = useSnackBar();
-  const isSignUpRoute = useMatches().some(
-    (match) => match.routeId === "/_appOnly/_authenticated/sign-up/",
+  const isSignUpRoute = useMatches().some((match) =>
+    match.routeId.startsWith("/_appOnly/_authenticated/sign-up"),
   );
 
   // NOTE: 인증 토큰이 서버 쿠키로 발급되어 클라이언트에서 로그인 여부를 직접 읽을 수 없으므로,
