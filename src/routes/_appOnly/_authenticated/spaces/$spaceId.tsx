@@ -5,6 +5,8 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useState } from "react";
+import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
+import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
 import ShareModal from "@/components/UI/ShareModal/ShareModal";
 import useKakaoShareBridge from "@/hooks/@common/useKakaoShareBridge";
@@ -22,6 +24,12 @@ function RouteComponent() {
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const { requestKakaoShare } = useKakaoShareBridge();
+  const { data: space } = useGetSpaceInformation<SpaceResponse>(spaceId, {
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseSpaceResponse).data ?? {},
+    },
+  });
   const matches = useMatches();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
@@ -74,9 +82,10 @@ function RouteComponent() {
         onClose={() => setIsShareModalOpen(false)}
         onKakaoShare={() => {
           requestKakaoShare({
-            title: "초대장이 도착했어요",
-            description: "방명록을 남길 수 있도록 스페이스를 공유해보세요",
+            title: `${space?.name ?? ""} | Forgather`,
+            description: "스페이스에 초대되었습니다",
             link: writeUrl,
+            buttonTitle: "방명록 남기기",
           });
           setIsShareModalOpen(false);
         }}
