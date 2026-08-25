@@ -43,7 +43,7 @@ export const Textarea = styled.textarea`
   outline: none;
   resize: none;
   width: 100%;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
+  ${({ theme }) => ({ ...theme.typography.body3 })};
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 
