@@ -1,3 +1,4 @@
+import { useTheme } from "@emotion/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useLogout } from "@/api/generated/auth-인증";
@@ -7,6 +8,7 @@ import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
+import Divider from "@/components/@common/Divider/Divider";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -18,6 +20,7 @@ import * as S from "./MyPage.styles";
 const APP_VERSION = "v1.0.0";
 
 const MyPage = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const { showSnackBar } = useSnackBar();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -74,7 +77,7 @@ const MyPage = () => {
         </S.IntroBlock>
       </S.ProfileSection>
 
-      <S.Divider aria-hidden="true" />
+      <Divider color={theme.colors.gray.gray600} height={12} />
 
       <S.MenuList>
         <li>

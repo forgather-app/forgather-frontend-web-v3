@@ -74,12 +74,6 @@ export const ContactLink = styled.a`
   text-decoration: underline;
 `;
 
-export const Divider = styled.div`
-  height: 12px;
-  margin: 0 -16px;
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
-`;
-
 export const MenuList = styled.ul`
   padding-top: 4px;
 `;

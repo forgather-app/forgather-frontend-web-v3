@@ -5,6 +5,9 @@ import { shouldForwardProp } from "@/utils/shouldForwardProp";
 export const ScrollArea = styled.div`
   flex: 1;
   overflow-y: auto;
+  // NOTE: 좌우 끝까지 이어지도록 수정
+  margin: 0 calc(-1 * ${({ theme }) => theme.layout.sidePadding}px);
+  padding: 0 ${({ theme }) => theme.layout.sidePadding}px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
@@ -134,12 +137,6 @@ export const MoreButton = styled.button`
   flex-shrink: 0;
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray300};
-`;
-
-export const Divider = styled.div`
-  height: 8px;
-  margin: 24px calc(-1 * ${({ theme }) => theme.layout.sidePadding}px) 0;
-  background-color: rgba(17, 17, 17, 0.7);
 `;
 
 export const SectionHeader = styled.div`
