@@ -5,6 +5,7 @@ export const PageWrapper = styled.form`
   flex-direction: column;
   flex: 1;
   min-height: 0;
+
 `;
 
 export const Title = styled.h2`
@@ -21,6 +22,7 @@ export const ScrollArea = styled.div`
   flex-direction: column;
   gap: 20px;
   padding-top: 32px;
+  padding-bottom: 80px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
@@ -53,5 +55,4 @@ export const RequiredDot = styled.span`
 
 export const Footer = styled.footer`
   flex-shrink: 0;
-  padding-top: 16px;
 `;

@@ -4,6 +4,8 @@ import { shouldForwardProp } from "@/utils/shouldForwardProp";
 export const ScrollWrapper = styled.div`
   flex: 1;
   overflow-y: auto;
+  margin: 0 calc(-1 * ${({ theme }) => theme.layout.sidePadding}px);
+  padding: 0 ${({ theme }) => theme.layout.sidePadding}px;
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;

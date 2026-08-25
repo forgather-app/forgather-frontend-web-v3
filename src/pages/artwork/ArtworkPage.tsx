@@ -21,6 +21,7 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import Button from "@/components/@common/Button/Button";
+import Divider from "@/components/@common/Divider/Divider";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
@@ -33,6 +34,9 @@ import * as S from "./ArtworkPage.styles";
 
 /** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
 const CAROUSEL_SIDE_PEEK_RATIO = 0.02;
+
+/** 섹션 구분선 색상 */
+const SECTION_DIVIDER_COLOR = "rgba(17, 17, 17, 0.7)";
 
 interface ArtworkPageProps {
   /** 스페이스 ID */
@@ -194,7 +198,7 @@ const ArtworkPage = ({
         <S.TitleSkeleton />
         <S.DescriptionSkeleton />
 
-        <S.Divider />
+        <Divider color={SECTION_DIVIDER_COLOR} height={8} marginTop={24} />
 
         <S.SectionHeader>
           <S.SectionTitle>작품</S.SectionTitle>
@@ -296,7 +300,7 @@ const ArtworkPage = ({
         )}
       </S.DescriptionRow>
 
-      <S.Divider />
+      <Divider color={SECTION_DIVIDER_COLOR} height={8} marginTop={24} />
 
       <S.SectionHeader>
         <S.SectionTitle>작품 {artworks.length}개</S.SectionTitle>

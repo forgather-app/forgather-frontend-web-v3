@@ -1,16 +1,24 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { useGetMyTermAgreementsSuspense } from "@/api/generated/term-약관";
+import {
+  getGetMyTermAgreementsQueryKey,
+  useAgreeTerm,
+  useGetMyTermAgreementsSuspense,
+  useWithdrawTerm,
+} from "@/api/generated/term-약관";
 import type {
   ApiResponseListTermAgreementResponse,
   TermAgreementResponse,
 } from "@/api/model";
-import IcCheckboxInactive from "@/assets/icons/ic_checkbox_inactive.svg?react";
+import IcCheckmark from "@/assets/icons/ic_checkmark.svg?react";
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import Modal from "@/components/UI/Modal/Modal";
+import { ERROR_MESSAGES } from "@/constants/error";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import { MarkdownContent } from "@/styles/@common/Markdown/Markdown.styles";
 import * as S from "./MyPageTermsPage.styles";
 
@@ -19,6 +27,8 @@ type Term = TermAgreementResponse & { id: number };
 
 const MyPageTermsPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { showSnackBar } = useSnackBar();
   const [activeTerm, setActiveTerm] = useState<Term | null>(null);
 
   const { data: terms } = useGetMyTermAgreementsSuspense<Term[]>({
@@ -33,6 +43,40 @@ const MyPageTermsPage = () => {
           .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)),
     },
   });
+
+  const { mutate: agreeTerm, isPending: isAgreePending } = useAgreeTerm();
+  const { mutate: withdrawTerm, isPending: isWithdrawPending } =
+    useWithdrawTerm();
+  const isTogglePending = isAgreePending || isWithdrawPending;
+
+  const handleToggle = (term: Term) => {
+    if (isTogglePending) return;
+
+    const onSuccess = () =>
+      queryClient.invalidateQueries({
+        queryKey: getGetMyTermAgreementsQueryKey(),
+      });
+
+    if (term.isAgreed) {
+      withdrawTerm(
+        { termId: term.id },
+        {
+          onSuccess,
+          onError: () =>
+            showSnackBar(ERROR_MESSAGES.TERM_WITHDRAW_FAILED, "error"),
+        },
+      );
+    } else {
+      agreeTerm(
+        { termId: term.id },
+        {
+          onSuccess,
+          onError: () =>
+            showSnackBar(ERROR_MESSAGES.TERM_AGREE_FAILED, "error"),
+        },
+      );
+    }
+  };
 
   return (
     <NavigationBarLayout
@@ -55,10 +99,18 @@ const MyPageTermsPage = () => {
               {term.isRequired ? (
                 term.isAgreed && <S.AgreedLabel>동의함</S.AgreedLabel>
               ) : (
-                // TODO: 마케팅 정보 수신 동의 조회/토글 API 연동 시 실제 동의 상태로 교체
-                <S.CheckboxIconWrapper aria-hidden="true">
-                  <IcCheckboxInactive />
-                </S.CheckboxIconWrapper>
+                <S.CheckboxWrapper>
+                  <S.HiddenInput
+                    type="checkbox"
+                    checked={!!term.isAgreed}
+                    disabled={isTogglePending}
+                    onChange={() => handleToggle(term)}
+                    aria-label={term.name}
+                  />
+                  <S.CheckIcon $checked={!!term.isAgreed} aria-hidden>
+                    <IcCheckmark width={11} height={8} />
+                  </S.CheckIcon>
+                </S.CheckboxWrapper>
               )}
             </S.TermRow>
           </li>
