@@ -107,6 +107,12 @@ export const theme = {
       accent: "#FF4242",
       black: "#111111",
     },
+    icon: {
+      default: "#C2C8CF",
+      point: "#6247FF",
+      strong: "#FFFFFF",
+      weak: "#6D7684",
+    },
     button: {
       primaryHover: "#5439F0",
       secondaryText: "#3B19FF",
