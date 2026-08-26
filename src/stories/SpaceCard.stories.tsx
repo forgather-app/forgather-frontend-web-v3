@@ -9,7 +9,7 @@ const meta: Meta<typeof SpaceCard> = {
     docs: {
       description: {
         component:
-          "나의 스페이스 목록에 표시되는 컴팩트 카드 컴포넌트입니다. 64px 썸네일, 스페이스 제목(1줄 말줄임), 방명록 수를 보여주며 카드 전체가 버튼으로 동작합니다.",
+          "나의 스페이스 목록에 표시되는 컴팩트 카드 컴포넌트입니다. 72px 썸네일, 스페이스 제목, 방명록 수를 보여주며 카드 전체가 버튼으로 동작합니다. guestBookCount 미전달 시 방명록 뱃지와 이동 버튼 없이 제목만 2줄까지 표시됩니다.",
       },
     },
     layout: "centered",
@@ -20,8 +20,9 @@ const meta: Meta<typeof SpaceCard> = {
       table: { type: { summary: "string" } },
     },
     guestBookCount: {
-      description: "방명록 수",
-      table: { type: { summary: "number" } },
+      description:
+        "방명록 수. 미전달 시 방명록 뱃지·이동 버튼이 사라지고 제목이 2줄까지 표시됩니다.",
+      table: { type: { summary: "number | undefined" } },
     },
     thumbnailUrl: {
       description:
@@ -97,6 +98,29 @@ export const LongTitle: Story = {
       "매우 긴 스페이스 제목이 한 줄을 초과할 경우 말줄임 처리되는 동작을 확인합니다.",
     guestBookCount: 99,
     thumbnailUrl: "https://picsum.photos/seed/forgather2/128/128",
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export const WithoutGuestBookCount: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "guestBookCount 미전달 케이스입니다. 방명록 뱃지와 이동 버튼이 사라지고, 제목이 2줄까지 표시됩니다.",
+      },
+    },
+  },
+  args: {
+    title:
+      "포게더 : 작가와 방문객이 연결되는 곳 포게더 : 작가와 방문객이 연결되는 곳",
+    thumbnailUrl: "https://picsum.photos/seed/forgather3/128/128",
   },
   decorators: [
     (Story) => (

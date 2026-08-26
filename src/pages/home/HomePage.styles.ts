@@ -164,7 +164,7 @@ export const CurrentSpaceActionsSkeleton = styled.div`
 
 export const SpaceCardSkeleton = styled.div`
   width: 100%;
-  height: 72px;
+  height: 80px;
   border-radius: 12px;
   background: ${({ theme }) => theme.colors.skeleton.skeleton20};
   background-size: 300% 100%;
