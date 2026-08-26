@@ -144,7 +144,7 @@ const HomePage = () => {
               <>
                 <S.CurrentSpaceSkeleton aria-hidden />
                 <S.CurrentSpaceActionsSkeleton aria-hidden />
-                <S.MySpaceSection $topGap={32}>
+                <S.MySpaceSection>
                   <S.SectionTitle>나의 스페이스</S.SectionTitle>
                   <S.SpaceList>
                     <S.SpaceCardSkeleton aria-hidden />
@@ -186,7 +186,7 @@ const HomePage = () => {
                 <HomeCtaBanner onClick={handleAddSpaceClick} />
               )}
 
-              <S.MySpaceSection $topGap={currentSpaces.length > 0 ? 32 : 24}>
+              <S.MySpaceSection>
                 <S.SectionTitle>나의 스페이스</S.SectionTitle>
                 <S.ListHeader>
                   <S.SpaceCountGroup>

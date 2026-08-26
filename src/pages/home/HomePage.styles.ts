@@ -88,14 +88,14 @@ export const ContentWrapper = styled.main`
   padding: 20px 0 40px;
 `;
 
-export const MySpaceSection = styled.section<{ $topGap: 24 | 32 }>`
+export const MySpaceSection = styled.section`
   display: flex;
   flex-direction: column;
-  margin-top: ${({ $topGap }) => $topGap}px;
+  margin-top: 32px;
 `;
 
 export const SectionTitle = styled.h2`
-  ${({ theme }) => ({ ...theme.typography.heading2 })};
+  ${({ theme }) => ({ ...theme.typography.heading1 })};
   color: ${({ theme }) => theme.colors.gray.white};
   padding-left: 2px;
   margin-bottom: 16px;
