@@ -18,6 +18,12 @@ function RouteComponent() {
           params: { spaceId, artworkId: String(artworkId) },
         })
       }
+      onHostClick={(hostCode) =>
+        navigate({
+          to: "/hosts/$hostCode",
+          params: { hostCode },
+        })
+      }
     />
   );
 }
