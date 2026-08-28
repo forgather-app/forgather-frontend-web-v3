@@ -36,7 +36,7 @@ export const Artist = styled.p`
 `;
 
 export const Description = styled.p`
-  ${({ theme }) => ({ ...theme.typography.subBody })};
+  ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   white-space: pre-wrap;
 `;
