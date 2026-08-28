@@ -19,6 +19,13 @@ export const ProfileRow = styled.div`
   gap: 8px;
 `;
 
+export const ProfileButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+`;
+
 export const UserAvatar = styled.div`
   width: 32px;
   height: 32px;

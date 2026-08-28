@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppOnlyRouteImport } from './routes/_appOnly'
+import { Route as HostsHostCodeRouteImport } from './routes/hosts/$hostCode'
 import { Route as AppOnlyAuthenticatedRouteImport } from './routes/_appOnly/_authenticated'
 import { Route as AppOnlyLoginIndexRouteImport } from './routes/_appOnly/login/index'
 import { Route as AppOnlyAuthenticatedIndexRouteImport } from './routes/_appOnly/_authenticated/index'
@@ -37,6 +38,11 @@ import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport 
 
 const AppOnlyRoute = AppOnlyRouteImport.update({
   id: '/_appOnly',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostsHostCodeRoute = HostsHostCodeRouteImport.update({
+  id: '/hosts/$hostCode',
+  path: '/hosts/$hostCode',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppOnlyAuthenticatedRoute = AppOnlyAuthenticatedRouteImport.update({
@@ -181,6 +187,7 @@ const AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AppOnlyAuthenticatedIndexRoute
+  '/hosts/$hostCode': typeof HostsHostCodeRoute
   '/spaces/$spaceId/guest': typeof SpacesSpaceIdGuestRouteWithChildren
   '/login/': typeof AppOnlyLoginIndexRoute
   '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
@@ -206,6 +213,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AppOnlyAuthenticatedIndexRoute
+  '/hosts/$hostCode': typeof HostsHostCodeRoute
   '/login': typeof AppOnlyLoginIndexRoute
   '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
   '/my-page/terms': typeof AppOnlyAuthenticatedMyPageTermsRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_appOnly': typeof AppOnlyRouteWithChildren
   '/_appOnly/_authenticated': typeof AppOnlyAuthenticatedRouteWithChildren
+  '/hosts/$hostCode': typeof HostsHostCodeRoute
   '/spaces/$spaceId/guest': typeof SpacesSpaceIdGuestRouteWithChildren
   '/_appOnly/_authenticated/': typeof AppOnlyAuthenticatedIndexRoute
   '/_appOnly/login/': typeof AppOnlyLoginIndexRoute
@@ -259,6 +268,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/hosts/$hostCode'
     | '/spaces/$spaceId/guest'
     | '/login/'
     | '/my-page/edit'
@@ -284,6 +294,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/hosts/$hostCode'
     | '/login'
     | '/my-page/edit'
     | '/my-page/terms'
@@ -308,6 +319,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_appOnly'
     | '/_appOnly/_authenticated'
+    | '/hosts/$hostCode'
     | '/spaces/$spaceId/guest'
     | '/_appOnly/_authenticated/'
     | '/_appOnly/login/'
@@ -335,6 +347,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppOnlyRoute: typeof AppOnlyRouteWithChildren
+  HostsHostCodeRoute: typeof HostsHostCodeRoute
   SpacesSpaceIdGuestRoute: typeof SpacesSpaceIdGuestRouteWithChildren
 }
 
@@ -345,6 +358,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AppOnlyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hosts/$hostCode': {
+      id: '/hosts/$hostCode'
+      path: '/hosts/$hostCode'
+      fullPath: '/hosts/$hostCode'
+      preLoaderRoute: typeof HostsHostCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_appOnly/_authenticated': {
@@ -617,6 +637,7 @@ const SpacesSpaceIdGuestRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AppOnlyRoute: AppOnlyRouteWithChildren,
+  HostsHostCodeRoute: HostsHostCodeRoute,
   SpacesSpaceIdGuestRoute: SpacesSpaceIdGuestRouteWithChildren,
 }
 export const routeTree = rootRouteImport

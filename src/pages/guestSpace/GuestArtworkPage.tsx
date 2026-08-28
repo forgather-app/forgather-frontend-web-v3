@@ -29,11 +29,14 @@ interface GuestArtworkPageProps {
   spaceId: string;
   /** 작품 카드 클릭 핸들러 */
   onArtworkClick?: (artworkId: number) => void;
+  /** 스페이스 주인 프로필 클릭 핸들러 */
+  onHostClick?: (hostCode: string) => void;
 }
 
 const GuestArtworkPage = ({
   spaceId,
   onArtworkClick = () => {},
+  onHostClick = () => {},
 }: GuestArtworkPageProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [activeArtworkIndex, setActiveArtworkIndex] = useState(0);
@@ -107,7 +110,11 @@ const GuestArtworkPage = ({
 
   return (
     <S.ScrollArea>
-      <S.ProfileRow>
+      <S.ProfileButton
+        type="button"
+        onClick={() => host?.code && onHostClick(host.code)}
+        aria-label={`${host?.nickname ?? ""} 작가님 프로필 보기`}
+      >
         {host?.photoPath ? (
           <S.UserAvatarImage
             src={getImageUrl(host.photoPath)}
@@ -118,7 +125,7 @@ const GuestArtworkPage = ({
           <S.UserAvatar aria-hidden />
         )}
         <S.UserName>{host?.nickname ?? ""}</S.UserName>
-      </S.ProfileRow>
+      </S.ProfileButton>
 
       <S.TitleRow>
         <S.Title>{space.name}</S.Title>
