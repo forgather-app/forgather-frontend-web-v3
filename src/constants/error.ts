@@ -31,6 +31,8 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 진행을 해제하지 못했어요. 잠시 후 다시 시도해 주세요",
   SPACE_CREATE_FAILED:
     "일시적인 오류로 스페이스를 만들지 못했어요. 잠시 후 다시 시도해 주세요",
+  SPACE_UPDATE_FAILED:
+    "일시적인 오류로 스페이스를 수정하지 못했어요. 잠시 후 다시 시도해 주세요",
   TERM_AGREE_FAILED:
     "일시적인 오류로 약관에 동의하지 못했어요. 잠시 후 다시 시도해 주세요",
   TERM_WITHDRAW_FAILED:

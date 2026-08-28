@@ -105,7 +105,7 @@ export const DescriptionRow = styled("div", { shouldForwardProp })<{
   flex-direction: ${({ $isExpanded }) => ($isExpanded ? "column" : "row")};
   align-items: flex-end;
   gap: 4px;
-  margin-top: 16px;
+  margin-top: 24px;
 `;
 
 export const Description = styled("p", { shouldForwardProp })<{
@@ -114,7 +114,7 @@ export const Description = styled("p", { shouldForwardProp })<{
   flex: 1;
   width: 100%;
   min-width: 0;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
+  ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   overflow: hidden;
   text-overflow: ellipsis;
@@ -125,7 +125,7 @@ export const Description = styled("p", { shouldForwardProp })<{
 
 export const MoreButton = styled.button`
   flex-shrink: 0;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
+  ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray300};
 `;
 
