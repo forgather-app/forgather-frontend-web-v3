@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { CONSTRAINTS } from "@/constants/constraints";
 import {
   MESSAGE_MAX_LENGTH_ERROR,
   MESSAGE_REQUIRED_ERROR,
@@ -25,21 +26,23 @@ describe("validateNicknameRequired", () => {
 });
 
 describe("validateNicknameMaxLength", () => {
-  it("20자 이하면 true를 반환한다", () => {
-    expect(validateNicknameMaxLength("a".repeat(20))).toBe(true);
+  const max = CONSTRAINTS.GUEST_BOOK_WRITE.NICKNAME_MAX_LENGTH;
+
+  it("최대 길이 이하면 true를 반환한다", () => {
+    expect(validateNicknameMaxLength("a".repeat(max))).toBe(true);
   });
 
-  it("20자를 초과하면 에러 메시지를 반환한다", () => {
-    expect(validateNicknameMaxLength("a".repeat(21))).toBe(
+  it("최대 길이를 초과하면 에러 메시지를 반환한다", () => {
+    expect(validateNicknameMaxLength("a".repeat(max + 1))).toBe(
       NICKNAME_MAX_LENGTH_ERROR,
     );
   });
 
   it("그래핌(예: 이모지) 단위로 글자 수를 센다", () => {
-    expect(validateNicknameMaxLength("😀".repeat(21))).toBe(
+    expect(validateNicknameMaxLength("😀".repeat(max + 1))).toBe(
       NICKNAME_MAX_LENGTH_ERROR,
     );
-    expect(validateNicknameMaxLength("😀".repeat(20))).toBe(true);
+    expect(validateNicknameMaxLength("😀".repeat(max))).toBe(true);
   });
 });
 

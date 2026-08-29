@@ -23,7 +23,8 @@ export const CONSTRAINTS = {
   },
 
   GUEST_BOOK_WRITE: {
-    NICKNAME_MAX_LENGTH: 20,
+    // API 스펙(WriteGuestBookCardRequest.nickname @maxLength 10)과 일치시킨다
+    NICKNAME_MAX_LENGTH: 10,
     MESSAGE_MAX_LENGTH: 400,
     MAX_PHOTO_COUNT: 10,
   },

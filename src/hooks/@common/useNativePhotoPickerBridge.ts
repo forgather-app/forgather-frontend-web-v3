@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef } from "react";
 import { ERROR_MESSAGES } from "@/constants/error";
 import { base64ToBlob } from "@/utils/base64ToBlob";
+import {
+  type NormalizedImage,
+  normalizeImageForWeb,
+} from "@/utils/normalizeImageForWeb";
 import useSnackBar from "./useSnackBar";
 
 export interface PickedPhoto {
@@ -45,7 +49,7 @@ const useNativePhotoPickerBridge = () => {
   );
 
   useEffect(() => {
-    const handleMessage = (e: MessageEvent) => {
+    const handlePickerMessage = async (e: MessageEvent) => {
       try {
         const rawData =
           typeof e.data === "string" ? JSON.parse(e.data) : e.data;
@@ -56,12 +60,26 @@ const useNativePhotoPickerBridge = () => {
 
         if (data.type === "PHOTO_PICKER_RESULT") {
           pendingResolveRef.current = null;
-          resolve(
-            data.payload.images.map(({ base64, fileName, mimeType }) => ({
-              blob: base64ToBlob(base64, mimeType),
-              fileName,
-            })),
+          // 아이폰 기본 포맷(HEIC) 등 브라우저가 못 다루는 이미지를 선택 즉시 정규화한다.
+          // 일부만 실패해도 성공한 사진은 반영하고 안내만 노출한다.
+          const settled = await Promise.allSettled(
+            data.payload.images.map(({ base64, fileName, mimeType }) =>
+              normalizeImageForWeb(base64ToBlob(base64, mimeType), fileName),
+            ),
           );
+          const picked = settled
+            .filter(
+              (result): result is PromiseFulfilledResult<NormalizedImage> =>
+                result.status === "fulfilled",
+            )
+            .map(({ value }) => ({
+              blob: value.blob,
+              fileName: value.fileName,
+            }));
+          if (picked.length < data.payload.images.length) {
+            showSnackBar(ERROR_MESSAGES.IMAGE_CONVERT_FAILED, "error");
+          }
+          resolve(picked);
           return;
         }
         if (data.type === "PHOTO_PICKER_CANCELLED") {
@@ -84,6 +102,10 @@ const useNativePhotoPickerBridge = () => {
         // TODO: 원인 파악 후 제거
         console.error("PHOTO_PICKER parse/handle error", err, e.data);
       }
+    };
+
+    const handleMessage = (e: MessageEvent) => {
+      void handlePickerMessage(e);
     };
 
     window.addEventListener("message", handleMessage);

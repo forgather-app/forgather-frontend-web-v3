@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { spin } from "@/styles/animations";
 
 export const Grid = styled.div`
   display: flex;
@@ -81,4 +82,25 @@ export const AddButton = styled.button`
 
 export const InvisibleInput = styled.input`
   display: none;
+`;
+
+export const ConvertingBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  border-radius: 8px;
+  opacity: 0.5;
+`;
+
+export const Spinner = styled.div`
+  width: 20px;
+  height: 20px;
+  border: 2px solid ${({ theme }) => theme.colors.gray.gray400};
+  border-top-color: ${({ theme }) => theme.colors.gray.white};
+  border-radius: 50%;
+  animation: ${spin} 0.7s linear infinite;
 `;
