@@ -34,7 +34,8 @@ import { Route as AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRouteImport } f
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdEditIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/edit/index'
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/create-product/index'
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
-import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/index'
+import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/edit'
 
 const AppOnlyRoute = AppOnlyRouteImport.update({
   id: '/_appOnly',
@@ -178,10 +179,16 @@ const AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute =
     path: '/guestbook/$guestbookId',
     getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
   } as any)
-const AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute =
-  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport.update({
-    id: '/artworks/$artworkId',
-    path: '/artworks/$artworkId',
+const AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRouteImport.update({
+    id: '/artworks/$artworkId/',
+    path: '/artworks/$artworkId/',
+    getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
+  } as any)
+const AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute =
+  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRouteImport.update({
+    id: '/artworks/$artworkId/edit',
+    path: '/artworks/$artworkId/edit',
     getParentRoute: () => AppOnlyAuthenticatedSpacesSpaceIdRoute,
   } as any)
 
@@ -205,11 +212,12 @@ export interface FileRoutesByFullPath {
   '/spaces/$spaceId/guest/guestbook/write': typeof SpacesSpaceIdGuestGuestbookWriteRoute
   '/spaces/$spaceId/': typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
   '/spaces/$spaceId/guest/guestbook/': typeof SpacesSpaceIdGuestGuestbookIndexRoute
-  '/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   '/spaces/$spaceId/guestbook/$guestbookId': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
   '/spaces/$spaceId/create-product/': typeof AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRoute
   '/spaces/$spaceId/edit/': typeof AppOnlyAuthenticatedSpacesSpaceIdEditIndexRoute
   '/spaces/$spaceId/guestbook/': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  '/spaces/$spaceId/artworks/$artworkId/edit': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute
+  '/spaces/$spaceId/artworks/$artworkId/': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppOnlyAuthenticatedIndexRoute
@@ -229,11 +237,12 @@ export interface FileRoutesByTo {
   '/spaces/$spaceId/guest/guestbook/write': typeof SpacesSpaceIdGuestGuestbookWriteRoute
   '/spaces/$spaceId': typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
   '/spaces/$spaceId/guest/guestbook': typeof SpacesSpaceIdGuestGuestbookIndexRoute
-  '/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   '/spaces/$spaceId/guestbook/$guestbookId': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
   '/spaces/$spaceId/create-product': typeof AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRoute
   '/spaces/$spaceId/edit': typeof AppOnlyAuthenticatedSpacesSpaceIdEditIndexRoute
   '/spaces/$spaceId/guestbook': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  '/spaces/$spaceId/artworks/$artworkId/edit': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute
+  '/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -258,11 +267,12 @@ export interface FileRoutesById {
   '/spaces/$spaceId/guest/guestbook/write': typeof SpacesSpaceIdGuestGuestbookWriteRoute
   '/_appOnly/_authenticated/spaces/$spaceId/': typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
   '/spaces/$spaceId/guest/guestbook/': typeof SpacesSpaceIdGuestGuestbookIndexRoute
-  '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   '/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
   '/_appOnly/_authenticated/spaces/$spaceId/create-product/': typeof AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRoute
   '/_appOnly/_authenticated/spaces/$spaceId/edit/': typeof AppOnlyAuthenticatedSpacesSpaceIdEditIndexRoute
   '/_appOnly/_authenticated/spaces/$spaceId/guestbook/': typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/edit': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute
+  '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/': typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -286,11 +296,12 @@ export interface FileRouteTypes {
     | '/spaces/$spaceId/guest/guestbook/write'
     | '/spaces/$spaceId/'
     | '/spaces/$spaceId/guest/guestbook/'
-    | '/spaces/$spaceId/artworks/$artworkId'
     | '/spaces/$spaceId/guestbook/$guestbookId'
     | '/spaces/$spaceId/create-product/'
     | '/spaces/$spaceId/edit/'
     | '/spaces/$spaceId/guestbook/'
+    | '/spaces/$spaceId/artworks/$artworkId/edit'
+    | '/spaces/$spaceId/artworks/$artworkId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -310,11 +321,12 @@ export interface FileRouteTypes {
     | '/spaces/$spaceId/guest/guestbook/write'
     | '/spaces/$spaceId'
     | '/spaces/$spaceId/guest/guestbook'
-    | '/spaces/$spaceId/artworks/$artworkId'
     | '/spaces/$spaceId/guestbook/$guestbookId'
     | '/spaces/$spaceId/create-product'
     | '/spaces/$spaceId/edit'
     | '/spaces/$spaceId/guestbook'
+    | '/spaces/$spaceId/artworks/$artworkId/edit'
+    | '/spaces/$spaceId/artworks/$artworkId'
   id:
     | '__root__'
     | '/_appOnly'
@@ -338,11 +350,12 @@ export interface FileRouteTypes {
     | '/spaces/$spaceId/guest/guestbook/write'
     | '/_appOnly/_authenticated/spaces/$spaceId/'
     | '/spaces/$spaceId/guest/guestbook/'
-    | '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId'
     | '/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId'
     | '/_appOnly/_authenticated/spaces/$spaceId/create-product/'
     | '/_appOnly/_authenticated/spaces/$spaceId/edit/'
     | '/_appOnly/_authenticated/spaces/$spaceId/guestbook/'
+    | '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/edit'
+    | '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -528,11 +541,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImport
       parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
     }
-    '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId': {
-      id: '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId'
+    '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/'
       path: '/artworks/$artworkId'
-      fullPath: '/spaces/$spaceId/artworks/$artworkId'
-      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRouteImport
+      fullPath: '/spaces/$spaceId/artworks/$artworkId/'
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRouteImport
+      parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
+    }
+    '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/edit': {
+      id: '/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/edit'
+      path: '/artworks/$artworkId/edit'
+      fullPath: '/spaces/$spaceId/artworks/$artworkId/edit'
+      preLoaderRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRouteImport
       parentRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdRoute
     }
   }
@@ -540,19 +560,18 @@ declare module '@tanstack/react-router' {
 
 interface AppOnlyAuthenticatedSpacesSpaceIdRouteChildren {
   AppOnlyAuthenticatedSpacesSpaceIdIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdIndexRoute
-  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute
   AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute
   AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRoute
   AppOnlyAuthenticatedSpacesSpaceIdEditIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdEditIndexRoute
   AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute
+  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute
+  AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute: typeof AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute
 }
 
 const AppOnlyAuthenticatedSpacesSpaceIdRouteChildren: AppOnlyAuthenticatedSpacesSpaceIdRouteChildren =
   {
     AppOnlyAuthenticatedSpacesSpaceIdIndexRoute:
       AppOnlyAuthenticatedSpacesSpaceIdIndexRoute,
-    AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute:
-      AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdRoute,
     AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute:
       AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRoute,
     AppOnlyAuthenticatedSpacesSpaceIdCreateProductIndexRoute:
@@ -561,6 +580,10 @@ const AppOnlyAuthenticatedSpacesSpaceIdRouteChildren: AppOnlyAuthenticatedSpaces
       AppOnlyAuthenticatedSpacesSpaceIdEditIndexRoute,
     AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute:
       AppOnlyAuthenticatedSpacesSpaceIdGuestbookIndexRoute,
+    AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute:
+      AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute,
+    AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute:
+      AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRoute,
   }
 
 const AppOnlyAuthenticatedSpacesSpaceIdRouteWithChildren =
