@@ -5,6 +5,7 @@ import type {
   ApiResponseIssueSignedUrlResponse,
   WriteGuestBookCardPhotoRequest,
 } from "@/api/model";
+import { uploadImageToSignedUrl } from "@/api/uploadImageToSignedUrl";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -55,16 +56,15 @@ export const useGuestBookSubmit = () => {
       (response as unknown as ApiResponseIssueSignedUrlResponse).data
         ?.signedUrls ?? {};
 
+    // presigned URL은 x-amz-tagging까지 서명에 포함하므로, 해당 헤더를 함께 보내고
+    // 응답 상태까지 검증하는 공용 업로더를 사용한다. (raw fetch는 헤더 누락으로 403,
+    // 게다가 fetch는 4xx에 reject하지 않아 실패해도 방명록 POST가 이어지는 문제가 있었음)
     await Promise.all(
       webpPhotos.map((blob, index) => {
         const uploadFileName = uploadFiles[index].fileName;
         const signedUrl = signedUrls[uploadFileName];
         if (!signedUrl) throw new Error("사진 업로드 URL 발급에 실패했습니다.");
-        return fetch(signedUrl, {
-          method: "PUT",
-          headers: { "Content-Type": "image/webp" },
-          body: blob,
-        });
+        return uploadImageToSignedUrl(signedUrl, blob, uploadFileName);
       }),
     );
 
