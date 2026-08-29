@@ -1,7 +1,13 @@
 import type { ReactElement, SVGProps } from "react";
-import { useEffect, useId, useMemo } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
+import { ERROR_MESSAGES } from "@/constants/error";
 import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
+import useSnackBar from "@/hooks/@common/useSnackBar";
+import {
+  type NormalizedImage,
+  normalizeImageForWeb,
+} from "@/utils/normalizeImageForWeb";
 import * as S from "./PhotoInput.styles";
 
 interface PhotoInputProps {
@@ -31,8 +37,10 @@ const PhotoInput = ({
   listAriaLabel = "첨부한 사진",
 }: PhotoInputProps) => {
   const inputId = useId();
+  const { showSnackBar } = useSnackBar();
   const { requestPhotoPicker, isNativeAvailable } =
     useNativePhotoPickerBridge();
+  const [isConverting, setIsConverting] = useState(false);
   const canAddMore = photos.length < maxCount;
 
   const previewUrls = useMemo(
@@ -46,24 +54,60 @@ const PhotoInput = ({
     };
   }, [previewUrls]);
 
-  const addPhotos = (files: File[]) => {
+  const appendFiles = (files: File[]) => {
     if (files.length > 0) onChange([...photos, ...files].slice(0, maxCount));
   };
 
-  // 웹뷰가 아닌 순수 브라우저(예: 방명록 작성 링크를 브라우저로 접근)에서의 폴백 경로
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    addPhotos(Array.from(e.target.files ?? []));
+  // 웹뷰가 아닌 순수 브라우저(예: 방명록 작성 링크를 브라우저로 접근)에서의 폴백 경로.
+  // HEIC 등 브라우저가 못 다루는 포맷은 미리보기·업로드 전에 여기서 정규화한다.
+  const handleFileInputChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const selected = Array.from(e.target.files ?? []);
     e.target.value = "";
+    if (selected.length === 0 || isConverting) return;
+
+    setIsConverting(true);
+    try {
+      const settled = await Promise.allSettled(
+        selected.map((file) => normalizeImageForWeb(file, file.name)),
+      );
+      const files = settled
+        .filter(
+          (result): result is PromiseFulfilledResult<NormalizedImage> =>
+            result.status === "fulfilled",
+        )
+        .map(
+          ({ value }) =>
+            new File([value.blob], value.fileName, {
+              type: value.blob.type || "image/jpeg",
+            }),
+        );
+      appendFiles(files);
+      if (files.length < selected.length) {
+        showSnackBar(ERROR_MESSAGES.IMAGE_CONVERT_FAILED, "error");
+      }
+    } finally {
+      setIsConverting(false);
+    }
   };
 
-  // RN 앱 웹뷰 안에서는 네이티브 갤러리 피커를 사용
+  // RN 앱 웹뷰 안에서는 네이티브 갤러리 피커를 사용 (정규화는 브릿지 훅에서 처리됨)
   const handleNativeAdd = async () => {
-    const picked = await requestPhotoPicker(maxCount - photos.length);
-    addPhotos(
-      picked.map(
-        ({ blob, fileName }) => new File([blob], fileName, { type: blob.type }),
-      ),
-    );
+    if (isConverting) return;
+
+    setIsConverting(true);
+    try {
+      const picked = await requestPhotoPicker(maxCount - photos.length);
+      appendFiles(
+        picked.map(
+          ({ blob, fileName }) =>
+            new File([blob], fileName, { type: blob.type || "image/jpeg" }),
+        ),
+      );
+    } finally {
+      setIsConverting(false);
+    }
   };
 
   const handleRemove = (index: number) => {
@@ -73,7 +117,11 @@ const PhotoInput = ({
   return (
     <S.Grid role="list" aria-label={listAriaLabel}>
       {canAddMore &&
-        (isNativeAvailable ? (
+        (isConverting ? (
+          <S.ConvertingBox role="status" aria-label="사진을 불러오는 중">
+            <S.Spinner aria-hidden="true" />
+          </S.ConvertingBox>
+        ) : isNativeAvailable ? (
           <S.AddButton
             type="button"
             onClick={handleNativeAdd}
