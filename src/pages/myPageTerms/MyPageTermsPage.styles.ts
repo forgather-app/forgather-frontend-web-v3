@@ -123,7 +123,8 @@ export const ModalCloseButton = styled.button`
 export const ModalBody = styled.div`
   overflow-y: auto;
   max-height: 324px;
-  padding-bottom: 16px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 
   scrollbar-width: thin;
   scrollbar-color: ${({ theme }) => theme.colors.gray.gray400} transparent;

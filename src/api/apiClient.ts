@@ -1,4 +1,5 @@
 import axios from "axios";
+import { notifyNativeLogout } from "@/utils/nativeBridge";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
 
@@ -28,6 +29,9 @@ const forceLogoutAndRedirect = () => {
   // NOTE: stateless JWT라 서버가 발급된 토큰 자체를 무효화하지는 못하지만,
   // 쿠키는 만료시켜야 하므로 로그아웃 요청 후 로그인 페이지로 이동
   apiClient.post(LOGOUT_PATH).finally(() => {
+    // NOTE: 앱 WebView는 Authorization 토큰을 주입하므로, 서버 로그아웃과 별개로
+    // 앱에 토큰 폐기를 알려야 세션이 실제로 끊긴다 (docs/webview-logout-token-persistence.md)
+    notifyNativeLogout();
     const redirectTo = `${window.location.pathname}${window.location.search}`;
     window.location.href = `/login?redirectTo=${encodeURIComponent(redirectTo)}`;
   });
