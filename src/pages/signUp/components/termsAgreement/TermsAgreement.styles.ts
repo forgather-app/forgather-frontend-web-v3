@@ -167,8 +167,8 @@ export const ModalBody = styled.div`
   color: ${({ theme }) => theme.colors.gray.gray50};
   overflow-y: auto;
   max-height: 324px;
-  padding-right: 16px;
-  padding-bottom: 16px;
+  padding-right: 20px;
+  padding-bottom: 20px;
 
   scrollbar-width: thin;
   scrollbar-color: ${({ theme }) => theme.colors.gray.gray400} transparent;
