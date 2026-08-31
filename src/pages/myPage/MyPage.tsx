@@ -1,7 +1,6 @@
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useLogout } from "@/api/generated/auth-인증";
 import { useGetProfileSuspense } from "@/api/generated/host-호스트";
 import type { ApiResponseHostProfileResponse } from "@/api/model";
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
@@ -10,9 +9,8 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
-import { ERROR_MESSAGES } from "@/constants/error";
-import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
+import LogoutModal from "./components/LogoutModal/LogoutModal";
 import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
 import * as S from "./MyPage.styles";
 
@@ -22,9 +20,8 @@ const APP_VERSION = "v1.0.0";
 const MyPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { showSnackBar } = useSnackBar();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
-  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { data: profile } = useGetProfileSuspense({
     query: {
       select: (response) =>
@@ -98,17 +95,7 @@ const MyPage = () => {
         <li>
           <S.MenuButton
             type="button"
-            disabled={isLoggingOut}
-            onClick={() => {
-              logout(undefined, {
-                onSuccess: () => {
-                  navigate({ to: "/login" });
-                },
-                onError: () => {
-                  showSnackBar(ERROR_MESSAGES.LOGOUT_FAILED, "error");
-                },
-              });
-            }}
+            onClick={() => setIsLogoutModalOpen(true)}
           >
             로그아웃
             <IcChevronRight aria-hidden="true" />
@@ -142,6 +129,11 @@ const MyPage = () => {
           <LogoWordmark aria-hidden="true" />
         </S.FooterInfo>
       </S.Footer>
+
+      <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+      />
 
       <WithdrawModal
         isOpen={isWithdrawModalOpen}
