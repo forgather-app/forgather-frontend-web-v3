@@ -39,8 +39,9 @@ function RouteComponent() {
   );
   const isDetailRoute = matches.some(
     (match) =>
-      match.routeId ===
-        "/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId" ||
+      match.routeId.startsWith(
+        "/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId",
+      ) ||
       match.routeId ===
         "/_appOnly/_authenticated/spaces/$spaceId/guestbook/$guestbookId" ||
       match.routeId ===

@@ -10,15 +10,27 @@ import {
 } from "@/utils/normalizeImageForWeb";
 import * as S from "./PhotoInput.styles";
 
+/** 서버에 이미 저장된 사진(수정 화면에서 기존 사진을 표시할 때 사용) */
+export interface ExistingPhoto {
+  /** 사진 id — 삭제 요청 시 서버에 전달할 식별자 */
+  id: number;
+  /** 표시할 이미지 URL */
+  url: string;
+}
+
 interface PhotoInputProps {
-  /** 선택된 사진 목록. showCoverBadge가 true면 첫 번째 사진이 대표 사진으로 표시됨 */
+  /** 새로 선택한 사진 목록. showCoverBadge가 true면 (기존 사진이 없을 때) 첫 번째 사진이 대표 사진으로 표시됨 */
   photos: File[];
-  /** 최대 선택 가능 장수 */
+  /** 최대 선택 가능 장수. 기존 사진 + 새 사진의 합계 기준으로 판단됨 */
   maxCount: number;
-  /** 사진 목록 변경 시 호출 */
+  /** 새 사진 목록 변경 시 호출 */
   onChange: (photos: File[]) => void;
   /** 추가 버튼에 표시할 아이콘 (24×24 SVG 권장) */
   icon: ReactElement<SVGProps<SVGSVGElement>>;
+  /** 서버에 이미 저장된 사진 목록. 전달 시 새 사진보다 앞에 표시됨 (수정 화면 전용) */
+  existingPhotos?: ExistingPhoto[];
+  /** 기존 사진의 삭제 버튼 클릭 시 호출. existingPhotos를 전달했다면 함께 지정해야 함 */
+  onRemoveExisting?: (id: number) => void;
   /** 첫 번째 사진에 '대표 사진' 배지 표시 여부. 작품 등록처럼 대표 사진 개념이 있는 경우에만 true로 설정 */
   showCoverBadge?: boolean;
   /** 추가 버튼의 접근성 레이블 */
@@ -32,6 +44,8 @@ const PhotoInput = ({
   maxCount,
   onChange,
   icon,
+  existingPhotos = [],
+  onRemoveExisting,
   showCoverBadge = false,
   addButtonAriaLabel = "사진 추가",
   listAriaLabel = "첨부한 사진",
@@ -41,7 +55,8 @@ const PhotoInput = ({
   const { requestPhotoPicker, isNativeAvailable } =
     useNativePhotoPickerBridge();
   const [isConverting, setIsConverting] = useState(false);
-  const canAddMore = photos.length < maxCount;
+  const totalCount = existingPhotos.length + photos.length;
+  const canAddMore = totalCount < maxCount;
 
   const previewUrls = useMemo(
     () => photos.map((photo) => URL.createObjectURL(photo)),
@@ -55,7 +70,9 @@ const PhotoInput = ({
   }, [previewUrls]);
 
   const appendFiles = (files: File[]) => {
-    if (files.length > 0) onChange([...photos, ...files].slice(0, maxCount));
+    if (files.length === 0 || totalCount >= maxCount) return;
+    // 기존 사진 장수를 제외한 나머지만큼만 새 사진을 채운다
+    onChange([...photos, ...files].slice(0, maxCount - existingPhotos.length));
   };
 
   // 웹뷰가 아닌 순수 브라우저(예: 방명록 작성 링크를 브라우저로 접근)에서의 폴백 경로.
@@ -98,7 +115,7 @@ const PhotoInput = ({
 
     setIsConverting(true);
     try {
-      const picked = await requestPhotoPicker(maxCount - photos.length);
+      const picked = await requestPhotoPicker(maxCount - totalCount);
       appendFiles(
         picked.map(
           ({ blob, fileName }) =>
@@ -143,29 +160,50 @@ const PhotoInput = ({
             />
           </>
         ))}
-      {photos.map((photo, index) => (
-        <S.Thumbnail
-          key={`${photo.name}-${photo.lastModified}`}
-          role="listitem"
-        >
-          <S.PreviewImage
-            src={previewUrls[index]}
-            alt={
-              showCoverBadge && index === 0 ? "대표 사진" : `사진 ${index + 1}`
-            }
-          />
-          {showCoverBadge && index === 0 && (
-            <S.CoverBadge>대표 사진</S.CoverBadge>
-          )}
-          <S.RemoveButton
-            type="button"
-            aria-label={`사진 ${index + 1} 삭제`}
-            onClick={() => handleRemove(index)}
+      {existingPhotos.map((photo, index) => {
+        const isCover = showCoverBadge && index === 0;
+        return (
+          <S.Thumbnail key={`existing-${photo.id}`} role="listitem">
+            <S.PreviewImage
+              src={photo.url}
+              alt={isCover ? "대표 사진" : `사진 ${index + 1}`}
+            />
+            {isCover && <S.CoverBadge>대표 사진</S.CoverBadge>}
+            {onRemoveExisting && (
+              <S.RemoveButton
+                type="button"
+                aria-label={`사진 ${index + 1} 삭제`}
+                onClick={() => onRemoveExisting(photo.id)}
+              >
+                <IcClose aria-hidden="true" width={16} height={16} />
+              </S.RemoveButton>
+            )}
+          </S.Thumbnail>
+        );
+      })}
+      {photos.map((photo, index) => {
+        const position = existingPhotos.length + index;
+        const isCover = showCoverBadge && position === 0;
+        return (
+          <S.Thumbnail
+            key={`${photo.name}-${photo.lastModified}`}
+            role="listitem"
           >
-            <IcClose aria-hidden="true" width={16} height={16} />
-          </S.RemoveButton>
-        </S.Thumbnail>
-      ))}
+            <S.PreviewImage
+              src={previewUrls[index]}
+              alt={isCover ? "대표 사진" : `사진 ${position + 1}`}
+            />
+            {isCover && <S.CoverBadge>대표 사진</S.CoverBadge>}
+            <S.RemoveButton
+              type="button"
+              aria-label={`사진 ${position + 1} 삭제`}
+              onClick={() => handleRemove(index)}
+            >
+              <IcClose aria-hidden="true" width={16} height={16} />
+            </S.RemoveButton>
+          </S.Thumbnail>
+        );
+      })}
     </S.Grid>
   );
 };

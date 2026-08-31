@@ -45,6 +45,16 @@ const meta: Meta<typeof PhotoInput> = {
         defaultValue: { summary: "false" },
       },
     },
+    existingPhotos: {
+      description:
+        "서버에 이미 저장된 사진 목록({ id, url }). 전달 시 새 사진보다 앞에 표시되며, 수정 화면에서 사용합니다.",
+      table: { type: { summary: "ExistingPhoto[]" } },
+    },
+    onRemoveExisting: {
+      description:
+        "기존 사진의 삭제 버튼 클릭 시 호출됩니다. existingPhotos를 전달했다면 함께 지정합니다.",
+      table: { type: { summary: "(id: number) => void" } },
+    },
   },
 };
 
@@ -92,5 +102,42 @@ export const WithCoverBadge: Story = {
   render: (args) => {
     const [photos, setPhotos] = useState<File[]>([]);
     return <PhotoInput {...args} photos={photos} onChange={setPhotos} />;
+  },
+};
+
+export const WithExistingPhotos: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "서버에 이미 저장된 사진(`existingPhotos`)을 함께 표시하는 예시입니다. 작품 수정처럼 기존 사진을 개별 삭제하고 새 사진을 추가하는 화면에서 사용합니다. 기존 사진은 새 사진보다 앞에 오고, 대표 사진 배지는 전체 목록의 첫 번째 사진에만 표시됩니다.",
+      },
+    },
+  },
+  args: {
+    maxCount: 10,
+    icon: <IcPhoto aria-hidden="true" width={24} height={24} />,
+    showCoverBadge: true,
+    addButtonAriaLabel: "작품 사진 추가",
+    listAriaLabel: "첨부한 작품 사진",
+  },
+  render: (args) => {
+    const [photos, setPhotos] = useState<File[]>([]);
+    const [existingPhotos, setExistingPhotos] = useState([
+      { id: 1, url: "https://picsum.photos/id/1015/200" },
+      { id: 2, url: "https://picsum.photos/id/1016/200" },
+      { id: 3, url: "https://picsum.photos/id/1018/200" },
+    ]);
+    return (
+      <PhotoInput
+        {...args}
+        photos={photos}
+        onChange={setPhotos}
+        existingPhotos={existingPhotos}
+        onRemoveExisting={(id) =>
+          setExistingPhotos((prev) => prev.filter((photo) => photo.id !== id))
+        }
+      />
+    );
   },
 };

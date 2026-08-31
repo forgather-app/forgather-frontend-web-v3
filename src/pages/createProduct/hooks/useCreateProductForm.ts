@@ -2,13 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { withApiVersion } from "@/api/apiVersion";
 import { useRegisterV3 } from "@/api/generated/product-전시-작품";
-import { useIssueProductSignedUrls } from "@/api/generated/upload-파일-업로드";
-import type {
-  ApiResponseIssueSignedUrlResponse,
-  RegisterProductPhotoRequest,
-} from "@/api/model";
-import { uploadImageToSignedUrl } from "@/api/uploadImageToSignedUrl";
-import { CONSTRAINTS } from "@/constants/constraints";
+import type { RegisterProductPhotoRequest } from "@/api/model";
+import { uploadProductPhotos } from "@/api/uploadProductPhotos";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
@@ -19,7 +14,6 @@ import {
   validateProductVideoUrlFormat,
   validateProductVideoUrlMaxLength,
 } from "@/pages/createProduct/utils/createProductValidation";
-import { convertImageToWebp } from "@/utils/convertImageToWebp";
 
 interface CreateProductFormValues {
   title: string;
@@ -73,54 +67,9 @@ export const useCreateProductForm = (spaceCode: string) => {
 
   const [photos, setPhotos] = useState<File[]>([]);
   const [isUploadingPhotos, setIsUploadingPhotos] = useState(false);
-  const { mutateAsync: issuePreSignedUrls } = useIssueProductSignedUrls();
   const { mutate: registerProduct, isPending: isRegistering } = useRegisterV3({
     request: withApiVersion(3),
   });
-
-  const uploadPhotos = async (): Promise<RegisterProductPhotoRequest[]> => {
-    if (photos.length === 0) return [];
-
-    // NOTE: presigned URL 스펙상 확장자·Content-Type이 webp로 고정 서명되어 있어,
-    // 원본 포맷(HEIC 등 네이티브 피커 결과 포함)과 무관하게 업로드 전 webp로 변환해야 함
-    const webpPhotos = await Promise.all(
-      photos.map((file) =>
-        convertImageToWebp(file, {
-          maxSize: CONSTRAINTS.IMAGE.UPLOAD_MAX_DIMENSION,
-          quality: CONSTRAINTS.IMAGE.UPLOAD_QUALITY,
-        }),
-      ),
-    );
-    const uploadFiles = webpPhotos.map((blob) => ({
-      fileName: `${crypto.randomUUID()}.webp`,
-      size: blob.size,
-    }));
-
-    const response = await issuePreSignedUrls({
-      spaceCode,
-      data: { uploadFiles },
-    });
-    // NOTE: BE 스펙상 응답 content-type이 `*/*`라 orval이 Blob으로 잘못 추론함.
-    // 실제 응답 바디는 ApiResponseIssueSignedUrlResponse (JSON)이므로 캐스팅해서 사용
-    const signedUrls =
-      (response as unknown as ApiResponseIssueSignedUrlResponse).data
-        ?.signedUrls ?? {};
-
-    await Promise.all(
-      webpPhotos.map((blob, index) => {
-        const uploadFileName = uploadFiles[index].fileName;
-        const signedUrl = signedUrls[uploadFileName];
-        if (!signedUrl) throw new Error("사진 업로드 URL 발급에 실패했습니다.");
-        return uploadImageToSignedUrl(signedUrl, blob, uploadFileName);
-      }),
-    );
-
-    return photos.map((file, index) => ({
-      originalName: file.name,
-      uploadFileName: uploadFiles[index].fileName,
-      capacity: webpPhotos[index].size,
-    }));
-  };
 
   // 필수값 미입력 에러는 blur로 터치된 이후에만 노출, 글자 수 초과 에러는 항상 즉시 노출
   const titleError =
@@ -136,7 +85,7 @@ export const useCreateProductForm = (spaceCode: string) => {
       let photoRequests: RegisterProductPhotoRequest[];
       try {
         setIsUploadingPhotos(true);
-        photoRequests = await uploadPhotos();
+        photoRequests = await uploadProductPhotos(spaceCode, photos);
       } catch {
         showSnackBar(ERROR_MESSAGES.PHOTO_UPLOAD_FAILED, "error");
         return;

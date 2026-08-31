@@ -273,7 +273,7 @@ const ArtworkDetailPage = ({
                 style={{ flex: 1 }}
               />
               <Button
-                variant="primary"
+                variant="danger"
                 text="삭제하기"
                 onClick={handleConfirmDelete}
                 style={{ flex: 1 }}
