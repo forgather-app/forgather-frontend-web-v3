@@ -9,7 +9,8 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
 // NOTE: RN → Web 메시지 형식
-// { type: 'APPLE_TOKEN', payload: { id_token, authorization_code, raw_nonce, full_name? } }
+// 성공: { type: 'APPLE_TOKEN', payload: { id_token, authorization_code, raw_nonce, full_name? } }
+// 취소/실패: { type: 'APPLE_TOKEN_ERROR', payload: { canceled?: boolean; message?: string } }
 // raw_nonce는 RN이 Apple 요청 전에 미리 생성해 보관한 값, full_name은 Apple 최초 동의 시에만 전달됨
 interface AppleTokenMessage {
   type: "APPLE_TOKEN";
@@ -20,6 +21,16 @@ interface AppleTokenMessage {
     full_name?: string;
   };
 }
+
+interface AppleTokenErrorMessage {
+  type: "APPLE_TOKEN_ERROR";
+  payload?: {
+    canceled?: boolean;
+    message?: string;
+  };
+}
+
+type AppleBridgeMessage = AppleTokenMessage | AppleTokenErrorMessage;
 
 const useAppleLoginBridge = (redirectTo?: string) => {
   const navigate = useNavigate();
@@ -66,10 +77,21 @@ const useAppleLoginBridge = (redirectTo?: string) => {
       try {
         const rawData =
           typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-        if (!rawData || rawData.type !== "APPLE_TOKEN") return;
-        const data = rawData as AppleTokenMessage;
+        if (!rawData) return;
+        const data = rawData as AppleBridgeMessage;
 
-        handleAppleToken(data.payload);
+        if (data.type === "APPLE_TOKEN") {
+          handleAppleToken(data.payload);
+          return;
+        }
+        if (data.type === "APPLE_TOKEN_ERROR") {
+          // NOTE: 사용자가 네이티브 로그인 창을 닫은 경우(canceled)는 조용히 원복.
+          // 그 외 실패는 스낵바로 안내.
+          if (!data.payload?.canceled) {
+            showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");
+          }
+          setIsRequesting(false);
+        }
       } catch (err) {
         // TODO: 원인 파악 후 제거
         console.error("APPLE_TOKEN parse/handle error", err, e.data);
@@ -82,7 +104,7 @@ const useAppleLoginBridge = (redirectTo?: string) => {
       window.removeEventListener("message", handleMessage);
       document.removeEventListener("message", handleMessage as EventListener);
     };
-  }, [handleAppleToken]);
+  }, [handleAppleToken, showSnackBar]);
 
   // Web → RN: 애플 로그인 요청
   const requestAppleLogin = () => {
