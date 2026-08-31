@@ -24,7 +24,6 @@ export const IconButton = styled.button`
   align-items: center;
   justify-content: center;
   padding: 8px;
-  margin: 0 -8px;
   color: ${({ theme }) => theme.colors.gray.gray400};
 `;
 
