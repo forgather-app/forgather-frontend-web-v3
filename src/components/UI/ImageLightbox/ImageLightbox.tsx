@@ -29,25 +29,27 @@ const LightboxSlide = ({ image, index, onSave }: LightboxSlideProps) => {
 
   return (
     <S.ImageSquare>
-      {imageError ? (
-        <S.PlaceholderWrapper aria-hidden>
-          <ImagePlaceholderGraphic />
-        </S.PlaceholderWrapper>
-      ) : (
-        <S.SlideImage
-          src={image.url}
-          alt={`첨부 이미지 ${index + 1}`}
-          onError={() => setImageError(true)}
-        />
-      )}
-      <S.DownloadButtonWrapper>
-        <Button
-          variant="icon"
-          icon={<IcDownload aria-hidden="true" />}
-          aria-label="이미지 다운로드"
-          onClick={() => onSave(image, index)}
-        />
-      </S.DownloadButtonWrapper>
+      <S.ImageFrame>
+        {imageError ? (
+          <S.PlaceholderWrapper aria-hidden>
+            <ImagePlaceholderGraphic />
+          </S.PlaceholderWrapper>
+        ) : (
+          <S.SlideImage
+            src={image.url}
+            alt={`첨부 이미지 ${index + 1}`}
+            onError={() => setImageError(true)}
+          />
+        )}
+        <S.DownloadButtonWrapper>
+          <Button
+            variant="icon"
+            icon={<IcDownload aria-hidden="true" />}
+            aria-label="이미지 다운로드"
+            onClick={() => onSave(image, index)}
+          />
+        </S.DownloadButtonWrapper>
+      </S.ImageFrame>
     </S.ImageSquare>
   );
 };
