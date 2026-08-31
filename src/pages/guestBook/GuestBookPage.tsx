@@ -162,6 +162,8 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
             <GuestList
               key={card.id}
               nickname={card.nickname ?? ""}
+              message={card.message}
+              createdAt={card.createdAt ? new Date(card.createdAt) : undefined}
               hasPhoto={card.containsPhoto}
               onClick={() => onCardClick(card.id)}
             />
