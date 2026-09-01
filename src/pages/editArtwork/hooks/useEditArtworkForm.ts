@@ -145,8 +145,8 @@ export const useEditArtworkForm = (
             authorName: values.authorName.trim(),
             description: values.description,
             videoUrl: values.videoUrl.trim(),
-            // 사진 → 영상 순서 재정렬 UI가 없어 기존 값을 유지(없으면 사진 다음 영상)
-            isVideoAfterPhoto: product.isVideoAfterPhoto ?? true,
+            // 순서 재정렬 UI가 없어, 영상을 사진보다 먼저 노출하도록 고정 전달
+            isVideoAfterPhoto: false,
             deletePhotoIds,
             newPhotos,
           },
