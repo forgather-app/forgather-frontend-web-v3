@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import IcPlus from "@/assets/icons/ic_plus.svg?react";
 import { gradientSweep } from "@/styles/animations";
+import { selectableText } from "@/styles/mixins";
 
 export const HomePageContainer = styled.div`
   display: flex;
@@ -40,6 +41,7 @@ export const UserProfile = styled.div`
 export const UserName = styled.h2`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.white};
+  ${selectableText};
 `;
 
 export const HeaderActions = styled.div`

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { selectableText } from "@/styles/mixins";
 
 export const PageWrapper = styled.div`
   display: flex;
@@ -35,6 +36,7 @@ export const NameRow = styled.div`
 export const Name = styled.strong`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.gray50};
+  ${selectableText};
 `;
 
 export const NameSuffix = styled.span`
@@ -54,6 +56,7 @@ export const IntroText = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   white-space: pre-line;
+  ${selectableText};
 `;
 
 export const ContactLink = styled.a`

@@ -232,6 +232,7 @@ fill-ing/
 │   ├── stories/         # Storybook 스토리 (컴포넌트 단위)
 │   ├── styles/          # 전역 스타일 및 테마
 │   │   ├── animations.ts    # 공통 Emotion keyframes 애니메이션
+│   │   ├── mixins.ts        # styled component에 합성하는 재사용 css 스니펫 (selectableText 등)
 │   │   ├── @common/         # 공통 스타일 컴포넌트 (Backdrop 등)
 │   │   ├── theme.ts         # 디자인 토큰 (색상, 타이포그래피, 레이아웃 등)
 │   │   ├── GlobalStyle.tsx  # 전역 스타일 컴포넌트
@@ -299,6 +300,7 @@ UI 제약값, 임계값 등 프로젝트 공통 상수를 관리합니다.
 전역 스타일, 테마, 디자인 토큰 등을 관리합니다.
 
 - `animations.ts`: 여러 컴포넌트에서 재사용되는 공통 Emotion keyframes
+- `mixins.ts`: styled component에 합성하는 재사용 css 스니펫 (예: `selectableText` — 사용자 입력 콘텐츠 텍스트 선택 허용)
 - `@common/`: Backdrop 등 재사용 가능한 공통 스타일 컴포넌트
 - `theme.ts`: 색상, 타이포그래피, 레이아웃(zIndex) 등 디자인 토큰 정의
 - `GlobalStyle.tsx`: 전역 스타일 컴포넌트

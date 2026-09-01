@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { gradientSweep } from "@/styles/animations";
+import { selectableText } from "@/styles/mixins";
 import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const ScrollArea = styled.div`
@@ -37,6 +38,7 @@ export const UserAvatar = styled.div`
 export const UserName = styled.span`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
+  ${selectableText};
 `;
 
 export const TitleRow = styled.div`
@@ -55,6 +57,7 @@ export const Title = styled.h1`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  ${selectableText};
 `;
 
 export const SpaceLink = styled.a`
@@ -65,6 +68,7 @@ export const SpaceLink = styled.a`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray300};
   text-decoration: underline;
+  ${selectableText};
 `;
 
 export const DescriptionRow = styled("div", { shouldForwardProp })<{
@@ -91,6 +95,7 @@ export const Description = styled("p", { shouldForwardProp })<{
   display: -webkit-box;
   -webkit-line-clamp: ${({ $isExpanded }) => ($isExpanded ? "unset" : 2)};
   -webkit-box-orient: vertical;
+  ${selectableText};
 `;
 
 export const MoreButton = styled.button`

@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { selectableText } from "@/styles/mixins";
 
 export const Card = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ export const Title = styled.p`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  ${selectableText};
 `;
 
 export const ImageFrame = styled.div`

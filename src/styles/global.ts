@@ -22,6 +22,17 @@ export const global = (theme: Theme) => css`
     font-family: 'SUIT', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
     background-color: ${theme.colors.gray.gray700};
     word-break: break-all;
+    /* 시스템 UI 문구 복사 방지 — 사용자 입력 콘텐츠는 styles/mixins의 selectableText로 다시 허용한다 */
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  /* 입력값 편집·선택은 항상 허용 */
+  input,
+  textarea,
+  [contenteditable] {
+    -webkit-user-select: text;
+    user-select: text;
   }
   a {
     text-decoration: none;

@@ -1,6 +1,7 @@
 import type { Theme } from "@emotion/react";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { selectableText } from "@/styles/mixins";
 
 export const EditIconWrapper = styled.span`
   display: inline-flex;
@@ -31,6 +32,7 @@ export const NameRow = styled.div`
 export const Name = styled.strong`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.white};
+  ${selectableText};
 `;
 
 export const NameSuffix = styled.span`
@@ -49,6 +51,7 @@ export const IntroText = styled.p`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   white-space: pre-line;
+  ${selectableText};
 `;
 
 export const ContactLink = styled.a`
@@ -58,6 +61,7 @@ export const ContactLink = styled.a`
   ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray300};
   text-decoration: underline;
+  ${selectableText};
 `;
 
 export const MenuList = styled.ul`
