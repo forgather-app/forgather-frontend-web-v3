@@ -14,7 +14,7 @@ export const Backdrop = styled.div`
 export const CloseButton = styled.button`
   position: absolute;
   top: 16px;
-  left: 16px;
+  right: 16px;
   z-index: 1;
   display: flex;
   align-items: center;
