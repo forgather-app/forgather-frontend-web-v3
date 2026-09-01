@@ -139,7 +139,6 @@ export const SpaceList = styled.div`
 
 export const BottomCta = styled.div`
   flex-shrink: 0;
-  padding: 12px 16px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
 `;
 
