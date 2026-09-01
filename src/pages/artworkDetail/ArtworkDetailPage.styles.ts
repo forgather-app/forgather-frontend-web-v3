@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { gradientSweep } from "@/styles/animations";
+import { selectableText } from "@/styles/mixins";
 
 export const ScrollArea = styled.div`
   flex: 1;
@@ -47,17 +48,20 @@ export const TitleSection = styled.div`
 export const Title = styled.h1`
   ${({ theme }) => ({ ...theme.typography.heading1 })};
   color: ${({ theme }) => theme.colors.gray.white};
+  ${selectableText};
 `;
 
 export const Artist = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray300};
+  ${selectableText};
 `;
 
 export const Description = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   white-space: pre-wrap;
+  ${selectableText};
 `;
 
 export const ImageList = styled.div`

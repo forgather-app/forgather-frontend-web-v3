@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { selectableText } from "@/styles/mixins";
 
 export const Card = styled.section`
   display: flex;
@@ -70,6 +71,7 @@ export const SpaceName = styled.h2`
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  ${selectableText};
 `;
 
 export const Actions = styled.div`

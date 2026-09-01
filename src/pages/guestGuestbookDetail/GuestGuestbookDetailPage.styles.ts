@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { gradientSweep } from "@/styles/animations";
+import { selectableText } from "@/styles/mixins";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -35,6 +36,7 @@ export const SlideContent = styled.div`
 export const Message = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
+  ${selectableText};
 `;
 
 export const SkeletonPhoto = styled.div`
