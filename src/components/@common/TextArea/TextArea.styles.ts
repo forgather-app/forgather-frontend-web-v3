@@ -51,9 +51,20 @@ export const Textarea = styled.textarea`
     color: ${({ theme }) => theme.colors.gray.gray300};
   }
 
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: ${({ theme }) => theme.colors.gray.gray400} transparent;
+
   &::-webkit-scrollbar {
-    display: none;
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.colors.gray.gray400};
+    border-radius: 999px;
   }
 `;
 
