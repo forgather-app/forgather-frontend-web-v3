@@ -22,7 +22,7 @@ export const Viewport = styled.div`
 export const DotsWrapper = styled.div`
   display: flex;
   gap: 8px;
-  padding: 24px 0;
+  padding: 24px 0 0;
   flex-shrink: 0;
 `;
 
