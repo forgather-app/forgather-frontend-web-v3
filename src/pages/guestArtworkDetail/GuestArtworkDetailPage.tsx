@@ -112,7 +112,6 @@ const GuestArtworkDetailPage = ({
 
   const videoSection = embedUrl && (
     <S.VideoSection>
-      <S.SectionTitle>영상</S.SectionTitle>
       <S.VideoFrame>
         <S.VideoIframe
           src={embedUrl}
