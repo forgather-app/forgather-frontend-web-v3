@@ -1,7 +1,8 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.form`
-  height: 100dvh;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
@@ -11,6 +12,7 @@ export const Container = styled.form`
 export const Title = styled.h1`
   flex-shrink: 0;
   margin-top: 32px;
+  margin-bottom: 8px;
   ${({ theme }) => ({ ...theme.typography.title1 })};
   color: ${({ theme }) => theme.colors.gray.white};
 `;
@@ -18,11 +20,16 @@ export const Title = styled.h1`
 export const Main = styled.main`
   flex: 1;
   min-height: 0;
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 50px;
   overflow-y: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const FieldGroup = styled.div`

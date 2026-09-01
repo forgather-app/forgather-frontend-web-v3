@@ -74,8 +74,8 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
         title="스페이스 수정"
         onBackClick={() => window.history.back()}
       />
-      <S.Title>스페이스를 소개해주세요!</S.Title>
       <S.Main>
+        <S.Title>스페이스를 소개해주세요!</S.Title>
         <S.FieldGroup>
           <S.FieldLabelRow>
             <S.Label>스페이스명</S.Label>
