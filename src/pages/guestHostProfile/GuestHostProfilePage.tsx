@@ -10,6 +10,7 @@ import IcLink from "@/assets/icons/ic_link.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
 import GuestHeader from "@/components/@common/GuestHeader/GuestHeader";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
+import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
 import { getImageUrl } from "@/utils/getImageUrl";
 import * as S from "./GuestHostProfilePage.styles";
@@ -61,11 +62,7 @@ const GuestHostProfilePage = ({
       <S.ScrollArea>
         <S.ProfileSection>
           <S.ProfileRow>
-            {pictureUrl ? (
-              <S.AvatarImage src={pictureUrl} alt="" aria-hidden="true" />
-            ) : (
-              <S.Avatar aria-hidden="true" />
-            )}
+            <ProfileImage src={pictureUrl} size={40} />
             <S.NameRow>
               <S.Name>{nickname}</S.Name>
               <S.NameSuffix>작가님</S.NameSuffix>

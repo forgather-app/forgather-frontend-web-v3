@@ -15,6 +15,7 @@ import type {
 import IcPerson from "@/assets/icons/ic_person.svg?react";
 import BottomSheet from "@/components/@common/BottomSheet/BottomSheet";
 import Button from "@/components/@common/Button/Button";
+import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
@@ -110,15 +111,10 @@ const HomePage = () => {
       <S.PageWrapper>
         <S.Header>
           <S.UserProfile>
-            {profile?.photoPath ? (
-              <S.UserAvatarImage
-                src={getImageUrl(profile.photoPath)}
-                alt=""
-                aria-hidden
-              />
-            ) : (
-              <S.UserAvatar aria-hidden />
-            )}
+            <ProfileImage
+              src={profile?.photoPath ? getImageUrl(profile.photoPath) : ""}
+              size={40}
+            />
             <S.UserName>{profile?.nickname ?? ""}</S.UserName>
           </S.UserProfile>
           <S.HeaderActions>

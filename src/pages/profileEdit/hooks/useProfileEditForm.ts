@@ -97,6 +97,11 @@ export const useProfileEditForm = (
     setCropSourceUrl(null);
   };
 
+  /** 크롭을 취소하고 크롭 화면을 닫는다 (선택한 이미지는 반영하지 않음) */
+  const handleCropClose = () => {
+    setCropSourceUrl(null);
+  };
+
   // 필수값 미입력 에러는 blur로 터치된 이후에만 노출, 글자 수 초과 에러는 항상 즉시 노출
   const nicknameError =
     errors.nickname?.type === "required" && !touchedFields.nickname
@@ -121,5 +126,6 @@ export const useProfileEditForm = (
     getSubmitHandler,
     handleImageSelect,
     handleCropSave,
+    handleCropClose,
   };
 };

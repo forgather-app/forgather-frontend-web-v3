@@ -27,23 +27,6 @@ export const UserProfile = styled.div`
   gap: 8px;
 `;
 
-export const UserAvatar = styled.div`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.semantic.black};
-  flex-shrink: 0;
-`;
-
-export const UserAvatarImage = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  background-color: ${({ theme }) => theme.colors.semantic.black};
-`;
-
 export const UserName = styled.span`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.gray100};

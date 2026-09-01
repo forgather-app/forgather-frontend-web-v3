@@ -11,6 +11,7 @@ import type {
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
+import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
@@ -115,15 +116,10 @@ const GuestArtworkPage = ({
         onClick={() => host?.code && onHostClick(host.code)}
         aria-label={`${host?.nickname ?? ""} 작가님 프로필 보기`}
       >
-        {host?.photoPath ? (
-          <S.UserAvatarImage
-            src={getImageUrl(host.photoPath)}
-            alt=""
-            aria-hidden
-          />
-        ) : (
-          <S.UserAvatar aria-hidden />
-        )}
+        <ProfileImage
+          src={host?.photoPath ? getImageUrl(host.photoPath) : ""}
+          size={32}
+        />
         <S.UserName>{host?.nickname ?? ""}</S.UserName>
       </S.ProfileButton>
 

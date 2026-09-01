@@ -22,20 +22,6 @@ export const ProfileRow = styled.div`
   gap: 16px;
 `;
 
-export const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #d9d9d9;
-`;
-
-export const AvatarImage = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
 export const NameRow = styled.div`
   display: flex;
   align-items: center;

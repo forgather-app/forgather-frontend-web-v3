@@ -8,6 +8,7 @@ import IcEdit from "@/assets/icons/ic_edit.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
+import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import { getImageUrl } from "@/utils/getImageUrl";
 import LogoutModal from "./components/LogoutModal/LogoutModal";
@@ -48,11 +49,7 @@ const MyPage = () => {
     >
       <S.ProfileSection>
         <S.ProfileRow>
-          {pictureUrl ? (
-            <S.AvatarImage src={pictureUrl} alt="" aria-hidden="true" />
-          ) : (
-            <S.Avatar aria-hidden="true" />
-          )}
+          <ProfileImage src={pictureUrl} size={40} />
           <S.NameRow>
             <S.Name>{nickname}</S.Name>
             <S.NameSuffix>작가님</S.NameSuffix>

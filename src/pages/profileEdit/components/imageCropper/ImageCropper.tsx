@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import IcClose from "@/assets/icons/ic_close.svg?react";
 import Button from "@/components/@common/Button/Button";
 import {
   CROP_MAX_SCALE,
@@ -26,9 +27,11 @@ interface ImageCropperProps {
   imageUrl: string;
   /** 저장하기 클릭 시 크롭된 이미지 전달 */
   onSave: (image: Blob) => void;
+  /** 닫기(X) 클릭 또는 Esc 입력 시 호출 — 크롭을 취소하고 화면을 닫음 */
+  onClose: () => void;
 }
 
-const ImageCropper = ({ imageUrl, onSave }: ImageCropperProps) => {
+const ImageCropper = ({ imageUrl, onSave, onClose }: ImageCropperProps) => {
   const gestureRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const windowRef = useRef<HTMLDivElement>(null);
@@ -155,6 +158,14 @@ const ImageCropper = ({ imageUrl, onSave }: ImageCropperProps) => {
     return () => gesture.removeEventListener("wheel", handleWheel);
   }, [baseSize, minScale]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   const handleSave = () => {
     const image = imageRef.current;
     const windowEl = windowRef.current;
@@ -196,6 +207,9 @@ const ImageCropper = ({ imageUrl, onSave }: ImageCropperProps) => {
 
   return (
     <S.Backdrop>
+      <S.CloseButton type="button" onClick={onClose} aria-label="닫기">
+        <IcClose aria-hidden="true" width={32} height={32} />
+      </S.CloseButton>
       <S.GestureArea
         ref={gestureRef}
         role="application"
