@@ -83,7 +83,27 @@ button: cursor, border, background, padding, box-shadow, border-radius
 a: text-decoration, color, cursor
 input: border, outline (focus 시)
 * : box-sizing, font-family
+body: user-select(none), -webkit-touch-callout(none) — 시스템 UI 문구 복사 차단
+input, textarea, [contenteditable]: user-select(text) — 입력값 편집 예외
 ```
+
+### 사용자 입력 콘텐츠 텍스트 선택
+
+`body`에 `user-select: none`이 걸려 있어 시스템 문구는 복사되지 않습니다.
+사용자가 입력한 값(작품 제목·설명, 방명록 메시지, 닉네임·소개, 스페이스명·링크 등)을
+표시하는 styled component에는 `src/styles/mixins.ts`의 `selectableText`를 합성해
+텍스트 선택·복사를 다시 허용합니다.
+
+```typescript
+import { selectableText } from "@/styles/mixins";
+
+export const Description = styled.p`
+  ${({ theme }) => ({ ...theme.typography.body4 })};
+  ${selectableText};
+`;
+```
+
+- `aria-hidden` 처리된 목록형 텍스트(부모에 `aria-label`이 있는 경우)는 대상에서 제외합니다.
 
 ### variant 분기 처리 패턴
 
