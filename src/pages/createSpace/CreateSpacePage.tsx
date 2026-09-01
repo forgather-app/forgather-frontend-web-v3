@@ -54,7 +54,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                 variant="count"
                 value={field.value}
                 maxCount={CONSTRAINTS.CREATE_SPACE.NAME_MAX_LENGTH}
-                placeholder="작품 제목을 작성해주세요."
+                placeholder="스페이스명을 작성해주세요."
                 errorMessage={spaceNameError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -76,7 +76,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               <TextArea
                 value={field.value}
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
-                placeholder="작품에 대한 설명을 작성해주세요."
+                placeholder="스페이스 설명을 작성해주세요."
                 errorMessage={descriptionError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
