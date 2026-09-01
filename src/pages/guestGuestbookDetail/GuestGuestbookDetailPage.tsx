@@ -178,6 +178,7 @@ const GuestGuestbookDetailPage = ({
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
         images={lightboxCard?.images ?? []}
+        allowSave={false}
       />
     </S.Wrapper>
   );

@@ -173,6 +173,7 @@ const GuestArtworkDetailPage = ({
           onClose={() => setIsLightboxOpen(false)}
           images={images}
           startIndex={lightboxStartIndex}
+          allowSave={false}
         />
       )}
 
