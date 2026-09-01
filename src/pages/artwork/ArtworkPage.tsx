@@ -336,7 +336,7 @@ const ArtworkPage = ({
           <S.EmptyStateText>첫번째 작품을 추가해보세요.</S.EmptyStateText>
         </S.EmptyState>
       ) : (
-        <S.CarouselWrapper>
+        <S.CarouselWrapper $fullBleed={artworks.length > 1}>
           <SwiperAction
             activeIndex={activeArtworkIndex}
             onIndexChange={setActiveArtworkIndex}
