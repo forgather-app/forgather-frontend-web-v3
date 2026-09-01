@@ -1,23 +1,32 @@
 import { describe, expect, it } from "vitest";
 import { getYoutubeEmbedUrl } from "./getYoutubeEmbedUrl";
 
+const EMBED = (id: string) =>
+  `https://www.youtube-nocookie.com/embed/${id}?playsinline=1&modestbranding=1&rel=0`;
+
 describe("getYoutubeEmbedUrl", () => {
-  it("watch URL을 embed URL로 변환한다", () => {
+  it("watch URL을 nocookie embed URL로 변환한다", () => {
     expect(
       getYoutubeEmbedUrl("https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
-    ).toBe("https://www.youtube.com/embed/dQw4w9WgXcQ");
+    ).toBe(EMBED("dQw4w9WgXcQ"));
   });
 
   it("youtu.be 단축 URL을 embed URL로 변환한다", () => {
     expect(getYoutubeEmbedUrl("https://youtu.be/dQw4w9WgXcQ")).toBe(
-      "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      EMBED("dQw4w9WgXcQ"),
     );
   });
 
   it("이미 embed URL이면 그대로 정규화해 반환한다", () => {
     expect(
       getYoutubeEmbedUrl("https://www.youtube.com/embed/dQw4w9WgXcQ"),
-    ).toBe("https://www.youtube.com/embed/dQw4w9WgXcQ");
+    ).toBe(EMBED("dQw4w9WgXcQ"));
+  });
+
+  it("nocookie embed URL도 정규화해 반환한다", () => {
+    expect(
+      getYoutubeEmbedUrl("https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"),
+    ).toBe(EMBED("dQw4w9WgXcQ"));
   });
 
   it("부가 쿼리 파라미터(t, list 등)가 있어도 video id만 추출한다", () => {
@@ -25,7 +34,7 @@ describe("getYoutubeEmbedUrl", () => {
       getYoutubeEmbedUrl(
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=10s&list=PL123",
       ),
-    ).toBe("https://www.youtube.com/embed/dQw4w9WgXcQ");
+    ).toBe(EMBED("dQw4w9WgXcQ"));
   });
 
   it("유튜브 URL이 아니면 null을 반환한다", () => {
