@@ -101,8 +101,8 @@ export const useCreateProductForm = (spaceCode: string) => {
             authorName: values.authorName.trim(),
             description: values.description,
             videoUrl: values.videoUrl.trim(),
-            // 폼에 사진 → 영상 순서 재정렬 UI가 없어, 화면에 보이는 순서(사진 다음 영상) 그대로 고정 전달
-            isVideoAfterPhoto: true,
+            // 순서 재정렬 UI가 없어, 영상을 사진보다 먼저 노출하도록 고정 전달
+            isVideoAfterPhoto: false,
             photos: photoRequests,
           },
         },

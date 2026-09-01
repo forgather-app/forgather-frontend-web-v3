@@ -22,9 +22,16 @@ interface LightboxSlideProps {
   image: LightboxImage;
   index: number;
   onSave: (image: LightboxImage, index: number) => void;
+  /** 이미지 저장(다운로드) 버튼 노출 여부 */
+  showSave: boolean;
 }
 
-const LightboxSlide = ({ image, index, onSave }: LightboxSlideProps) => {
+const LightboxSlide = ({
+  image,
+  index,
+  onSave,
+  showSave,
+}: LightboxSlideProps) => {
   const [imageError, setImageError] = useState(false);
 
   return (
@@ -41,14 +48,16 @@ const LightboxSlide = ({ image, index, onSave }: LightboxSlideProps) => {
             onError={() => setImageError(true)}
           />
         )}
-        <S.DownloadButtonWrapper>
-          <Button
-            variant="icon"
-            icon={<IcDownload aria-hidden="true" />}
-            aria-label="이미지 다운로드"
-            onClick={() => onSave(image, index)}
-          />
-        </S.DownloadButtonWrapper>
+        {showSave && (
+          <S.DownloadButtonWrapper>
+            <Button
+              variant="icon"
+              icon={<IcDownload aria-hidden="true" />}
+              aria-label="이미지 다운로드"
+              onClick={() => onSave(image, index)}
+            />
+          </S.DownloadButtonWrapper>
+        )}
       </S.ImageFrame>
     </S.ImageSquare>
   );
@@ -63,6 +72,8 @@ interface ImageLightboxProps {
   images: LightboxImage[];
   /** 처음 보여줄 이미지의 인덱스 (기본값 0) */
   startIndex?: number;
+  /** 이미지 저장(다운로드·모두 저장하기) 기능 노출 여부 (기본값 true) */
+  allowSave?: boolean;
 }
 
 const ImageLightbox = ({
@@ -70,6 +81,7 @@ const ImageLightbox = ({
   onClose,
   images,
   startIndex = 0,
+  allowSave = true,
 }: ImageLightboxProps) => {
   const [currentIndex, setCurrentIndex] = useState(startIndex);
   const { saveImage, saveImages } = useSaveImageBridge();
@@ -109,6 +121,7 @@ const ImageLightbox = ({
                 image={image}
                 index={index}
                 onSave={handleSave}
+                showSave={allowSave}
               />
             ))}
           />
@@ -131,9 +144,11 @@ const ImageLightbox = ({
               ))}
             </S.DotsWrapper>
           </S.CounterGroup>
-          <S.SaveAllButton type="button" onClick={handleSaveAll}>
-            모두 저장하기
-          </S.SaveAllButton>
+          {allowSave && (
+            <S.SaveAllButton type="button" onClick={handleSaveAll}>
+              모두 저장하기
+            </S.SaveAllButton>
+          )}
         </S.FooterPanel>
       </S.Root>
     </Modal>

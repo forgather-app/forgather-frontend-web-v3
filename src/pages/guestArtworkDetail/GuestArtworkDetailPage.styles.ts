@@ -56,7 +56,6 @@ export const ArtworkImageButton = styled.button`
 export const ArtworkImage = styled.img`
   width: 100%;
   height: auto;
-  border-radius: 16px;
 `;
 
 export const VideoSection = styled.div`
@@ -65,16 +64,10 @@ export const VideoSection = styled.div`
   gap: 12px;
 `;
 
-export const SectionTitle = styled.h2`
-  ${({ theme }) => ({ ...theme.typography.body1 })};
-  color: ${({ theme }) => theme.colors.gray.white};
-`;
-
 export const VideoFrame = styled.div`
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-radius: 16px;
 `;
 
 export const VideoIframe = styled.iframe`

@@ -83,11 +83,6 @@ export const VideoSection = styled.div`
   gap: 12px;
 `;
 
-export const SectionTitle = styled.h2`
-  ${({ theme }) => ({ ...theme.typography.body1 })};
-  color: ${({ theme }) => theme.colors.gray.white};
-`;
-
 export const VideoFrame = styled.div`
   width: 100%;
   aspect-ratio: 16 / 9;

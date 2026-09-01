@@ -50,6 +50,7 @@ const SwiperAction = ({
   const threshold = useRef(0);
   const isDragging = useRef(false);
   const shouldPreventClick = useRef(false);
+  const hasCapture = useRef(false);
 
   const x = useMotionValue(0);
 
@@ -220,11 +221,8 @@ const SwiperAction = ({
   const handlePointerDown = (e: React.PointerEvent) => {
     if (swiperElement.length === 0) return;
 
-    // 웹뷰(RN WebView)의 자체 제스처(엣지 스와이프백 등)가 포인터를 가로채도
-    // move/up이 끊기지 않도록 드래그 시작 시점에 포인터를 캡처한다
-    e.currentTarget.setPointerCapture(e.pointerId);
-
     isDragging.current = true;
+    hasCapture.current = false;
     startX.current = e.clientX;
     startY.current = e.clientY;
     shouldPreventClick.current = false;
@@ -243,6 +241,14 @@ const SwiperAction = ({
     }
     if (Math.abs(diffX) > MIN_THRESHOLD) {
       shouldPreventClick.current = true;
+
+      // 드래그가 확정된 뒤에야 포인터를 캡처한다. 웹뷰(RN WebView)의 자체 제스처가
+      // move/up을 가로채도 스와이프가 끊기지 않게 하되, 단순 클릭(마우스)일 때는
+      // 캡처하지 않아 자식 요소로 click 이벤트가 정상 전달되도록 한다
+      if (!hasCapture.current) {
+        e.currentTarget.setPointerCapture(e.pointerId);
+        hasCapture.current = true;
+      }
     }
     x.set(calculateLocation(currentIndex) - diffX);
   };
@@ -251,6 +257,11 @@ const SwiperAction = ({
     if (swiperElement.length === 0) return;
 
     isDragging.current = false;
+
+    if (hasCapture.current) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+      hasCapture.current = false;
+    }
 
     const diffX = startX.current - e.clientX;
     const diffY = startY.current - e.clientY;
@@ -272,6 +283,7 @@ const SwiperAction = ({
   // pointercancel(웹뷰 제스처에 의한 포인터 탈취)도 leave와 동일하게 드래그를 취소하고 스냅백한다
   const handlePointerLeave = () => {
     isDragging.current = false;
+    hasCapture.current = false;
     animate(x, calculateLocation(currentIndex), SPRING_PRESET);
   };
 

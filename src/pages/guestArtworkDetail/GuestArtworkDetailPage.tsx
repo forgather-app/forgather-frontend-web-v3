@@ -112,7 +112,6 @@ const GuestArtworkDetailPage = ({
 
   const videoSection = embedUrl && (
     <S.VideoSection>
-      <S.SectionTitle>영상</S.SectionTitle>
       <S.VideoFrame>
         <S.VideoIframe
           src={embedUrl}
@@ -174,6 +173,7 @@ const GuestArtworkDetailPage = ({
           onClose={() => setIsLightboxOpen(false)}
           images={images}
           startIndex={lightboxStartIndex}
+          allowSave={false}
         />
       )}
 

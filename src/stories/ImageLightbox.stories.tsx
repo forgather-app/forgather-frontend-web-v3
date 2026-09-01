@@ -45,6 +45,10 @@ const meta: Meta<typeof ImageLightbox> = {
     isOpen: { description: "라이트박스 열림 여부" },
     onClose: { description: "닫기(X) 버튼 · 배경 클릭 시 호출되는 콜백" },
     images: { description: "전체보기할 이미지 목록 (url, name)" },
+    allowSave: {
+      description:
+        "이미지 저장(다운로드·모두 저장하기) 기능 노출 여부 (기본값 true)",
+    },
   },
 };
 
@@ -144,4 +148,45 @@ export const SinglePhoto: Story = {
     },
   },
   render: () => <SinglePhotoStory />,
+};
+
+const GuestStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100dvh",
+        backgroundColor: theme.colors.gray.gray700,
+      }}
+    >
+      <button
+        type="button"
+        style={triggerButtonStyle}
+        onClick={() => setIsOpen(true)}
+      >
+        이미지 라이트박스 열기
+      </button>
+      <ImageLightbox
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        images={DUMMY_IMAGES}
+        allowSave={false}
+      />
+    </div>
+  );
+};
+
+export const GuestNoSave: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "게스트뷰에서는 `allowSave={false}`로 다운로드 아이콘과 모두 저장하기 버튼을 숨깁니다. 게스트는 이미지를 저장할 수 없습니다.",
+      },
+    },
+  },
+  render: () => <GuestStory />,
 };
