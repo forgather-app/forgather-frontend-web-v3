@@ -116,6 +116,7 @@ export const Description = styled("p", { shouldForwardProp })<{
   min-width: 0;
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
+  white-space: pre-wrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

@@ -16,6 +16,9 @@ export const ImageArea = styled.div`
   padding: 16px 12px;
   border-radius: 8px;
   overflow: hidden;
+  /* 캐러셀 Track의 transform 하위에서 overflow 클리핑이 깨져 모서리에 틈이 생기는 것 방지 */
+  isolation: isolate;
+  background-color: ${({ theme }) => theme.colors.gray.gray500};
 `;
 
 export const Thumbnail = styled.img`
@@ -25,6 +28,7 @@ export const Thumbnail = styled.img`
   height: 100%;
   object-fit: cover;
   object-position: center;
+  border-radius: inherit;
   background-color: ${({ theme }) => theme.colors.gray.gray500};
 `;
 
@@ -34,6 +38,7 @@ export const Dim = styled.div`
   right: 0;
   bottom: 0;
   height: 144px;
+  border-radius: inherit;
   background: linear-gradient(
     180deg,
     rgba(17, 17, 17, 0) 23%,
@@ -72,6 +77,7 @@ export const Actions = styled.div`
   align-items: center;
   border-radius: 8px;
   overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 export const ActionButton = styled.button`
@@ -89,7 +95,7 @@ export const ActionButton = styled.button`
 export const Divider = styled.div`
   width: 1px;
   height: 18px;
-  background-color: ${({ theme }) => theme.colors.gray.gray400};
+  background-color: ${({ theme }) => theme.colors.gray.gray500};
   flex-shrink: 0;
 `;
 

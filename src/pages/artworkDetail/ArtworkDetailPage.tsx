@@ -212,11 +212,11 @@ const ArtworkDetailPage = ({
             isOpen={isMenuOpen}
             onClose={() => setIsMenuOpen(false)}
             items={[
+              { label: "수정하기", onClick: onEditClick },
               {
                 label: "삭제하기",
                 onClick: () => setIsDeleteConfirmOpen(true),
               },
-              { label: "수정하기", onClick: onEditClick },
             ]}
           />
         </S.MenuWrapper>

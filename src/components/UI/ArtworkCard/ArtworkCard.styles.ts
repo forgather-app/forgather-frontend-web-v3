@@ -15,8 +15,7 @@ export const Card = styled.div`
 
 export const TitleBox = styled.div`
   width: 100%;
-  padding: 16px;
-  border: 1px solid rgba(65, 72, 85, 0.8); /* TODO: 토큰 없음 - border rgba(65, 72, 85, 0.8) */
+  padding: 20px 16px;
   border-radius: 16px 16px 0 0;
   background: ${({ theme }) => theme.colors.gradient.grayFill};
 `;
