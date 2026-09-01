@@ -55,6 +55,7 @@ const ProfileEditPage = () => {
     getSubmitHandler,
     handleImageSelect,
     handleCropSave,
+    handleCropClose,
   } = useProfileEditForm({
     nickname: profile?.nickname ?? "",
     introduction: profile?.introduction ?? "",
@@ -197,7 +198,11 @@ const ProfileEditPage = () => {
         <Button text="저장하기" type="submit" disabled={!isValid || isSaving} />
       </S.Footer>
       {cropSourceUrl && (
-        <ImageCropper imageUrl={cropSourceUrl} onSave={handleCropSave} />
+        <ImageCropper
+          imageUrl={cropSourceUrl}
+          onSave={handleCropSave}
+          onClose={handleCropClose}
+        />
       )}
     </S.PageWrapper>
   );

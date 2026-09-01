@@ -11,6 +11,18 @@ export const Backdrop = styled.div`
   overflow: hidden;
 `;
 
+export const CloseButton = styled.button`
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  color: ${({ theme }) => theme.colors.gray.white};
+`;
+
 export const GestureArea = styled.div`
   position: absolute;
   inset: 0;
