@@ -7,6 +7,7 @@ import {
   getGetSpaceInformationQueryKey,
   getGetSpacesInformationQueryKey,
   useDelete,
+  useFeatureSpaces,
   useGetSpaceInformation,
   useUnfeatureSpaces,
 } from "@/api/generated/space-스페이스";
@@ -67,6 +68,7 @@ const ArtworkPage = ({
   const { showSnackBar } = useSnackBar();
   const queryClient = useQueryClient();
   const { mutate: deleteSpace } = useDelete();
+  const { mutate: featureSpace } = useFeatureSpaces();
   const { mutate: unfeatureSpace } = useUnfeatureSpaces();
 
   const handleConfirmDelete = () => {
@@ -84,6 +86,26 @@ const ArtworkPage = ({
         onError: () => {
           setIsDeleteConfirmOpen(false);
           showSnackBar("스페이스 삭제에 실패했어요", "error");
+        },
+      },
+    );
+  };
+
+  const handleFeature = () => {
+    featureSpace(
+      { data: { spaceCodes: [spaceId] } },
+      {
+        onSuccess: () => {
+          showSnackBar("진행 중인 스페이스로 등록했어요", "alert");
+          queryClient.invalidateQueries({
+            queryKey: getGetSpacesInformationQueryKey(),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getGetSpaceInformationQueryKey(spaceId),
+          });
+        },
+        onError: () => {
+          showSnackBar(ERROR_MESSAGES.SPACE_FEATURE_FAILED, "error");
         },
       },
     );
@@ -186,11 +208,15 @@ const ArtworkPage = ({
                     label: "삭제하기",
                     onClick: () => setIsDeleteConfirmOpen(true),
                   },
-                  {
-                    label: "진행 해제하기",
-                    onClick: handleUnfeature,
-                    disabled: !space?.isFeatured,
-                  },
+                  space?.isFeatured
+                    ? {
+                        label: "진행 해제하기",
+                        onClick: handleUnfeature,
+                      }
+                    : {
+                        label: "진행 등록하기",
+                        onClick: handleFeature,
+                      },
                 ]}
               />
             </S.MenuWrapper>
@@ -256,11 +282,15 @@ const ArtworkPage = ({
                   label: "삭제하기",
                   onClick: () => setIsDeleteConfirmOpen(true),
                 },
-                {
-                  label: "진행 해제하기",
-                  onClick: handleUnfeature,
-                  disabled: !space?.isFeatured,
-                },
+                space?.isFeatured
+                  ? {
+                      label: "진행 해제하기",
+                      onClick: handleUnfeature,
+                    }
+                  : {
+                      label: "진행 등록하기",
+                      onClick: handleFeature,
+                    },
               ]}
             />
           </S.MenuWrapper>

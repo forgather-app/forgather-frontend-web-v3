@@ -134,9 +134,9 @@ const ArtworkDetailPage = ({
             <S.ArtistSkeleton />
           </S.TitleSection>
 
-          <S.MediaSkeleton />
-
           <S.DescriptionSkeleton />
+
+          <S.MediaSkeleton />
         </S.Content>
       </S.ScrollArea>
     );
@@ -228,6 +228,8 @@ const ArtworkDetailPage = ({
           <S.Artist>{artistName}</S.Artist>
         </S.TitleSection>
 
+        <S.Description>{artwork.description}</S.Description>
+
         {isVideoFirst ? (
           <>
             {videoSection}
@@ -239,8 +241,6 @@ const ArtworkDetailPage = ({
             {videoSection}
           </>
         )}
-
-        <S.Description>{artwork.description}</S.Description>
       </S.Content>
 
       {images.length > 0 && (
