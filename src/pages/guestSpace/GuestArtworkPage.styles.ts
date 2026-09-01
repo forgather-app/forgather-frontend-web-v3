@@ -34,14 +34,6 @@ export const UserAvatar = styled.div`
   flex-shrink: 0;
 `;
 
-export const UserAvatarImage = styled.img`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-`;
-
 export const UserName = styled.span`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.gray100};

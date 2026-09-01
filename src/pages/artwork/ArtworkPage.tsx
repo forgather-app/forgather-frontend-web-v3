@@ -23,6 +23,7 @@ import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import Button from "@/components/@common/Button/Button";
 import Divider from "@/components/@common/Divider/Divider";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
+import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
@@ -158,15 +159,10 @@ const ArtworkPage = ({
       <S.ScrollArea>
         <S.ProfileRow>
           <S.UserProfile>
-            {profile?.photoPath ? (
-              <S.UserAvatarImage
-                src={getImageUrl(profile.photoPath)}
-                alt=""
-                aria-hidden
-              />
-            ) : (
-              <S.UserAvatar aria-hidden />
-            )}
+            <ProfileImage
+              src={profile?.photoPath ? getImageUrl(profile.photoPath) : ""}
+              size={32}
+            />
             <S.UserName>{profile?.nickname ?? ""}</S.UserName>
           </S.UserProfile>
           <S.ActionsWrapper>
@@ -233,15 +229,10 @@ const ArtworkPage = ({
     <S.ScrollArea>
       <S.ProfileRow>
         <S.UserProfile>
-          {profile?.photoPath ? (
-            <S.UserAvatarImage
-              src={getImageUrl(profile.photoPath)}
-              alt=""
-              aria-hidden
-            />
-          ) : (
-            <S.UserAvatar aria-hidden />
-          )}
+          <ProfileImage
+            src={profile?.photoPath ? getImageUrl(profile.photoPath) : ""}
+            size={32}
+          />
           <S.UserName>{profile?.nickname ?? ""}</S.UserName>
         </S.UserProfile>
         <S.ActionsWrapper>

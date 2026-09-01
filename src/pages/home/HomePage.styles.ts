@@ -37,22 +37,6 @@ export const UserProfile = styled.div`
   align-items: center;
 `;
 
-export const UserAvatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.semantic.black};
-  flex-shrink: 0;
-`;
-
-export const UserAvatarImage = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-`;
-
 export const UserName = styled.h2`
   ${({ theme }) => ({ ...theme.typography.heading2 })};
   color: ${({ theme }) => theme.colors.gray.white};
