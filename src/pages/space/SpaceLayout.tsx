@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import IcLeftArrow from "@/assets/icons/ic_left_arrow.svg?react";
-import IcLink from "@/assets/icons/ic_link.svg?react";
+import IcShare from "@/assets/icons/ic_share.svg?react";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
 import * as S from "./SpaceLayout.styles";
 
@@ -49,7 +49,7 @@ const SpaceLayout = ({
           aria-label="링크 공유"
           onClick={onShareClick}
         >
-          <IcLink width={24} height={24} />
+          <IcShare width={35.64} height={35.64} />
         </S.FloatingIconButton>
       </S.BottomBar>
     </>
