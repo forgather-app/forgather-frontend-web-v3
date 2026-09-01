@@ -103,6 +103,14 @@ export const ActionIcon = styled.span`
   color: ${({ theme }) => theme.colors.gray.gray200};
 `;
 
+export const CopyActionIcon = styled(ActionIcon)`
+  color: ${({ theme }) => theme.colors.icon.default};
+
+  & path {
+    fill: currentColor;
+  }
+`;
+
 export const KakaoBadge = styled(IcKakaoBadge)`
   flex-shrink: 0;
 `;

@@ -50,9 +50,9 @@ const ShareModal = ({
                 <span>카카오톡으로 보내기</span>
               </S.ActionButton>
               <S.ActionButton type="button" onClick={onCopyLink}>
-                <S.ActionIcon aria-hidden="true">
-                  <IcLink width={20} height={20} />
-                </S.ActionIcon>
+                <S.CopyActionIcon aria-hidden="true">
+                  <IcLink width={24} height={24} />
+                </S.CopyActionIcon>
                 <span>클립보드에 복사하기</span>
               </S.ActionButton>
               <S.ActionButton type="button" onClick={onSaveQr}>

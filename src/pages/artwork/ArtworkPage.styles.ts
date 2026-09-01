@@ -197,9 +197,16 @@ export const EmptyStateText = styled.p`
   text-align: center;
 `;
 
-export const CarouselWrapper = styled.div`
-  width: 100%;
+export const CarouselWrapper = styled("div", { shouldForwardProp })<{
+  $fullBleed?: boolean;
+}>`
   margin-top: 16px;
+  ${({ $fullBleed, theme }) =>
+    $fullBleed &&
+    `
+    margin-left: calc(-1 * ${theme.layout.sidePadding}px);
+    margin-right: calc(-1 * ${theme.layout.sidePadding}px);
+  `}
 `;
 
 export const CardSkeleton = styled.div`

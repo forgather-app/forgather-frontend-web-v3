@@ -171,7 +171,7 @@ const GuestArtworkPage = ({
           <S.EmptyStateText>아직 등록된 작품이 없어요</S.EmptyStateText>
         </S.EmptyState>
       ) : (
-        <S.CarouselWrapper>
+        <S.CarouselWrapper $fullBleed={artworks.length > 1}>
           <SwiperAction
             activeIndex={activeArtworkIndex}
             onIndexChange={setActiveArtworkIndex}
