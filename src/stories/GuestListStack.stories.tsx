@@ -17,7 +17,8 @@ const meta: Meta<typeof GuestListStack> = {
       description: {
         component:
           "방명록 목록 상단에 표시되는 '새로 도착한 방명록' 스택 카드입니다. " +
-          "`count`가 2 이상이면 카드 뒤로 겹쳐진 카드가 살짝 보이며 은은하게 움직이는 애니메이션이 추가됩니다.",
+          "`count`가 2 이상이면 뒤쪽 카드 2장이 서로 반대로 살짝 기울어져 위쪽으로 부채꼴처럼 겹쳐 보입니다. " +
+          "hover·press 시 카드 내부 색이 살짝 밝아집니다.",
       },
     },
   },
@@ -56,7 +57,8 @@ export const Multiple: Story = {
   parameters: {
     docs: {
       description: {
-        story: "새로 도착한 방명록이 여러 개일 때 — 뒤에 카드가 겹쳐 보입니다.",
+        story:
+          "새로 도착한 방명록이 여러 개일 때 — 뒤에 카드가 위쪽으로 겹쳐 보입니다.",
       },
     },
   },

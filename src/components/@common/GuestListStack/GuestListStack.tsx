@@ -1,5 +1,4 @@
-import { useReducedMotion } from "framer-motion";
-import IcSmallLogo from "@/assets/icons/logos/logo_small.svg?react";
+import IcSmallLogo from "@/assets/icons/logos/logo_small_bright.svg?react";
 import * as S from "./GuestListStack.styles";
 
 interface GuestListStackProps {
@@ -12,44 +11,19 @@ interface GuestListStackProps {
 // 뒤쪽(깊은) 레이어부터 나열 — 렌더 순서대로 쌓여 앞쪽 레이어와 Container가 위에 겹침
 const PEEK_DEPTHS: S.PeekDepth[] = [2, 1];
 
-interface PeekLayerProps {
-  depth: S.PeekDepth;
-}
-
-const PeekLayer = ({ depth }: PeekLayerProps) => {
-  const prefersReducedMotion = useReducedMotion();
-  const { top, rotate } = S.peekLayerVariants[depth];
-
-  return (
-    <S.PeekLayer
-      $depth={depth}
-      aria-hidden
-      style={{ top, rotate, transformOrigin: "bottom center" }}
-      animate={
-        prefersReducedMotion
-          ? undefined
-          : { y: [0, -3, 0], scale: [1, 1.015, 1] }
-      }
-      transition={{
-        duration: 3 + depth,
-        delay: depth * 0.4,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    />
-  );
-};
-
 const GuestListStack = ({ count = 1, onClick }: GuestListStackProps) => {
   const showPeekLayers = count >= 2;
 
   return (
     <S.Wrapper>
       {showPeekLayers &&
-        PEEK_DEPTHS.map((depth) => <PeekLayer key={depth} depth={depth} />)}
+        PEEK_DEPTHS.map((depth) => (
+          <S.PeekLayer key={depth} $depth={depth} aria-hidden />
+        ))}
       <S.Container
         type="button"
         onClick={onClick}
+        $stacked={showPeekLayers}
         aria-label="새로 도착한 방명록 — 클릭하여 열기"
       >
         <IcSmallLogo width={40} height={40} aria-hidden />
