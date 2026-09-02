@@ -1,19 +1,23 @@
 import styled from "@emotion/styled";
+import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
-export const Card = styled.button`
+export const Card = styled("button", { shouldForwardProp })<{
+  $hasPhoto: boolean;
+}>`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  align-items: flex-start;
+  /* Figma: 사진 있을 때 8px, 없을 때 12px */
+  gap: ${({ $hasPhoto }) => ($hasPhoto ? 8 : 12)}px;
+  align-items: stretch;
   width: 100%;
-  box-sizing: border-box;
-  padding: 12px 16px;
+  padding: 16px 20px;
   border-radius: 8px;
   text-align: left;
+  /* TODO: 토큰 없음 - #292D32 (gray600 근사값) */
   background: linear-gradient(
-    193deg,
-    #292d32 6%,
-    ${({ theme }) => theme.colors.gray.gray600} 57%
+    161deg,
+    #292d32 0%,
+    ${({ theme }) => theme.colors.gray.gray600} 61%
   );
 `;
 
@@ -21,13 +25,16 @@ export const HeaderRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
+  min-height: 24px;
 `;
 
 export const Nickname = styled.p`
-  ${({ theme }) => ({ ...theme.typography.label })};
-  color: ${({ theme }) => theme.colors.gray.white};
+  ${({ theme }) => ({ ...theme.typography.body2 })};
+  /* TODO: 토큰 없음 - Figma Heading 16/SB (line-height 140%) */
+  line-height: 140%;
+  color: ${({ theme }) => theme.colors.gray.gray50};
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -46,14 +53,12 @@ export const Body = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
 `;
 
 export const Message = styled.p`
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  /* TODO: 토큰 없음 - line-height 150% (subBody 토큰은 160%) */
-  line-height: 150%;
+  ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   width: 100%;
   overflow: hidden;
@@ -74,8 +79,11 @@ export const DateTimeGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  ${({ theme }) => ({ ...theme.typography.caption })};
-  color: ${({ theme }) => theme.colors.gray.gray300};
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  /* TODO: 토큰 없음 - Figma Body 14/R (Regular 400, line-height 150%) */
+  font-weight: 400;
+  line-height: 150%;
+  color: ${({ theme }) => theme.colors.gray.gray400};
   white-space: nowrap;
 `;
 
@@ -84,7 +92,10 @@ export const DetailLink = styled.span`
   align-items: center;
   justify-content: center;
   gap: 2px;
-  ${({ theme }) => ({ ...theme.typography.caption })};
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  /* TODO: 토큰 없음 - Figma Body 14/R (Regular 400, line-height 150%) */
+  font-weight: 400;
+  line-height: 150%;
   color: ${({ theme }) => theme.colors.gray.gray300};
   white-space: nowrap;
 `;
@@ -93,8 +104,11 @@ export const ChevronWrapper = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  transform: scaleX(-1);
+
+  & path {
+    stroke: ${({ theme }) => theme.colors.gray.gray400};
+  }
 `;

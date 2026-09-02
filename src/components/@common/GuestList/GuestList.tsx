@@ -1,4 +1,4 @@
-import IcChevron from "@/assets/icons/ic_chevron.svg?react";
+import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcPhoto from "@/assets/icons/ic_photo.svg?react";
 import { formatCardDate, formatCardTime } from "@/utils/date";
 import * as S from "./GuestList.styles";
@@ -28,6 +28,7 @@ const GuestList = ({
       type="button"
       aria-label={`${nickname} 님의 방명록 자세히보기`}
       onClick={onClick}
+      $hasPhoto={hasPhoto}
     >
       <S.HeaderRow>
         <S.Nickname aria-hidden>{nickname}</S.Nickname>
@@ -51,7 +52,7 @@ const GuestList = ({
           <S.DetailLink aria-hidden>
             자세히보기
             <S.ChevronWrapper>
-              <IcChevron />
+              <IcChevronRight width={20} height={20} />
             </S.ChevronWrapper>
           </S.DetailLink>
         </S.MetaRow>
