@@ -1,4 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
+import { Lottie } from "lottie-react";
+import spaceAnimation from "@/assets/animations/space.json";
 import Button from "@/components/@common/Button/Button";
 import * as S from "./SignUpCompletePage.styles";
 
@@ -16,8 +18,8 @@ const SignUpCompletePage = () => {
         </S.Title>
       </S.Content>
 
-      <S.GraphicArea>
-        <S.GraphicPlaceholder>그래픽 영역</S.GraphicPlaceholder>
+      <S.GraphicArea aria-hidden="true">
+        <Lottie src={spaceAnimation} loop autoplay />
       </S.GraphicArea>
 
       <S.Footer>
