@@ -1,5 +1,5 @@
+import type { Theme } from "@emotion/react";
 import styled from "@emotion/styled";
-import { motion } from "framer-motion";
 import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const Wrapper = styled.div`
@@ -11,36 +11,71 @@ export type PeekDepth = 1 | 2;
 
 export const peekLayerVariants: Record<
   PeekDepth,
-  { gradient: string; rotate: number; top: number }
+  {
+    gradient: string;
+    top: number;
+    left: number;
+    right: number;
+    height: number;
+    rotate: number;
+  }
 > = {
   1: {
     gradient:
-      "linear-gradient(115deg, rgba(89, 75, 250, 1), rgba(61, 45, 246, 1))",
-    rotate: 2,
-    top: -6,
+      "linear-gradient(127deg, rgba(89, 75, 250, 1) 0%, rgba(139, 128, 248, 1) 100%)",
+    top: -8,
+    left: 13,
+    right: 2,
+    height: 117,
+    rotate: -1.3,
   },
   2: {
     gradient:
-      "linear-gradient(115deg, rgba(61, 45, 246, 1), rgba(43, 28, 200, 1))",
-    rotate: -2,
-    top: -11,
+      "linear-gradient(127deg, rgba(61, 45, 246, 1) 0%, rgba(113, 99, 252, 1) 100%)",
+    top: -12,
+    left: 3,
+    right: 7,
+    height: 122,
+    rotate: 0.7,
   },
 };
 
-export const PeekLayer = styled(motion.div, { shouldForwardProp })<{
+export const PeekLayer = styled("div", { shouldForwardProp })<{
   $depth: PeekDepth;
 }>`
   position: absolute;
-  left: 4px;
-  right: 4px;
-  height: 120px;
+  ${({ $depth }) => {
+    const { gradient, top, left, right, height, rotate } =
+      peekLayerVariants[$depth];
+    return `
+      top: ${top}px;
+      left: ${left}px;
+      right: ${right}px;
+      height: ${height}px;
+      background: ${gradient};
+      transform: rotate(${rotate}deg);
+    `;
+  }}
+  transform-origin: bottom center;
   border-radius: 8px;
-  background: ${({ $depth }) => peekLayerVariants[$depth].gradient};
-  /* semantic.black(#111111) 75% opacity */
   box-shadow: 0px 0px 12px 0px rgba(17, 17, 17, 0.75);
 `;
 
-export const Container = styled.button`
+const CARD_INNER_DEFAULT = "#1E2022";
+const CARD_INNER_ACTIVE = "#26292D";
+
+const BORDER_GRADIENT =
+  "linear-gradient(127deg, rgba(139, 128, 248, 1) 0%, rgba(89, 75, 250, 1) 100%)";
+
+const cardBackground = (theme: Theme, innerColor: string) => `
+  radial-gradient(circle at 50% 63%, ${innerColor} 0%, ${theme.colors.semantic.black} 100%)
+    padding-box,
+  ${BORDER_GRADIENT} border-box
+`;
+
+export const Container = styled("button", { shouldForwardProp })<{
+  $stacked: boolean;
+}>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -49,19 +84,21 @@ export const Container = styled.button`
   gap: 12px;
   width: 100%;
   height: 120px;
+  border: 1px solid transparent;
   border-radius: 8px;
-  border: 1px solid #8b80f8;
-  background: radial-gradient(
-    ellipse at center,
-    #1e2022 0%,
-    ${({ theme }) => theme.colors.semantic.black} 100%
-  );
+  background: ${({ theme }) => cardBackground(theme, CARD_INNER_DEFAULT)};
+  box-shadow: ${({ $stacked }) =>
+    $stacked ? "0px 0px 12px 0px rgba(17, 17, 17, 0.75)" : "none"};
+
+  &:hover,
+  &:active {
+    background: ${({ theme }) => cardBackground(theme, CARD_INNER_ACTIVE)};
+  }
 `;
 
 export const Label = styled.span`
   ${({ theme }) => ({ ...theme.typography.subBody })};
-  /* TODO: 토큰 없음 - line-height 150% (subBody 토큰은 160%) */
   line-height: 150%;
-  color: ${({ theme }) => theme.colors.gray.white};
+  color: ${({ theme }) => theme.colors.gray.gray50};
   text-align: center;
 `;
