@@ -27,23 +27,26 @@ export const Title = styled.h1`
 `;
 
 export const GraphicArea = styled.div`
+  position: relative;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
+  overflow: hidden;
 
-// TODO: [그래픽] - Figma에도 최종 에셋 없이 placeholder로 표기됨. 준비되면 교체
-export const GraphicPlaceholder = styled.div`
-  width: 100%;
-  aspect-ratio: 1;
-  border: 1px dashed ${({ theme }) => theme.colors.gray.gray200};
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.colors.gray.gray300};
-  ${({ theme }) => ({ ...theme.typography.caption })};
+  &::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 116px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      ${({ theme }) => theme.colors.gray.gray700} 73%
+    );
+    pointer-events: none;
+  }
 `;
 
 export const Footer = styled.div`
