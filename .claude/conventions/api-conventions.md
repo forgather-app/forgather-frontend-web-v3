@@ -83,6 +83,14 @@ navigate({ to: "/" });
 ```
 
 - API 성공/실패에 따른 이동은 mutation의 `onSuccess`/`onError` 콜백 내부에서 처리하고, 컴포넌트 바디에 별도의 `useEffect`로 분리하지 않습니다.
+- 뒤로가기 동작(`NavigationBar`의 `onBackClick`, 상세 화면의 `onBack` 등)은 `src/hooks/@common/useFlowBack.ts`의 `useFlowBack()`을 사용합니다. 히스토리 스택에 이전 항목이 있으면 `history.back()`으로 이동하고, 없으면 전달한 fallback 경로로 `replace` 이동하므로 진입 경로와 무관하게 자연스럽게 이전 화면으로 돌아갑니다.
+
+```typescript
+const flowBack = useFlowBack();
+flowBack({ to: "/my-page" }); // 히스토리 없으면 /my-page로 replace 이동
+```
+
+- 되돌아갈 필요가 없는 화면 전환(로그인·로그아웃·회원 탈퇴, 온보딩 완료, 스페이스·작품 삭제, 인증 가드 리다이렉트 등)은 `navigate({ ..., replace: true })`로 이동해 이전 화면이 히스토리에 남지 않도록 합니다.
 
 ---
 

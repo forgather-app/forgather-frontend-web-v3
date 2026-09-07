@@ -1,4 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import GuestArtworkDetailPage from "@/pages/guestArtworkDetail/GuestArtworkDetailPage";
 
 export const Route = createFileRoute(
@@ -10,13 +11,14 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { spaceId, artworkId } = Route.useParams();
   const navigate = useNavigate();
+  const flowBack = useFlowBack();
 
   return (
     <GuestArtworkDetailPage
       spaceId={spaceId}
       artworkId={Number(artworkId)}
       onBack={() =>
-        navigate({ to: "/spaces/$spaceId/guest", params: { spaceId } })
+        flowBack({ to: "/spaces/$spaceId/guest", params: { spaceId } })
       }
       onWriteClick={() =>
         navigate({

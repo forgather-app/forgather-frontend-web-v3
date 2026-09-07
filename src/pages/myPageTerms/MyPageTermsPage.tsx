@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -18,6 +17,7 @@ import IcClose from "@/assets/icons/ic_close.svg?react";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import Modal from "@/components/UI/Modal/Modal";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { MarkdownContent } from "@/styles/@common/Markdown/Markdown.styles";
 import * as S from "./MyPageTermsPage.styles";
@@ -26,7 +26,7 @@ import * as S from "./MyPageTermsPage.styles";
 type Term = TermAgreementResponse & { id: number };
 
 const MyPageTermsPage = () => {
-  const navigate = useNavigate();
+  const flowBack = useFlowBack();
   const queryClient = useQueryClient();
   const { showSnackBar } = useSnackBar();
   const [activeTerm, setActiveTerm] = useState<Term | null>(null);
@@ -81,7 +81,7 @@ const MyPageTermsPage = () => {
   return (
     <NavigationBarLayout
       title="서비스 이용 약관"
-      onBackClick={() => navigate({ to: "/my-page" })}
+      onBackClick={() => flowBack({ to: "/my-page" })}
     >
       <S.Gap aria-hidden="true" />
       <S.TermList>

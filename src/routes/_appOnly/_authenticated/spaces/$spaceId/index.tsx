@@ -17,7 +17,7 @@ function RouteComponent() {
       onEditClick={() =>
         navigate({ to: "/spaces/$spaceId/edit", params: { spaceId } })
       }
-      onDeleteSuccess={() => navigate({ to: "/home" })}
+      onDeleteSuccess={() => navigate({ to: "/home", replace: true })}
       onAddArtworkClick={() =>
         navigate({ to: "/spaces/$spaceId/create-product", params: { spaceId } })
       }

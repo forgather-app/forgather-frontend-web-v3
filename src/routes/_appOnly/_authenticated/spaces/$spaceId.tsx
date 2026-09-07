@@ -9,6 +9,7 @@ import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
 import ShareModal from "@/components/UI/ShareModal/ShareModal";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import useKakaoShareBridge from "@/hooks/@common/useKakaoShareBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import SpaceLayout from "@/pages/space/SpaceLayout";
@@ -22,6 +23,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
+  const flowBack = useFlowBack();
   const { showSnackBar } = useSnackBar();
   const { requestKakaoShare } = useKakaoShareBridge();
   const { data: space } = useGetSpaceInformation<SpaceResponse>(spaceId, {
@@ -59,7 +61,7 @@ function RouteComponent() {
     <>
       <SpaceLayout
         activeTab={isGuestBookTab ? "right" : "left"}
-        onBack={() => navigate({ to: "/home" })}
+        onBack={() => flowBack({ to: "/home" })}
         onArtworkTabClick={() =>
           navigate({
             to: "/spaces/$spaceId",

@@ -25,9 +25,12 @@ const SignUpCompletePage = () => {
       <S.Footer>
         <Button
           text="스페이스 만들기"
-          onClick={() => navigate({ to: "/create-space" })}
+          onClick={() => navigate({ to: "/create-space", replace: true })}
         />
-        <S.SkipButton type="button" onClick={() => navigate({ to: "/home" })}>
+        <S.SkipButton
+          type="button"
+          onClick={() => navigate({ to: "/home", replace: true })}
+        >
           나중에 하기
         </S.SkipButton>
       </S.Footer>

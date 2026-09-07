@@ -1,4 +1,3 @@
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 import {
@@ -18,6 +17,7 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
@@ -29,7 +29,7 @@ import {
 import * as S from "./ProfileEditPage.styles";
 
 const ProfileEditPage = () => {
-  const navigate = useNavigate();
+  const flowBack = useFlowBack();
   const { showSnackBar } = useSnackBar();
   const { requestPhotoPicker } = useNativePhotoPickerBridge();
   const [isSaving, setIsSaving] = useState(false);
@@ -98,7 +98,7 @@ const ProfileEditPage = () => {
           ...(photo && { photo }),
         },
       });
-      navigate({ to: "/my-page" });
+      flowBack({ to: "/my-page" });
     } catch {
       showSnackBar(ERROR_MESSAGES.PROFILE_UPDATE_FAILED, "error");
     } finally {
@@ -110,7 +110,7 @@ const ProfileEditPage = () => {
     <S.PageWrapper onSubmit={getSubmitHandler(handleSave)} noValidate>
       <NavigationBar
         title="프로필 설정"
-        onBackClick={() => navigate({ to: "/my-page" })}
+        onBackClick={() => flowBack({ to: "/my-page" })}
       />
       <S.ScrollArea>
         <S.ProfileGroup>

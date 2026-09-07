@@ -1,4 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import CreateProductPage from "@/pages/createProduct/CreateProductPage";
 
 export const Route = createFileRoute(
@@ -9,15 +10,16 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { spaceId } = Route.useParams();
-  const navigate = useNavigate();
+  const flowBack = useFlowBack();
+
+  const backToSpace = () =>
+    flowBack({ to: "/spaces/$spaceId", params: { spaceId } });
 
   return (
     <CreateProductPage
       spaceCode={spaceId}
-      onBack={() => navigate({ to: "/spaces/$spaceId", params: { spaceId } })}
-      onSuccess={() =>
-        navigate({ to: "/spaces/$spaceId", params: { spaceId } })
-      }
+      onBack={backToSpace}
+      onSuccess={backToSpace}
     />
   );
 }

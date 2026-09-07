@@ -27,7 +27,7 @@ const LogoutModal = ({ isOpen, onClose }: LogoutModalProps) => {
       onSuccess: () => {
         notifyLogout();
         queryClient.clear();
-        navigate({ to: "/login" });
+        navigate({ to: "/login", replace: true });
       },
       onError: () => {
         showSnackBar(ERROR_MESSAGES.LOGOUT_FAILED, "error");

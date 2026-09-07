@@ -1,4 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import EditSpacePage from "@/pages/editSpace/EditSpacePage";
 
 export const Route = createFileRoute(
@@ -9,13 +10,13 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { spaceId } = Route.useParams();
-  const navigate = useNavigate();
+  const flowBack = useFlowBack();
 
   return (
     <EditSpacePage
       spaceId={spaceId}
       onSuccess={() =>
-        navigate({ to: "/spaces/$spaceId", params: { spaceId } })
+        flowBack({ to: "/spaces/$spaceId", params: { spaceId } })
       }
     />
   );
