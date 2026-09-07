@@ -39,7 +39,7 @@ const SignUpFunnel = () => {
       stepIndex={currentStepIndex}
       totalSteps={STEPS.length}
       title={TITLE_META[STEPS[currentStepIndex]]}
-      onBackClick={currentStepIndex > 0 ? onPrev : () => window.history.back()}
+      onBackClick={currentStepIndex > 0 ? onPrev : undefined}
     >
       {STEPS[currentStepIndex] === "artistName" && (
         <ArtistNameStep onNext={onNext} />

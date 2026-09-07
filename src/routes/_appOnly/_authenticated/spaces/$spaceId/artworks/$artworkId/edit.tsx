@@ -1,4 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import EditArtworkPage from "@/pages/editArtwork/EditArtworkPage";
 
 export const Route = createFileRoute(
@@ -9,10 +10,10 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   const { spaceId, artworkId } = Route.useParams();
-  const navigate = useNavigate();
+  const flowBack = useFlowBack();
 
   const goToDetail = () =>
-    navigate({
+    flowBack({
       to: "/spaces/$spaceId/artworks/$artworkId",
       params: { spaceId, artworkId },
     });

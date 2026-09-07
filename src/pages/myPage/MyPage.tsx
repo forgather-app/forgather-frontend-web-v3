@@ -10,6 +10,7 @@ import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import { getImageUrl } from "@/utils/getImageUrl";
 import LogoutModal from "./components/LogoutModal/LogoutModal";
 import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
@@ -21,6 +22,7 @@ const APP_VERSION = "v1.0.0";
 const MyPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const flowBack = useFlowBack();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const { data: profile } = useGetProfileSuspense({
@@ -38,7 +40,7 @@ const MyPage = () => {
   return (
     <NavigationBarLayout
       title="마이페이지"
-      onBackClick={() => navigate({ to: ".." })}
+      onBackClick={() => flowBack({ to: "/home" })}
       rightContent={
         <S.EditIconWrapper>
           <IcEdit width={32} height={32} aria-hidden="true" />

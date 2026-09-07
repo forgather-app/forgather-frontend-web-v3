@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Suspense } from "react";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import GuestGuestbookDetailPage from "@/pages/guestGuestbookDetail/GuestGuestbookDetailPage";
 
 export const Route = createFileRoute(
@@ -11,6 +12,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { spaceId, guestbookId } = Route.useParams();
   const navigate = useNavigate();
+  const flowBack = useFlowBack();
 
   return (
     <Suspense fallback={null}>
@@ -18,7 +20,7 @@ function RouteComponent() {
         spaceId={spaceId}
         currentId={Number(guestbookId)}
         onBack={() =>
-          navigate({
+          flowBack({
             to: "/spaces/$spaceId/guest/guestbook",
             params: { spaceId },
           })

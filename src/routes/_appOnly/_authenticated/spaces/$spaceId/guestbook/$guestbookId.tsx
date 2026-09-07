@@ -5,6 +5,7 @@ import {
   getReadGuestBookV2QueryKey,
   getReadUnreadGuestBookQueryKey,
 } from "@/api/generated/spaceguestbook-스페이스-방명록";
+import useFlowBack from "@/hooks/@common/useFlowBack";
 import GuestbookDetailPage from "@/pages/guestbookDetail/GuestbookDetailPage";
 
 export const Route = createFileRoute(
@@ -16,6 +17,7 @@ export const Route = createFileRoute(
 function RouteComponent() {
   const { spaceId, guestbookId } = Route.useParams();
   const navigate = useNavigate();
+  const flowBack = useFlowBack();
   const queryClient = useQueryClient();
 
   return (
@@ -33,7 +35,7 @@ function RouteComponent() {
           queryClient.invalidateQueries({
             queryKey: ["guestbook", spaceId, "list"],
           });
-          navigate({ to: "/spaces/$spaceId/guestbook", params: { spaceId } });
+          flowBack({ to: "/spaces/$spaceId/guestbook", params: { spaceId } });
         }}
         onNavigate={(id) =>
           navigate({
