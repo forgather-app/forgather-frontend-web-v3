@@ -25,7 +25,7 @@ function RouteComponent() {
         })
       }
       onDeleteSuccess={() =>
-        navigate({ to: "/spaces/$spaceId", params: { spaceId } })
+        navigate({ to: "/spaces/$spaceId", params: { spaceId }, replace: true })
       }
     />
   );
