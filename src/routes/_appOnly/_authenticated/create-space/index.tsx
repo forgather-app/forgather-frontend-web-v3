@@ -14,6 +14,7 @@ function RouteComponent() {
         navigate({
           to: "/spaces/$spaceId",
           params: { spaceId: spaceCode },
+          replace: true,
         })
       }
     />

@@ -39,10 +39,10 @@ function LoginRouteGuard() {
   useEffect(() => {
     if (isPending || isError) return;
     if (onboardingCompleted) {
-      navigate({ href: redirectTo ?? "/home" });
+      navigate({ href: redirectTo ?? "/home", replace: true });
       return;
     }
-    navigate({ to: "/sign-up" });
+    navigate({ to: "/sign-up", replace: true });
   }, [isPending, isError, onboardingCompleted, navigate, redirectTo]);
 
   if (isPending || !isError) return null;

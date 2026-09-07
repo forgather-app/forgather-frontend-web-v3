@@ -40,7 +40,7 @@ const DevLoginModal = ({ isOpen, onClose, redirectTo }: DevLoginModalProps) => {
           await queryClient.invalidateQueries({
             queryKey: getGetCurrentUserQueryKey(),
           });
-          navigate({ href: redirectTo ?? "/home" });
+          navigate({ href: redirectTo ?? "/home", replace: true });
         },
         onError: () => {
           showSnackBar(ERROR_MESSAGES.LOGIN_FAILED, "error");

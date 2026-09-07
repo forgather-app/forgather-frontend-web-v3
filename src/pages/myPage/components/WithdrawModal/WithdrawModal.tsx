@@ -22,7 +22,7 @@ const WithdrawModal = ({ isOpen, onClose }: WithdrawModalProps) => {
     withdraw(undefined, {
       onSuccess: () => {
         showSnackBar("회원 탈퇴가 완료되었어요", "alert");
-        navigate({ to: "/login" });
+        navigate({ to: "/login", replace: true });
       },
       onError: () => {
         showSnackBar(ERROR_MESSAGES.WITHDRAW_FAILED, "error");

@@ -44,11 +44,12 @@ function AuthenticatedLayout() {
       navigate({
         to: "/login",
         search: { redirectTo: location.href },
+        replace: true,
       });
       return;
     }
     if (!isPending && !onboardingCompleted) {
-      navigate({ to: "/sign-up" });
+      navigate({ to: "/sign-up", replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
