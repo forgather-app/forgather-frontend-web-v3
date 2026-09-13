@@ -88,6 +88,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     (card): card is GuestBookCardSimpleResponse & { id: number } =>
       card.id !== undefined,
   );
+  const hasUnreadStack = hasNewCards && !!firstUnreadCard;
 
   const { targetRef } = useInfiniteScroll({
     hasNextPage,
@@ -140,7 +141,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.CountGroup>
       </S.TitleRow>
 
-      {hasNewCards && firstUnreadCard && (
+      {hasUnreadStack && (
         <S.GuestCardWrapper>
           <GuestListStack
             count={unreadCount}
@@ -150,12 +151,14 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
       )}
 
       {guestBookCards.length === 0 ? (
-        <S.EmptyState>
-          <S.EmptyStateGraphic aria-hidden>
-            <GuestBookEmptyGraphic />
-          </S.EmptyStateGraphic>
-          <S.EmptyStateText>아직 방명록이 없어요</S.EmptyStateText>
-        </S.EmptyState>
+        !hasUnreadStack && (
+          <S.EmptyState>
+            <S.EmptyStateGraphic aria-hidden>
+              <GuestBookEmptyGraphic />
+            </S.EmptyStateGraphic>
+            <S.EmptyStateText>아직 방명록이 없어요</S.EmptyStateText>
+          </S.EmptyState>
+        )
       ) : (
         <S.GuestListContainer>
           {guestBookCards.map((card) => (
