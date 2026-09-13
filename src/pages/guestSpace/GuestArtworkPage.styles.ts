@@ -189,14 +189,6 @@ export const DescriptionSkeleton = styled.div`
 `;
 
 export const BottomSpacer = styled.div`
-  position: sticky;
-  bottom: 0;
   flex-shrink: 0;
-  height: 34px;
-  background: linear-gradient(
-    180deg,
-    rgba(27, 29, 31, 0) 0%,
-    ${({ theme }) => theme.colors.gray.gray700} 50%
-  );
-  pointer-events: none;
+  height: ${({ theme }) => 120 - theme.layout.sidePadding}px;
 `;
