@@ -13,7 +13,7 @@ export const Backdrop = styled.div`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 16px;
+  top: calc(16px + env(safe-area-inset-top));
   right: 16px;
   z-index: 1;
   display: flex;
@@ -81,5 +81,5 @@ export const Footer = styled.footer`
   position: absolute;
   left: 16px;
   right: 16px;
-  bottom: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
 `;

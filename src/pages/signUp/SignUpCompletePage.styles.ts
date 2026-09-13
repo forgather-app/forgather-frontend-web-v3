@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
-  min-height: 100dvh;
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   /* 상단 상태 표시줄(48px) + 여백(48px) 대체 */
   padding-top: 48px;
   background-color: ${({ theme }) => theme.colors.gray.gray700};

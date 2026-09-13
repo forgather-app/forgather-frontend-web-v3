@@ -11,7 +11,7 @@ export const Root = styled.div`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: 16px;
+  top: calc(16px + env(safe-area-inset-top));
   right: 16px;
   z-index: 1;
   display: flex;
@@ -65,7 +65,9 @@ export const SlideImage = styled.img`
    * 기기 폭(100%)에 맞고, 세로가 긴 이미지는 max-height가 걸려 폭이 줄어든다.
    */
   max-width: 100%;
-  max-height: calc(100dvh - 234px);
+  max-height: calc(
+    100dvh - 234px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
   box-shadow: 0 0 60px 0 rgba(0, 0, 0, 0.6);
 `;
 
@@ -73,7 +75,9 @@ export const PlaceholderWrapper = styled.div`
   width: min(100vw, ${({ theme }) => theme.layout.maxWidth});
   max-width: 100%;
   aspect-ratio: 1;
-  max-height: calc(100dvh - 234px);
+  max-height: calc(
+    100dvh - 234px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
   display: flex;
   align-items: center;
   justify-content: center;

@@ -131,7 +131,7 @@ export const ErrorMessage = styled.p`
 
 export const WriteCtaWrapper = styled.div`
   position: fixed;
-  bottom: 34px;
+  bottom: calc(34px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
   width: 100%;

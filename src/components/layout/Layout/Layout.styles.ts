@@ -10,6 +10,6 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
-  padding: 0 ${({ theme }) => theme.layout.sidePadding}px
-    ${({ theme }) => theme.layout.sidePadding}px;
+  padding: env(safe-area-inset-top) ${({ theme }) => theme.layout.sidePadding}px
+    calc(${({ theme }) => theme.layout.sidePadding}px + env(safe-area-inset-bottom));
 `;

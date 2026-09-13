@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const BottomBar = styled.div`
   position: fixed;
-  bottom: 34px;
+  bottom: calc(34px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
   display: flex;
