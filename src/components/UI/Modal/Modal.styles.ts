@@ -18,7 +18,7 @@ export const Content = styled.div<{ $isVisible: boolean }>`
   z-index: ${({ theme }) => theme.layout.zIndex.modalContent};
   width: calc(100% - 32px);
   max-width: 328px;
-  max-height: calc(100dvh - 32px);
+  max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   overflow-x: hidden;
   overflow-y: auto;
   background: ${({ theme }) => theme.colors.gray.gray600};
