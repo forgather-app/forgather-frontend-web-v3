@@ -17,6 +17,9 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  // NOTE: src/constants/routes.ts의 APP_BASE_PATH와 값을 반드시 맞춰야 한다
+  // (forgather.app을 v2/v3가 경로로 나눠 쓰기 위한 prefix)
+  base: "/v3/",
   plugins: [
     tanstackRouter({
       target: "react",
