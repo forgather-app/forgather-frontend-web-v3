@@ -1,8 +1,9 @@
 import IcFire from "@/assets/icons/ic_fire.svg?react";
+import { APP_BASE_PATH } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./CurrentSpaceSection.styles";
 
-const spaceCardFallback = "/images/fallback/space_card.png";
+const spaceCardFallback = `${APP_BASE_PATH}/images/fallback/space_card.png`;
 
 interface CurrentSpaceSectionProps {
   /** 스페이스 이름 (최대 두 줄 표시) */

@@ -53,6 +53,13 @@ const useKakaoLoginBridge = (redirectTo?: string) => {
             await queryClient.invalidateQueries({
               queryKey: getGetCurrentUserQueryKey(),
             });
+            // NOTE: 로그인 이후는 SPA 클라이언트 라우팅만 일어나 WebView의 페이지 로드가
+            // 다시 발생하지 않는다. Android는 CookieManager.flush()가 페이지 로드 완료
+            // 시점에만 호출되므로, 세션 쿠키가 디스크에 반영되기 전에 앱이 종료되면
+            // 재실행 시 로그인 상태가 유실될 수 있다. RN에 알려 명시적으로 flush시킨다.
+            window.ReactNativeWebView?.postMessage(
+              JSON.stringify({ type: "AUTH_SESSION_CONFIRMED" }),
+            );
             navigate({ href: redirectTo ?? "/home" });
           },
           onError: () => {

@@ -9,6 +9,7 @@ import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
 import ShareModal from "@/components/UI/ShareModal/ShareModal";
+import { APP_BASE_PATH } from "@/constants/routes";
 import useFlowBack from "@/hooks/@common/useFlowBack";
 import useKakaoShareBridge from "@/hooks/@common/useKakaoShareBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -55,7 +56,7 @@ function RouteComponent() {
     return <Outlet />;
   }
 
-  const writeUrl = `${window.location.origin}/spaces/${spaceId}/guest`;
+  const writeUrl = `${window.location.origin}${APP_BASE_PATH}/spaces/${spaceId}/guest`;
 
   return (
     <>

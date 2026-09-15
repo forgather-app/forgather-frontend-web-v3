@@ -1,9 +1,10 @@
 import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcSmallLogo from "@/assets/icons/logos/logo_small.svg?react";
+import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./SpaceCard.styles";
 
-const spaceCardFallback = "/images/fallback/exhibition_list.png";
+const spaceCardFallback = EXHIBITION_LIST_FALLBACK_IMAGE;
 
 interface SpaceCardProps {
   /** 스페이스 제목 */
