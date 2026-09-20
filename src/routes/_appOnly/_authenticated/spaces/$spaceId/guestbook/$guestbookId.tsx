@@ -20,21 +20,25 @@ function RouteComponent() {
   const flowBack = useFlowBack();
   const queryClient = useQueryClient();
 
+  const invalidateGuestbookQueries = () => {
+    queryClient.invalidateQueries({
+      queryKey: getReadGuestBookV2QueryKey(spaceId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: getReadUnreadGuestBookQueryKey(spaceId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["guestbook", spaceId, "list"],
+    });
+  };
+
   return (
     <Suspense fallback={null}>
       <GuestbookDetailPage
         spaceId={spaceId}
         currentId={Number(guestbookId)}
         onBack={() => {
-          queryClient.invalidateQueries({
-            queryKey: getReadGuestBookV2QueryKey(spaceId),
-          });
-          queryClient.invalidateQueries({
-            queryKey: getReadUnreadGuestBookQueryKey(spaceId),
-          });
-          queryClient.invalidateQueries({
-            queryKey: ["guestbook", spaceId, "list"],
-          });
+          invalidateGuestbookQueries();
           flowBack({ to: "/spaces/$spaceId/guestbook", params: { spaceId } });
         }}
         onNavigate={(id) =>
@@ -44,6 +48,10 @@ function RouteComponent() {
             replace: true,
           })
         }
+        onDeleteSuccess={() => {
+          invalidateGuestbookQueries();
+          flowBack({ to: "/spaces/$spaceId/guestbook", params: { spaceId } });
+        }}
       />
     </Suspense>
   );
