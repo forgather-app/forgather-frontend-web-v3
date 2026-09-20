@@ -6,8 +6,9 @@ export const LANDING_DESKTOP_QUERY = `@media (min-width: ${LANDING_DESKTOP_MIN_W
 /** 포게더 카카오톡 채널 - 헤더 "문의하기"와 푸터 카카오톡 아이콘이 공유한다 */
 export const LANDING_KAKAO_CHANNEL_URL = "https://pf.kakao.com/_rHNtn";
 
-/** TODO: 심사 완료 후 실제 App Store 상세 페이지 URL로 교체한다 - Hero CTA와 앱 안내 모달이 공유한다 */
-export const LANDING_APP_STORE_URL = "#";
+/** Hero CTA와 앱 안내 모달이 공유한다 */
+export const LANDING_APP_STORE_URL =
+  "https://apps.apple.com/kr/app/%ED%8F%AC%EA%B2%8C%EB%8D%94-forgather/id6795543031?l=en-GB";
 
 /** 오늘 하루 보지 않기 상태를 저장하는 localStorage 키 */
 export const LANDING_APP_NOTICE_DISMISS_KEY =
