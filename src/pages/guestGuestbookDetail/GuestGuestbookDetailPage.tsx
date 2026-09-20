@@ -52,6 +52,7 @@ const GuestGuestbookDetailPage = ({
   const lightboxOpenIdRef = useRef(0);
   const [lightboxCard, setLightboxCard] = useState<{
     openId: number;
+    startIndex: number;
     images: LightboxImage[];
   } | null>(null);
 
@@ -124,42 +125,42 @@ const GuestGuestbookDetailPage = ({
             if (!detail) {
               return (
                 <S.SlideContent key={id}>
-                  {simple?.containsPhoto && <S.SkeletonPhoto aria-hidden />}
                   <S.Message>{simple?.message}</S.Message>
+                  {simple?.containsPhoto && <S.SkeletonPhoto aria-hidden />}
                 </S.SlideContent>
               );
             }
 
-            const photos = detail.photos ?? [];
+            const validPhotos = (detail.photos ?? []).filter(
+              (photo): photo is typeof photo & { path: string } =>
+                Boolean(photo.path),
+            );
 
             return (
               <S.SlideContent key={id}>
-                {photos.length > 0 && (
-                  <GuestbookAttachedPhoto
-                    imageUrl={
-                      photos[0]?.path ? getImageUrl(photos[0].path) : undefined
-                    }
-                    currentIndex={1}
-                    totalCount={photos.length}
-                    onClick={() => {
-                      lightboxOpenIdRef.current += 1;
-                      setLightboxCard({
-                        openId: lightboxOpenIdRef.current,
-                        images: photos
-                          .filter(
-                            (photo): photo is typeof photo & { path: string } =>
-                              Boolean(photo.path),
-                          )
-                          .map((photo) => ({
-                            url: getImageUrl(photo.path),
-                            name: photo.originalName,
-                          })),
-                      });
-                      setIsLightboxOpen(true);
-                    }}
-                  />
-                )}
                 <S.Message>{detail.message}</S.Message>
+                {validPhotos.length > 0 && (
+                  <S.PhotoList>
+                    {validPhotos.map((photo, index) => (
+                      <GuestbookAttachedPhoto
+                        key={photo.path}
+                        imageUrl={getImageUrl(photo.path)}
+                        onClick={() => {
+                          lightboxOpenIdRef.current += 1;
+                          setLightboxCard({
+                            openId: lightboxOpenIdRef.current,
+                            startIndex: index,
+                            images: validPhotos.map((p) => ({
+                              url: getImageUrl(p.path),
+                              name: p.originalName,
+                            })),
+                          });
+                          setIsLightboxOpen(true);
+                        }}
+                      />
+                    ))}
+                  </S.PhotoList>
+                )}
               </S.SlideContent>
             );
           })}
@@ -178,6 +179,7 @@ const GuestGuestbookDetailPage = ({
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
         images={lightboxCard?.images ?? []}
+        startIndex={lightboxCard?.startIndex}
         allowSave={false}
       />
     </S.Wrapper>
