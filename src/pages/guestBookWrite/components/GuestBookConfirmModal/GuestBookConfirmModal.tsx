@@ -29,7 +29,7 @@ const GuestBookConfirmModal = ({
             <S.Description>
               한 번 남긴 방명록은
               <br />
-              수정 및 삭제가 불가해요.
+              작가님 외에 수정 및 삭제가 불가해요.
             </S.Description>
           </S.TextGroup>
           <S.ButtonRow>
