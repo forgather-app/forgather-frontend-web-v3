@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Link } from "@tanstack/react-router";
 import { LANDING_DESKTOP_QUERY } from "@/pages/landing/LandingPage.constants";
 
 export const Wrapper = styled.section`
@@ -63,26 +62,4 @@ export const Heading = styled.h2`
   ${LANDING_DESKTOP_QUERY} {
     font-size: 38px;
   }
-`;
-
-export const CtaLink = styled(Link)`
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 32px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(${({ theme }) => theme.colors.gray.white}, ${({ theme }) => theme.colors.gray.white}) padding-box,
-    linear-gradient(127deg, rgba(139, 128, 248, 1) 0%, rgba(89, 75, 250, 1) 100%) border-box;
-`;
-
-export const CtaLinkText = styled.span`
-  ${({ theme }) => ({ ...theme.typography.body1 })};
-  font-size: 16px;
-  background: linear-gradient(127deg, rgba(139, 128, 248, 1) 0%, rgba(89, 75, 250, 1) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
 `;

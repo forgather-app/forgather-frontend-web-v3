@@ -6,6 +6,13 @@ export const LANDING_DESKTOP_QUERY = `@media (min-width: ${LANDING_DESKTOP_MIN_W
 /** 포게더 카카오톡 채널 - 헤더 "문의하기"와 푸터 카카오톡 아이콘이 공유한다 */
 export const LANDING_KAKAO_CHANNEL_URL = "https://pf.kakao.com/_rHNtn";
 
+/** TODO: 심사 완료 후 실제 App Store 상세 페이지 URL로 교체한다 - Hero CTA와 앱 안내 모달이 공유한다 */
+export const LANDING_APP_STORE_URL = "#";
+
+/** 오늘 하루 보지 않기 상태를 저장하는 localStorage 키 */
+export const LANDING_APP_NOTICE_DISMISS_KEY =
+  "forgather:landing-app-notice-dismissed";
+
 export interface LandingStat {
   id: string;
   value: string;
@@ -20,13 +27,13 @@ export const LANDING_STATS: LandingStat[] = [
   },
   {
     id: "artist",
-    value: "100+",
+    value: "200+",
     description: "명의 작가가 포게더를 사용했어요",
   },
-  { id: "artwork", value: "140+", description: "점의 작품이 소개됐어요" },
+  { id: "artwork", value: "200+", description: "점의 작품이 소개됐어요" },
   {
     id: "guestbook",
-    value: "700+",
+    value: "800+",
     description: "개의 소중한 방명록이 모였어요",
   },
 ];

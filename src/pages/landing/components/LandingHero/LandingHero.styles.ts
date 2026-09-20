@@ -57,26 +57,11 @@ export const Subtitle = styled.p`
   }
 `;
 
-/** 곧 앱으로 만나요 - PC/모바일 동일 문구의 안내 배지 (스토어 출시 전이라 다운로드 링크 없음) */
-export const AppBadge = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+export const AppButtonsSlot = styled.div`
   margin-top: 20px;
-  padding: 14px 32px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background:
-    radial-gradient(circle at 50% 100%, rgba(30, 32, 34, 1) 0%, rgba(17, 17, 17, 1) 100%) padding-box,
-    linear-gradient(127deg, rgba(139, 128, 248, 1) 0%, rgba(89, 75, 250, 1) 100%) border-box;
-  ${({ theme }) => ({ ...theme.typography.body1 })};
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.gray.gray100};
 
   ${LANDING_DESKTOP_QUERY} {
     margin-top: 24px;
-    padding: 16px 37px;
-    font-size: 20px;
   }
 `;
 

@@ -1,4 +1,5 @@
 import heroIllustration from "@/assets/images/landing/hero_illustration.png";
+import LandingAppStoreButtons from "@/pages/landing/components/LandingAppStoreButtons/LandingAppStoreButtons";
 import LandingHeader from "@/pages/landing/components/LandingHeader/LandingHeader";
 import { MobileBreak } from "@/pages/landing/Landing.shared.styles";
 import * as S from "./LandingHero.styles";
@@ -19,7 +20,9 @@ const LandingHero = () => {
           전시의 순간을 더 오래 간직해보세요
         </S.Subtitle>
       </S.TextGroup>
-      <S.AppBadge>곧 앱으로 만나요</S.AppBadge>
+      <S.AppButtonsSlot>
+        <LandingAppStoreButtons />
+      </S.AppButtonsSlot>
       <S.IllustrationWrapper aria-hidden="true">
         <S.IllustrationImage src={heroIllustration} alt="" />
       </S.IllustrationWrapper>
