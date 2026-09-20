@@ -8,7 +8,6 @@ import {
 import { useEffect } from "react";
 import { useGetCurrentUser } from "@/api/generated/auth-인증";
 import type { ApiResponseHostResponse } from "@/api/model";
-import useSnackBar from "@/hooks/@common/useSnackBar";
 
 export const Route = createFileRoute("/_appOnly/_authenticated")({
   component: AuthenticatedLayout,
@@ -17,7 +16,6 @@ export const Route = createFileRoute("/_appOnly/_authenticated")({
 function AuthenticatedLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { showSnackBar } = useSnackBar();
   const isSignUpRoute = useMatches().some((match) =>
     match.routeId.startsWith("/_appOnly/_authenticated/sign-up"),
   );
@@ -40,7 +38,6 @@ function AuthenticatedLayout() {
   useEffect(() => {
     if (isSignUpRoute) return;
     if (isError) {
-      showSnackBar("세션이 만료되었어요. 다시 로그인해주세요.", "error");
       navigate({
         to: "/login",
         search: { redirectTo: location.href },
@@ -52,14 +49,7 @@ function AuthenticatedLayout() {
       navigate({ to: "/sign-up", replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isError,
-    isPending,
-    onboardingCompleted,
-    isSignUpRoute,
-    navigate,
-    showSnackBar,
-  ]);
+  }, [isError, isPending, onboardingCompleted, isSignUpRoute, navigate]);
 
   const isAuthorized =
     isSignUpRoute || (!isError && !isPending && onboardingCompleted);
