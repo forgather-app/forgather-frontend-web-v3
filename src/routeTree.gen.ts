@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LandingRouteImport } from './routes/landing'
 import { Route as AppOnlyRouteImport } from './routes/_appOnly'
 import { Route as HostsHostCodeRouteImport } from './routes/hosts/$hostCode'
 import { Route as AppOnlyAuthenticatedRouteImport } from './routes/_appOnly/_authenticated'
@@ -37,6 +38,11 @@ import { Route as AppOnlyAuthenticatedSpacesSpaceIdGuestbookGuestbookIdRouteImpo
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdIndexRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/index'
 import { Route as AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRouteImport } from './routes/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/edit'
 
+const LandingRoute = LandingRouteImport.update({
+  id: '/landing',
+  path: '/landing',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppOnlyRoute = AppOnlyRouteImport.update({
   id: '/_appOnly',
   getParentRoute: () => rootRouteImport,
@@ -194,6 +200,7 @@ const AppOnlyAuthenticatedSpacesSpaceIdArtworksArtworkIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof AppOnlyAuthenticatedIndexRoute
+  '/landing': typeof LandingRoute
   '/hosts/$hostCode': typeof HostsHostCodeRoute
   '/spaces/$spaceId/guest': typeof SpacesSpaceIdGuestRouteWithChildren
   '/login/': typeof AppOnlyLoginIndexRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof AppOnlyAuthenticatedIndexRoute
+  '/landing': typeof LandingRoute
   '/hosts/$hostCode': typeof HostsHostCodeRoute
   '/login': typeof AppOnlyLoginIndexRoute
   '/my-page/edit': typeof AppOnlyAuthenticatedMyPageEditRoute
@@ -247,6 +255,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_appOnly': typeof AppOnlyRouteWithChildren
+  '/landing': typeof LandingRoute
   '/_appOnly/_authenticated': typeof AppOnlyAuthenticatedRouteWithChildren
   '/hosts/$hostCode': typeof HostsHostCodeRoute
   '/spaces/$spaceId/guest': typeof SpacesSpaceIdGuestRouteWithChildren
@@ -278,6 +287,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/landing'
     | '/hosts/$hostCode'
     | '/spaces/$spaceId/guest'
     | '/login/'
@@ -305,6 +315,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/landing'
     | '/hosts/$hostCode'
     | '/login'
     | '/my-page/edit'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/_appOnly'
+    | '/landing'
     | '/_appOnly/_authenticated'
     | '/hosts/$hostCode'
     | '/spaces/$spaceId/guest'
@@ -360,12 +372,20 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   AppOnlyRoute: typeof AppOnlyRouteWithChildren
+  LandingRoute: typeof LandingRoute
   HostsHostCodeRoute: typeof HostsHostCodeRoute
   SpacesSpaceIdGuestRoute: typeof SpacesSpaceIdGuestRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/landing': {
+      id: '/landing'
+      path: '/landing'
+      fullPath: '/landing'
+      preLoaderRoute: typeof LandingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_appOnly': {
       id: '/_appOnly'
       path: ''
@@ -660,6 +680,7 @@ const SpacesSpaceIdGuestRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   AppOnlyRoute: AppOnlyRouteWithChildren,
+  LandingRoute: LandingRoute,
   HostsHostCodeRoute: HostsHostCodeRoute,
   SpacesSpaceIdGuestRoute: SpacesSpaceIdGuestRouteWithChildren,
 }
