@@ -156,9 +156,11 @@ const SwiperAction = ({
   // 슬라이드가 바뀌거나 컨테이너 폭이 바뀔 때만 현재 보이는 슬라이드의 실제 높이로 다시 맞춥니다.
   // NOTE: deps 없이 매 커밋마다 재측정하면, Slide에 height:100%가 걸려 있어 방금 set한
   // trackHeight를 그대로 되읽는 자기 자신 참조 루프가 되어 "Maximum update depth exceeded"가 난다.
+  // NOTE: fillHeight 모드는 각 Slide가 Container 높이에 고정된 채 내부에서 자체 스크롤하므로
+  // (활성 슬라이드 높이에 트랙을 맞추는 대신) 이 측정 자체가 필요 없다 — 건너뛴다.
   // biome-ignore lint/correctness/useExhaustiveDependencies: swiperElement/activeIndex는 currentIndex로 이미 반영됨
   useLayoutEffect(() => {
-    if (!isControlled) return;
+    if (!isControlled || fillHeight) return;
     const activeSlide = trackRef.current?.children[currentIndex];
     if (activeSlide instanceof HTMLElement) {
       const height = activeSlide.scrollHeight;
@@ -324,6 +326,7 @@ const SwiperAction = ({
           <S.Slide
             // biome-ignore lint/suspicious/noArrayIndexKey: 현재로썬 index만 사용 가능함
             key={index}
+            $fillHeight={fillHeight}
             style={
               isControlled
                 ? { width: controlledSlideWidth || "100%" }
