@@ -1,5 +1,4 @@
 import axios from "axios";
-import { APP_BASE_PATH } from "@/constants/routes";
 import { notifyNativeLogout } from "@/utils/nativeBridge";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
@@ -34,7 +33,7 @@ const forceLogoutAndRedirect = () => {
     // 앱에 토큰 폐기를 알려야 세션이 실제로 끊긴다 (docs/webview-logout-token-persistence.md)
     notifyNativeLogout();
     const redirectTo = `${window.location.pathname}${window.location.search}`;
-    window.location.href = `${APP_BASE_PATH}/login?redirectTo=${encodeURIComponent(redirectTo)}`;
+    window.location.href = `/login?redirectTo=${encodeURIComponent(redirectTo)}`;
   });
 };
 
