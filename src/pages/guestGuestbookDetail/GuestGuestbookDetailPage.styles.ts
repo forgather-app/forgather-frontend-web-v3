@@ -38,6 +38,7 @@ export const PhotoList = styled.div`
 export const Message = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
+  white-space: pre-wrap;
   ${selectableText};
 `;
 
