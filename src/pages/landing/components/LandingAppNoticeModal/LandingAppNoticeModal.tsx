@@ -3,7 +3,10 @@ import IcCheckmark from "@/assets/icons/ic_checkmark.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
-import { LANDING_KAKAO_CHANNEL_URL } from "@/pages/landing/LandingPage.constants";
+import {
+  LANDING_APP_STORE_URL,
+  LANDING_KAKAO_CHANNEL_URL,
+} from "@/pages/landing/LandingPage.constants";
 import { dismissToday } from "@/utils/dailyDismiss";
 import * as S from "./LandingAppNoticeModal.styles";
 
@@ -38,16 +41,19 @@ const LandingAppNoticeModal = ({
           <S.CloseButton type="button" onClick={handleClose} aria-label="닫기">
             <IcClose width={24} height={24} />
           </S.CloseButton>
-          <S.Title>작가님 기능 일시 중단 안내</S.Title>
+          <S.Title>포게더가 앱으로 새로워졌어요</S.Title>
           <S.Description>
-            <p>
-              현재 시스템 점검으로 인해 작가님은 서비스를 일시적으로 이용하실 수
-              없습니다.
-            </p>
+            <p>앱 출시 및 서비스 리뉴얼에 따라 이용 방식이 변경되었습니다.</p>
             <S.BulletList>
-              <li>작가님: 내일 오전 중 정상화될 예정입니다.</li>
+              <li>
+                작가님: 포게더 앱에서 이용해 주세요. (기존/신규 작가님 모두)
+              </li>
               <li>방문객: 기존처럼 웹에서 이용하실 수 있어요.</li>
             </S.BulletList>
+            <p>
+              현재 앱은 App Store(iOS)에서 만나보실 수 있으며, 안드로이드 버전은
+              10월 중 출시 예정입니다.
+            </p>
             <p>이용에 불편을 드려 죄송합니다.</p>
             <p>
               문의 및 건의 사항은 아래 '문의하기' 버튼을 눌러 카카오톡 채널로
@@ -57,6 +63,17 @@ const LandingAppNoticeModal = ({
           <S.ButtonRow>
             <Button
               variant="primary"
+              text="App Store에서 다운로드"
+              onClick={() => {
+                window.open(
+                  LANDING_APP_STORE_URL,
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+            />
+            <Button
+              variant="tertiary"
               text="문의하기"
               onClick={() => {
                 window.open(
