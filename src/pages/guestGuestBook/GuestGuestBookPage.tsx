@@ -63,14 +63,14 @@ const GuestGuestBookPage = ({
   } = useInfiniteQuery({
     queryKey: ["guestbook", spaceId, "list"],
     queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
-    initialPageParam: 0,
+    initialPageParam: 1,
     enabled: !isSpacePending && isPublic,
     getNextPageParam: (_lastPage, allPages) => {
       const totalPages = allPages.at(-1)?.data?.totalPages;
       if (totalPages === undefined || allPages.length >= totalPages) {
         return undefined;
       }
-      return allPages.length;
+      return allPages.length + 1;
     },
   });
 
