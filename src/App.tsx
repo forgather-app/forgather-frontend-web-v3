@@ -4,7 +4,6 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import ErrorModalProvider from "./components/@common/ErrorModal/ErrorModalProvider";
 import RootErrorBoundary from "./components/@common/RootErrorBoundary/RootErrorBoundary";
 import SnackBarProvider from "./components/@common/SnackBar/SnackBarProvider";
-import { APP_BASE_PATH } from "./constants/routes";
 import { routeTree } from "./routeTree.gen";
 import GlobalStyle from "./styles/GlobalStyle";
 import { theme } from "./styles/theme";
@@ -12,7 +11,6 @@ import { theme } from "./styles/theme";
 const queryClient = new QueryClient();
 const router = createRouter({
   routeTree,
-  basepath: APP_BASE_PATH,
   defaultErrorComponent: RootErrorBoundary,
 });
 

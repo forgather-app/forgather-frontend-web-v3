@@ -1,3 +1,4 @@
+import LandingAppStoreButtons from "@/pages/landing/components/LandingAppStoreButtons/LandingAppStoreButtons";
 import { MobileBreak } from "@/pages/landing/Landing.shared.styles";
 import * as S from "./LandingFinalCta.styles";
 
@@ -14,9 +15,7 @@ const LandingFinalCta = () => {
         <MobileBreak />
         {" 오래 기억될 수 있도록"}
       </S.Heading>
-      <S.CtaLink to="/">
-        <S.CtaLinkText>내 전시 공간 만들기</S.CtaLinkText>
-      </S.CtaLink>
+      <LandingAppStoreButtons />
     </S.Wrapper>
   );
 };
