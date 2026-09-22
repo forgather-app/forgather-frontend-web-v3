@@ -26,6 +26,11 @@ let refreshPromise: Promise<unknown> | null = null;
 
 const forceLogoutAndRedirect = () => {
   if (isHandlingSessionExpired) return;
+  // NOTE: /login 페이지 자체가 "이미 로그인돼 있나" 확인하려고 /auth/me를 호출했다가
+  // 비로그인 상태라 401을 받는 경우도 이 경로를 탄다. 이미 /login에 있으므로 강제
+  // 로그아웃/리다이렉트가 불필요할 뿐 아니라, /login으로의 하드 리다이렉트가
+  // LoginRouteGuard를 재마운트시켜 같은 401을 반복 유발하는 무한 리로드 루프가 된다.
+  if (window.location.pathname.startsWith("/login")) return;
   isHandlingSessionExpired = true;
   // NOTE: stateless JWT라 서버가 발급된 토큰 자체를 무효화하지는 못하지만,
   // 쿠키는 만료시켜야 하므로 로그아웃 요청 후 로그인 페이지로 이동
