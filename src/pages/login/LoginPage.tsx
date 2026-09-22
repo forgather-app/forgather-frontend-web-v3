@@ -1,5 +1,5 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppleLogo from "@/assets/icons/ic_apple.svg?react";
 import KakaoLogo from "@/assets/icons/ic_kakao.svg?react";
 import Button from "@/components/@common/Button/Button";
@@ -23,6 +23,11 @@ const LoginPage = () => {
     useKakaoLoginBridge(redirectTo);
   const [isDevLoginOpen, setIsDevLoginOpen] = useState(false);
   const isAndroid = getMobileOS(navigator.userAgent) === "android";
+
+  useEffect(() => {
+    document.body.classList.add("scroll-lock");
+    return () => document.body.classList.remove("scroll-lock");
+  }, []);
 
   return (
     <CarouselLayout
