@@ -5,9 +5,11 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import GuestSpaceLayout from "@/pages/guestSpace/GuestSpaceLayout";
+import NotFoundPage from "@/pages/notFound/NotFoundPage";
 
 export const Route = createFileRoute("/spaces/$spaceId/guest")({
   component: RouteComponent,
+  notFoundComponent: NotFoundPage,
 });
 
 function RouteComponent() {
@@ -25,7 +27,6 @@ function RouteComponent() {
       match.routeId === "/spaces/$spaceId/guest/guestbook/$guestbookId" ||
       match.routeId === "/spaces/$spaceId/guest/guestbook/write",
   );
-
   if (isFullPageRoute) {
     return <Outlet />;
   }

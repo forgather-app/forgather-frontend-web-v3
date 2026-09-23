@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import { markNotFoundError } from "@/utils/markNotFoundError";
 import { notifyNativeLogout } from "@/utils/nativeBridge";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
@@ -50,9 +51,12 @@ apiClient.interceptors.response.use(
     // - 공통 에러 타입 정의 (e.g. { code: string; message: string })
     // - 403 Forbidden: 권한 없음 처리
     // - 비즈니스 에러 코드별 분기 처리
-    // NOTE: 404는 공통 처리 대상에서 제외 — 리소스 없음은 각 페이지가 로컬로 분기 처리
-    // (예: ArtworkDetailPage의 isNotFound 분기)하거나 라우트 notFound()로 다뤄야 할 케이스라,
-    // 여기서 전역 에러 바운더리로 흘려보내지 않음
+    // NOTE: 404는 TanStack Router의 notFound() 마커를 달아 전역 표준화한다. 페이지는
+    // isAxiosError로 직접 404를 판별하는 대신 throwIfRoutableError()/throwIfNotFound()에
+    // 이 에러를 넘기기만 하면 공통 NotFoundPage로 라우팅된다.
+    if (isAxiosError(error) && error.response?.status === 404) {
+      markNotFoundError(error);
+    }
 
     const isUnauthorized = error.response?.status === 401;
     const requestUrl: string = error.config?.url ?? "";
