@@ -30,19 +30,17 @@ const appButtonBase = css`
   }
 `;
 
-/** 다운로드 준비 전까지 비활성 처리한 버튼 - 실제 링크가 생기면 활성화한다 */
-export const AppStoreButton = styled.button`
+export const AppStoreButton = styled.a`
   ${appButtonBase};
   ${({ theme }) => ({ ...theme.typography.body1 })};
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
-  color: ${({ theme }) => theme.colors.gray.gray400};
-
-  &:disabled {
-    cursor: not-allowed;
-  }
+  background:
+    radial-gradient(circle at 50% 100%, rgba(30, 32, 34, 1) 0%, rgba(17, 17, 17, 1) 100%) padding-box,
+    linear-gradient(127deg, rgba(139, 128, 248, 1) 0%, rgba(89, 75, 250, 1) 100%) border-box;
+  color: ${({ theme }) => theme.colors.gray.gray100};
+  text-decoration: none;
 `;
 
-/** 플레이스토어 출시 전 안내용 비활성 버튼 - 출시 후 실제 링크가 생기면 활성화한다 */
+/** 플레이스토어 출시 전 안내용 비활성 버튼 - 출시 후 실제 링크가 생기면 AppStoreButton과 동일하게 활성화한다 */
 export const PlayStoreButton = styled.button`
   ${appButtonBase};
   ${({ theme }) => ({ ...theme.typography.body1 })};

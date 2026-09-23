@@ -1,8 +1,12 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
 import {
+  getReadCardQueryKey,
+  getReadGuestBookV2QueryKey,
+  getReadUnreadGuestBookQueryKey,
+  useDeleteCard,
   useReadCard,
   useReadUnreadGuestBookSuspense,
 } from "@/api/generated/spaceguestbook-스페이스-방명록";
@@ -13,14 +17,18 @@ import type {
   GuestBookResponse,
 } from "@/api/model";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
+import Button from "@/components/@common/Button/Button";
+import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import GuestbookAttachedPhoto from "@/components/@common/GuestbookAttachedPhoto/GuestbookAttachedPhoto";
 import GuestbookDetailHeader from "@/components/@common/GuestbookDetailHeader/GuestbookDetailHeader";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ImageLightbox, {
   type LightboxImage,
 } from "@/components/UI/ImageLightbox/ImageLightbox";
+import Modal from "@/components/UI/Modal/Modal";
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { CONSTRAINTS } from "@/constants/constraints";
+import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
 import * as S from "./GuestbookDetailPage.styles";
 
@@ -33,6 +41,8 @@ interface GuestbookDetailPageProps {
   onBack: () => void;
   /** 이전/다음 카드로 이동 핸들러 */
   onNavigate: (id: number) => void;
+  /** 삭제 성공 후 호출되는 핸들러 (예: 목록으로 이동) */
+  onDeleteSuccess?: () => void;
 }
 
 /** 사진은 목록 응답에 없어(containsPhoto만 제공) 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다. 닉네임·메시지·작성일은 목록 응답에 이미 포함돼 있어 개별 조회를 기다릴 필요가 없습니다 */
@@ -63,8 +73,14 @@ const GuestbookDetailPage = ({
   currentId,
   onBack,
   onNavigate,
+  onDeleteSuccess = () => {},
 }: GuestbookDetailPageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const { showSnackBar } = useSnackBar();
+  const queryClient = useQueryClient();
+  const { mutate: deleteCard } = useDeleteCard();
   // 닫힘 애니메이션 동안 Modal이 언마운트되지 않으므로, onClose에서 images를 비우면
   // 잠깐 "n / 0"처럼 잘못된 카운터가 보입니다. 닫을 때는 isOpen만 false로 바꾸고
   // 마지막으로 열었던 카드 데이터는 그대로 유지합니다.
@@ -162,6 +178,33 @@ const GuestbookDetailPage = ({
 
   if (!isResolved || currentCardId === undefined) return null;
 
+  const handleConfirmDelete = () => {
+    deleteCard(
+      { spaceCode: spaceId, guestBookCardId: currentCardId },
+      {
+        onSuccess: () => {
+          setIsDeleteConfirmOpen(false);
+          showSnackBar("방명록을 삭제했어요", "alert");
+          // 목록/상세 캐시를 무효화해 뒤로가기 등으로 재접근해도 삭제된 상태가 바로 반영되게 한다
+          queryClient.invalidateQueries({
+            queryKey: getReadGuestBookV2QueryKey(spaceId),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getReadUnreadGuestBookQueryKey(spaceId),
+          });
+          queryClient.invalidateQueries({
+            queryKey: getReadCardQueryKey(spaceId, currentCardId),
+          });
+          onDeleteSuccess();
+        },
+        onError: () => {
+          setIsDeleteConfirmOpen(false);
+          showSnackBar("방명록 삭제에 실패했어요", "error");
+        },
+      },
+    );
+  };
+
   const getDetail = (id: number): GuestBookCardResponse | undefined => {
     if (id === prevId) return prevQuery.data;
     if (id === currentCardId) return currentQuery.data;
@@ -177,15 +220,26 @@ const GuestbookDetailPage = ({
 
   return (
     <S.Wrapper>
-      <NavigationBar
-        onBackClick={onBack}
-        rightContent={
-          <IcVerticalDots width={24} height={24} aria-hidden="true" />
-        }
-        rightAriaLabel="더보기"
-        // TODO: 케밥 메뉴(수정/삭제/신고 등) 액션 연동 필요
-        onRightClick={() => {}}
-      />
+      <S.NavWrapper>
+        <NavigationBar
+          onBackClick={onBack}
+          rightContent={
+            <IcVerticalDots width={24} height={24} aria-hidden="true" />
+          }
+          rightAriaLabel="더보기"
+          onRightClick={() => setIsMenuOpen((prev) => !prev)}
+        />
+        <Dropdown
+          isOpen={isMenuOpen}
+          onClose={() => setIsMenuOpen(false)}
+          items={[
+            {
+              label: "삭제하기",
+              onClick: () => setIsDeleteConfirmOpen(true),
+            },
+          ]}
+        />
+      </S.NavWrapper>
       <GuestbookDetailHeader
         nickname={nickname}
         createdAt={createdAt}
@@ -259,6 +313,34 @@ const GuestbookDetailPage = ({
         images={lightboxCard?.images ?? []}
         startIndex={lightboxCard?.startIndex}
       />
+      <Modal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => setIsDeleteConfirmOpen(false)}
+      >
+        <Modal.Overlay />
+        <Modal.Content>
+          <S.ConfirmBody>
+            <S.ConfirmTextGroup>
+              <S.ConfirmTitle>방명록을 삭제할까요?</S.ConfirmTitle>
+              <S.ConfirmSubtitle>삭제하면 되돌릴 수 없어요</S.ConfirmSubtitle>
+            </S.ConfirmTextGroup>
+            <S.ConfirmActions>
+              <Button
+                variant="tertiary"
+                text="취소"
+                onClick={() => setIsDeleteConfirmOpen(false)}
+                style={{ flex: 1 }}
+              />
+              <Button
+                variant="danger"
+                text="삭제하기"
+                onClick={handleConfirmDelete}
+                style={{ flex: 1 }}
+              />
+            </S.ConfirmActions>
+          </S.ConfirmBody>
+        </Modal.Content>
+      </Modal>
     </S.Wrapper>
   );
 };

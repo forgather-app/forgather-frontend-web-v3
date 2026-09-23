@@ -156,7 +156,7 @@ const GuestArtworkPage = ({
       <Divider color={SECTION_DIVIDER_COLOR} height={8} marginTop={24} />
 
       <S.SectionHeader>
-        <S.SectionTitle>작품 {artworks.length}건</S.SectionTitle>
+        <S.SectionTitle>작품 {artworks.length}개</S.SectionTitle>
       </S.SectionHeader>
 
       {artworks.length === 0 ? (

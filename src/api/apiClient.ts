@@ -9,14 +9,15 @@ export const apiClient = axios.create({
   withCredentials: true,
 });
 
-// NOTE: /auth/me는 로그인 여부를 확인하는 용도라 401이 정상 응답 중 하나이므로 제외.
-// _authenticated 레이아웃이 /auth/me의 401을 자체적으로 처리해 /login으로 안내한다.
+// NOTE: /auth/me의 401은 accessToken(1시간)만 만료되고 refreshToken(90일)은
+// 살아있는 경우와 구분할 수 없으므로 재발급 대상에 포함한다 — 제외하면 refreshToken이
+// 유효해도 매시간 로그인 화면으로 튕겨난다. refresh 자체가 실패하면(=완전 비로그인)
+// 아래 catch에서 forceLogoutAndRedirect()로 동일하게 /login으로 보낸다.
 // /auth/refresh, /auth/logout 자체의 401은 재발급/로그아웃 재시도로 이어지면 순환이
-// 생기므로 함께 제외한다.
-const SESSION_CHECK_PATH = "/auth/me";
+// 생기므로 제외한다.
 const REFRESH_PATH = "/auth/refresh";
 const LOGOUT_PATH = "/auth/logout";
-const AUTH_FLOW_PATHS = [SESSION_CHECK_PATH, REFRESH_PATH, LOGOUT_PATH];
+const AUTH_FLOW_PATHS = [REFRESH_PATH, LOGOUT_PATH];
 
 let isHandlingSessionExpired = false;
 // NOTE: 동시에 여러 요청이 401을 받아도 /auth/refresh는 한 번만 호출하도록
@@ -25,6 +26,11 @@ let refreshPromise: Promise<unknown> | null = null;
 
 const forceLogoutAndRedirect = () => {
   if (isHandlingSessionExpired) return;
+  // NOTE: /login 페이지 자체가 "이미 로그인돼 있나" 확인하려고 /auth/me를 호출했다가
+  // 비로그인 상태라 401을 받는 경우도 이 경로를 탄다. 이미 /login에 있으므로 강제
+  // 로그아웃/리다이렉트가 불필요할 뿐 아니라, /login으로의 하드 리다이렉트가
+  // LoginRouteGuard를 재마운트시켜 같은 401을 반복 유발하는 무한 리로드 루프가 된다.
+  if (window.location.pathname.startsWith("/login")) return;
   isHandlingSessionExpired = true;
   // NOTE: stateless JWT라 서버가 발급된 토큰 자체를 무효화하지는 못하지만,
   // 쿠키는 만료시켜야 하므로 로그아웃 요청 후 로그인 페이지로 이동
