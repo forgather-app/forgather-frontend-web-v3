@@ -1,10 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
-import {
-  getGetCurrentUserQueryKey,
-  useKakaoLoginConfirm,
-} from "@/api/generated/auth-인증";
+import { useKakaoLoginConfirm } from "@/api/generated/auth-인증";
+import { getGetCurrentUserQueryKey } from "@/api/generated/host-호스트";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 

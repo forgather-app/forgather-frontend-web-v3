@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useWithdraw } from "@/api/generated/auth-인증";
+import { useWithdraw } from "@/api/generated/host-호스트";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import { ERROR_MESSAGES } from "@/constants/error";

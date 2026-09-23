@@ -28,7 +28,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 설정된 고정 아이디/비밀번호로 로그인합니다. 카카오 로그인과 동일하게 액세스토큰과 리프레시토큰을 응답 바디와 HttpOnly 쿠키로 반환합니다. 운영 환경에는 이 API가 존재하지 않습니다.
+ * 설정된 고정 아이디/비밀번호로 로그인합니다. 카카오 로그인과 동일하게 액세스토큰과 리프레시토큰을 HttpOnly 쿠키로 반환합니다. 운영 환경에는 이 API가 존재하지 않습니다.
  * @summary 개발용 임시 로그인
  */
 export type devLoginResponse200 = {

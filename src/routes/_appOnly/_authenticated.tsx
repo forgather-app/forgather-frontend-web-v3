@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useGetCurrentUser } from "@/api/generated/auth-인증";
+import { useGetCurrentUser } from "@/api/generated/host-호스트";
 import type { ApiResponseHostResponse } from "@/api/model";
 
 export const Route = createFileRoute("/_appOnly/_authenticated")({
