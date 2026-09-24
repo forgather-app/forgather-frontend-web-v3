@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react";
 import { isNotFound, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 import useErrorModal from "@/hooks/@common/useErrorModal";
@@ -20,6 +21,11 @@ const RootErrorBoundary = ({ error }: RootErrorBoundaryProps) => {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: 마운트 시 1회만 실행
   useEffect(() => {
+    // NOTE: 여기까지 도달한 에러는 위에서 notFound()를 걸러낸 뒤 남은, 렌더링 중 발생한
+    // 예기치 못한 에러다. 이전에는 모달만 띄우고 어디에도 보고하지 않아 원인 파악이
+    // 불가능했다.
+    Sentry.captureException(error);
+
     // NOTE: 게스트 flow(_appOnly 밖)는 "/"가 안전하지 않다 — _appOnly/_authenticated의
     // 인증 가드에 걸려 로그인 리다이렉트로 빠진다. 그리고 index 라우트(예:
     // /spaces/$spaceId/guest)에서는 ".."가 어디로 계산될지도 신뢰하기 어렵다(실측 결과

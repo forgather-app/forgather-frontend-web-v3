@@ -1,6 +1,9 @@
 import axios, { isAxiosError } from "axios";
+import { resetAnalyticsUser } from "@/utils/analytics";
+import { captureSentryError } from "@/utils/captureSentryError";
 import { markNotFoundError } from "@/utils/markNotFoundError";
 import { notifyNativeLogout } from "@/utils/nativeBridge";
+import { clearSentryUser } from "@/utils/sentry";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
 
@@ -39,6 +42,8 @@ const forceLogoutAndRedirect = () => {
     // NOTE: 앱 WebView는 Authorization 토큰을 주입하므로, 서버 로그아웃과 별개로
     // 앱에 토큰 폐기를 알려야 세션이 실제로 끊긴다 (docs/webview-logout-token-persistence.md)
     notifyNativeLogout();
+    clearSentryUser();
+    resetAnalyticsUser();
     const redirectTo = `${window.location.pathname}${window.location.search}`;
     window.location.href = `/login?redirectTo=${encodeURIComponent(redirectTo)}`;
   });
@@ -54,7 +59,8 @@ apiClient.interceptors.response.use(
     // NOTE: 404는 TanStack Router의 notFound() 마커를 달아 전역 표준화한다. 페이지는
     // isAxiosError로 직접 404를 판별하는 대신 throwIfRoutableError()/throwIfNotFound()에
     // 이 에러를 넘기기만 하면 공통 NotFoundPage로 라우팅된다.
-    if (isAxiosError(error) && error.response?.status === 404) {
+    const isNotFound = isAxiosError(error) && error.response?.status === 404;
+    if (isNotFound) {
       markNotFoundError(error);
     }
 
@@ -68,10 +74,22 @@ apiClient.interceptors.response.use(
     const alreadyRetriedAfterRefresh = error.config?.__isRetryAfterRefresh;
 
     if (!isUnauthorized || isAuthFlowRequest || isHandlingSessionExpired) {
+      // NOTE: 404는 notFound() 마커로 라우터가 전담 처리하는 정상 플로우이므로
+      // Sentry에는 남기지 않는다(예: 삭제된 방명록 링크 접근).
+      if (!isNotFound) {
+        if (isAxiosError(error) && !error.response) {
+          captureSentryError(error, "network_error");
+        } else if (requestUrl.startsWith(REFRESH_PATH)) {
+          captureSentryError(error, "token_refresh_failed");
+        } else if (!isUnauthorized) {
+          captureSentryError(error, "http_error");
+        }
+      }
       return Promise.reject(error);
     }
 
     if (alreadyRetriedAfterRefresh) {
+      captureSentryError(error, "auth_retry_failed");
       forceLogoutAndRedirect();
       return Promise.reject(error);
     }
@@ -86,6 +104,9 @@ apiClient.interceptors.response.use(
         __isRetryAfterRefresh: true,
       });
     } catch {
+      // NOTE: /auth/refresh 요청 자체의 실패는 위 인터셉터 분기(REFRESH_PATH 매칭)에서
+      // 이미 "token_refresh_failed"로 캡처됐다. 동시에 여러 요청이 refreshPromise를
+      // 공유하므로, 여기서도 캡처하면 실패 1건이 대기 중이던 요청 수만큼 중복 리포팅된다.
       forceLogoutAndRedirect();
       return Promise.reject(error);
     }

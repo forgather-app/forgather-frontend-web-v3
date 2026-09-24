@@ -1,7 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import { initAnalytics } from "./utils/analytics";
 import { getLegacyV2RedirectPath } from "./utils/getLegacyV2RedirectPath";
+import { initSentry } from "./utils/sentry";
+
+initSentry();
+initAnalytics();
 
 const legacyRedirectPath = getLegacyV2RedirectPath(
   window.location.pathname,
