@@ -1,11 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import useFlowBack from "@/hooks/@common/useFlowBack";
 import ArtworkDetailPage from "@/pages/artworkDetail/ArtworkDetailPage";
+import NotFoundPage from "@/pages/notFound/NotFoundPage";
 
 export const Route = createFileRoute(
   "/_appOnly/_authenticated/spaces/$spaceId/artworks/$artworkId/",
 )({
   component: RouteComponent,
+  notFoundComponent: NotFoundPage,
 });
 
 function RouteComponent() {

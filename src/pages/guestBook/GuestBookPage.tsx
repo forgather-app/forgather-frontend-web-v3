@@ -13,6 +13,7 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestBookPage.styles";
 
 const SKELETON_CARD_COUNT = 4;
@@ -49,6 +50,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     isFetchingNextPage,
     isPending,
     isError,
+    error,
   } = useInfiniteQuery({
     queryKey: ["guestbook", spaceId, "list"],
     queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
@@ -66,6 +68,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     data: unreadData,
     isPending: isUnreadPending,
     isError: isUnreadError,
+    error: unreadError,
   } = useQuery({
     queryKey: ["guestbook", spaceId, "unread"],
     queryFn: () => fetchUnreadGuestBook(spaceId),
@@ -107,8 +110,12 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
   const isLoading = isPending || isUnreadPending;
   const showSkeleton = useDelayedLoading(isLoading);
 
-  // TODO: 에러 UI 구현
-  if (isError || isUnreadError) return;
+  // 최초 로드가 실패했을 때만 전역 에러로 처리한다. useInfiniteQuery는 fetchNextPage()가
+  // 실패해도 error/isError가 함께 바뀌므로, 이미 로드된 목록이 있으면(=최초 로드는 성공)
+  // "더 불러오기" 실패로 페이지 전체가 죽어선 안 된다 — 그 경우는 위 onIntersect에서
+  // 이미 스낵바로 안내한다.
+  throwIfRoutableError(data ? undefined : error, unreadError);
+  if ((isError && !data) || isUnreadError) return null;
 
   if (isLoading) {
     if (!showSkeleton) return null;

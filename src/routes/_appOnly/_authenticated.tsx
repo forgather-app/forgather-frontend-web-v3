@@ -6,8 +6,10 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useGetCurrentUser } from "@/api/generated/auth-인증";
+import { useGetCurrentUser } from "@/api/generated/host-호스트";
 import type { ApiResponseHostResponse } from "@/api/model";
+import { identifyAnalyticsUser } from "@/utils/analytics";
+import { identifySentryUser } from "@/utils/sentry";
 
 export const Route = createFileRoute("/_appOnly/_authenticated")({
   component: AuthenticatedLayout,
@@ -28,8 +30,15 @@ function AuthenticatedLayout() {
   const { data, isError, isPending } = useGetCurrentUser({
     query: { enabled: !isSignUpRoute, retry: false },
   });
-  const onboardingCompleted = (data as unknown as ApiResponseHostResponse)?.data
-    ?.onboardingCompleted;
+  const hostData = (data as unknown as ApiResponseHostResponse)?.data;
+  const onboardingCompleted = hostData?.onboardingCompleted;
+  const hostId = hostData?.id;
+
+  useEffect(() => {
+    if (hostId === undefined) return;
+    identifySentryUser(hostId);
+    identifyAnalyticsUser(hostId);
+  }, [hostId]);
 
   // NOTE: location.href를 deps에 넣으면 navigate() 호출이 location을 바꾸고,
   // 그게 다시 effect를 재실행시켜 redirectTo가 자기 자신을 감싸며 무한 navigate되는

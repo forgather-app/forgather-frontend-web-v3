@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Suspense } from "react";
 import GuestHostProfilePage from "@/pages/guestHostProfile/GuestHostProfilePage";
+import NotFoundPage from "@/pages/notFound/NotFoundPage";
 
 export const Route = createFileRoute("/hosts/$hostCode")({
   component: RouteComponent,
+  notFoundComponent: NotFoundPage,
 });
 
 function RouteComponent() {

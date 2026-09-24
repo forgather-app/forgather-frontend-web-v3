@@ -33,6 +33,7 @@ import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./ArtworkPage.styles";
 
 /** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
@@ -142,6 +143,7 @@ const ArtworkPage = ({
     data: space,
     isPending: isSpacePending,
     isError: isSpaceError,
+    error: spaceError,
   } = useGetSpaceInformation<SpaceResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -157,6 +159,7 @@ const ArtworkPage = ({
     data: products,
     isPending: isProductsPending,
     isError: isProductsError,
+    error: productsError,
   } = useGetV3<ProductsResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -169,10 +172,9 @@ const ArtworkPage = ({
   const isPending = isSpacePending || isProductsPending;
   const showSkeleton = useDelayedLoading(isPending);
 
-  // TODO: 에러 UI 구현
-  if (isSpaceError || isProductsError) {
-    return;
-  }
+  // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
+  throwIfRoutableError(spaceError, productsError);
+  if (isSpaceError || isProductsError) return null;
 
   if (isPending) {
     if (!showSkeleton) return null;
