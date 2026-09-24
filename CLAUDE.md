@@ -25,6 +25,11 @@
 
 - **TanStack React Query**: 서버 상태 관리 및 데이터 페칭
 
+### 에러 모니터링 및 분석
+
+- **Sentry** (`@sentry/react`, `@sentry/vite-plugin`): 에러 모니터링 및 소스맵 업로드
+- **PostHog** (`posthog-js`): 제품 분석 및 사용자 이벤트 트래킹
+
 ### API 코드 생성
 
 - **Orval**: OpenAPI 스펙 기반 API 클라이언트 코드 자동 생성
