@@ -21,6 +21,7 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import AddSpaceOptionsSheet from "./components/addSpaceOptionsSheet/AddSpaceOptionsSheet";
 import CurrentSpaceAddSlot from "./components/currentSpaceAddSlot/CurrentSpaceAddSlot";
 import CurrentSpaceCarousel from "./components/currentSpaceCarousel/CurrentSpaceCarousel";
@@ -55,6 +56,7 @@ const HomePage = () => {
     data: allSpaces,
     isPending,
     isError,
+    error,
   } = useGetSpacesInformation({
     query: {
       select: (response) =>
@@ -66,10 +68,9 @@ const HomePage = () => {
 
   const showSkeleton = useDelayedLoading(isPending);
 
-  // TODO: 에러 UI 구현
-  if (isError) {
-    return;
-  }
+  // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
+  throwIfRoutableError(error);
+  if (isError) return null;
 
   const spaces = (allSpaces ?? []).filter(
     (space): space is HostSpaceItemResponse & { spaceCode: string } =>
