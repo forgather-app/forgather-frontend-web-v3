@@ -9,6 +9,7 @@ import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "@/pages/createSpace/CreateSpacePage.styles";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import { useEditSpaceForm } from "./hooks/useEditSpaceForm";
 
 interface EditSpacePageProps {
@@ -23,6 +24,7 @@ const EditSpacePage = ({ spaceId, onSuccess }: EditSpacePageProps) => {
     data: space,
     isPending: isSpacePending,
     isError: isSpaceError,
+    error: spaceError,
   } = useGetSpaceInformation<SpaceResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -30,10 +32,9 @@ const EditSpacePage = ({ spaceId, onSuccess }: EditSpacePageProps) => {
     },
   });
 
-  // TODO: 에러 UI 구현
-  if (isSpaceError) {
-    return;
-  }
+  // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
+  throwIfRoutableError(spaceError);
+  if (isSpaceError) return null;
 
   if (isSpacePending) {
     return null;

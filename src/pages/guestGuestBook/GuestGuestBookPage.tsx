@@ -14,6 +14,7 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import PrivateGuestBookOverlay from "./components/privateGuestBookOverlay/PrivateGuestBookOverlay";
 import * as S from "./GuestGuestBookPage.styles";
 
@@ -42,7 +43,7 @@ const GuestGuestBookPage = ({
   const {
     data: space,
     isPending: isSpacePending,
-    isError: isSpaceError,
+    error: spaceError,
   } = useGetSpaceInformation<SpaceResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -59,7 +60,7 @@ const GuestGuestBookPage = ({
     hasNextPage,
     isFetchingNextPage,
     isPending: isGuestBookPending,
-    isError: isGuestBookError,
+    error: guestBookError,
   } = useInfiniteQuery({
     queryKey: ["guestbook", spaceId, "list"],
     queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
@@ -101,8 +102,7 @@ const GuestGuestBookPage = ({
   const isPending = isSpacePending || (isPublic && isGuestBookPending);
   const showSkeleton = useDelayedLoading(isPending);
 
-  // TODO: 에러 UI 구현
-  if (isSpaceError) return;
+  throwIfRoutableError(spaceError, guestBookError);
 
   if (isPending) {
     if (!showSkeleton) return null;
@@ -145,9 +145,6 @@ const GuestGuestBookPage = ({
       </S.ScrollArea>
     );
   }
-
-  // TODO: 에러 UI 구현
-  if (isGuestBookError) return;
 
   return (
     <S.ScrollArea>

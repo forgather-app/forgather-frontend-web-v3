@@ -9,6 +9,7 @@ import PhotoInput from "@/components/@common/photoInput/PhotoInput";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./EditArtworkPage.styles";
 import { useEditArtworkForm } from "./hooks/useEditArtworkForm";
 
@@ -33,6 +34,7 @@ const EditArtworkPage = ({
     data: product,
     isPending,
     isError,
+    error,
   } = useGet<ProductResponse>(spaceId, artworkId, {
     query: {
       select: (response) =>
@@ -42,14 +44,13 @@ const EditArtworkPage = ({
     request: withApiVersion(1),
   });
 
-  if (isPending || isError) {
-    // TODO: 로딩/에러 UI — ArtworkDetailPage와 동일한 스켈레톤/에러 패턴 적용 검토
-    return (
-      <>
-        <NavigationBar title="작품 수정하기" onBackClick={onBack} />
-        {isError && <S.Subtitle>작품 정보를 불러오지 못했어요.</S.Subtitle>}
-      </>
-    );
+  // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
+  throwIfRoutableError(error);
+  if (isError) return null;
+
+  if (isPending) {
+    // TODO: 로딩 UI — ArtworkDetailPage와 동일한 스켈레톤 패턴 적용 검토
+    return <NavigationBar title="작품 수정하기" onBackClick={onBack} />;
   }
 
   return (

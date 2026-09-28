@@ -164,17 +164,3 @@ export const ConfirmActions = styled.div`
   gap: 16px;
   width: 100%;
 `;
-
-export const ErrorState = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-`;
-
-export const ErrorMessage = styled.p`
-  ${({ theme }) => ({ ...theme.typography.body3 })};
-  color: ${({ theme }) => theme.colors.gray.gray300};
-`;

@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
@@ -18,6 +19,7 @@ import ImageLightbox, {
 import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestGuestbookDetailPage.styles";
 
 interface GuestGuestbookDetailPageProps {
@@ -70,6 +72,7 @@ const GuestGuestbookDetailPage = ({
     hasNextPage,
     isFetchingNextPage,
     isPending: isGuestBookPending,
+    error: guestBookError,
   } = useInfiniteQuery({
     queryKey: ["guestbook", spaceId, "list"],
     queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
@@ -137,6 +140,23 @@ const GuestGuestbookDetailPage = ({
   const prevQuery = useGuestbookCardDetail(spaceId, prevId);
   const currentQuery = useGuestbookCardDetail(spaceId, currentCardId);
   const nextQuery = useGuestbookCardDetail(spaceId, nextId);
+
+  // NOTE: 목록 API는 200으로 정상 응답했지만(HTTP 에러 아님) 모든 페이지를 다 뒤져도
+  // currentId를 못 찾은 경우 — 존재하지 않는 카드다. 이 경우 cardIds[0](첫 카드)로
+  // fallback하지 않고 명시적으로 404 처리한다. currentQuery는 이미 이 엉뚱한 첫 카드
+  // 기준으로 나갔을 수 있으므로, 그 에러를 아래에서 참고하기 전에 먼저 걸러낸다.
+  if (isResolved && !isCurrentLoaded) throw notFound();
+
+  // NOTE: 목록 조회(useInfiniteQuery)는 fetchNextPage()가 실패해도 error/isError가
+  // 함께 바뀐다. 이미 첫 페이지를 로드한 뒤라면(guestBookPages 존재) 위 두 useEffect가
+  // 시도하는 배경 페이지네이션 실패로 상세 화면 전체가 죽어선 안 되므로 초기 로드
+  // 실패일 때만 전역 에러로 넘긴다. prev/next는 스와이프 미리보기용이라 실패해도
+  // 페이지 전체를 막지 않고, 지금 보고 있는 카드(current)가 404/5xx일 때만 공통
+  // 처리로 넘긴다.
+  throwIfRoutableError(
+    guestBookPages ? undefined : guestBookError,
+    currentQuery.error,
+  );
 
   if (!isResolved || currentCardId === undefined) return null;
 

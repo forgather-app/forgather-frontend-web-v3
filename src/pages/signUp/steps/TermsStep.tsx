@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   getGetCurrentUserQueryKey,
   useSubmitOnboarding,
-} from "@/api/generated/auth-인증";
+} from "@/api/generated/host-호스트";
 import { useGetLatestTermsSuspense } from "@/api/generated/term-약관";
 import type {
   ApiResponseHostResponse,
