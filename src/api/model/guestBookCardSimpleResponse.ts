@@ -19,6 +19,6 @@ export interface GuestBookCardSimpleResponse {
   createdAt?: string;
   /** 사진 포함 여부 */
   containsPhoto?: boolean;
-  /** 호스트 읽음 여부 */
+  /** 해당 스페이스의 로그인 호스트에게만 제공하는 읽음 여부 (false: 읽지 않음) */
   isRead?: boolean;
 }
