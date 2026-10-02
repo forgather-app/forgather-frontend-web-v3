@@ -32,6 +32,7 @@ export const uploadProductPhotos = async (
       }),
     ),
   );
+
   const uploadFiles = webpPhotos.map((blob) => ({
     fileName: `${crypto.randomUUID()}.webp`,
     size: blob.size,

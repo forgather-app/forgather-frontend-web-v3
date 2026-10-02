@@ -47,6 +47,12 @@ export default defineConfig(({ mode }) => {
     build: {
       sourcemap: true,
     },
+    optimizeDeps: {
+      // NOTE: jSquash(@jsquash/webp, @jsquash/resize)는 워커/wasm 에셋을 자체적으로
+      // 동적 import하는데, Vite의 의존성 사전 번들링(esbuild)을 거치면 그 경로 해석이
+      // 깨진다. 공식 가이드에 따라 사전 번들링 대상에서 제외한다.
+      exclude: ["@jsquash/webp", "@jsquash/resize"],
+    },
     resolve: {
       alias: {
         "@": path.resolve(dirname, "./src"),
