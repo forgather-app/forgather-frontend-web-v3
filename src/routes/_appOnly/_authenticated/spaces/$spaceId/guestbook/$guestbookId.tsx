@@ -1,10 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Suspense } from "react";
-import {
-  getReadGuestBookV2QueryKey,
-  getReadUnreadGuestBookQueryKey,
-} from "@/api/generated/spaceguestbook-스페이스-방명록";
 import useFlowBack from "@/hooks/@common/useFlowBack";
 import GuestbookDetailPage from "@/pages/guestbookDetail/GuestbookDetailPage";
 
@@ -21,12 +17,6 @@ function RouteComponent() {
   const queryClient = useQueryClient();
 
   const invalidateGuestbookQueries = () => {
-    queryClient.invalidateQueries({
-      queryKey: getReadGuestBookV2QueryKey(spaceId),
-    });
-    queryClient.invalidateQueries({
-      queryKey: getReadUnreadGuestBookQueryKey(spaceId),
-    });
     queryClient.invalidateQueries({
       queryKey: ["guestbook", spaceId, "list"],
     });
