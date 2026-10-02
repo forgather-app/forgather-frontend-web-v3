@@ -11,12 +11,30 @@ import * as S from "./ImageLightbox.styles";
 export interface LightboxImage {
   /** 이미지 URL */
   url: string;
-  /** 저장 시 사용할 파일명. 없으면 URL에서 유추합니다. */
+  /** 저장 시 사용할 파일명(확장자 제외 기준 이름). 없으면 URL에서 유추합니다. */
   name?: string;
 }
 
-const getFilename = (image: LightboxImage, index: number) =>
-  image.name ?? image.url.split("/").pop() ?? `image-${index + 1}`;
+// NOTE: 저장(다운로드) 요청의 확장자는 실제 파일 내용(webp)과 일부러 다르게 jpg로 고정한다.
+// RN 앱이 쓰는 @react-native-camera-roll/camera-roll 7.5.1+ (PR #599)에서, 확장자가 webp인
+// 파일을 CameraRoll.saveAsset으로 저장할 때 디코딩 후 재인코딩하는 분기(UIImageJPEGRepresentation
+// 호출 누락)가 PHPhotosErrorDomain 3302로 항상 실패한다. jpg 등 다른 확장자는 파일을 그대로
+// 전달하는 분기를 타 재인코딩 없이 안전하게 저장된다. 라이브러리 버그가 고쳐지기 전까지의
+// 임시 우회이며, 실제로는 webp 바이트가 .jpg로 표시되는 라벨 불일치를 의도적으로 만든다.
+const SAVE_EXTENSION = "jpg";
+
+const stripExtension = (name: string) => name.replace(/\.[a-zA-Z0-9]+$/, "");
+
+const getFilename = (image: LightboxImage, index: number) => {
+  const base = image.name
+    ? stripExtension(image.name)
+    : (image.url
+        .split("/")
+        .pop()
+        ?.split("?")[0]
+        .replace(/\.[a-zA-Z0-9]+$/, "") ?? `image-${index + 1}`);
+  return `${base}.${SAVE_EXTENSION}`;
+};
 
 interface LightboxSlideProps {
   image: LightboxImage;
