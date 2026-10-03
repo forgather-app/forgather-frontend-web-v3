@@ -56,9 +56,6 @@ const GuestArtworkPage = ({
     },
   });
 
-  const { ref: descriptionRef, isTruncated: isDescriptionTruncated } =
-    useIsTruncated<HTMLParagraphElement>([space?.description]);
-
   const {
     data: products,
     isPending: isProductsPending,
@@ -74,6 +71,11 @@ const GuestArtworkPage = ({
   });
 
   const isPending = isSpacePending || isProductsPending;
+
+  // 소개글 DOM은 두 조회가 완료된 뒤 생성되므로 로딩 종료 시에도 다시 측정한다.
+  const { ref: descriptionRef, isTruncated: isDescriptionTruncated } =
+    useIsTruncated<HTMLParagraphElement>([space?.description, isPending]);
+
   const showSkeleton = useDelayedLoading(isPending);
 
   // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
