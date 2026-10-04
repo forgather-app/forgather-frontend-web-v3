@@ -272,7 +272,7 @@ export const StatRow = styled(MarqueeTrack)`
 export const StatCard = styled.div`
   flex: 0 0 auto;
   width: 216px;
-  min-height: 220px;
+  min-height: 114px; /* 숫자와 두 줄 설명이 들어가는 높이로 통일 */
   padding: 16px 12px;
   border: 2px solid #cfd6dd; /* TODO: 토큰 없음 - #CFD6DD */
   border-radius: 12px;
@@ -283,7 +283,7 @@ export const StatCard = styled.div`
 
   ${LANDING_DESKTOP_QUERY} {
     width: 398px;
-    min-height: 217px;
+    min-height: 224px; /* 숫자와 두 줄 설명이 들어가는 높이로 통일 */
     padding: 40px 30px;
     gap: 12px;
   }
