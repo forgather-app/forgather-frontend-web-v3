@@ -142,7 +142,7 @@ const LandingProblem = () => {
             {"에 모았어요"}
           </S.SummaryHeading>
           <S.MarqueeViewport>
-            <S.StatRow $duration={22} $reverse>
+            <S.StatRow $duration={22}>
               {MARQUEE_STATS.map((stat, index) => (
                 <S.StatCard key={`${stat.id}-${index}`}>
                   <S.StatValue>{stat.value}</S.StatValue>
