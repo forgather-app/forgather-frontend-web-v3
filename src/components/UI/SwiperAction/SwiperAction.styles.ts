@@ -9,7 +9,7 @@ export const Container = styled("div", { shouldForwardProp })<{
   position: relative;
   display: flex;
   width: 100%;
-  ${({ $fillHeight }) => $fillHeight && "min-height: 100%;"}
+  ${({ $fillHeight }) => $fillHeight && "height: 100%; min-height: 100%;"}
   overflow: hidden;
   /* 세로 스크롤은 브라우저 기본 동작에 맡기고, 가로 드래그만 JS로 판별합니다 */
   touch-action: pan-y;
@@ -22,10 +22,22 @@ export const Track = styled(motion.div)`
   gap: ${CARD_GAP}px;
 `;
 
-export const Slide = styled.div`
+export const Slide = styled("div", { shouldForwardProp })<{
+  $fillHeight?: boolean;
+}>`
   display: flex;
   justify-content: flex-start;
   flex-shrink: 0;
   user-select: none;
   height: 100%;
+  ${({ $fillHeight }) =>
+    $fillHeight &&
+    `
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  `}
 `;

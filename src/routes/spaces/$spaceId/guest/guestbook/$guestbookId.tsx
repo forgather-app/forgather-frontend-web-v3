@@ -2,11 +2,13 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Suspense } from "react";
 import useFlowBack from "@/hooks/@common/useFlowBack";
 import GuestGuestbookDetailPage from "@/pages/guestGuestbookDetail/GuestGuestbookDetailPage";
+import NotFoundPage from "@/pages/notFound/NotFoundPage";
 
 export const Route = createFileRoute(
   "/spaces/$spaceId/guest/guestbook/$guestbookId",
 )({
   component: RouteComponent,
+  notFoundComponent: NotFoundPage,
 });
 
 function RouteComponent() {

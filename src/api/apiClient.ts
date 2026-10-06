@@ -1,5 +1,9 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
+import { resetAnalyticsUser } from "@/utils/analytics";
+import { captureSentryError } from "@/utils/captureSentryError";
+import { markNotFoundError } from "@/utils/markNotFoundError";
 import { notifyNativeLogout } from "@/utils/nativeBridge";
+import { clearSentryUser } from "@/utils/sentry";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
 
@@ -9,14 +13,15 @@ export const apiClient = axios.create({
   withCredentials: true,
 });
 
-// NOTE: /auth/me는 로그인 여부를 확인하는 용도라 401이 정상 응답 중 하나이므로 제외.
-// _authenticated 레이아웃이 /auth/me의 401을 자체적으로 처리해 /login으로 안내한다.
+// NOTE: /auth/me의 401은 accessToken(1시간)만 만료되고 refreshToken(90일)은
+// 살아있는 경우와 구분할 수 없으므로 재발급 대상에 포함한다 — 제외하면 refreshToken이
+// 유효해도 매시간 로그인 화면으로 튕겨난다. refresh 자체가 실패하면(=완전 비로그인)
+// 아래 catch에서 forceLogoutAndRedirect()로 동일하게 /login으로 보낸다.
 // /auth/refresh, /auth/logout 자체의 401은 재발급/로그아웃 재시도로 이어지면 순환이
-// 생기므로 함께 제외한다.
-const SESSION_CHECK_PATH = "/auth/me";
+// 생기므로 제외한다.
 const REFRESH_PATH = "/auth/refresh";
 const LOGOUT_PATH = "/auth/logout";
-const AUTH_FLOW_PATHS = [SESSION_CHECK_PATH, REFRESH_PATH, LOGOUT_PATH];
+const AUTH_FLOW_PATHS = [REFRESH_PATH, LOGOUT_PATH];
 
 let isHandlingSessionExpired = false;
 // NOTE: 동시에 여러 요청이 401을 받아도 /auth/refresh는 한 번만 호출하도록
@@ -25,6 +30,11 @@ let refreshPromise: Promise<unknown> | null = null;
 
 const forceLogoutAndRedirect = () => {
   if (isHandlingSessionExpired) return;
+  // NOTE: /login 페이지 자체가 "이미 로그인돼 있나" 확인하려고 /auth/me를 호출했다가
+  // 비로그인 상태라 401을 받는 경우도 이 경로를 탄다. 이미 /login에 있으므로 강제
+  // 로그아웃/리다이렉트가 불필요할 뿐 아니라, /login으로의 하드 리다이렉트가
+  // LoginRouteGuard를 재마운트시켜 같은 401을 반복 유발하는 무한 리로드 루프가 된다.
+  if (window.location.pathname.startsWith("/login")) return;
   isHandlingSessionExpired = true;
   // NOTE: stateless JWT라 서버가 발급된 토큰 자체를 무효화하지는 못하지만,
   // 쿠키는 만료시켜야 하므로 로그아웃 요청 후 로그인 페이지로 이동
@@ -32,6 +42,8 @@ const forceLogoutAndRedirect = () => {
     // NOTE: 앱 WebView는 Authorization 토큰을 주입하므로, 서버 로그아웃과 별개로
     // 앱에 토큰 폐기를 알려야 세션이 실제로 끊긴다 (docs/webview-logout-token-persistence.md)
     notifyNativeLogout();
+    clearSentryUser();
+    resetAnalyticsUser();
     const redirectTo = `${window.location.pathname}${window.location.search}`;
     window.location.href = `/login?redirectTo=${encodeURIComponent(redirectTo)}`;
   });
@@ -44,9 +56,13 @@ apiClient.interceptors.response.use(
     // - 공통 에러 타입 정의 (e.g. { code: string; message: string })
     // - 403 Forbidden: 권한 없음 처리
     // - 비즈니스 에러 코드별 분기 처리
-    // NOTE: 404는 공통 처리 대상에서 제외 — 리소스 없음은 각 페이지가 로컬로 분기 처리
-    // (예: ArtworkDetailPage의 isNotFound 분기)하거나 라우트 notFound()로 다뤄야 할 케이스라,
-    // 여기서 전역 에러 바운더리로 흘려보내지 않음
+    // NOTE: 404는 TanStack Router의 notFound() 마커를 달아 전역 표준화한다. 페이지는
+    // isAxiosError로 직접 404를 판별하는 대신 throwIfRoutableError()/throwIfNotFound()에
+    // 이 에러를 넘기기만 하면 공통 NotFoundPage로 라우팅된다.
+    const isNotFound = isAxiosError(error) && error.response?.status === 404;
+    if (isNotFound) {
+      markNotFoundError(error);
+    }
 
     const isUnauthorized = error.response?.status === 401;
     const requestUrl: string = error.config?.url ?? "";
@@ -58,10 +74,22 @@ apiClient.interceptors.response.use(
     const alreadyRetriedAfterRefresh = error.config?.__isRetryAfterRefresh;
 
     if (!isUnauthorized || isAuthFlowRequest || isHandlingSessionExpired) {
+      // NOTE: 404는 notFound() 마커로 라우터가 전담 처리하는 정상 플로우이므로
+      // Sentry에는 남기지 않는다(예: 삭제된 방명록 링크 접근).
+      if (!isNotFound) {
+        if (isAxiosError(error) && !error.response) {
+          captureSentryError(error, "network_error");
+        } else if (requestUrl.startsWith(REFRESH_PATH)) {
+          captureSentryError(error, "token_refresh_failed");
+        } else if (!isUnauthorized) {
+          captureSentryError(error, "http_error");
+        }
+      }
       return Promise.reject(error);
     }
 
     if (alreadyRetriedAfterRefresh) {
+      captureSentryError(error, "auth_retry_failed");
       forceLogoutAndRedirect();
       return Promise.reject(error);
     }
@@ -76,6 +104,9 @@ apiClient.interceptors.response.use(
         __isRetryAfterRefresh: true,
       });
     } catch {
+      // NOTE: /auth/refresh 요청 자체의 실패는 위 인터셉터 분기(REFRESH_PATH 매칭)에서
+      // 이미 "token_refresh_failed"로 캡처됐다. 동시에 여러 요청이 refreshPromise를
+      // 공유하므로, 여기서도 캡처하면 실패 1건이 대기 중이던 요청 수만큼 중복 리포팅된다.
       forceLogoutAndRedirect();
       return Promise.reject(error);
     }

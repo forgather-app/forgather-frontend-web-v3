@@ -55,7 +55,7 @@ function RouteComponent() {
     return <Outlet />;
   }
 
-  const writeUrl = `${window.location.origin}/spaces/${spaceId}/guest`;
+  const writeUrl = `${import.meta.env.VITE_DOMAIN}/spaces/${spaceId}/guest`;
 
   return (
     <>
