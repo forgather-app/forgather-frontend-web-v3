@@ -11,13 +11,16 @@ import {
 } from "@/pages/landing/LandingPage.constants";
 import * as S from "./LandingProblem.styles";
 
-// 무한 루프 마퀴: 동일한 목록을 두 번 이어 붙이고 -50% 만큼 이동시켜 이어지는 것처럼 보이게 한다
 const MARQUEE_STATS = [...LANDING_STATS, ...LANDING_STATS];
-const TESTIMONIALS_REVERSED = [...LANDING_TESTIMONIALS].reverse();
+const [testimonialT1, testimonialT2, testimonialT3, testimonialT4] =
+  LANDING_TESTIMONIALS;
+const TESTIMONIALS_ALT_ORDER = [
+  testimonialT2,
+  testimonialT1,
+  testimonialT4,
+  testimonialT3,
+];
 
-// 인용 헤딩 뒤로 어긋나게 쌓이는 정적 카드 콜라주 4행 - 위/아래로 갈수록 옅어지는 배경 텍스처
-// row1은 헤딩과 겹치도록 살짝 비치고, row2부터는 헤딩/설명 텍스트 아래로 내려와 배치된다
-// row2는 t1-t2-t3, row3는 t3-t2-t1 순서로 어긋나게 배치한다
 const COLLAGE_ROWS: {
   id: string;
   opacity: number;
@@ -25,7 +28,7 @@ const COLLAGE_ROWS: {
   marginTopDesktop: number;
   shift: number;
   shiftDesktop: number;
-  reverse: boolean;
+  altOrder: boolean;
 }[] = [
   {
     id: "row1",
@@ -34,7 +37,7 @@ const COLLAGE_ROWS: {
     marginTopDesktop: 0,
     shift: -80,
     shiftDesktop: -150,
-    reverse: true,
+    altOrder: true,
   },
   {
     id: "row2",
@@ -43,7 +46,7 @@ const COLLAGE_ROWS: {
     marginTopDesktop: 90,
     shift: 50,
     shiftDesktop: 90,
-    reverse: false,
+    altOrder: false,
   },
   {
     id: "row3",
@@ -52,7 +55,7 @@ const COLLAGE_ROWS: {
     marginTopDesktop: 32,
     shift: -40,
     shiftDesktop: -70,
-    reverse: true,
+    altOrder: true,
   },
   {
     id: "row4",
@@ -61,7 +64,7 @@ const COLLAGE_ROWS: {
     marginTopDesktop: 32,
     shift: 70,
     shiftDesktop: 130,
-    reverse: false,
+    altOrder: false,
   },
 ];
 
@@ -70,8 +73,8 @@ const LandingProblem = () => {
     <S.Wrapper>
       <S.CollageLayer aria-hidden="true">
         {COLLAGE_ROWS.map((row) => {
-          const testimonials = row.reverse
-            ? TESTIMONIALS_REVERSED
+          const testimonials = row.altOrder
+            ? TESTIMONIALS_ALT_ORDER
             : LANDING_TESTIMONIALS;
           return (
             <S.CollageRowViewport
