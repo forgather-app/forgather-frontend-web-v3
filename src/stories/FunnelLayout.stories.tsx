@@ -14,6 +14,21 @@ const meta: Meta<typeof FunnelLayout> = {
       },
     },
   },
+  // 실제 앱처럼 Layout(flex column, 화면 높이) 안에서 높이를 채우도록 감싼다
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          margin: "-16px",
+          height: "100dvh",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     stepIndex: {
       description: "현재 단계 인덱스 (0부터 시작)",
