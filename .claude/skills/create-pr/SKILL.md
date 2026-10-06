@@ -289,7 +289,7 @@ PR이 만들어지면 사용자에게 묻지 않고 바로 `pr-review` 스킬을
 ```
 ✅ Draft PR을 만들었습니다.
 
-제목: feature: 방명록 목록에 NEW 배지 추가
+제목: feature: 새로 도착한 방명록을 목록 안에 NEW 배지로 표시
 Base: develop
 PR: https://github.com/forgather-app/forgather-frontend-web-v3/pull/...
 🤖 자동 리뷰: CRITICAL 0 · HIGH 1 · MEDIUM 2 · LOW 0 (PR 코멘트로 남김)
