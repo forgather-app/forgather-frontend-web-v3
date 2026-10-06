@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { GUEST_CONTENT_BOTTOM_INSET } from "@/pages/guestSpace/GuestSpaceLayout.constants";
 import { gradientSweep } from "@/styles/animations";
 
 export const ScrollArea = styled.div`
@@ -86,14 +87,7 @@ export const PrivatePlaceholder = styled.div`
 `;
 
 export const BottomSpacer = styled.div`
-  position: sticky;
-  bottom: 0;
   flex-shrink: 0;
-  height: 34px;
-  background: linear-gradient(
-    180deg,
-    rgba(27, 29, 31, 0) 0%,
-    ${({ theme }) => theme.colors.gray.gray700} 50%
-  );
-  pointer-events: none;
+  /* Layout 하단 padding(sidePadding)만큼 빼야 화면 끝 기준 여백이 GUEST_CONTENT_BOTTOM_INSET이 된다 */
+  height: ${({ theme }) => GUEST_CONTENT_BOTTOM_INSET - theme.layout.sidePadding}px;
 `;
