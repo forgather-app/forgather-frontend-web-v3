@@ -6,7 +6,7 @@ import { SnackBarContext } from "./SnackBarContext";
 
 const FixedContainer = styled.div`
   position: fixed;
-  bottom: calc(24px + env(safe-area-inset-bottom));
+  bottom: calc(24px + ${({ theme }) => theme.layout.safeArea.bottom});
   left: 50%;
   transform: translateX(-50%);
   z-index: 30;

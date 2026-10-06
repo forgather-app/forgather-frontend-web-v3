@@ -11,7 +11,7 @@ export const Root = styled.div`
 
 export const CloseButton = styled.button`
   position: absolute;
-  top: calc(16px + env(safe-area-inset-top));
+  top: calc(16px + ${({ theme }) => theme.layout.safeArea.top});
   right: 16px;
   z-index: 1;
   display: flex;
@@ -66,7 +66,7 @@ export const SlideImage = styled.img`
    */
   max-width: 100%;
   max-height: calc(
-    100dvh - 234px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    100dvh - 234px - ${({ theme }) => theme.layout.safeArea.top} - ${({ theme }) => theme.layout.safeArea.bottom}
   );
   box-shadow: 0 0 60px 0 rgba(0, 0, 0, 0.6);
 `;
@@ -76,7 +76,7 @@ export const PlaceholderWrapper = styled.div`
   max-width: 100%;
   aspect-ratio: 1;
   max-height: calc(
-    100dvh - 234px - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+    100dvh - 234px - ${({ theme }) => theme.layout.safeArea.top} - ${({ theme }) => theme.layout.safeArea.bottom}
   );
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@ export const FooterPanel = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  padding: 24px 12px calc(24px + env(safe-area-inset-bottom, 0px));
+  padding: 24px 12px calc(24px + ${({ theme }) => theme.layout.safeArea.bottom});
   background: linear-gradient(
     180deg,
     rgba(17, 17, 17, 0) 0%,
