@@ -1,7 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
 import { useReadCard } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
@@ -44,12 +43,10 @@ const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
     },
   });
 
-// OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
-// 목록 페이지(GuestGuestBookPage)와 동일한 queryKey를 사용해 캐시를 공유한다.
+// 목록 페이지(GuestGuestBookPage)와 동일한 queryKey/요청(ver1)을 사용해 캐시를 공유한다.
 const fetchGuestBookPage = (spaceId: string, page: number) =>
   customFetcher<ApiResponseGuestBookResponse>(
     `/spaces/${spaceId}/guestbook?page=${page}&size=${CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE}`,
-    withApiVersion(2),
   );
 
 const GuestGuestbookDetailPage = ({

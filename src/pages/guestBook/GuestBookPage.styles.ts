@@ -59,10 +59,6 @@ export const GuestListSkeleton = styled.div`
   animation: ${gradientSweep} 1.5s linear infinite;
 `;
 
-export const GuestCardWrapper = styled.div`
-  margin-top: 28px;
-`;
-
 export const GuestListContainer = styled.div`
   display: flex;
   flex-direction: column;

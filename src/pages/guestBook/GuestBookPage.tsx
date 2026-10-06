@@ -1,5 +1,4 @@
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { withApiVersion } from "@/api/apiVersion";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { customFetcher } from "@/api/customFetcher";
 import type {
   ApiResponseGuestBookResponse,
@@ -7,7 +6,6 @@ import type {
 } from "@/api/model";
 import GuestBookEmptyGraphic from "@/assets/images/guestbook_empty_placeholder.svg?react";
 import GuestList from "@/components/@common/GuestList/GuestList";
-import GuestListStack from "@/components/@common/GuestListStack/GuestListStack";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
@@ -25,19 +23,11 @@ interface GuestBookPageProps {
   onCardClick: (guestbookId: number) => void;
 }
 
-// OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
-// 같은 서버의 다른 엔드포인트(GET /guestbook/me/reports)가 Spring Pageable(0-base page) 컨벤션을 쓰는 것으로 보아 이 엔드포인트도 동일하게 0-base로 가정한다.
+// 생성된 useReadGuestBook 훅은 OpenAPI 스펙의 응답 미디어 타입 누락으로 응답 데이터가 Blob으로 잘못 타이핑되어 그대로 사용할 수 없다.
+// X-API-Version 헤더 없이(ver1) 호출하면 읽은/읽지 않은 방명록이 섞인 하나의 목록과 카드별 isRead를 받는다.
 const fetchGuestBookPage = (spaceId: string, page: number) =>
   customFetcher<ApiResponseGuestBookResponse>(
     `/spaces/${spaceId}/guestbook?page=${page}&size=${CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE}`,
-    withApiVersion(2),
-  );
-
-// 생성된 useReadUnreadGuestBook 훅은 OpenAPI 스펙의 응답 미디어 타입 누락으로 응답 데이터가 Blob으로 잘못 타이핑되어 그대로 사용할 수 없다.
-// 위 방명록 목록 조회(v2)와 동일한 GuestBookResponse 스키마이므로 같은 방식으로 customFetcher를 직접 호출한다.
-const fetchUnreadGuestBook = (spaceId: string) =>
-  customFetcher<ApiResponseGuestBookResponse>(
-    `/spaces/${spaceId}/guestbook/unread`,
   );
 
 const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
@@ -64,16 +54,6 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     },
   });
 
-  const {
-    data: unreadData,
-    isPending: isUnreadPending,
-    isError: isUnreadError,
-    error: unreadError,
-  } = useQuery({
-    queryKey: ["guestbook", spaceId, "unread"],
-    queryFn: () => fetchUnreadGuestBook(spaceId),
-  });
-
   const pages = data?.pages.map((page) => page.data ?? {}) ?? [];
   const guestBookCards = pages
     .flatMap((page) => page.guestBookCards ?? [])
@@ -82,15 +62,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         card.id !== undefined,
     );
 
-  const unreadCount =
-    pages[0]?.unreadCount ?? unreadData?.data?.totalCount ?? 0;
-  const hasNewCards = unreadCount > 0;
-  const readTotalCount = pages[0]?.totalCount ?? guestBookCards.length;
-  const totalCount = readTotalCount + unreadCount;
-  const firstUnreadCard = unreadData?.data?.guestBookCards?.find(
-    (card): card is GuestBookCardSimpleResponse & { id: number } =>
-      card.id !== undefined,
-  );
+  const totalCount = pages[0]?.totalCount ?? guestBookCards.length;
 
   const { targetRef } = useInfiniteScroll({
     hasNextPage,
@@ -107,17 +79,16 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
     },
   });
 
-  const isLoading = isPending || isUnreadPending;
-  const showSkeleton = useDelayedLoading(isLoading);
+  const showSkeleton = useDelayedLoading(isPending);
 
   // 최초 로드가 실패했을 때만 전역 에러로 처리한다. useInfiniteQuery는 fetchNextPage()가
   // 실패해도 error/isError가 함께 바뀌므로, 이미 로드된 목록이 있으면(=최초 로드는 성공)
   // "더 불러오기" 실패로 페이지 전체가 죽어선 안 된다 — 그 경우는 위 onIntersect에서
   // 이미 스낵바로 안내한다.
-  throwIfRoutableError(data ? undefined : error, unreadError);
-  if ((isError && !data) || isUnreadError) return null;
+  throwIfRoutableError(data ? undefined : error);
+  if (isError && !data) return null;
 
-  if (isLoading) {
+  if (isPending) {
     if (!showSkeleton) return null;
 
     return (
@@ -147,15 +118,6 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.CountGroup>
       </S.TitleRow>
 
-      {hasNewCards && firstUnreadCard && (
-        <S.GuestCardWrapper>
-          <GuestListStack
-            count={unreadCount}
-            onClick={() => onCardClick(firstUnreadCard.id)}
-          />
-        </S.GuestCardWrapper>
-      )}
-
       {guestBookCards.length === 0 ? (
         <S.EmptyState>
           <S.EmptyStateGraphic aria-hidden>
@@ -172,6 +134,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
               message={card.message}
               createdAt={card.createdAt ? new Date(card.createdAt) : undefined}
               hasPhoto={card.containsPhoto}
+              isNew={card.isRead === false}
               onClick={() => onCardClick(card.id)}
             />
           ))}

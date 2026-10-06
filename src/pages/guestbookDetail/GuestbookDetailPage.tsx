@@ -1,21 +1,16 @@
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
 import {
   getReadCardQueryKey,
-  getReadGuestBookV2QueryKey,
-  getReadUnreadGuestBookQueryKey,
   useDeleteCard,
   useReadCard,
-  useReadUnreadGuestBookSuspense,
 } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
   ApiResponseGuestBookCardResponse,
   ApiResponseGuestBookResponse,
   GuestBookCardResponse,
-  GuestBookResponse,
 } from "@/api/model";
 import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import Button from "@/components/@common/Button/Button";
@@ -48,26 +43,26 @@ interface GuestbookDetailPageProps {
 }
 
 /** 사진은 목록 응답에 없어(containsPhoto만 제공) 화면에 보일 수 있는 현재/이전/다음 카드만 개별 조회합니다. 닉네임·메시지·작성일은 목록 응답에 이미 포함돼 있어 개별 조회를 기다릴 필요가 없습니다 */
-const useGuestbookCardDetail = (spaceId: string, cardId: number | undefined) =>
+const useGuestbookCardDetail = (
+  spaceId: string,
+  cardId: number | undefined,
+  // id는 항상 실제 값을 넘겨 queryKey를 유지한다 — 그래야 이 카드가 current였을 때
+  // 이미 받아온 캐시를 enabled:false 상태에서도 그대로 재사용할 수 있다.
+  enabled = true,
+) =>
   useReadCard<GuestBookCardResponse>(spaceId, cardId ?? -1, {
     query: {
-      enabled: cardId !== undefined,
+      enabled: cardId !== undefined && enabled,
       select: (response) =>
         // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
         (response as unknown as ApiResponseGuestBookCardResponse).data ?? {},
     },
   });
 
-// TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
-const selectGuestBookResponse = (response: unknown): GuestBookResponse =>
-  (response as ApiResponseGuestBookResponse).data ?? {};
-
-// OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
-// 목록 페이지(GuestBookPage)와 동일한 queryKey를 사용해 캐시를 공유한다.
+// 목록 페이지(GuestBookPage)와 동일한 queryKey/요청(ver1, 읽은/읽지 않은 카드가 섞인 목록)을 사용해 캐시를 공유한다.
 const fetchGuestBookPage = (spaceId: string, page: number) =>
   customFetcher<ApiResponseGuestBookResponse>(
     `/spaces/${spaceId}/guestbook?page=${page}&size=${CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE}`,
-    withApiVersion(2),
   );
 
 const GuestbookDetailPage = ({
@@ -114,15 +109,9 @@ const GuestbookDetailPage = ({
       return allPages.length + 1;
     },
   });
-  const { data: unreadGuestBook } =
-    useReadUnreadGuestBookSuspense<GuestBookResponse>(spaceId, {
-      query: { select: selectGuestBookResponse },
-    });
-
-  const readCards = (guestBookPages?.pages ?? []).flatMap(
+  const cards = (guestBookPages?.pages ?? []).flatMap(
     (page) => page.data?.guestBookCards ?? [],
   );
-  const cards = [...(unreadGuestBook.guestBookCards ?? []), ...readCards];
   const cardIds = Array.from(
     new Set(
       cards
@@ -175,9 +164,23 @@ const GuestbookDetailPage = ({
   const prevId = isResolved ? cardIds[currentIndex - 1] : undefined;
   const nextId = isResolved ? cardIds[currentIndex + 1] : undefined;
 
-  const prevQuery = useGuestbookCardDetail(spaceId, prevId);
+  // 상세 조회(readCard)는 호출 자체가 서버에서 읽음 처리로 이어지므로, 아직 안 읽은
+  // 인접 카드는 실제로 스와이프해 current가 되기 전까지 미리 조회하지 않는다.
+  // 그렇지 않으면 사용자가 보지도 않은 다음/이전 카드까지 같이 읽음 처리돼 버린다.
+  const isUnreadCard = (id: number | undefined) =>
+    id !== undefined && cards.find((card) => card.id === id)?.isRead === false;
+
+  const prevQuery = useGuestbookCardDetail(
+    spaceId,
+    prevId,
+    !isUnreadCard(prevId),
+  );
   const currentQuery = useGuestbookCardDetail(spaceId, currentCardId);
-  const nextQuery = useGuestbookCardDetail(spaceId, nextId);
+  const nextQuery = useGuestbookCardDetail(
+    spaceId,
+    nextId,
+    !isUnreadCard(nextId),
+  );
 
   // NOTE: 목록 API는 200으로 정상 응답했지만(HTTP 에러 아님) 모든 페이지를 다 뒤져도
   // currentId를 못 찾은 경우 — 존재하지 않는 카드다. 이 경우 cardIds[0](첫 카드)로
@@ -207,10 +210,7 @@ const GuestbookDetailPage = ({
           showSnackBar("방명록을 삭제했어요", "alert");
           // 목록/상세 캐시를 무효화해 뒤로가기 등으로 재접근해도 삭제된 상태가 바로 반영되게 한다
           queryClient.invalidateQueries({
-            queryKey: getReadGuestBookV2QueryKey(spaceId),
-          });
-          queryClient.invalidateQueries({
-            queryKey: getReadUnreadGuestBookQueryKey(spaceId),
+            queryKey: ["guestbook", spaceId, "list"],
           });
           queryClient.invalidateQueries({
             queryKey: getReadCardQueryKey(spaceId, currentCardId),

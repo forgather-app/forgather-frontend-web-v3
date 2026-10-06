@@ -30,6 +30,7 @@ import type {
 import type {
   CreateGuestBookReportRequest,
   DeleteGuestBookCardPhotosRequest,
+  ReadGuestBookParams,
   WriteGuestBookCardRequest
 } from '../model';
 
@@ -42,32 +43,56 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 공개 스페이스가 아닌 경우 호스트만 조회 가능. 호스트일 경우 읽은 방명록만 조회하고 읽지 않은 방명록 수를 응답한다.
- * @summary 방명록 조회 v2
+ * 같은 경로의 GET API이며 X-API-Version 헤더로 조회 방식을 선택한다.
+
+### ver1 (기본 버전)
+- X-API-Version 헤더 없이 호출한다.
+- 읽은 방명록과 읽지 않은 방명록을 하나의 목록으로 반환한다.
+- 해당 스페이스의 로그인 호스트에게만 카드별 isRead를 제공한다. false는 읽지 않음을 의미한다.
+- 방문자 응답에는 isRead가 없으며, 모든 조회자의 응답에서 unreadCount를 제외한다.
+
+### ver2
+- X-API-Version: 2 헤더로 호출한다.
+- 해당 스페이스의 로그인 호스트에게 읽은 방명록만 반환하고, 읽지 않은 방명록 개수인 unreadCount를 제공한다.
+- 카드별 isRead는 제공하지 않는다. 읽지 않은 목록은 /spaces/{spaceCode}/guestbook/unread에서 조회한다.
+- 방문자는 읽음 여부와 관계없이 전체 목록을 조회하며, 응답에는 isRead와 unreadCount가 없다.
+
+공개 스페이스가 아닌 경우 해당 스페이스의 로그인 호스트만 조회할 수 있다.
+
+ * @summary 방명록 목록 조회 (ver1 / ver2)
  */
-export type readGuestBookV2Response200 = {
+export type readGuestBookResponse200 = {
   data: Blob
   status: 200
 }
 
-export type readGuestBookV2ResponseSuccess = (readGuestBookV2Response200) & {
+export type readGuestBookResponseSuccess = (readGuestBookResponse200) & {
   headers: Headers;
 };
 ;
 
-export type readGuestBookV2Response = (readGuestBookV2ResponseSuccess)
+export type readGuestBookResponse = (readGuestBookResponseSuccess)
 
-export const getReadGuestBookV2Url = (spaceCode: string,) => {
+export const getReadGuestBookUrl = (spaceCode: string,
+    params?: ReadGuestBookParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
+    
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
 
-  
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/spaces/${spaceCode}/guestbook`
+  return stringifiedParams.length > 0 ? `/spaces/${spaceCode}/guestbook?${stringifiedParams}` : `/spaces/${spaceCode}/guestbook`
 }
 
-export const readGuestBookV2 = async (spaceCode: string, options?: RequestInit): Promise<readGuestBookV2Response> => {
+export const readGuestBook = async (spaceCode: string,
+    params?: ReadGuestBookParams, options?: RequestInit): Promise<readGuestBookResponse> => {
   
-  return customFetcher<readGuestBookV2Response>(getReadGuestBookV2Url(spaceCode),
+  return customFetcher<readGuestBookResponse>(getReadGuestBookUrl(spaceCode,params),
   {      
     ...options,
     method: 'GET'
@@ -80,69 +105,75 @@ export const readGuestBookV2 = async (spaceCode: string, options?: RequestInit):
 
 
 
-export const getReadGuestBookV2QueryKey = (spaceCode: string,) => {
+export const getReadGuestBookQueryKey = (spaceCode: string,
+    params?: ReadGuestBookParams,) => {
     return [
-    `/spaces/${spaceCode}/guestbook`
+    `/spaces/${spaceCode}/guestbook`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getReadGuestBookV2QueryOptions = <TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export const getReadGuestBookQueryOptions = <TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getReadGuestBookV2QueryKey(spaceCode);
+  const queryKey =  queryOptions?.queryKey ?? getReadGuestBookQueryKey(spaceCode,params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBookV2>>> = ({ signal }) => readGuestBookV2(spaceCode, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBook>>> = ({ signal }) => readGuestBook(spaceCode,params, { signal, ...requestOptions });
 
       
 
       
 
-   return  { queryKey, queryFn, enabled: !!(spaceCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, enabled: !!(spaceCode), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ReadGuestBookV2QueryResult = NonNullable<Awaited<ReturnType<typeof readGuestBookV2>>>
-export type ReadGuestBookV2QueryError = unknown
+export type ReadGuestBookQueryResult = NonNullable<Awaited<ReturnType<typeof readGuestBook>>>
+export type ReadGuestBookQueryError = unknown
 
 
-export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>> & Pick<
+export function useReadGuestBook<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params: undefined |  ReadGuestBookParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof readGuestBookV2>>,
+          Awaited<ReturnType<typeof readGuestBook>>,
           TError,
-          Awaited<ReturnType<typeof readGuestBookV2>>
+          Awaited<ReturnType<typeof readGuestBook>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>> & Pick<
+export function useReadGuestBook<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof readGuestBookV2>>,
+          Awaited<ReturnType<typeof readGuestBook>>,
           TError,
-          Awaited<ReturnType<typeof readGuestBookV2>>
+          Awaited<ReturnType<typeof readGuestBook>>
         > , 'initialData'
       >, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export function useReadGuestBook<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary 방명록 조회 v2
+ * @summary 방명록 목록 조회 (ver1 / ver2)
  */
 
-export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export function useReadGuestBook<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getReadGuestBookV2QueryOptions(spaceCode,options)
+  const queryOptions = getReadGuestBookQueryOptions(spaceCode,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -152,50 +183,55 @@ export function useReadGuestBookV2<TData = Awaited<ReturnType<typeof readGuestBo
 
 
 
-export const getReadGuestBookV2SuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export const getReadGuestBookSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getReadGuestBookV2QueryKey(spaceCode);
+  const queryKey =  queryOptions?.queryKey ?? getReadGuestBookQueryKey(spaceCode,params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBookV2>>> = ({ signal }) => readGuestBookV2(spaceCode, { signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof readGuestBook>>> = ({ signal }) => readGuestBook(spaceCode,params, { signal, ...requestOptions });
 
       
 
       
 
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type ReadGuestBookV2SuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof readGuestBookV2>>>
-export type ReadGuestBookV2SuspenseQueryError = unknown
+export type ReadGuestBookSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof readGuestBook>>>
+export type ReadGuestBookSuspenseQueryError = unknown
 
 
-export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export function useReadGuestBookSuspense<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params: undefined |  ReadGuestBookParams, options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export function useReadGuestBookSuspense<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export function useReadGuestBookSuspense<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient
   ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary 방명록 조회 v2
+ * @summary 방명록 목록 조회 (ver1 / ver2)
  */
 
-export function useReadGuestBookV2Suspense<TData = Awaited<ReturnType<typeof readGuestBookV2>>, TError = unknown>(
- spaceCode: string, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBookV2>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+export function useReadGuestBookSuspense<TData = Awaited<ReturnType<typeof readGuestBook>>, TError = unknown>(
+ spaceCode: string,
+    params?: ReadGuestBookParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof readGuestBook>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getReadGuestBookV2SuspenseQueryOptions(spaceCode,options)
+  const queryOptions = getReadGuestBookSuspenseQueryOptions(spaceCode,params,options)
 
   const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
