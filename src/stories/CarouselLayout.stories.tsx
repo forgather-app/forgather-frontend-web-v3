@@ -55,7 +55,14 @@ const meta: Meta<typeof CarouselLayout> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ margin: "-16px" }}>
+      <div
+        style={{
+          margin: "-16px",
+          height: "100dvh",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Story />
       </div>
     ),
