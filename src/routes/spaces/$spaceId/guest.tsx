@@ -16,6 +16,9 @@ export const Route = createFileRoute("/spaces/$spaceId/guest")({
   notFoundComponent: NotFoundPage,
 });
 
+// TODO: 리팩토링 필요 — useGetSpaceInformation 호출과 space_viewed 트래킹이 호스트 쪽
+// $spaceId.tsx에도 거의 동일하게 중복되어 있다. 공용 훅(예: useSpaceViewTracking)으로
+// 추출해 두 라우트가 공유하도록 정리하는 방향 검토
 function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();

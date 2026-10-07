@@ -21,6 +21,10 @@ export const Route = createFileRoute(
   component: RouteComponent,
 });
 
+// TODO: 리팩토링 필요 — 공유 모달/QR 시트 상태(isShareModalOpen, isQrSheetOpen)와
+// onKakaoShare/onCopyLink/onSaveQr 핸들러, 관련 트래킹 호출이 라우트 파일에 직접 들어
+// 있어 책임이 과도하게 몰려 있다. useSpaceShare 같은 커스텀 훅이나 SpaceShareSection
+// 컴포넌트로 추출해 라우트는 얇게 유지하는 방향 검토
 function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
