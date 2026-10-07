@@ -4,8 +4,12 @@ import {
   useMatches,
   useNavigate,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
+import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import GuestSpaceLayout from "@/pages/guestSpace/GuestSpaceLayout";
 import NotFoundPage from "@/pages/notFound/NotFoundPage";
+import { trackEvent } from "@/utils/analytics";
 
 export const Route = createFileRoute("/spaces/$spaceId/guest")({
   component: RouteComponent,
@@ -16,6 +20,21 @@ function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
   const matches = useMatches();
+  const { data: space } = useGetSpaceInformation<SpaceResponse>(spaceId, {
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseSpaceResponse).data ?? {},
+    },
+  });
+
+  useEffect(() => {
+    if (!space?.name) return;
+    trackEvent("space_viewed", {
+      space_id: spaceId,
+      space_name: space.name,
+      viewer_role: "guest",
+    });
+  }, [spaceId, space?.name]);
 
   const isGuestBookTab = matches.some(
     (match) => match.routeId === "/spaces/$spaceId/guest/guestbook/",

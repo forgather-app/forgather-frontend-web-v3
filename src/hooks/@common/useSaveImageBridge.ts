@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "./useSnackBar";
 
@@ -24,8 +24,16 @@ type SaveImageBridgeMessage =
   | SaveImageErrorMessage
   | SaveImagePermissionDeniedMessage;
 
-const useSaveImageBridge = () => {
+interface UseSaveImageBridgeOptions {
+  /** SAVE_IMAGE_SUCCESS 수신 시 호출되는 콜백 (예: 저장 완료 이벤트 트래킹) */
+  onSuccess?: () => void;
+}
+
+const useSaveImageBridge = (options?: UseSaveImageBridgeOptions) => {
   const { showSnackBar } = useSnackBar();
+  // 메시지 리스너를 재등록하지 않고도 최신 콜백을 참조하기 위해 ref로 보관한다
+  const onSuccessRef = useRef(options?.onSuccess);
+  onSuccessRef.current = options?.onSuccess;
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {
@@ -37,6 +45,7 @@ const useSaveImageBridge = () => {
 
         if (data.type === "SAVE_IMAGE_SUCCESS") {
           showSnackBar("이미지가 갤러리에 저장되었습니다.", "default");
+          onSuccessRef.current?.();
           return;
         }
         if (data.type === "SAVE_IMAGE_PERMISSION_DENIED") {
