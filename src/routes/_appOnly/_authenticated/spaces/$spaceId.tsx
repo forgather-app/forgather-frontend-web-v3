@@ -4,7 +4,7 @@ import {
   useMatches,
   useNavigate,
 } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
@@ -13,6 +13,7 @@ import useFlowBack from "@/hooks/@common/useFlowBack";
 import useKakaoShareBridge from "@/hooks/@common/useKakaoShareBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import SpaceLayout from "@/pages/space/SpaceLayout";
+import { trackEvent } from "@/utils/analytics";
 
 export const Route = createFileRoute(
   "/_appOnly/_authenticated/spaces/$spaceId",
@@ -20,6 +21,10 @@ export const Route = createFileRoute(
   component: RouteComponent,
 });
 
+// TODO: 리팩토링 필요 — 공유 모달/QR 시트 상태(isShareModalOpen, isQrSheetOpen)와
+// onKakaoShare/onCopyLink/onSaveQr 핸들러, 관련 트래킹 호출이 라우트 파일에 직접 들어
+// 있어 책임이 과도하게 몰려 있다. useSpaceShare 같은 커스텀 훅이나 SpaceShareSection
+// 컴포넌트로 추출해 라우트는 얇게 유지하는 방향 검토
 function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
@@ -35,6 +40,15 @@ function RouteComponent() {
   const matches = useMatches();
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
+
+  useEffect(() => {
+    if (!space?.name) return;
+    trackEvent("space_viewed", {
+      space_id: spaceId,
+      space_name: space.name,
+      viewer_role: "host",
+    });
+  }, [spaceId, space?.name]);
   const isGuestBookTab = matches.some(
     (match) =>
       match.routeId === "/_appOnly/_authenticated/spaces/$spaceId/guestbook/",
@@ -91,10 +105,18 @@ function RouteComponent() {
             link: writeUrl,
             buttonTitle: "방명록 남기기",
           });
+          trackEvent("space_shared", {
+            space_id: spaceId,
+            share_channel: "kakao",
+          });
           setIsShareModalOpen(false);
         }}
         onCopyLink={async () => {
           await navigator.clipboard.writeText(writeUrl);
+          trackEvent("space_shared", {
+            space_id: spaceId,
+            share_channel: "link",
+          });
           showSnackBar("링크가 클립보드에 복사되었습니다.", "default");
           setIsShareModalOpen(false);
         }}
@@ -109,6 +131,9 @@ function RouteComponent() {
           isOpen={isQrSheetOpen}
           onClose={() => setIsQrSheetOpen(false)}
           qrValue={writeUrl}
+          onSaveSuccess={() =>
+            trackEvent("space_qr_saved", { space_id: spaceId })
+          }
         />
       )}
     </>

@@ -60,14 +60,17 @@ interface QrBottomSheetContentProps {
   onClose: () => void;
   /** QR 코드로 인코딩할 값(링크 등) */
   qrValue: string;
+  /** 이미지 저장 완료(SAVE_IMAGE_SUCCESS) 시 호출되는 콜백 (예: 저장 완료 이벤트 트래킹) */
+  onSaveSuccess?: () => void;
 }
 
 const QrBottomSheetContent = ({
   isOpen,
   onClose,
   qrValue,
+  onSaveSuccess,
 }: QrBottomSheetContentProps) => {
-  const { saveImage } = useSaveImageBridge();
+  const { saveImage } = useSaveImageBridge({ onSuccess: onSaveSuccess });
   const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
 

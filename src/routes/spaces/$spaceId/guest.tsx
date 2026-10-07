@@ -4,18 +4,40 @@ import {
   useMatches,
   useNavigate,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
+import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import GuestSpaceLayout from "@/pages/guestSpace/GuestSpaceLayout";
 import NotFoundPage from "@/pages/notFound/NotFoundPage";
+import { trackEvent } from "@/utils/analytics";
 
 export const Route = createFileRoute("/spaces/$spaceId/guest")({
   component: RouteComponent,
   notFoundComponent: NotFoundPage,
 });
 
+// TODO: 리팩토링 필요 — useGetSpaceInformation 호출과 space_viewed 트래킹이 호스트 쪽
+// $spaceId.tsx에도 거의 동일하게 중복되어 있다. 공용 훅(예: useSpaceViewTracking)으로
+// 추출해 두 라우트가 공유하도록 정리하는 방향 검토
 function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
   const matches = useMatches();
+  const { data: space } = useGetSpaceInformation<SpaceResponse>(spaceId, {
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseSpaceResponse).data ?? {},
+    },
+  });
+
+  useEffect(() => {
+    if (!space?.name) return;
+    trackEvent("space_viewed", {
+      space_id: spaceId,
+      space_name: space.name,
+      viewer_role: "guest",
+    });
+  }, [spaceId, space?.name]);
 
   const isGuestBookTab = matches.some(
     (match) => match.routeId === "/spaces/$spaceId/guest/guestbook/",

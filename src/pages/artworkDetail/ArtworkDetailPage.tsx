@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
 import {
   getGetQueryKey,
@@ -16,6 +16,7 @@ import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import Modal from "@/components/UI/Modal/Modal";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useSnackBar from "@/hooks/@common/useSnackBar";
+import { trackEvent } from "@/utils/analytics";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
@@ -89,6 +90,16 @@ const ArtworkDetailPage = ({
     request: withApiVersion(1),
   });
   const showSkeleton = useDelayedLoading(isPending);
+
+  useEffect(() => {
+    if (!artwork?.id) return;
+    trackEvent("artwork_viewed", {
+      artwork_id: artwork.id,
+      space_id: spaceId,
+      artist_name: artwork.authorName ?? "",
+      viewer_role: "host",
+    });
+  }, [artwork?.id, artwork?.authorName, spaceId]);
 
   // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
   throwIfRoutableError(error);
