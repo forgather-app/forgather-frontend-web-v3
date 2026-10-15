@@ -1,9 +1,15 @@
 {
   "applinks": {
+    "apps": [],
     "details": [
       {
-        "appID": "3C38YUT7MY.com.forgatherapp",
-        "paths": ["*"]
+        "appIDs": ["3C38YUT7MY.com.forgather.app"],
+        "components": [
+          { "/": "/landing", "exclude": true, "comment": "랜딩 페이지는 유니버설 링크 제외" },
+          { "/": "/spaces/*/guest", "exclude": true, "comment": "게스트 페이지는 유니버설 링크 제외" },
+          { "/": "/spaces/*/guest/*", "exclude": true, "comment": "게스트 하위 페이지는 유니버설 링크 제외" },
+          { "/": "/*" }
+        ]
       }
     ]
   }
