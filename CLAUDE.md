@@ -74,6 +74,7 @@
 ### 컴포넌트 작성 규칙
 
 > 상세 규칙은 `.claude/conventions/ui-conventions.md`를 참조합니다.
+> PR·이슈·문서에서 기능을 부를 때는 `.claude/conventions/domain-glossary.md`의 화면 표기를 씁니다 (예: `Product` → "작품", `Host` → "작가").
 
 - 구현 파일(`Component.tsx`)과 스타일 파일(`Component.styles.ts`) 분리
 - 상수·타입이 많을 경우 `Component.constants.ts`로 분리
