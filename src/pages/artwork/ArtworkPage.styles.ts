@@ -186,23 +186,18 @@ export const EmptyStateText = styled.p`
   text-align: center;
 `;
 
-export const CarouselWrapper = styled("div", { shouldForwardProp })<{
-  $fullBleed?: boolean;
-}>`
+export const ArtworkList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-top: 16px;
-  ${({ $fullBleed, theme }) =>
-    $fullBleed &&
-    `
-    margin-left: calc(-1 * ${theme.layout.sidePadding}px);
-    margin-right: calc(-1 * ${theme.layout.sidePadding}px);
-  `}
 `;
 
 export const CardSkeleton = styled.div`
   width: 100%;
-  height: 276px;
+  height: 80px;
   flex-shrink: 0;
-  border-radius: 16px;
+  border-radius: 12px;
   background: ${({ theme }) => theme.colors.skeleton.skeleton20};
   background-size: 300% 100%;
   animation: ${gradientSweep} 1.5s linear infinite;

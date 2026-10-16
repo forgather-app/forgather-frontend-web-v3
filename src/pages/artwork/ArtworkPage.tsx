@@ -27,7 +27,6 @@ import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
-import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
@@ -35,9 +34,6 @@ import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./ArtworkPage.styles";
-
-/** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
-const CAROUSEL_SIDE_PEEK_RATIO = 0.02;
 
 /** 섹션 구분선 색상 */
 const SECTION_DIVIDER_COLOR = "rgba(17, 17, 17, 0.7)";
@@ -63,7 +59,6 @@ const ArtworkPage = ({
   onArtworkClick = () => {},
 }: ArtworkPageProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [activeArtworkIndex, setActiveArtworkIndex] = useState(0);
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const { showSnackBar } = useSnackBar();
@@ -243,9 +238,11 @@ const ArtworkPage = ({
           </S.AddButton>
         </S.SectionHeader>
 
-        <S.CarouselWrapper>
+        <S.ArtworkList>
           <S.CardSkeleton />
-        </S.CarouselWrapper>
+          <S.CardSkeleton />
+          <S.CardSkeleton />
+        </S.ArtworkList>
       </S.ScrollArea>
     );
   }
@@ -361,25 +358,20 @@ const ArtworkPage = ({
           <S.EmptyStateText>첫번째 작품을 추가해보세요.</S.EmptyStateText>
         </S.EmptyState>
       ) : (
-        <S.CarouselWrapper $fullBleed={artworks.length > 1}>
-          <SwiperAction
-            activeIndex={activeArtworkIndex}
-            onIndexChange={setActiveArtworkIndex}
-            sidePeekRatio={CAROUSEL_SIDE_PEEK_RATIO}
-            swiperElement={artworks.map((artwork) => (
-              <ArtworkCard
-                key={artwork.id}
-                title={artwork.title ?? ""}
-                imageUrl={
-                  artwork.firstPhoto?.path
-                    ? getImageUrl(artwork.firstPhoto.path)
-                    : undefined
-                }
-                onClick={() => onArtworkClick(artwork.id)}
-              />
-            ))}
-          />
-        </S.CarouselWrapper>
+        <S.ArtworkList>
+          {artworks.map((artwork) => (
+            <ArtworkCard
+              key={artwork.id}
+              title={artwork.title ?? ""}
+              imageUrl={
+                artwork.firstPhoto?.path
+                  ? getImageUrl(artwork.firstPhoto.path)
+                  : undefined
+              }
+              onClick={() => onArtworkClick(artwork.id)}
+            />
+          ))}
+        </S.ArtworkList>
       )}
 
       <S.BottomSpacer />
