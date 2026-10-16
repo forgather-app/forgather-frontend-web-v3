@@ -17,6 +17,7 @@ import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { linkifyText } from "@/utils/linkifyText";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestArtworkPage.styles";
 
@@ -145,7 +146,7 @@ const GuestArtworkPage = ({
 
       <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
         <S.Description ref={descriptionRef} $isExpanded={isDescriptionExpanded}>
-          {space.description}
+          {linkifyText(space.description)}
         </S.Description>
         {isDescriptionTruncated && (
           <S.MoreButton
