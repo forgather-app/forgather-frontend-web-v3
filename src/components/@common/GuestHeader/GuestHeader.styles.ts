@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Link } from "@tanstack/react-router";
 import LogoWordmark from "@/assets/icons/logos/logo_wordmark.svg?react";
 
 export const Wrapper = styled.header`
@@ -17,7 +18,7 @@ export const Logo = styled(LogoWordmark)`
   }
 `;
 
-export const BrowseLink = styled.a`
+export const BrowseLink = styled(Link)`
   ${({ theme }) => ({ ...theme.typography.button })};
   color: ${({ theme }) => theme.colors.gray.gray100};
 `;

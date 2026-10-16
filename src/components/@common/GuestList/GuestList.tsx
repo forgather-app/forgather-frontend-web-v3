@@ -12,6 +12,8 @@ interface GuestListProps {
   createdAt?: Date;
   /** 사진 첨부 여부. true이면 닉네임 우측에 사진 아이콘을 표시합니다. */
   hasPhoto?: boolean;
+  /** 새(읽지 않은) 방명록 여부. true이면 닉네임 좌측에 NEW 배지를 표시합니다. */
+  isNew?: boolean;
   /** 카드(자세히보기) 클릭 핸들러 */
   onClick: () => void;
 }
@@ -21,17 +23,21 @@ const GuestList = ({
   message,
   createdAt,
   hasPhoto = false,
+  isNew = false,
   onClick,
 }: GuestListProps) => {
   return (
     <S.Card
       type="button"
-      aria-label={`${nickname} 님의 방명록 자세히보기`}
+      aria-label={`${isNew ? "새 방명록 " : ""}${nickname} 님의 방명록 자세히보기`}
       onClick={onClick}
       $hasPhoto={hasPhoto}
     >
       <S.HeaderRow>
-        <S.Nickname aria-hidden>{nickname}</S.Nickname>
+        <S.NicknameGroup>
+          {isNew && <S.NewBadge aria-hidden>NEW</S.NewBadge>}
+          <S.Nickname aria-hidden>{nickname}</S.Nickname>
+        </S.NicknameGroup>
         {hasPhoto && (
           <S.PhotoIconWrapper aria-hidden>
             <IcPhoto width={20} height={20} />

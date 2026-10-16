@@ -6,6 +6,7 @@ import Button from "@/components/@common/Button/Button";
 import useAppleLoginBridge from "@/hooks/@common/useAppleLoginBridge";
 import useKakaoLoginBridge from "@/hooks/@common/useKakaoLoginBridge";
 import CarouselLayout from "@/shared/carousel/CarouselLayout";
+import { getMobileOS } from "@/utils/getMobileOS";
 import DevLoginModal from "./components/DevLoginModal/DevLoginModal";
 import OnboardingIllustration1 from "./illustrations/OnboardingIllustration1";
 import OnboardingIllustration2 from "./illustrations/OnboardingIllustration2";
@@ -21,19 +22,22 @@ const LoginPage = () => {
   const { requestKakaoLogin, isRequesting: isKakaoRequesting } =
     useKakaoLoginBridge(redirectTo);
   const [isDevLoginOpen, setIsDevLoginOpen] = useState(false);
+  const isAndroid = getMobileOS(navigator.userAgent) === "android";
 
   return (
     <CarouselLayout
       footer={
         <S.FooterWrapper>
-          <S.AppleButton
-            type="button"
-            onClick={requestAppleLogin}
-            disabled={isAppleRequesting}
-          >
-            <AppleLogo aria-hidden="true" />
-            <span>Apple로 로그인</span>
-          </S.AppleButton>
+          {!isAndroid && (
+            <S.AppleButton
+              type="button"
+              onClick={requestAppleLogin}
+              disabled={isAppleRequesting}
+            >
+              <AppleLogo aria-hidden="true" />
+              <span>Apple로 로그인</span>
+            </S.AppleButton>
+          )}
           <S.KakaoButton
             type="button"
             onClick={requestKakaoLogin}

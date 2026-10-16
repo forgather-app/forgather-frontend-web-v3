@@ -15,7 +15,7 @@ export interface UpdateSpaceRequest {
   name?: string | null;
   /**
    * 새로운 스페이스 설명
-   * @maxLength 200
+   * @maxLength 500
    * @nullable
    */
   description?: string | null;

@@ -1,5 +1,4 @@
-import { isAxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { withApiVersion } from "@/api/apiVersion";
 import { useGet } from "@/api/generated/product-전시-작품";
 import type { ApiResponseProductResponse, ProductResponse } from "@/api/model";
@@ -7,8 +6,10 @@ import Button from "@/components/@common/Button/Button";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
+import { trackEvent } from "@/utils/analytics";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestArtworkDetailPage.styles";
 
 interface GuestArtworkDetailPageProps {
@@ -36,7 +37,6 @@ const GuestArtworkDetailPage = ({
     isPending,
     isError,
     error,
-    refetch,
   } = useGet<ProductResponse>(spaceId, artworkId, {
     query: {
       select: (response) =>
@@ -47,29 +47,19 @@ const GuestArtworkDetailPage = ({
   });
   const showSkeleton = useDelayedLoading(isPending);
 
-  if (isError) {
-    const isNotFound = isAxiosError(error) && error.response?.status === 404;
+  useEffect(() => {
+    if (!artwork?.id) return;
+    trackEvent("artwork_viewed", {
+      artwork_id: artwork.id,
+      space_id: spaceId,
+      artist_name: artwork.authorName ?? "",
+      viewer_role: "guest",
+    });
+  }, [artwork?.id, artwork?.authorName, spaceId]);
 
-    return (
-      <S.ScrollArea>
-        <NavigationBar onBackClick={onBack} />
-        <S.ErrorState>
-          <S.ErrorMessage>
-            {isNotFound ? "잘못된 접근입니다." : "정보를 불러오지 못했어요."}
-          </S.ErrorMessage>
-          {isNotFound ? (
-            <Button variant="secondary" text="돌아가기" onClick={onBack} />
-          ) : (
-            <Button
-              variant="secondary"
-              text="다시 시도"
-              onClick={() => refetch()}
-            />
-          )}
-        </S.ErrorState>
-      </S.ScrollArea>
-    );
-  }
+  // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
+  throwIfRoutableError(error);
+  if (isError) return null;
 
   if (isPending) {
     if (!showSkeleton) return null;

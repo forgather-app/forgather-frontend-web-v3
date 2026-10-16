@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useGetCurrentUser } from "@/api/generated/auth-인증";
+import { useGetCurrentUser } from "@/api/generated/host-호스트";
 import type { ApiResponseHostResponse } from "@/api/model";
 import LoginPage from "@/pages/login/LoginPage";
 

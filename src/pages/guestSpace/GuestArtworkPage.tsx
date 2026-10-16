@@ -17,6 +17,7 @@ import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestArtworkPage.styles";
 
 /** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
@@ -46,6 +47,7 @@ const GuestArtworkPage = ({
     data: space,
     isPending: isSpacePending,
     isError: isSpaceError,
+    error: spaceError,
   } = useGetSpaceInformation<SpaceResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -54,13 +56,11 @@ const GuestArtworkPage = ({
     },
   });
 
-  const { ref: descriptionRef, isTruncated: isDescriptionTruncated } =
-    useIsTruncated<HTMLParagraphElement>([space?.description]);
-
   const {
     data: products,
     isPending: isProductsPending,
     isError: isProductsError,
+    error: productsError,
   } = useGetV3<ProductsResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -71,12 +71,16 @@ const GuestArtworkPage = ({
   });
 
   const isPending = isSpacePending || isProductsPending;
+
+  // 소개글 DOM은 두 조회가 완료된 뒤 생성되므로 로딩 종료 시에도 다시 측정한다.
+  const { ref: descriptionRef, isTruncated: isDescriptionTruncated } =
+    useIsTruncated<HTMLParagraphElement>([space?.description, isPending]);
+
   const showSkeleton = useDelayedLoading(isPending);
 
-  // TODO: 에러 UI 구현
-  if (isSpaceError || isProductsError) {
-    return;
-  }
+  // 에러가 있으면 항상 throw하므로 아래 return은 타입 좁히기 용도일 뿐 실제로 렌더링되지 않는다
+  throwIfRoutableError(spaceError, productsError);
+  if (isSpaceError || isProductsError) return null;
 
   if (isPending) {
     if (!showSkeleton) return null;
@@ -156,7 +160,7 @@ const GuestArtworkPage = ({
       <Divider color={SECTION_DIVIDER_COLOR} height={8} marginTop={24} />
 
       <S.SectionHeader>
-        <S.SectionTitle>작품 {artworks.length}건</S.SectionTitle>
+        <S.SectionTitle>작품 {artworks.length}개</S.SectionTitle>
       </S.SectionHeader>
 
       {artworks.length === 0 ? (

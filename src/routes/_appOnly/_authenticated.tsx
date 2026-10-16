@@ -6,9 +6,10 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useGetCurrentUser } from "@/api/generated/auth-인증";
+import { useGetCurrentUser } from "@/api/generated/host-호스트";
 import type { ApiResponseHostResponse } from "@/api/model";
-import useSnackBar from "@/hooks/@common/useSnackBar";
+import { identifyAnalyticsUser } from "@/utils/analytics";
+import { identifySentryUser } from "@/utils/sentry";
 
 export const Route = createFileRoute("/_appOnly/_authenticated")({
   component: AuthenticatedLayout,
@@ -17,7 +18,6 @@ export const Route = createFileRoute("/_appOnly/_authenticated")({
 function AuthenticatedLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { showSnackBar } = useSnackBar();
   const isSignUpRoute = useMatches().some((match) =>
     match.routeId.startsWith("/_appOnly/_authenticated/sign-up"),
   );
@@ -30,8 +30,15 @@ function AuthenticatedLayout() {
   const { data, isError, isPending } = useGetCurrentUser({
     query: { enabled: !isSignUpRoute, retry: false },
   });
-  const onboardingCompleted = (data as unknown as ApiResponseHostResponse)?.data
-    ?.onboardingCompleted;
+  const hostData = (data as unknown as ApiResponseHostResponse)?.data;
+  const onboardingCompleted = hostData?.onboardingCompleted;
+  const hostId = hostData?.id;
+
+  useEffect(() => {
+    if (hostId === undefined) return;
+    identifySentryUser(hostId);
+    identifyAnalyticsUser(hostId);
+  }, [hostId]);
 
   // NOTE: location.href를 deps에 넣으면 navigate() 호출이 location을 바꾸고,
   // 그게 다시 effect를 재실행시켜 redirectTo가 자기 자신을 감싸며 무한 navigate되는
@@ -40,7 +47,6 @@ function AuthenticatedLayout() {
   useEffect(() => {
     if (isSignUpRoute) return;
     if (isError) {
-      showSnackBar("세션이 만료되었어요. 다시 로그인해주세요.", "error");
       navigate({
         to: "/login",
         search: { redirectTo: location.href },
@@ -52,14 +58,7 @@ function AuthenticatedLayout() {
       navigate({ to: "/sign-up", replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    isError,
-    isPending,
-    onboardingCompleted,
-    isSignUpRoute,
-    navigate,
-    showSnackBar,
-  ]);
+  }, [isError, isPending, onboardingCompleted, isSignUpRoute, navigate]);
 
   const isAuthorized =
     isSignUpRoute || (!isError && !isPending && onboardingCompleted);
