@@ -22,7 +22,7 @@ export const ContentArea = styled.div`
 
 export const WriteCtaWrapper = styled.div`
   position: fixed;
-  bottom: 34px;
+  bottom: calc(34px + ${({ theme }) => theme.layout.safeArea.bottom});
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
