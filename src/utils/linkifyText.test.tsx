@@ -54,6 +54,18 @@ describe("linkifyText", () => {
     );
   });
 
+  it("URL 뒤에 공백 없이 붙는 한글 조사는 링크에서 제외한다", () => {
+    const { container } = renderWithTheme(
+      <p>{linkifyText("자세한 내용은 https://forgather.app를 참고하세요")}</p>,
+    );
+
+    const link = screen.getByRole("link", { name: "https://forgather.app" });
+    expect(link).toHaveAttribute("href", "https://forgather.app");
+    expect(container).toHaveTextContent(
+      "자세한 내용은 https://forgather.app를 참고하세요",
+    );
+  });
+
   it("괄호로 감싸진 URL은 닫는 괄호를 링크에서 제외한다", () => {
     renderWithTheme(
       <p>{linkifyText("참고 (https://forgather.app) 입니다")}</p>,

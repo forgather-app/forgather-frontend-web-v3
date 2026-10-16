@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import { InlineLink } from "@/styles/@common/InlineLink/InlineLink.styles";
 
-const URL_PATTERN = /https?:\/\/[^\s]+|www\.[^\s]+/gi;
+const URL_CHARS = "[A-Za-z0-9\\-._~:/?#[\\]@!$&'()*+,;=%]";
+const URL_PATTERN = new RegExp(
+  `https?://${URL_CHARS}+|www\\.${URL_CHARS}+`,
+  "gi",
+);
 const TRAILING_PUNCTUATION_PATTERN = /[.,!?;:)\]}'"]+$/;
 
 const splitTrailingPunctuation = (
