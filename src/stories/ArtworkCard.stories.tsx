@@ -9,7 +9,7 @@ const meta: Meta<typeof ArtworkCard> = {
     docs: {
       description: {
         component:
-          "스페이스 메인 화면에서 작품 목록을 보여주는 카드 컴포넌트입니다. 상단에 작품 제목(최대 2줄, 초과 시 말줄임), 하단에 작품 이미지가 표시됩니다. 이미지 URL이 없거나 로드에 실패하면 플레이스홀더 그래픽이 대신 표시됩니다.",
+          "스페이스 메인 화면에서 작품 목록을 보여주는 컴팩트 카드 컴포넌트입니다. 72px 썸네일과 작품 제목(최대 2줄, 초과 시 말줄임)을 가로로 보여주며 카드 전체가 버튼으로 동작합니다. 이미지 URL이 없거나 로드에 실패하면 플레이스홀더 그래픽이 대신 표시됩니다.",
       },
     },
     layout: "centered",
@@ -49,6 +49,13 @@ export const Default: Story = {
     },
   },
   args: defaultArgs,
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const WithImage: Story = {
@@ -63,6 +70,13 @@ export const WithImage: Story = {
     ...defaultArgs,
     imageUrl: "https://picsum.photos/seed/forgather-artwork/328/200",
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const LongTitle: Story = {
@@ -77,6 +91,13 @@ export const LongTitle: Story = {
     title:
       "매우 긴 작품 제목이 두 줄을 초과할 경우 나머지 텍스트는 말줄임 처리되어 화면에 표시됩니다",
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export const ImageLoadError: Story = {
@@ -92,4 +113,11 @@ export const ImageLoadError: Story = {
     ...defaultArgs,
     imageUrl: "https://invalid.example.com/not-found.png",
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 328 }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
