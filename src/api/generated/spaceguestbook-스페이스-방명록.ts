@@ -242,7 +242,7 @@ export function useReadGuestBookSuspense<TData = Awaited<ReturnType<typeof readG
 
 
 /**
- * 방문자 닉네임(10자), 메세지(400자)
+ * 방문자 닉네임(20자), 메세지(500자)
  * @summary 방명록 카드 작성
  */
 export type writeCardResponse200 = {
