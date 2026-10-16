@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /landing
+Allow: /assets/
+Allow: /$
+Disallow: /
+
+Sitemap: https://forgather.app/sitemap.xml
