@@ -57,12 +57,14 @@ describe("validateMessageRequired", () => {
 });
 
 describe("validateMessageMaxLength", () => {
-  it("400자 이하면 true를 반환한다", () => {
-    expect(validateMessageMaxLength("a".repeat(400))).toBe(true);
+  const max = CONSTRAINTS.GUEST_BOOK_WRITE.MESSAGE_MAX_LENGTH;
+
+  it("최대 길이 이하면 true를 반환한다", () => {
+    expect(validateMessageMaxLength("a".repeat(max))).toBe(true);
   });
 
-  it("400자를 초과하면 에러 메시지를 반환한다", () => {
-    expect(validateMessageMaxLength("a".repeat(401))).toBe(
+  it("최대 길이를 초과하면 에러 메시지를 반환한다", () => {
+    expect(validateMessageMaxLength("a".repeat(max + 1))).toBe(
       MESSAGE_MAX_LENGTH_ERROR,
     );
   });

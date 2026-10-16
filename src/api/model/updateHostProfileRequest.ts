@@ -12,7 +12,8 @@ import type { RegisterHostProfilePhotoRequest } from './registerHostProfilePhoto
  */
 export interface UpdateHostProfileRequest {
   /**
-   * 닉네임 (최대 10자)
+   * 닉네임 (최대 20자)
+   * @maxLength 20
    * @nullable
    */
   nickname?: string | null;

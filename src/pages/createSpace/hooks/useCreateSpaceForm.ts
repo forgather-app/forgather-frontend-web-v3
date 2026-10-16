@@ -7,6 +7,7 @@ import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
   validateSpaceDescriptionMaxLength,
   validateSpaceLinkNameMaxLength,
+  validateSpaceLinkPair,
   validateSpaceLinkUrlFormat,
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
@@ -30,8 +31,15 @@ const descriptionRules = {
   validate: validateSpaceDescriptionMaxLength,
 };
 
+const linkUrlRules = {
+  validate: { pair: validateSpaceLinkPair },
+};
+
 const linkNameRules = {
-  validate: validateSpaceLinkNameMaxLength,
+  validate: {
+    maxLength: validateSpaceLinkNameMaxLength,
+    pair: validateSpaceLinkPair,
+  },
 };
 
 export const useCreateSpaceForm = () => {
@@ -39,6 +47,7 @@ export const useCreateSpaceForm = () => {
   const {
     control,
     handleSubmit,
+    trigger,
     formState: { errors, touchedFields, isValid },
   } = useForm<CreateSpaceFormValues>({
     mode: "onChange",
@@ -51,9 +60,9 @@ export const useCreateSpaceForm = () => {
   });
 
   const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(false);
-  const [linkUrlError, setLinkUrlError] = useState<string | undefined>(
-    undefined,
-  );
+  const [linkUrlFormatError, setLinkUrlFormatError] = useState<
+    string | undefined
+  >(undefined);
   const { mutate: createSpace, isPending } = useCreate();
 
   const spaceNameError =
@@ -61,19 +70,26 @@ export const useCreateSpaceForm = () => {
       ? undefined
       : errors.spaceName?.message;
   const descriptionError = errors.description?.message;
+  // 형식 에러(blur 시점)를 우선 노출하고, 없으면 짝 검증(RHF) 에러를 노출함
+  const linkUrlError = linkUrlFormatError ?? errors.linkUrl?.message;
   const linkNameError = errors.linkName?.message;
 
-  // linkUrl은 onChange마다 검증하지 않고, blur 시점에만 검증해 에러를 노출함
+  // linkUrl은 onChange마다 형식을 검증하지 않고, blur 시점에만 검증해 에러를 노출함
   const handleLinkUrlBlur = (value: string) => {
     const result = validateSpaceLinkUrlFormat(value);
-    setLinkUrlError(result === true ? undefined : result);
+    setLinkUrlFormatError(result === true ? undefined : result);
+  };
+
+  // linkUrl/linkName은 서로 짝을 이뤄야 하므로, 한쪽이 바뀌면 둘 다 재검증한다
+  const triggerLinkPair = () => {
+    trigger(["linkUrl", "linkName"]);
   };
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
     handleSubmit((values) => {
       const linkUrlValidation = validateSpaceLinkUrlFormat(values.linkUrl);
       if (linkUrlValidation !== true) {
-        setLinkUrlError(linkUrlValidation);
+        setLinkUrlFormatError(linkUrlValidation);
         return;
       }
 
@@ -112,12 +128,14 @@ export const useCreateSpaceForm = () => {
     control,
     spaceNameRules,
     descriptionRules,
+    linkUrlRules,
     linkNameRules,
     spaceNameError,
     descriptionError,
     linkNameError,
     linkUrlError,
     handleLinkUrlBlur,
+    triggerLinkPair,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,

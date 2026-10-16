@@ -10,12 +10,12 @@ import type { WriteGuestBookCardPhotoRequest } from './writeGuestBookCardPhotoRe
 export interface WriteGuestBookCardRequest {
   /**
    * 방문자 닉네임
-   * @maxLength 10
+   * @maxLength 20
    */
   nickname: string;
   /**
    * 메세지
-   * @maxLength 400
+   * @maxLength 500
    */
   message?: string;
   /** 방명록 카드 사진 목록 */

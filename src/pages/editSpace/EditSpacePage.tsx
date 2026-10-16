@@ -56,12 +56,14 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
     control,
     spaceNameRules,
     descriptionRules,
+    linkUrlRules,
     linkNameRules,
     spaceNameError,
     descriptionError,
     linkNameError,
     linkUrlError,
     handleLinkUrlBlur,
+    triggerLinkPair,
     isValid,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
@@ -130,13 +132,17 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
           <Controller
             control={control}
             name="linkUrl"
+            rules={linkUrlRules}
             render={({ field }) => (
               <TextField
                 variant="link"
                 value={field.value}
                 placeholder="전시와 관련된 링크를 첨부해주세요."
                 errorMessage={linkUrlError}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  field.onChange(e);
+                  triggerLinkPair();
+                }}
                 onBlur={() => {
                   field.onBlur();
                   handleLinkUrlBlur(field.value);
@@ -156,7 +162,10 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
                 maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
                 placeholder="링크 제목을 작성해주세요."
                 errorMessage={linkNameError}
-                onChange={field.onChange}
+                onChange={(e) => {
+                  field.onChange(e);
+                  triggerLinkPair();
+                }}
                 onBlur={field.onBlur}
                 aria-label="링크 제목"
               />
