@@ -17,7 +17,7 @@ import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
 import * as S from "./MyPage.styles";
 
 // TODO: 버전 관리 방식 확정 시 대체
-const APP_VERSION = "v1.0.0";
+const APP_VERSION = "v1.0.2";
 
 const MyPage = () => {
   const theme = useTheme();

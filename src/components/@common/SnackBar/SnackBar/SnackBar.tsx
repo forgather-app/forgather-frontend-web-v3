@@ -1,4 +1,4 @@
-import { type JSX, useEffect, useRef, useState } from "react";
+import { type JSX, useCallback, useEffect, useRef, useState } from "react";
 import IcAlert from "@/assets/icons/ic_alert.svg?react";
 import IcCheck from "@/assets/icons/ic_check.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
@@ -56,14 +56,19 @@ const SnackBar = ({ onClose, message, iconType }: SnackBarProps) => {
     direction: "horizontal",
   });
 
-  useEffect(() => {
-    const timer = setTimeout(hideSheet, 3000);
-    return () => clearTimeout(timer);
+  const closeWithAnimation = useCallback(() => {
+    snackBarRef.current?.style.removeProperty("animation");
+    hideSheet();
   }, [hideSheet]);
+
+  useEffect(() => {
+    const timer = setTimeout(closeWithAnimation, 3000);
+    return () => clearTimeout(timer);
+  }, [closeWithAnimation]);
 
   const handleCloseButton = () => {
     setIsDissolving(true);
-    hideSheet();
+    closeWithAnimation();
   };
 
   const icon = iconType && ICON[iconType];

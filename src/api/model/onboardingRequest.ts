@@ -7,7 +7,10 @@
  */
 
 export interface OnboardingRequest {
-  /** 서비스 닉네임 */
+  /**
+   * 서비스 닉네임 (최대 20자)
+   * @maxLength 20
+   */
   nickname?: string;
   /** 동의한 약관 ID 목록 */
   agreedTermIds?: number[];

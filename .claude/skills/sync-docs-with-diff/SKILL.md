@@ -62,6 +62,7 @@ diff에서 변경된 파일 목록을 분석해 **업데이트가 필요할 수 
 | `*.config.*`, `biome.json`, `tsconfig.*` | `CLAUDE.md` (개발 도구, 설정 섹션) |
 | `.claude/skills/**` | 해당 스킬의 SKILL.md 자체 |
 | `.storybook/**` | `CLAUDE.md` (Storybook 설정) |
+| `src/pages/**`, `src/components/**` 중 화면 문자열·`aria-label`이 바뀐 경우 | `.claude/conventions/domain-glossary.md` (화면 표기·코드 식별자 대응) |
 
 위 패턴에 해당하지 않는 변경이라도 새 디렉토리/파일이 생겼다면 CLAUDE.md 프로젝트 구조를 확인합니다.
 

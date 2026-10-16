@@ -3,9 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.forgatherapp",
+      "package_name": "com.forgather.app",
       "sha256_cert_fingerprints": [
-        "TODO_RELEASE_KEYSTORE_SHA256_CERT_FINGERPRINT"
+        "8A:B4:E3:89:F5:C2:9C:D3:EC:D8:74:DC:11:55:2D:0B:20:7C:FF:FA:F1:44:85:41:52:64:D7:CD:8F:53:E7:20"
       ]
     }
   }

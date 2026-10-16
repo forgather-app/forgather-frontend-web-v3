@@ -1,5 +1,4 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { withApiVersion } from "@/api/apiVersion";
 import { customFetcher } from "@/api/customFetcher";
 import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type {
@@ -14,6 +13,7 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
+import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import PrivateGuestBookOverlay from "./components/privateGuestBookOverlay/PrivateGuestBookOverlay";
 import * as S from "./GuestGuestBookPage.styles";
 
@@ -26,11 +26,12 @@ interface GuestGuestBookPageProps {
   onCardClick: (guestbookId: number) => void;
 }
 
-// OpenAPI 스펙에는 page/size 쿼리 파라미터가 문서화되어 있지 않지만, 실제 서버 응답은 이미 페이지네이션되어 내려온다(#186).
+// X-API-Version 헤더 없이(ver1) 호출한다. ver2는 "해당 스페이스의 로그인 호스트"로 인식되는
+// 호출자에게 읽은 카드만 반환해, 호스트가 자신의 스페이스를 게스트 화면으로 열람할 때 안읽은
+// 카드가 보이지 않는 문제가 있었다. ver1은 호출자 역할과 무관하게 항상 전체 목록을 반환한다.
 const fetchGuestBookPage = (spaceId: string, page: number) =>
   customFetcher<ApiResponseGuestBookResponse>(
     `/spaces/${spaceId}/guestbook?page=${page}&size=${CONSTRAINTS.GUEST_BOOK_LIST.PAGE_SIZE}`,
-    withApiVersion(2),
   );
 
 const GuestGuestBookPage = ({
@@ -42,7 +43,7 @@ const GuestGuestBookPage = ({
   const {
     data: space,
     isPending: isSpacePending,
-    isError: isSpaceError,
+    error: spaceError,
   } = useGetSpaceInformation<SpaceResponse>(spaceId, {
     query: {
       select: (response) =>
@@ -59,18 +60,18 @@ const GuestGuestBookPage = ({
     hasNextPage,
     isFetchingNextPage,
     isPending: isGuestBookPending,
-    isError: isGuestBookError,
+    error: guestBookError,
   } = useInfiniteQuery({
     queryKey: ["guestbook", spaceId, "list"],
     queryFn: ({ pageParam }) => fetchGuestBookPage(spaceId, pageParam),
-    initialPageParam: 0,
+    initialPageParam: 1,
     enabled: !isSpacePending && isPublic,
     getNextPageParam: (_lastPage, allPages) => {
       const totalPages = allPages.at(-1)?.data?.totalPages;
       if (totalPages === undefined || allPages.length >= totalPages) {
         return undefined;
       }
-      return allPages.length;
+      return allPages.length + 1;
     },
   });
 
@@ -101,8 +102,7 @@ const GuestGuestBookPage = ({
   const isPending = isSpacePending || (isPublic && isGuestBookPending);
   const showSkeleton = useDelayedLoading(isPending);
 
-  // TODO: 에러 UI 구현
-  if (isSpaceError) return;
+  throwIfRoutableError(spaceError, guestBookError);
 
   if (isPending) {
     if (!showSkeleton) return null;
@@ -145,9 +145,6 @@ const GuestGuestBookPage = ({
       </S.ScrollArea>
     );
   }
-
-  // TODO: 에러 UI 구현
-  if (isGuestBookError) return;
 
   return (
     <S.ScrollArea>

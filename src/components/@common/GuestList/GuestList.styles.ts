@@ -30,6 +30,20 @@ export const HeaderRow = styled.div`
   min-height: 24px;
 `;
 
+export const NicknameGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+`;
+
+export const NewBadge = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody2 })};
+  color: ${({ theme }) => theme.colors.main.purple50};
+  flex-shrink: 0;
+`;
+
 export const Nickname = styled.p`
   ${({ theme }) => ({ ...theme.typography.body2 })};
   /* TODO: 토큰 없음 - Figma Heading 16/SB (line-height 140%) */

@@ -19,6 +19,7 @@ const meta: Meta<typeof GuestList> = {
           "방명록 목록의 카드 아이템 컴포넌트입니다. Figma 컴포넌트명: **Guest_List**\n\n" +
           "닉네임, 메시지 내용(최대 2줄), 작성 일시, '자세히보기' 링크를 표시합니다. " +
           "`hasPhoto=true`이면 닉네임 우측에 사진 첨부 아이콘이 함께 표시됩니다. " +
+          "`isNew=true`이면 닉네임 좌측에 NEW 배지가 표시되어 읽지 않은 방명록임을 나타냅니다. " +
           "카드 전체가 클릭 가능하며 클릭 시 방명록 상세로 이동합니다.",
       },
     },
@@ -39,6 +40,15 @@ const meta: Meta<typeof GuestList> = {
     hasPhoto: {
       control: { type: "boolean" },
       description: "사진 첨부 여부. true이면 사진 아이콘을 표시합니다.",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: "false" },
+      },
+    },
+    isNew: {
+      control: { type: "boolean" },
+      description:
+        "새(읽지 않은) 방명록 여부. true이면 닉네임 좌측에 NEW 배지를 표시합니다.",
       table: {
         type: { summary: "boolean" },
         defaultValue: { summary: "false" },
@@ -85,6 +95,25 @@ export const WithPhoto: Story = {
     message: "졸업 전시 축하해요! 정말 멋진 작품이었어요.",
     createdAt: new Date(2024, 4, 12, 14, 30),
     hasPhoto: true,
+    onClick: () => {},
+  },
+};
+
+export const New: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "아직 읽지 않은 새 방명록 카드입니다. 닉네임 좌측에 NEW 배지가 표시됩니다.",
+      },
+    },
+  },
+  args: {
+    nickname: "방문객 닉네임",
+    message: "졸업 전시 축하해요! 정말 멋진 작품이었어요.",
+    createdAt: new Date(2024, 4, 12, 14, 30),
+    hasPhoto: false,
+    isNew: true,
     onClick: () => {},
   },
 };

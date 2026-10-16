@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
 import { useId, useState } from "react";
 import { useDevLogin } from "@/api/generated/auth-개발용-임시-로그인";
-import { getGetCurrentUserQueryKey } from "@/api/generated/auth-인증";
+import { getGetCurrentUserQueryKey } from "@/api/generated/host-호스트";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import { ERROR_MESSAGES } from "@/constants/error";

@@ -10,7 +10,7 @@ export const CONSTRAINTS = {
   },
 
   PROFILE: {
-    NICKNAME_MAX_LENGTH: 10,
+    NICKNAME_MAX_LENGTH: 20,
     INTRO_MAX_LENGTH: 50,
   },
 
@@ -18,21 +18,21 @@ export const CONSTRAINTS = {
     TITLE_MAX_LENGTH: 50,
     AUTHOR_NAME_MAX_LENGTH: 35,
     DESCRIPTION_MAX_LENGTH: 2000,
-    VIDEO_URL_MAX_LENGTH: 500,
+    VIDEO_URL_MAX_LENGTH: 512,
     MAX_PHOTO_COUNT: 10,
   },
 
   GUEST_BOOK_WRITE: {
-    // API 스펙(WriteGuestBookCardRequest.nickname @maxLength 10)과 일치시킨다
-    NICKNAME_MAX_LENGTH: 10,
-    MESSAGE_MAX_LENGTH: 400,
+    // API 스펙(WriteGuestBookCardRequest.nickname @maxLength 20)과 일치시킨다
+    NICKNAME_MAX_LENGTH: 20,
+    MESSAGE_MAX_LENGTH: 500,
     MAX_PHOTO_COUNT: 10,
   },
 
   CREATE_SPACE: {
-    NAME_MAX_LENGTH: 50,
-    DESCRIPTION_MAX_LENGTH: 200,
-    LINK_NAME_MAX_LENGTH: 20,
+    NAME_MAX_LENGTH: 30,
+    DESCRIPTION_MAX_LENGTH: 500,
+    LINK_NAME_MAX_LENGTH: 30,
   },
 
   IMAGE: {

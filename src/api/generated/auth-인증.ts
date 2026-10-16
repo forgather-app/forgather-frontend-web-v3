@@ -6,32 +6,18 @@
  * OpenAPI spec version: 2.0.0
  */
 import {
-  useMutation,
-  useQuery,
-  useSuspenseQuery
+  useMutation
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
-  UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult,
-  UseSuspenseQueryOptions,
-  UseSuspenseQueryResult
+  UseMutationResult
 } from '@tanstack/react-query';
 
 import type {
   AppleLoginConfirmRequest,
-  KakaoLoginConfirmRequest,
-  OnboardingRequest,
-  RefreshRequest
+  KakaoLoginConfirmRequest
 } from '../model';
 
 import { customFetcher } from '../customFetcher';
@@ -43,7 +29,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 요청 바디의 리프레시 토큰을 우선 사용하고, 없으면 쿠키의 리프레시 토큰으로 로그인 세션을 갱신합니다. 갱신된 토큰은 응답 바디와 HttpOnly 쿠키로 반환합니다.
+ * 쿠키의 리프레시 토큰으로 로그인 세션을 갱신합니다. 갱신된 토큰은 HttpOnly 쿠키로 반환합니다.
  * @summary 로그인 세션 갱신
  */
 export type refreshResponse200 = {
@@ -66,15 +52,14 @@ export const getRefreshUrl = () => {
   return `/auth/refresh`
 }
 
-export const refresh = async (refreshRequest: RefreshRequest, options?: RequestInit): Promise<refreshResponse> => {
+export const refresh = async ( options?: RequestInit): Promise<refreshResponse> => {
   
   return customFetcher<refreshResponse>(getRefreshUrl(),
   {      
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      refreshRequest,)
+    method: 'POST'
+    
+    
   }
 );}
   
@@ -82,8 +67,8 @@ export const refresh = async (refreshRequest: RefreshRequest, options?: RequestI
 
 
 export const getRefreshMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,void, TContext> => {
 
 const mutationKey = ['refresh'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -95,10 +80,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof refresh>>, {data: RefreshRequest}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof refresh>>, void> = () => {
+          
 
-          return  refresh(data,requestOptions)
+          return  refresh(requestOptions)
         }
 
 
@@ -109,104 +94,21 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type RefreshMutationResult = NonNullable<Awaited<ReturnType<typeof refresh>>>
-    export type RefreshMutationBody = RefreshRequest
+    
     export type RefreshMutationError = unknown
 
     /**
  * @summary 로그인 세션 갱신
  */
 export const useRefresh = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,{data: RefreshRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof refresh>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof refresh>>,
         TError,
-        {data: RefreshRequest},
+        void,
         TContext
       > => {
       return useMutation(getRefreshMutationOptions(options), queryClient);
-    }
-    /**
- * 서비스 닉네임과 약관 동의 이력을 함께 저장합니다. 이미 온보딩이 완료된 호스트가 다시 호출하면 409 Conflict를 반환합니다.
- * @summary 온보딩 완료
- */
-export type submitOnboardingResponse200 = {
-  data: Blob
-  status: 200
-}
-
-export type submitOnboardingResponseSuccess = (submitOnboardingResponse200) & {
-  headers: Headers;
-};
-;
-
-export type submitOnboardingResponse = (submitOnboardingResponseSuccess)
-
-export const getSubmitOnboardingUrl = () => {
-
-
-  
-
-  return `/auth/onboarding`
-}
-
-export const submitOnboarding = async (onboardingRequest: OnboardingRequest, options?: RequestInit): Promise<submitOnboardingResponse> => {
-  
-  return customFetcher<submitOnboardingResponse>(getSubmitOnboardingUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      onboardingRequest,)
-  }
-);}
-  
-
-
-
-export const getSubmitOnboardingMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitOnboarding>>, TError,{data: OnboardingRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof submitOnboarding>>, TError,{data: OnboardingRequest}, TContext> => {
-
-const mutationKey = ['submitOnboarding'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof submitOnboarding>>, {data: OnboardingRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  submitOnboarding(data,requestOptions)
-        }
-
-
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SubmitOnboardingMutationResult = NonNullable<Awaited<ReturnType<typeof submitOnboarding>>>
-    export type SubmitOnboardingMutationBody = OnboardingRequest
-    export type SubmitOnboardingMutationError = unknown
-
-    /**
- * @summary 온보딩 완료
- */
-export const useSubmitOnboarding = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof submitOnboarding>>, TError,{data: OnboardingRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof submitOnboarding>>,
-        TError,
-        {data: OnboardingRequest},
-        TContext
-      > => {
-      return useMutation(getSubmitOnboardingMutationOptions(options), queryClient);
     }
     /**
  * 액세스토큰과 리프레시토큰 쿠키를 만료시킵니다. 인증 없이 호출할 수 있습니다. stateless JWT 구조이므로 서버 측에서 발급된 토큰을 무효화하지는 않습니다. 클라이언트가 보관 중인 토큰은 직접 폐기해야 합니다.
@@ -291,7 +193,7 @@ export const useLogout = <TError = unknown,
       return useMutation(getLogoutMutationOptions(options), queryClient);
     }
     /**
- * Kakao 로그인 후 발급받은 액세스토큰을 전달하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 응답 바디와 HttpOnly 쿠키로 반환합니다.
+ * Kakao 로그인 후 발급받은 액세스토큰을 전달하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 HttpOnly 쿠키로 반환합니다.
  * @summary Kakao 로그인 완료
  */
 export type kakaoLoginConfirmResponse200 = {
@@ -374,7 +276,7 @@ export const useKakaoLoginConfirm = <TError = unknown,
       return useMutation(getKakaoLoginConfirmMutationOptions(options), queryClient);
     }
     /**
- * Apple 로그인 후 발급받은 identity token, authorization code, raw nonce와 이름을 전달합니다. 서버는 authorization code를 Apple token endpoint에 교환하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 응답 바디와 HttpOnly 쿠키로 반환합니다.
+ * Apple 로그인 후 발급받은 identity token, authorization code, raw nonce와 이름을 전달합니다. 서버는 authorization code를 Apple token endpoint에 교환하여 로그인합니다. 로그인 성공 시, 액세스토큰과 리프레시토큰을 HttpOnly 쿠키로 반환합니다.
  * @summary Apple 로그인 완료
  */
 export type appleLoginConfirmResponse200 = {
@@ -455,251 +357,5 @@ export const useAppleLoginConfirm = <TError = unknown,
         TContext
       > => {
       return useMutation(getAppleLoginConfirmMutationOptions(options), queryClient);
-    }
-    /**
- * 현재 로그인된 사용자의 정보를 확인합니다. 로그인된 사용자가 없으면 401 Unauthorized를 반환합니다.
- * @summary 내 정보 확인
- */
-export type getCurrentUserResponse200 = {
-  data: Blob
-  status: 200
-}
-
-export type getCurrentUserResponseSuccess = (getCurrentUserResponse200) & {
-  headers: Headers;
-};
-;
-
-export type getCurrentUserResponse = (getCurrentUserResponseSuccess)
-
-export const getGetCurrentUserUrl = () => {
-
-
-  
-
-  return `/auth/me`
-}
-
-export const getCurrentUser = async ( options?: RequestInit): Promise<getCurrentUserResponse> => {
-  
-  return customFetcher<getCurrentUserResponse>(getGetCurrentUserUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-  
-
-
-
-
-export const getGetCurrentUserQueryKey = () => {
-    return [
-    `/auth/me`
-    ] as const;
-    }
-
-    
-export const getGetCurrentUserQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCurrentUserQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
-export type GetCurrentUserQueryError = unknown
-
-
-export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCurrentUser>>,
-          TError,
-          Awaited<ReturnType<typeof getCurrentUser>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getCurrentUser>>,
-          TError,
-          Awaited<ReturnType<typeof getCurrentUser>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 내 정보 확인
- */
-
-export function useGetCurrentUser<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCurrentUserQueryOptions(options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
-
-
-
-export const getGetCurrentUserSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
-) => {
-
-const {query: queryOptions, request: requestOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetCurrentUserQueryKey();
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getCurrentUser>>> = ({ signal }) => getCurrentUser({ signal, ...requestOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetCurrentUserSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>
-export type GetCurrentUserSuspenseQueryError = unknown
-
-
-export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
-  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
- * @summary 내 정보 확인
- */
-
-export function useGetCurrentUserSuspense<TData = Awaited<ReturnType<typeof getCurrentUser>>, TError = unknown>(
-  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getCurrentUser>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient 
- ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetCurrentUserSuspenseQueryOptions(options)
-
-  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
-
-
-
-/**
- * 회원을 탈퇴 처리합니다. 소셜 연결(Kakao/Apple)을 해제하고 계정과 소유 콘텐츠를 삭제합니다. 성공 시 액세스토큰과 리프레시토큰 쿠키를 만료시킵니다. 탈퇴 후 같은 소셜 계정으로 다시 로그인하면 신규 가입으로 처리됩니다.
- * @summary 회원 탈퇴
- */
-export type withdrawResponse200 = {
-  data: Blob
-  status: 200
-}
-
-export type withdrawResponseSuccess = (withdrawResponse200) & {
-  headers: Headers;
-};
-;
-
-export type withdrawResponse = (withdrawResponseSuccess)
-
-export const getWithdrawUrl = () => {
-
-
-  
-
-  return `/auth/me`
-}
-
-export const withdraw = async ( options?: RequestInit): Promise<withdrawResponse> => {
-  
-  return customFetcher<withdrawResponse>(getWithdrawUrl(),
-  {      
-    ...options,
-    method: 'DELETE'
-    
-    
-  }
-);}
-  
-
-
-
-export const getWithdrawMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,void, TContext> => {
-
-const mutationKey = ['withdraw'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof withdraw>>, void> = () => {
-          
-
-          return  withdraw(requestOptions)
-        }
-
-
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type WithdrawMutationResult = NonNullable<Awaited<ReturnType<typeof withdraw>>>
-    
-    export type WithdrawMutationError = unknown
-
-    /**
- * @summary 회원 탈퇴
- */
-export const useWithdraw = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,void, TContext>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof withdraw>>,
-        TError,
-        void,
-        TContext
-      > => {
-      return useMutation(getWithdrawMutationOptions(options), queryClient);
     }
     

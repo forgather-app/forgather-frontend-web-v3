@@ -25,6 +25,11 @@
 
 - **TanStack React Query**: 서버 상태 관리 및 데이터 페칭
 
+### 에러 모니터링 및 분석
+
+- **Sentry** (`@sentry/react`, `@sentry/vite-plugin`): 에러 모니터링 및 소스맵 업로드
+- **PostHog** (`posthog-js`): 제품 분석 및 사용자 이벤트 트래킹
+
 ### API 코드 생성
 
 - **Orval**: OpenAPI 스펙 기반 API 클라이언트 코드 자동 생성
@@ -69,6 +74,7 @@
 ### 컴포넌트 작성 규칙
 
 > 상세 규칙은 `.claude/conventions/ui-conventions.md`를 참조합니다.
+> PR·이슈·문서에서 기능을 부를 때는 `.claude/conventions/domain-glossary.md`의 화면 표기를 씁니다 (예: `Product` → "작품", `Host` → "작가").
 
 - 구현 파일(`Component.tsx`)과 스타일 파일(`Component.styles.ts`) 분리
 - 상수·타입이 많을 경우 `Component.constants.ts`로 분리
