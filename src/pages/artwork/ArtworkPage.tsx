@@ -33,6 +33,7 @@ import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { linkifyText } from "@/utils/linkifyText";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./ArtworkPage.styles";
 
@@ -319,7 +320,7 @@ const ArtworkPage = ({
 
       <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
         <S.Description ref={descriptionRef} $isExpanded={isDescriptionExpanded}>
-          {space.description}
+          {linkifyText(space.description)}
         </S.Description>
         {isDescriptionTruncated && (
           <S.MoreButton

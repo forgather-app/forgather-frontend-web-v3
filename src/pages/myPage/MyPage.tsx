@@ -12,6 +12,7 @@ import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import useFlowBack from "@/hooks/@common/useFlowBack";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { linkifyText } from "@/utils/linkifyText";
 import LogoutModal from "./components/LogoutModal/LogoutModal";
 import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
 import * as S from "./MyPage.styles";
@@ -58,7 +59,7 @@ const MyPage = () => {
           </S.NameRow>
         </S.ProfileRow>
         <S.IntroBlock>
-          <S.IntroText>{introduction}</S.IntroText>
+          <S.IntroText>{linkifyText(introduction)}</S.IntroText>
           {linkUrl && (
             <S.ContactLink
               href={linkUrl}
