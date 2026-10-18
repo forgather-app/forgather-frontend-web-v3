@@ -106,6 +106,8 @@ export * from './issueSignedUrlResponseSignedUrls';
 export * from './kakaoLoginConfirmRequest';
 export * from './kakaoLoginTokenResponse';
 export * from './landingGuestBookStats';
+export * from './landingHostStats';
+export * from './landingProductStats';
 export * from './landingSpaceStats';
 export * from './landingStatsResponse';
 export * from './localTime';

@@ -66,8 +66,18 @@ export const SpaceLink = styled.a`
   align-items: center;
   gap: 4px;
   margin-top: 8px;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray300};
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
+export const SpaceLinkText = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-decoration: underline;
   ${selectableText};
 `;
@@ -147,23 +157,17 @@ export const EmptyStateText = styled.p`
   text-align: center;
 `;
 
-export const CarouselWrapper = styled("div", { shouldForwardProp })<{
-  $fullBleed?: boolean;
-}>`
+export const ArtworkList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
   margin-top: 16px;
-  ${({ $fullBleed, theme }) =>
-    $fullBleed &&
-    `
-    margin-left: calc(-1 * ${theme.layout.sidePadding}px);
-    margin-right: calc(-1 * ${theme.layout.sidePadding}px);
-  `}
 `;
 
 export const CardSkeleton = styled.div`
   width: 100%;
-  height: 276px;
-  flex-shrink: 0;
-  border-radius: 16px;
+  height: 140px;
+  border-radius: 12px;
   background: ${({ theme }) => theme.colors.skeleton.skeleton20};
   background-size: 300% 100%;
   animation: ${gradientSweep} 1.5s linear infinite;

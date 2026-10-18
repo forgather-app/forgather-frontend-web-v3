@@ -1,38 +1,44 @@
-import { useState } from "react";
-import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
+import { ARTWORK_CARD_FALLBACK_IMAGE } from "@/constants/routes";
+import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./ArtworkCard.styles";
 
+const artworkCardFallback = ARTWORK_CARD_FALLBACK_IMAGE;
+
 interface ArtworkCardProps {
-  /** 작품 제목. 최대 2줄까지 표시되며 초과 시 말줄임 처리됩니다. */
+  /** 작품 제목. 1줄까지 표시되며 초과 시 말줄임 처리됩니다. */
   title: string;
-  /** 작품 이미지 URL. 미전달 또는 로드 실패 시 플레이스홀더 그래픽이 표시됩니다. */
+  /** 작가명. 미전달 또는 빈 문자열이면 표시하지 않습니다. */
+  authorName?: string;
+  /** 작품 이미지 URL. 미전달·빈 문자열 또는 에러 시 fallback 그래픽 표시 */
   imageUrl?: string;
   /** 카드 클릭 핸들러 */
   onClick?: () => void;
 }
 
-const ArtworkCard = ({ title, imageUrl, onClick }: ArtworkCardProps) => {
-  const [imageError, setImageError] = useState(false);
-  const showImage = Boolean(imageUrl) && !imageError;
-
+const ArtworkCard = ({
+  title,
+  authorName,
+  imageUrl,
+  onClick,
+}: ArtworkCardProps) => {
   return (
-    <S.Card role="button" onClick={onClick} aria-label={`작품: ${title}`}>
-      <S.TitleBox>
+    <S.Card
+      type="button"
+      onClick={onClick}
+      aria-label={
+        authorName ? `작품: ${title}, 작가: ${authorName}` : `작품: ${title}`
+      }
+    >
+      <S.Thumbnail
+        src={imageUrl || artworkCardFallback}
+        onError={(e) => handleImageError(e, artworkCardFallback)}
+        alt=""
+        aria-hidden
+      />
+      <S.Content>
         <S.Title>{title}</S.Title>
-      </S.TitleBox>
-      <S.ImageFrame>
-        {showImage ? (
-          <S.Thumbnail
-            src={imageUrl}
-            alt=""
-            onError={() => setImageError(true)}
-          />
-        ) : (
-          <S.PlaceholderWrapper aria-hidden>
-            <ArtworkPlaceholderGraphic />
-          </S.PlaceholderWrapper>
-        )}
-      </S.ImageFrame>
+        {authorName && <S.AuthorName>{authorName}</S.AuthorName>}
+      </S.Content>
     </S.Card>
   );
 };

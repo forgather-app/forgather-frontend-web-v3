@@ -1,9 +1,10 @@
 import icFile from "@/assets/icons/ic_file.svg";
 import IcSmallLogo from "@/assets/icons/logos/logo_small.svg?react";
+import { SPACE_CARD_FILE_FALLBACK_IMAGE } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
 import * as S from "./SpaceFileCard.styles";
 
-const spaceCardFallback = "/images/fallback/space_card_file.png";
+const spaceCardFallback = SPACE_CARD_FILE_FALLBACK_IMAGE;
 
 interface SpaceFileCardProps {
   /** 스페이스 제목 */

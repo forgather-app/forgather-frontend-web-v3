@@ -13,15 +13,11 @@ import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.
 import Divider from "@/components/@common/Divider/Divider";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
-import SwiperAction from "@/components/UI/SwiperAction/SwiperAction";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestArtworkPage.styles";
-
-/** 이전/다음 작품 카드가 좌우에 대칭으로 살짝 보이는 정도(카드 폭 대비 비율) */
-const CAROUSEL_SIDE_PEEK_RATIO = 0.02;
 
 /** 섹션 구분선 색상 */
 const SECTION_DIVIDER_COLOR = "rgba(17, 17, 17, 0.7)";
@@ -41,7 +37,6 @@ const GuestArtworkPage = ({
   onHostClick = () => {},
 }: GuestArtworkPageProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [activeArtworkIndex, setActiveArtworkIndex] = useState(0);
 
   const {
     data: space,
@@ -100,9 +95,12 @@ const GuestArtworkPage = ({
           <S.SectionTitle>작품</S.SectionTitle>
         </S.SectionHeader>
 
-        <S.CarouselWrapper>
+        <S.ArtworkList>
           <S.CardSkeleton />
-        </S.CarouselWrapper>
+          <S.CardSkeleton />
+          <S.CardSkeleton />
+          <S.CardSkeleton />
+        </S.ArtworkList>
       </S.ScrollArea>
     );
   }
@@ -139,7 +137,7 @@ const GuestArtworkPage = ({
           aria-label="링크 열기"
         >
           <IcLink width={16} height={16} aria-hidden="true" />
-          {space.linkName || space.linkUrl}
+          <S.SpaceLinkText>{space.linkName || space.linkUrl}</S.SpaceLinkText>
         </S.SpaceLink>
       )}
 
@@ -171,25 +169,21 @@ const GuestArtworkPage = ({
           <S.EmptyStateText>아직 등록된 작품이 없어요</S.EmptyStateText>
         </S.EmptyState>
       ) : (
-        <S.CarouselWrapper $fullBleed={artworks.length > 1}>
-          <SwiperAction
-            activeIndex={activeArtworkIndex}
-            onIndexChange={setActiveArtworkIndex}
-            sidePeekRatio={CAROUSEL_SIDE_PEEK_RATIO}
-            swiperElement={artworks.map((artwork) => (
-              <ArtworkCard
-                key={artwork.id}
-                title={artwork.title ?? ""}
-                imageUrl={
-                  artwork.firstPhoto?.path
-                    ? getImageUrl(artwork.firstPhoto.path)
-                    : undefined
-                }
-                onClick={() => onArtworkClick(artwork.id)}
-              />
-            ))}
-          />
-        </S.CarouselWrapper>
+        <S.ArtworkList>
+          {artworks.map((artwork) => (
+            <ArtworkCard
+              key={artwork.id}
+              title={artwork.title ?? ""}
+              authorName={artwork.authorName}
+              imageUrl={
+                artwork.firstPhoto?.path
+                  ? getImageUrl(artwork.firstPhoto.path)
+                  : undefined
+              }
+              onClick={() => onArtworkClick(artwork.id)}
+            />
+          ))}
+        </S.ArtworkList>
       )}
 
       <S.BottomSpacer />

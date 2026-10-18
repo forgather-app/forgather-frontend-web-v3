@@ -10,6 +10,6 @@
  * 방명록 통계
  */
 export interface LandingGuestBookStats {
-  /** 총 방명록 카드 수 */
+  /** 누적 방명록 카드 수 */
   cardCount?: number;
 }

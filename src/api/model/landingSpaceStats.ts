@@ -10,6 +10,6 @@
  * 스페이스 통계
  */
 export interface LandingSpaceStats {
-  /** 총 스페이스 수 */
+  /** 누적 스페이스 수 */
   spaceCount?: number;
 }

@@ -58,8 +58,19 @@ export const ContactLink = styled.a`
   display: flex;
   align-items: center;
   gap: 4px;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
+  max-width: 100%;
   color: ${({ theme }) => theme.colors.gray.gray300};
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
+export const ContactLinkText = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-decoration: underline;
   ${selectableText};
 `;
