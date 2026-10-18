@@ -99,6 +99,7 @@ const GuestArtworkPage = ({
           <S.CardSkeleton />
           <S.CardSkeleton />
           <S.CardSkeleton />
+          <S.CardSkeleton />
         </S.ArtworkList>
       </S.ScrollArea>
     );
@@ -173,6 +174,7 @@ const GuestArtworkPage = ({
             <ArtworkCard
               key={artwork.id}
               title={artwork.title ?? ""}
+              authorName={artwork.authorName}
               imageUrl={
                 artwork.firstPhoto?.path
                   ? getImageUrl(artwork.firstPhoto.path)

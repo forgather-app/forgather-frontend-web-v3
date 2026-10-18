@@ -148,16 +148,15 @@ export const EmptyStateText = styled.p`
 `;
 
 export const ArtworkList = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
   margin-top: 16px;
 `;
 
 export const CardSkeleton = styled.div`
   width: 100%;
-  height: 80px;
-  flex-shrink: 0;
+  height: 140px;
   border-radius: 12px;
   background: ${({ theme }) => theme.colors.skeleton.skeleton20};
   background-size: 300% 100%;
