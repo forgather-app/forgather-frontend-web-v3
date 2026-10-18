@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 
 export const Container = styled.div`
-  height: 100dvh;
+  /* Layout(flex column)이 이미 safe-area와 하단 여백을 뺀 높이를 주므로 그 높이를 그대로 채운다 */
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.gray.gray700};
