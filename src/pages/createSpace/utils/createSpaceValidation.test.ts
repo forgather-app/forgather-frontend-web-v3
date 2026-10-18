@@ -2,11 +2,9 @@ import { describe, expect, it } from "vitest";
 import { CONSTRAINTS } from "@/constants/constraints";
 import {
   SPACE_DESCRIPTION_MAX_LENGTH_ERROR,
-  SPACE_LINK_PAIR_ERROR,
   SPACE_NAME_MAX_LENGTH_ERROR,
   SPACE_NAME_REQUIRED_ERROR,
   validateSpaceDescriptionMaxLength,
-  validateSpaceLinkPair,
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
 } from "./createSpaceValidation";
@@ -61,44 +59,5 @@ describe("validateSpaceDescriptionMaxLength", () => {
 
   it("빈 문자열이어도 true를 반환한다 (선택 입력)", () => {
     expect(validateSpaceDescriptionMaxLength("")).toBe(true);
-  });
-});
-
-describe("validateSpaceLinkPair", () => {
-  it("URL과 표시 이름이 둘 다 채워져 있으면 true를 반환한다", () => {
-    expect(
-      validateSpaceLinkPair("", {
-        linkUrl: "https://example.com",
-        linkName: "인스타그램",
-      }),
-    ).toBe(true);
-  });
-
-  it("URL과 표시 이름이 둘 다 비어 있으면 true를 반환한다", () => {
-    expect(validateSpaceLinkPair("", { linkUrl: "", linkName: "" })).toBe(true);
-  });
-
-  it("URL만 입력되고 표시 이름이 비어 있으면 에러 메시지를 반환한다", () => {
-    expect(
-      validateSpaceLinkPair("", {
-        linkUrl: "https://example.com",
-        linkName: "",
-      }),
-    ).toBe(SPACE_LINK_PAIR_ERROR);
-  });
-
-  it("표시 이름만 입력되고 URL이 비어 있으면 에러 메시지를 반환한다", () => {
-    expect(
-      validateSpaceLinkPair("", { linkUrl: "", linkName: "인스타그램" }),
-    ).toBe(SPACE_LINK_PAIR_ERROR);
-  });
-
-  it("공백만 입력된 경우는 비어 있는 것으로 취급한다", () => {
-    expect(
-      validateSpaceLinkPair("", {
-        linkUrl: "https://example.com",
-        linkName: "   ",
-      }),
-    ).toBe(SPACE_LINK_PAIR_ERROR);
   });
 });
