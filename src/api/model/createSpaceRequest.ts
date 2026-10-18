@@ -14,7 +14,7 @@ export interface CreateSpaceRequest {
   name: string;
   /**
    * 스페이스 설명
-   * @maxLength 200
+   * @maxLength 500
    * @nullable
    */
   description?: string | null;

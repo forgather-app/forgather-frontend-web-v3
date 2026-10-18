@@ -137,6 +137,11 @@ export const theme = {
     sidePadding: 16,
     sectionGap: 20,
     cardGap: 8,
+    /** 앱 웹뷰가 노치·홈 인디케이터 영역까지 확장(viewport-fit=cover)되므로 고정 요소는 이 값을 더해 배치한다. 미지원 환경은 0px */
+    safeArea: {
+      top: "env(safe-area-inset-top, 0px)",
+      bottom: "env(safe-area-inset-bottom, 0px)",
+    },
     zIndex: {
       backdrop: 1,
       modalContent: 2,
