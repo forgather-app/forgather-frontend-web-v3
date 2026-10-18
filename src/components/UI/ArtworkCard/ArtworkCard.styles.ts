@@ -7,6 +7,7 @@ export const Card = styled.button`
   align-items: stretch;
   gap: 8px;
   width: 100%;
+  min-width: 0;
   padding: 4px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
