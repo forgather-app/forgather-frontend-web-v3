@@ -137,7 +137,7 @@ const GuestArtworkPage = ({
           aria-label="링크 열기"
         >
           <IcLink width={16} height={16} aria-hidden="true" />
-          {space.linkName || space.linkUrl}
+          <S.SpaceLinkText>{space.linkName || space.linkUrl}</S.SpaceLinkText>
         </S.SpaceLink>
       )}
 

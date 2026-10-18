@@ -67,7 +67,7 @@ const MyPage = () => {
               aria-label="링크 열기"
             >
               <IcLink aria-hidden="true" />
-              {linkUrl}
+              <S.ContactLinkText>{linkUrl}</S.ContactLinkText>
             </S.ContactLink>
           )}
         </S.IntroBlock>

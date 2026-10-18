@@ -66,8 +66,18 @@ export const SpaceLink = styled.a`
   align-items: center;
   gap: 4px;
   margin-top: 8px;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
   color: ${({ theme }) => theme.colors.gray.gray300};
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
+export const SpaceLinkText = styled.span`
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   text-decoration: underline;
   ${selectableText};
 `;
