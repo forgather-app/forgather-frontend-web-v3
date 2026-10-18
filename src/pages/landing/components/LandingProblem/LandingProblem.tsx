@@ -1,3 +1,5 @@
+import { useLandingSuspense } from "@/api/generated/stats-통계";
+import type { ApiResponseLandingStatsResponse } from "@/api/model";
 import decoArcMo from "@/assets/icons/landing/deco_arc_mo.svg";
 import decoArcPc from "@/assets/icons/landing/deco_arc_pc.svg";
 import decoDashMo from "@/assets/icons/landing/deco_dash_mo.svg";
@@ -6,12 +8,14 @@ import icQuote from "@/assets/icons/landing/ic_quote.svg";
 import profileFallback from "@/assets/icons/profile.svg";
 import { Highlight, MobileBreak } from "@/pages/landing/Landing.shared.styles";
 import {
-  LANDING_STATS,
+  LANDING_SCHOOL_STAT,
+  LANDING_STAT_DESCRIPTIONS,
   LANDING_TESTIMONIALS,
+  type LandingStat,
 } from "@/pages/landing/LandingPage.constants";
+import { formatStatCount } from "@/utils/formatStatCount";
 import * as S from "./LandingProblem.styles";
 
-const MARQUEE_STATS = [...LANDING_STATS, ...LANDING_STATS];
 const [testimonialT1, testimonialT2, testimonialT3, testimonialT4] =
   LANDING_TESTIMONIALS;
 const TESTIMONIALS_ALT_ORDER = [
@@ -69,6 +73,33 @@ const COLLAGE_ROWS: {
 ];
 
 const LandingProblem = () => {
+  const { data: landingStats } = useLandingSuspense({
+    query: {
+      select: (response) =>
+        (response as unknown as ApiResponseLandingStatsResponse).data,
+    },
+  });
+
+  const stats: LandingStat[] = [
+    LANDING_SCHOOL_STAT,
+    {
+      id: "artist",
+      value: formatStatCount(landingStats?.hostStats?.hostCount),
+      description: LANDING_STAT_DESCRIPTIONS.artist,
+    },
+    {
+      id: "artwork",
+      value: formatStatCount(landingStats?.productStats?.productCount),
+      description: LANDING_STAT_DESCRIPTIONS.artwork,
+    },
+    {
+      id: "guestbook",
+      value: formatStatCount(landingStats?.guestBookStats?.cardCount),
+      description: LANDING_STAT_DESCRIPTIONS.guestbook,
+    },
+  ];
+  const marqueeStats = [...stats, ...stats];
+
   return (
     <S.Wrapper>
       <S.CollageLayer aria-hidden="true">
@@ -146,7 +177,7 @@ const LandingProblem = () => {
           </S.SummaryHeading>
           <S.MarqueeViewport>
             <S.StatRow $duration={22}>
-              {MARQUEE_STATS.map((stat, index) => (
+              {marqueeStats.map((stat, index) => (
                 <S.StatCard key={`${stat.id}-${index}`}>
                   <S.StatValue>{stat.value}</S.StatValue>
                   <S.StatDescription>{stat.description}</S.StatDescription>

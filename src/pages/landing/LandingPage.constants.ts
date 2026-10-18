@@ -20,24 +20,19 @@ export interface LandingStat {
   description: string;
 }
 
-export const LANDING_STATS: LandingStat[] = [
-  {
-    id: "school",
-    value: "계원예대",
-    description: "애니메이션과 졸업전시\n온라인 도록을 진행했어요",
-  },
-  {
-    id: "artist",
-    value: "200+",
-    description: "명의 작가가 포게더를 사용했어요",
-  },
-  { id: "artwork", value: "200+", description: "점의 작품이 소개됐어요" },
-  {
-    id: "guestbook",
-    value: "800+",
-    description: "개의 소중한 방명록이 모였어요",
-  },
-];
+/** API로 집계되지 않는 케이스 스터디 문구 - 수치 통계(LandingProblem)와 함께 노출된다 */
+export const LANDING_SCHOOL_STAT: LandingStat = {
+  id: "school",
+  value: "계원예대",
+  description: "애니메이션과 졸업전시\n온라인 도록을 진행했어요",
+};
+
+/** /stats/landing 응답 수치와 함께 노출되는 설명 문구 */
+export const LANDING_STAT_DESCRIPTIONS = {
+  artist: "명의 작가가 포게더를 사용했어요",
+  artwork: "점의 작품이 소개됐어요",
+  guestbook: "개의 소중한 방명록이 모였어요",
+} as const;
 
 export interface LandingTestimonial {
   id: string;
