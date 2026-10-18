@@ -9,6 +9,7 @@ import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { trackEvent } from "@/utils/analytics";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
+import { linkifyText } from "@/utils/linkifyText";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestArtworkDetailPage.styles";
 
@@ -141,7 +142,7 @@ const GuestArtworkDetailPage = ({
           <S.Artist>{artistName}</S.Artist>
         </S.TitleSection>
 
-        <S.Description>{artwork.description}</S.Description>
+        <S.Description>{linkifyText(artwork.description)}</S.Description>
 
         {isVideoFirst ? (
           <>

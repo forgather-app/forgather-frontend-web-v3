@@ -13,6 +13,7 @@ import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import SpaceCard from "@/components/UI/SpaceCard/SpaceCard";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { linkifyText } from "@/utils/linkifyText";
 import * as S from "./GuestHostProfilePage.styles";
 
 interface GuestHostProfilePageProps {
@@ -69,7 +70,9 @@ const GuestHostProfilePage = ({
             </S.NameRow>
           </S.ProfileRow>
           <S.IntroBlock>
-            {introduction && <S.IntroText>{introduction}</S.IntroText>}
+            {introduction && (
+              <S.IntroText>{linkifyText(introduction)}</S.IntroText>
+            )}
             {linkUrl && (
               <S.ContactLink
                 href={linkUrl}
