@@ -25,13 +25,13 @@ export interface UpdateSpaceRequest {
    */
   isPublic?: boolean | null;
   /**
-   * 새로운 소개 링크 URL (표시 이름과 함께 입력, 빈 쌍으로 삭제)
+   * 새로운 소개 링크 URL (빈 문자열로 삭제, 삭제 시 표시 이름도 함께 비워야 함)
    * @maxLength 2048
    * @nullable
    */
   linkUrl?: string | null;
   /**
-   * 새로운 소개 링크 표시 이름 (URL과 함께 입력)
+   * 새로운 소개 링크 표시 이름 (선택, 링크 URL이 있을 때만 입력 가능)
    * @maxLength 30
    * @nullable
    */

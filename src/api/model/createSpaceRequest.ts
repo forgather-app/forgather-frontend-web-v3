@@ -21,13 +21,13 @@ export interface CreateSpaceRequest {
   /** 스페이스 공개 여부 */
   isPublic?: boolean;
   /**
-   * 스페이스 소개 링크 URL (표시 이름과 함께 입력)
+   * 스페이스 소개 링크 URL (선택)
    * @maxLength 2048
    * @nullable
    */
   linkUrl?: string | null;
   /**
-   * 스페이스 소개 링크 표시 이름 (URL과 함께 입력)
+   * 스페이스 소개 링크 표시 이름 (선택, 링크 URL이 있을 때만 입력 가능)
    * @maxLength 30
    * @nullable
    */

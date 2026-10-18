@@ -12,6 +12,8 @@ export interface SimpleProductResponse {
   id?: number;
   /** 작품명 */
   title?: string;
+  /** 작가명 (미입력 시 빈 문자열) */
+  authorName?: string;
   /** 임베드 영상 링크 */
   videoUrl?: string;
   firstPhoto?: ProductPhotoResponse;

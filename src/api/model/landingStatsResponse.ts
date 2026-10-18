@@ -6,9 +6,13 @@
  * OpenAPI spec version: 2.0.0
  */
 import type { LandingGuestBookStats } from './landingGuestBookStats';
+import type { LandingHostStats } from './landingHostStats';
+import type { LandingProductStats } from './landingProductStats';
 import type { LandingSpaceStats } from './landingSpaceStats';
 
 export interface LandingStatsResponse {
   spaceStats?: LandingSpaceStats;
   guestBookStats?: LandingGuestBookStats;
+  hostStats?: LandingHostStats;
+  productStats?: LandingProductStats;
 }
