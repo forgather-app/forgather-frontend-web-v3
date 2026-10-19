@@ -7,6 +7,7 @@ export const Card = styled.button`
   align-items: stretch;
   gap: 8px;
   width: 100%;
+  min-width: 0;
   padding: 4px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
@@ -19,7 +20,7 @@ export const Card = styled.button`
 
 export const Thumbnail = styled.img`
   width: 100%;
-  height: 72px;
+  height: 80px;
   border-radius: 8px;
   object-fit: cover;
   object-position: center;
