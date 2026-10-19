@@ -23,6 +23,16 @@ export interface SpaceResponse {
   /** 스페이스 소개 링크 표시 이름 */
   linkName?: string;
   /**
+   * 전시 시작일
+   * @nullable
+   */
+  exhibitionStartDate?: string | null;
+  /**
+   * 전시 종료일
+   * @nullable
+   */
+  exhibitionEndDate?: string | null;
+  /**
    * 스페이스 사진 경로 (대표 작품의 첫 번째 사진). 작품이 없거나 대표 작품에 사진이 없으면 null이며, 기본 사진 노출은 클라이언트가 담당한다.
    * @nullable
    */

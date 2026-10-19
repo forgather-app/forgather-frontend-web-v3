@@ -19,6 +19,11 @@ export const formatShortDate = (date: Date): string => {
   return `${String(year).slice(-2)}.${Number(month)}.${Number(day)}`;
 };
 
+export const formatPeriodDate = (date: Date): string => {
+  const { year, month, day } = parseDateParts(date);
+  return `${year}.${month}.${day}`;
+};
+
 export const formatExhibitionPeriod = (
   startDate: Date,
   endDate: Date,
@@ -32,4 +37,32 @@ export const formatCardDate = (date: Date): string => {
 export const formatCardTime = (date: Date): string => {
   const { hours, minutes } = parseDateParts(date);
   return `${hours}:${minutes}`;
+};
+
+/** API로 보낼 날짜 전용(시간 없음) 문자열로 변환합니다 (YYYY-MM-DD). */
+export const toDateOnlyString = (date: Date): string => {
+  const { year, month, day } = parseDateParts(date);
+  return `${year}-${month}-${day}`;
+};
+
+/** API에서 받은 날짜 전용(YYYY-MM-DD) 문자열을 로컬 타임존의 Date로 변환합니다. */
+export const parseDateOnlyString = (value: string): Date => {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+};
+
+/** 스페이스 상세의 "전시 일정"에 표시하는 형식입니다 (예: "2026.11.06 (금) — 11.09 (월)"). */
+export const formatExhibitionSchedule = (
+  startDate: Date,
+  endDate: Date,
+): string => {
+  const start = parseDateParts(startDate);
+  const end = parseDateParts(endDate);
+  const startText = `${start.year}.${start.month}.${start.day} (${start.weekday})`;
+  const endText =
+    start.year === end.year
+      ? `${end.month}.${end.day} (${end.weekday})`
+      : `${end.year}.${end.month}.${end.day} (${end.weekday})`;
+
+  return `${startText} — ${endText}`;
 };

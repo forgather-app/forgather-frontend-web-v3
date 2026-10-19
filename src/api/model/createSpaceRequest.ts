@@ -32,4 +32,14 @@ export interface CreateSpaceRequest {
    * @nullable
    */
   linkName?: string | null;
+  /**
+   * 전시 시작일 (종료일과 함께 입력, 시작일은 종료일 이하)
+   * @nullable
+   */
+  exhibitionStartDate?: string | null;
+  /**
+   * 전시 종료일 (시작일과 함께 입력)
+   * @nullable
+   */
+  exhibitionEndDate?: string | null;
 }

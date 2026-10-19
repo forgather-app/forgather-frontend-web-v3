@@ -6,6 +6,7 @@ import {
   useUpdate,
 } from "@/api/generated/space-스페이스";
 import type { SpaceResponse } from "@/api/model";
+import type { ExhibitionPeriodValue } from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
@@ -15,12 +16,14 @@ import {
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
+import { parseDateOnlyString, toDateOnlyString } from "@/utils/date";
 
 interface EditSpaceFormValues {
   spaceName: string;
   description: string;
   linkUrl: string;
   linkName: string;
+  exhibitionPeriod: ExhibitionPeriodValue;
 }
 
 const spaceNameRules = {
@@ -55,6 +58,14 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
       description: space.description ?? "",
       linkUrl: space.linkUrl ?? "",
       linkName: space.linkName ?? "",
+      exhibitionPeriod: {
+        startDate: space.exhibitionStartDate
+          ? parseDateOnlyString(space.exhibitionStartDate)
+          : null,
+        endDate: space.exhibitionEndDate
+          ? parseDateOnlyString(space.exhibitionEndDate)
+          : null,
+      },
     },
   });
 
@@ -93,6 +104,8 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
         return;
       }
 
+      const { startDate, endDate } = values.exhibitionPeriod;
+
       updateSpace(
         {
           spaceCode: spaceId,
@@ -102,6 +115,12 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
             isPublic: !isGuestBookPrivate,
             linkUrl: values.linkUrl.trim(),
             linkName: values.linkName.trim(),
+            ...(startDate && endDate
+              ? {
+                  exhibitionStartDate: toDateOnlyString(startDate),
+                  exhibitionEndDate: toDateOnlyString(endDate),
+                }
+              : {}),
           },
         },
         {

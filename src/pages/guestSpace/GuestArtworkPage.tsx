@@ -15,6 +15,7 @@ import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
+import { formatExhibitionSchedule, parseDateOnlyString } from "@/utils/date";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { linkifyText } from "@/utils/linkifyText";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
@@ -129,6 +130,18 @@ const GuestArtworkPage = ({
       <S.TitleRow>
         <S.Title>{space.name}</S.Title>
       </S.TitleRow>
+
+      {space.exhibitionStartDate && space.exhibitionEndDate && (
+        <S.PeriodRow>
+          <S.PeriodLabel>전시 일정</S.PeriodLabel>
+          <S.PeriodValue>
+            {formatExhibitionSchedule(
+              parseDateOnlyString(space.exhibitionStartDate),
+              parseDateOnlyString(space.exhibitionEndDate),
+            )}
+          </S.PeriodValue>
+        </S.PeriodRow>
+      )}
 
       {space.linkUrl && (
         <S.SpaceLink

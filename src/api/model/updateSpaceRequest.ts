@@ -36,4 +36,19 @@ export interface UpdateSpaceRequest {
    * @nullable
    */
   linkName?: string | null;
+  /**
+   * 전시 시작일 (종료일과 함께 입력, 시작일은 종료일 이하)
+   * @nullable
+   */
+  exhibitionStartDate?: string | null;
+  /**
+   * 전시 종료일 (시작일과 함께 입력)
+   * @nullable
+   */
+  exhibitionEndDate?: string | null;
+  /**
+   * 전시 기간 삭제 여부. 새 날짜 쌍이 있으면 교체가 우선하며, 날짜가 없을 때 true면 삭제한다. false, null, 생략이면 유지한다.
+   * @nullable
+   */
+  isDeleteExhibitionPeriod?: boolean | null;
 }
