@@ -20,7 +20,7 @@ export const Card = styled.button`
 
 export const Thumbnail = styled.img`
   width: 100%;
-  height: 72px;
+  height: 80px;
   border-radius: 8px;
   object-fit: cover;
   object-position: center;
