@@ -126,6 +126,22 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
 
         <S.FieldGroup>
           <S.FieldLabelRow>
+            <S.Label>전시 기간</S.Label>
+          </S.FieldLabelRow>
+          <Controller
+            control={control}
+            name="exhibitionPeriod"
+            render={({ field }) => (
+              <ExhibitionPeriodField
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        <S.FieldGroup>
+          <S.FieldLabelRow>
             <S.Label>링크</S.Label>
           </S.FieldLabelRow>
           <Controller
@@ -160,22 +176,6 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-label="링크 제목"
-              />
-            )}
-          />
-        </S.FieldGroup>
-
-        <S.FieldGroup>
-          <S.FieldLabelRow>
-            <S.Label>전시 기간</S.Label>
-          </S.FieldLabelRow>
-          <Controller
-            control={control}
-            name="exhibitionPeriod"
-            render={({ field }) => (
-              <ExhibitionPeriodField
-                value={field.value}
-                onChange={field.onChange}
               />
             )}
           />
