@@ -3,6 +3,7 @@ import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
+import ExhibitionLocationField from "@/components/@common/ExhibitionLocationField/ExhibitionLocationField";
 import ExhibitionPeriodField from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextArea from "@/components/@common/TextArea/TextArea";
@@ -58,6 +59,8 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    exhibitionLocationRules,
+    exhibitionLocationError,
     spaceNameError,
     descriptionError,
     linkNameError,
@@ -139,6 +142,20 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
             )}
           />
         </S.FieldGroup>
+
+        <Controller
+          control={control}
+          name="exhibitionLocation"
+          rules={exhibitionLocationRules}
+          render={({ field }) => (
+            <ExhibitionLocationField
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              errorMessage={exhibitionLocationError}
+            />
+          )}
+        />
 
         <S.FieldGroup>
           <S.FieldLabelRow>
