@@ -3,6 +3,7 @@ import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
+import ExhibitionLocationField from "@/components/@common/ExhibitionLocationField/ExhibitionLocationField";
 import ExhibitionPeriodField from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextArea from "@/components/@common/TextArea/TextArea";
@@ -58,6 +59,8 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    exhibitionLocationRules,
+    exhibitionLocationError,
     spaceNameError,
     descriptionError,
     linkNameError,
@@ -92,7 +95,7 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
                 variant="count"
                 value={field.value}
                 maxCount={CONSTRAINTS.CREATE_SPACE.NAME_MAX_LENGTH}
-                placeholder="스페이스 명을 작성해주세요."
+                placeholder="예) 2026 졸업전시, 나의 여름"
                 errorMessage={spaceNameError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -114,7 +117,9 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
               <TextArea
                 value={field.value}
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
-                placeholder="스페이스 설명을 작성해주세요."
+                placeholder={
+                  "전시 소개나 관람 안내를 자유롭게 적어주세요.\n운영 시간, 작가 상주 시간, 환영 인사도 좋아요."
+                }
                 errorMessage={descriptionError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -139,6 +144,20 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
             )}
           />
         </S.FieldGroup>
+
+        <Controller
+          control={control}
+          name="exhibitionLocation"
+          rules={exhibitionLocationRules}
+          render={({ field }) => (
+            <ExhibitionLocationField
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              errorMessage={exhibitionLocationError}
+            />
+          )}
+        />
 
         <S.FieldGroup>
           <S.FieldLabelRow>

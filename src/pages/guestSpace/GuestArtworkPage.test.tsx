@@ -5,6 +5,7 @@ import { act, cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { apiClient } from "@/api/apiClient";
+import type { SpaceResponse } from "@/api/model";
 import { theme } from "@/styles/theme";
 import GuestArtworkPage from "./GuestArtworkPage";
 
@@ -102,5 +103,77 @@ describe("스페이스 소개 더보기", () => {
     expect(Boolean(screen.queryByRole("button", { name: "더보기" }))).toBe(
       scrollHeight > 40,
     );
+  });
+});
+
+const renderLocationPage = (
+  location: Pick<SpaceResponse, "placeName" | "placeUrl">,
+) => {
+  vi.spyOn(apiClient, "request").mockImplementation(
+    (config) =>
+      Promise.resolve({
+        data: config.url?.endsWith("/products")
+          ? productsResponse
+          : {
+              data: {
+                ...spaceResponse.data,
+                exhibitionStartDate: "2026-10-20",
+                exhibitionEndDate: "2026-10-30",
+                linkName: "전시 홈페이지",
+                linkUrl: "https://example.com/exhibition",
+                ...location,
+              },
+            },
+      }) as ReturnType<typeof apiClient.request>,
+  );
+  return renderPage();
+};
+
+describe("게스트 전시 장소 상세", () => {
+  it.each([
+    undefined,
+    "",
+  ])("장소명이 %s이면 URL이 있어도 장소 행을 숨긴다", async (placeName) => {
+    renderLocationPage({
+      placeName,
+      placeUrl: "https://place.map.kakao.com/123",
+    });
+    await screen.findByRole("heading", { name: "테스트 스페이스" });
+    expect(screen.queryByText("전시 장소")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("직접 입력한 장소명만 있으면 지도 링크 없이 표시한다", async () => {
+    renderLocationPage({ placeName: "직접 입력한 전시장" });
+    expect(await screen.findByText("직접 입력한 전시장")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("전시 일정 다음과 기존 링크 사이에 직접 입력 장소명과 원본 지도 URL을 표시한다", async () => {
+    renderLocationPage({
+      placeName: "직접 입력한 전시장",
+      placeUrl: "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
+    });
+    const name = await screen.findByText("직접 입력한 전시장");
+    const map = screen.getByRole("link", { name: "카카오맵으로 열기 ↗" });
+    expect(map).toHaveAttribute(
+      "href",
+      "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
+    );
+    expect(map).toHaveAttribute("target", "_blank");
+    expect(map).toHaveAttribute("rel", "noopener noreferrer");
+    expect(
+      screen.getByText("전시 일정").compareDocumentPosition(name) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      name.compareDocumentPosition(
+        screen.getByRole("link", { name: "링크 열기" }),
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 });

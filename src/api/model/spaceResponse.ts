@@ -45,4 +45,10 @@ export interface SpaceResponse {
   /** '지금 축하받고 있는 스페이스'로 지정되었는지 여부 */
   isFeatured?: boolean;
   host?: SpaceHostInfoResponse;
+  /** 장소명 (장소가 없으면 빈 문자열) */
+  placeName?: string;
+  /** 장소 ID (장소 정보가 없으면 빈 문자열) */
+  placeId?: string;
+  /** 장소 URL (장소 정보가 없으면 빈 문자열) */
+  placeUrl?: string;
 }

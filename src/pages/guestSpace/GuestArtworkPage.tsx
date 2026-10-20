@@ -11,6 +11,7 @@ import type {
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
+import ExhibitionLocationDetail from "@/components/@common/ExhibitionLocationDetail/ExhibitionLocationDetail";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
@@ -142,6 +143,11 @@ const GuestArtworkPage = ({
           </S.PeriodValue>
         </S.PeriodRow>
       )}
+
+      <ExhibitionLocationDetail
+        placeName={space.placeName}
+        placeUrl={space.placeUrl}
+      />
 
       {space.linkUrl && (
         <S.SpaceLink
