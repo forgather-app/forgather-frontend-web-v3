@@ -95,7 +95,7 @@ afterEach(() => {
 });
 
 describe("ExhibitionLocationField", () => {
-  it("선택으로 등록 버튼이 사라지면 남아 있는 장소명 입력칸으로 포커스를 돌린다", async () => {
+  it("장소를 선택하면 입력칸 대신 등록된 장소 영역으로 포커스를 옮긴다", async () => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
     const opener = screen.getByRole("button", { name: "장소 등록" });
     opener.focus();
@@ -109,7 +109,8 @@ describe("ExhibitionLocationField", () => {
     );
     expect(opener.isConnected).toBe(false);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveFocus();
+    expect(screen.getByRole("group", { name: "등록된 장소" })).toHaveFocus();
+    expect(screen.getByRole("textbox", { name: "전시 장소명" })).not.toHaveFocus();
   });
   it.each([
     "back",

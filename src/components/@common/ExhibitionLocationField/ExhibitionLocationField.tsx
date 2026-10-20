@@ -21,14 +21,15 @@ const ExhibitionLocationField = ({
 }: ExhibitionLocationFieldProps) => {
   const nameId = useId();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const focusNameAfterSelectionRef = useRef(false);
+  const linkedPlaceRef = useRef<HTMLDivElement>(null);
+  const focusLinkedPlaceAfterSelectionRef = useRef(false);
   const isLinked = Boolean(value.placeId || value.placeUrl);
 
   useEffect(() => {
-    if (isSearchOpen || !focusNameAfterSelectionRef.current) return;
-    focusNameAfterSelectionRef.current = false;
-    document.getElementById(nameId)?.focus();
-  }, [isSearchOpen, nameId]);
+    if (isSearchOpen || !focusLinkedPlaceAfterSelectionRef.current) return;
+    focusLinkedPlaceAfterSelectionRef.current = false;
+    linkedPlaceRef.current?.focus({ preventScroll: true });
+  }, [isSearchOpen]);
 
   return (
     <S.Wrapper>
@@ -59,7 +60,12 @@ const ExhibitionLocationField = ({
       <S.ConnectionField>
         <S.ConnectionLabel>카카오맵 연결</S.ConnectionLabel>
         {isLinked ? (
-          <S.Chip>
+          <S.Chip
+            ref={linkedPlaceRef}
+            role="group"
+            aria-label="등록된 장소"
+            tabIndex={-1}
+          >
             등록된 장소
             <S.RemoveButton
               type="button"
@@ -83,7 +89,7 @@ const ExhibitionLocationField = ({
       {isSearchOpen ? (
         <ExhibitionPlaceSearch
           onSelect={({ placeId, placeUrl }) => {
-            focusNameAfterSelectionRef.current = true;
+            focusLinkedPlaceAfterSelectionRef.current = true;
             onChange({ ...value, placeId, placeUrl });
           }}
           onClose={() => setIsSearchOpen(false)}

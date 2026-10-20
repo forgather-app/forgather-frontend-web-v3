@@ -174,7 +174,7 @@ describe("EditSpacePage 장소 연결", () => {
     expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveValue(
       "직접 입력한 장소",
     );
-    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveFocus();
+    expect(screen.getByRole("group", { name: "등록된 장소" })).toHaveFocus();
     expect(mutationCalls()).toHaveLength(0);
     expect(await submit()).toMatchObject({
       placeName: "직접 입력한 장소",
