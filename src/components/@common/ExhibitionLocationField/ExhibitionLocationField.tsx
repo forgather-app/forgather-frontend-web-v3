@@ -82,7 +82,7 @@ const ExhibitionLocationField = ({
             aria-haspopup="dialog"
             onClick={() => setIsSearchOpen(true)}
           >
-            장소 등록
+            장소 검색
           </S.RegisterButton>
         )}
       </S.ConnectionField>

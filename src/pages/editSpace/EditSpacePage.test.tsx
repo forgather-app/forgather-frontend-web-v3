@@ -68,7 +68,7 @@ const submit = async () => {
   return JSON.parse(mutationCalls()[0].data as string);
 };
 const choosePlace = async () => {
-  fireEvent.click(screen.getByRole("button", { name: "장소 등록" }));
+  fireEvent.click(screen.getByRole("button", { name: "장소 검색" }));
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "검색어" },
   });
@@ -124,7 +124,7 @@ describe("EditSpacePage 장소 연결", () => {
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
     );
-    await user.click(screen.getByRole("button", { name: "장소 등록" }));
+    await user.click(screen.getByRole("button", { name: "장소 검색" }));
     const input = screen.getByRole("searchbox");
     fireEvent.compositionStart(input);
     await user.type(input, "한글");
@@ -150,7 +150,7 @@ describe("EditSpacePage 장소 연결", () => {
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
     );
-    await user.click(screen.getByRole("button", { name: "장소 등록" }));
+    await user.click(screen.getByRole("button", { name: "장소 검색" }));
     const input = screen.getByRole("searchbox");
     if (keyword) await user.type(input, keyword);
     await user.keyboard("{Enter}");
@@ -293,7 +293,7 @@ describe("EditSpacePage 장소 연결", () => {
     change("링크 제목", "수정 중인 링크");
     fireEvent.click(screen.getByRole("switch"));
     fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
-    fireEvent.click(screen.getByRole("button", { name: "장소 등록" }));
+    fireEvent.click(screen.getByRole("button", { name: "장소 검색" }));
     if (failure) {
       failSearch = true;
       fireEvent.change(screen.getByRole("searchbox"), {
