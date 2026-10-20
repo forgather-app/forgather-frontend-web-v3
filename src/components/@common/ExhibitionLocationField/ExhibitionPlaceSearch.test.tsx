@@ -130,6 +130,26 @@ afterEach(() => {
 });
 
 describe("ExhibitionPlaceSearch", () => {
+  it.each([true, false])("조합 확인 Enter는 IME 기본 동작을 유지한다 (native isComposing: %s)", async (nativeIsComposing) => {
+    const { onClose } = renderSearch();
+    const input = screen.getByRole("searchbox");
+    fireEvent.compositionStart(input);
+    fireEvent.change(input, { target: { value: "전시" } });
+    expect(
+      fireEvent.keyDown(input, {
+        key: "Enter",
+        isComposing: nativeIsComposing,
+      }),
+    ).toBe(true);
+    expect(input).toHaveValue("전시");
+    expect(onClose).not.toHaveBeenCalled();
+    await advance();
+    expect(mockedSearch).not.toHaveBeenCalled();
+    fireEvent.compositionEnd(input, { data: "전시" });
+    await advance();
+    expect(screen.getByText("디자인플라자")).toBeInTheDocument();
+  });
+
   it("빈 검색어로 열리고 한글 조합 중 검색하지 않다가 조합 종료 300ms 후 검색한다", async () => {
     renderSearch();
     const input = screen.getByRole("searchbox");

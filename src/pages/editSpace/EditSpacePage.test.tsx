@@ -8,6 +8,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { apiClient } from "@/api/apiClient";
 import { theme } from "@/styles/theme";
@@ -114,6 +115,41 @@ afterEach(() => {
 });
 
 describe("EditSpacePage 장소 연결", () => {
+  it.each(["", "검색어"])("검색 입력 Enter는 %s 검색어에서도 저장하지 않고 결과 버튼 Enter는 선택한다", async (keyword) => {
+    const user = userEvent.setup();
+    renderPage();
+    await screen.findByRole("textbox", { name: "전시 장소명" });
+    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
+    );
+    await user.click(screen.getByRole("button", { name: "장소 등록" }));
+    const input = screen.getByRole("searchbox");
+    if (keyword) await user.type(input, keyword);
+    await user.keyboard("{Enter}");
+    expect(mutationCalls()).toHaveLength(0);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue(keyword);
+    if (!keyword) await user.type(input, "검색어");
+    const select = await screen.findByRole("button", {
+      name: `${providerPlace.placeName} 선택`,
+    });
+    select.focus();
+    await user.keyboard("{Enter}");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveValue(
+      "직접 입력한 장소",
+    );
+    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveFocus();
+    expect(mutationCalls()).toHaveLength(0);
+    expect(await submit()).toMatchObject({
+      placeName: "직접 입력한 장소",
+      placeId: "123",
+      placeUrl: "https://place.map.kakao.com/123?original=true",
+    });
+  });
+
   it.each([
     [
       "그대로",
