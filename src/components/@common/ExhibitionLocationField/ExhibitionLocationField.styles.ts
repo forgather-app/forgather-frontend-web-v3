@@ -51,7 +51,7 @@ export const RegisterButton = styled.button`
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.gray.gray600};
   ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.gray100};
+  color: ${({ theme }) => theme.colors.gray.white};
   cursor: pointer;
   &:disabled {
     color: ${({ theme }) => theme.colors.gray.gray400};
@@ -69,7 +69,7 @@ export const Chip = styled.div`
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.gray.gray600};
   ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.gray100};
+  color: ${({ theme }) => theme.colors.gray.white};
 `;
 
 export const RemoveButton = styled.button`
