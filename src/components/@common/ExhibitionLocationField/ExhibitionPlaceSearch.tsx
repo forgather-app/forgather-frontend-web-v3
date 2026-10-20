@@ -93,6 +93,14 @@ const ExhibitionPlaceSearch = ({
           autoFocus
           value={keyword}
           onChange={(event) => setKeyword(event.target.value)}
+          onKeyDown={(event) => {
+            if (
+              event.key === "Enter" &&
+              !isComposing &&
+              !event.nativeEvent.isComposing
+            )
+              event.preventDefault();
+          }}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={(event) => {
             setKeyword(event.currentTarget.value);
