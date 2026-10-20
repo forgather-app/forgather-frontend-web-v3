@@ -49,7 +49,7 @@ export const Result = styled.li`
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  width: calc(100% - 24px);
+  width: 100%;
   min-height: 77px;
   box-sizing: border-box;
   padding: 16px;
