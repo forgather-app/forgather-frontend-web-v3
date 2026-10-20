@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextField from "@/components/@common/TextField/TextField";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
-import type { ExhibitionLocationValue } from "./exhibitionLocation";
 import * as S from "./ExhibitionPlaceSearch.styles";
+import type { ExhibitionLocationValue } from "./exhibitionLocation";
 import useExhibitionPlaceSearch from "./useExhibitionPlaceSearch";
 
 interface ExhibitionPlaceSearchProps {
@@ -67,6 +67,7 @@ const ExhibitionPlaceSearch = ({
   return (
     <S.Dialog
       ref={dialogRef}
+      className="ph-no-capture ph-mask"
       aria-label="장소 검색"
       onCancel={(event) => {
         event.preventDefault();

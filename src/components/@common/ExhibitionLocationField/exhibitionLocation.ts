@@ -24,7 +24,7 @@ export const validateExhibitionLocation = ({
   }
 
   if ((placeId || placeUrl) && !placeName.trim()) {
-    return "연결한 장소의 전시 장소명을 입력해 주세요.";
+    return "장소명을 입력하거나 등록된 장소를 제거해주세요.";
   }
 
   return true;

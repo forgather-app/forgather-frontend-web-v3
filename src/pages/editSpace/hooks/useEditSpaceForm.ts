@@ -6,6 +6,11 @@ import {
   useUpdate,
 } from "@/api/generated/space-스페이스";
 import type { SpaceResponse } from "@/api/model";
+import {
+  type ExhibitionLocationValue,
+  toExhibitionLocationPayload,
+  validateExhibitionLocation,
+} from "@/components/@common/ExhibitionLocationField/exhibitionLocation";
 import type { ExhibitionPeriodValue } from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -24,6 +29,7 @@ interface EditSpaceFormValues {
   linkUrl: string;
   linkName: string;
   exhibitionPeriod: ExhibitionPeriodValue;
+  exhibitionLocation: ExhibitionLocationValue;
 }
 
 const spaceNameRules = {
@@ -58,6 +64,11 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
       description: space.description ?? "",
       linkUrl: space.linkUrl ?? "",
       linkName: space.linkName ?? "",
+      exhibitionLocation: {
+        placeName: space.placeName ?? "",
+        placeId: space.placeId ?? "",
+        placeUrl: space.placeUrl ?? "",
+      },
       exhibitionPeriod: {
         startDate: space.exhibitionStartDate
           ? parseDateOnlyString(space.exhibitionStartDate)
@@ -110,6 +121,7 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
         {
           spaceCode: spaceId,
           data: {
+            ...toExhibitionLocationPayload(values.exhibitionLocation),
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
@@ -141,6 +153,8 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    exhibitionLocationRules: { validate: validateExhibitionLocation },
+    exhibitionLocationError: errors.exhibitionLocation?.message,
     spaceNameError,
     descriptionError,
     linkNameError,
