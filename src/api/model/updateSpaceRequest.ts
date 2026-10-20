@@ -51,4 +51,22 @@ export interface UpdateSpaceRequest {
    * @nullable
    */
   isDeleteExhibitionPeriod?: boolean | null;
+  /**
+   * 장소명 (선택, 최대 50자, 장소명만 입력 가능). 수정 시 생략/null은 기존 값 유지, 빈 문자열/공백만 있는 값은 빈 문자열로 삭제. 값이 있는 문자열의 앞뒤 공백은 보존
+   * @maxLength 50
+   * @nullable
+   */
+  placeName?: string | null;
+  /**
+   * 장소 ID (선택, 숫자 문자열, 장소명 필수, URL과 쌍으로 입력). 수정 시 생략/null은 기존 값 유지, 빈 문자열/공백만 있는 값은 빈 문자열로 삭제
+   * @maxLength 255
+   * @nullable
+   */
+  placeId?: string | null;
+  /**
+   * 장소 URL (선택, 장소명 필수, ID와 쌍으로 입력). http://place.map.kakao.com/ + ID 또는 https://place.map.kakao.com/ + ID와 정확히 일치해야 함. 입력한 URL은 변환 없이 저장. 수정 시 생략/null은 기존 값 유지, 빈 문자열/공백만 있는 값은 빈 문자열로 삭제
+   * @maxLength 2048
+   * @nullable
+   */
+  placeUrl?: string | null;
 }

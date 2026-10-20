@@ -159,3 +159,8 @@ export * from './uploadFileRequest';
 export * from './writeGuestBookCardPhotoRequest';
 export * from './writeGuestBookCardRequest';
 export * from './writeGuestBookCardResponse';
+export * from './searchParams';
+export * from './placeResult';
+export * from './placeSearchResponse';
+export * from './apiResponsePlaceSearchResponse';
+export * from './apiResponsePlaceSearchResponseCode';
