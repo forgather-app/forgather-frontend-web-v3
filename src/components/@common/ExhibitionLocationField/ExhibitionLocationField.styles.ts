@@ -6,34 +6,10 @@ export const Wrapper = styled.div`
   gap: 20px;
 `;
 
-export const NameField = styled.div<{ $hasError: boolean }>`
+export const NameField = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-
-  > div:last-child {
-    padding: ${({ $hasError }) => ($hasError ? "12px" : "13px 11px")};
-    gap: ${({ $hasError }) => ($hasError ? "12px" : "8px")};
-  }
-
-  textarea {
-    min-height: ${({ $hasError }) => ($hasError ? "52px" : "22px")};
-    padding: 0;
-    ${({ theme }) => ({ ...theme.typography.subBody, fontWeight: 400 })};
-    font-size: ${({ $hasError }) => ($hasError ? "16px" : "14px")};
-    color: ${({ theme }) => theme.colors.gray.gray100};
-  }
-
-  [role="alert"] {
-    max-width: 240px;
-    color: ${({ theme }) => theme.colors.semantic.alertRed};
-  }
-
-  [role="alert"] + span {
-    flex-shrink: 0;
-    white-space: nowrap;
-    color: ${({ theme }) => theme.colors.gray.gray300};
-  }
 `;
 
 export const LabelRow = styled.div<{ $hasError: boolean }>`
