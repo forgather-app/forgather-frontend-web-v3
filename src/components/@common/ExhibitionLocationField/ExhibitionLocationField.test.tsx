@@ -37,16 +37,32 @@ const renderField = (initial = empty) =>
     </ThemeProvider>,
   );
 beforeEach(() => {
+  // Native closed dialogs cannot receive focus; jsdom otherwise applies React autoFocus early.
+  const nativeFocus = HTMLElement.prototype.focus;
+  vi.spyOn(HTMLElement.prototype, "focus").mockImplementation(function (
+    this: HTMLElement,
+    options?: FocusOptions,
+  ) {
+    const dialog = this.closest("dialog");
+    if (dialog && !dialog.open) return;
+    nativeFocus.call(this, options);
+  });
+  let nativeOpener: Element | null = null;
   Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
     configurable: true,
     value: function (this: HTMLDialogElement) {
+      nativeOpener = document.activeElement;
       this.open = true;
     },
   });
   Object.defineProperty(HTMLDialogElement.prototype, "close", {
     configurable: true,
     value: function (this: HTMLDialogElement) {
+      if (!this.open) return;
       this.open = false;
+      if (nativeOpener instanceof HTMLElement && nativeOpener.isConnected) {
+        nativeOpener.focus();
+      }
     },
   });
   vi.stubGlobal(
@@ -79,6 +95,36 @@ afterEach(() => {
 });
 
 describe("ExhibitionLocationField", () => {
+  it("선택으로 등록 버튼이 사라지면 남아 있는 장소명 입력칸으로 포커스를 돌린다", async () => {
+    renderField({ ...empty, placeName: "직접 입력한 장소" });
+    const opener = screen.getByRole("button", { name: "장소 등록" });
+    opener.focus();
+    fireEvent.click(opener);
+    fireEvent.change(screen.getByRole("searchbox"), {
+      target: { value: "전시" },
+    });
+    fireEvent.click(
+      await screen.findByRole("button", { name: "검색 제공자 이름 선택" }),
+    );
+    expect(opener.isConnected).toBe(false);
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveFocus();
+  });
+  it.each([
+    "back",
+    "escape",
+  ])("%s로 검색을 취소하면 등록 버튼으로 포커스를 돌린다", (method) => {
+    renderField({ ...empty, placeName: "직접 입력한 장소" });
+    const opener = screen.getByRole("button", { name: "장소 등록" });
+    opener.focus();
+    fireEvent.click(opener);
+    expect(screen.getByRole("searchbox")).toHaveFocus();
+    if (method === "back")
+      fireEvent.click(screen.getByRole("button", { name: "뒤로 가기" }));
+    else fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Escape" });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(opener).toHaveFocus();
+  });
   it("검색 결과의 이름과 주소를 PostHog 자동 수집에서 제외한다", async () => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
     fireEvent.click(screen.getByRole("button", { name: "장소 등록" }));

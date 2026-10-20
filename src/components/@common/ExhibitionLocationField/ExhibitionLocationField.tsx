@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import CloseIcon from "@/assets/icons/ic_close_12.svg?react";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import { CONSTRAINTS } from "@/constants/constraints";
@@ -21,7 +21,14 @@ const ExhibitionLocationField = ({
 }: ExhibitionLocationFieldProps) => {
   const nameId = useId();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const focusNameAfterSelectionRef = useRef(false);
   const isLinked = Boolean(value.placeId || value.placeUrl);
+
+  useEffect(() => {
+    if (isSearchOpen || !focusNameAfterSelectionRef.current) return;
+    focusNameAfterSelectionRef.current = false;
+    document.getElementById(nameId)?.focus();
+  }, [isSearchOpen, nameId]);
 
   return (
     <S.Wrapper>
@@ -76,9 +83,10 @@ const ExhibitionLocationField = ({
       </S.ConnectionField>
       {isSearchOpen ? (
         <ExhibitionPlaceSearch
-          onSelect={({ placeId, placeUrl }) =>
-            onChange({ ...value, placeId, placeUrl })
-          }
+          onSelect={({ placeId, placeUrl }) => {
+            focusNameAfterSelectionRef.current = true;
+            onChange({ ...value, placeId, placeUrl });
+          }}
           onClose={() => setIsSearchOpen(false)}
         />
       ) : null}
