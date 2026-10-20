@@ -323,6 +323,7 @@ const ArtworkPage = ({
       <ExhibitionLocationDetail
         placeName={space.placeName}
         placeUrl={space.placeUrl}
+        emptyMessage="등록된 장소가 없어요"
       />
 
       {space.linkUrl && (

@@ -50,10 +50,11 @@ describe("호스트 전시 장소 상세", () => {
   it.each([
     undefined,
     "",
-  ])("장소명이 %s이면 URL이 있어도 장소 행을 숨긴다", async (placeName) => {
+  ])("장소명이 %s이면 미등록 안내를 표시하고 지도 링크는 숨긴다", async (placeName) => {
     renderPage({ placeName, placeUrl: "https://place.map.kakao.com/123" });
     await screen.findByRole("heading", { name: "테스트 스페이스" });
-    expect(screen.queryByText("전시 장소")).not.toBeInTheDocument();
+    expect(screen.getByText("전시 장소")).toBeInTheDocument();
+    expect(screen.getByText("등록된 장소가 없어요")).toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
     ).not.toBeInTheDocument();
