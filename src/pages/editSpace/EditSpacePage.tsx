@@ -95,7 +95,7 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
                 variant="count"
                 value={field.value}
                 maxCount={CONSTRAINTS.CREATE_SPACE.NAME_MAX_LENGTH}
-                placeholder="스페이스 명을 작성해주세요."
+                placeholder="예) 2026 졸업전시, 나의 여름"
                 errorMessage={spaceNameError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
@@ -117,7 +117,9 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
               <TextArea
                 value={field.value}
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
-                placeholder="스페이스 설명을 작성해주세요."
+                placeholder={
+                  "전시 소개나 관람 안내를 자유롭게 적어주세요.\n운영 시간, 작가 상주 시간, 환영 인사도 좋아요."
+                }
                 errorMessage={descriptionError}
                 onChange={field.onChange}
                 onBlur={field.onBlur}
