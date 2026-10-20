@@ -110,7 +110,9 @@ describe("ExhibitionLocationField", () => {
     expect(opener.isConnected).toBe(false);
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByRole("group", { name: "등록된 장소" })).toHaveFocus();
-    expect(screen.getByRole("textbox", { name: "전시 장소명" })).not.toHaveFocus();
+    expect(
+      screen.getByRole("textbox", { name: "전시 장소명" }),
+    ).not.toHaveFocus();
   });
   it.each([
     "back",
