@@ -73,6 +73,7 @@ const choosePlace = async () => {
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "검색어" },
   });
+  fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
   fireEvent.click(
     await screen.findByRole("button", {
       name: `${providerPlace.placeName} 선택`,
@@ -133,7 +134,33 @@ const fillForm = async () => {
 };
 
 describe("CreateSpacePage 장소 연결", () => {
-  it.each(["", "검색어"])("검색 입력 Enter는 %s 검색어에서도 저장하지 않고 결과 버튼 Enter는 선택한다", async (keyword) => {
+  it("조합 확인 Enter는 IME 기본 동작을 유지하며 바깥 폼을 저장하지 않는다", async () => {
+    const user = userEvent.setup();
+    renderPage();
+    change("스페이스명", "작성 중인 스페이스");
+    change("전시 장소명", "직접 입력한 장소");
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
+    );
+    await user.click(screen.getByRole("button", { name: "장소 등록" }));
+    const input = screen.getByRole("searchbox");
+    fireEvent.compositionStart(input);
+    await user.type(input, "한글");
+    await user.keyboard("{Enter}");
+    fireEvent.compositionEnd(input, { data: "한글" });
+    expect(mutationCalls()).toHaveLength(0);
+    expect(
+      request.mock.calls.filter(([config]) => config.url?.includes("/places")),
+    ).toHaveLength(0);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(input).toHaveFocus();
+    expect(input).toHaveValue("한글");
+  });
+
+  it.each([
+    "",
+    "검색어",
+  ])("검색 입력 Enter는 %s 검색어에서도 저장하지 않고 결과 버튼 Enter는 선택한다", async (keyword) => {
     const user = userEvent.setup();
     renderPage();
     change("스페이스명", "작성 중인 스페이스");
@@ -149,7 +176,13 @@ describe("CreateSpacePage 장소 연결", () => {
     expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(input).toHaveFocus();
     expect(input).toHaveValue(keyword);
-    if (!keyword) await user.type(input, "검색어");
+    expect(
+      request.mock.calls.filter(([config]) => config.url?.includes("/places")),
+    ).toHaveLength(keyword ? 1 : 0);
+    if (!keyword) {
+      await user.type(input, "검색어");
+      await user.keyboard("{Enter}");
+    }
     const select = await screen.findByRole("button", {
       name: `${providerPlace.placeName} 선택`,
     });
@@ -228,6 +261,7 @@ describe("CreateSpacePage 장소 연결", () => {
       fireEvent.change(screen.getByRole("searchbox"), {
         target: { value: "검색" },
       });
+      fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
       expect(await screen.findByRole("alert")).toHaveTextContent(
         "장소를 불러오지 못했습니다.",
       );

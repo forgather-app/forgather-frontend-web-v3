@@ -43,41 +43,40 @@ afterEach(() => {
 });
 
 describe("useExhibitionPlaceSearch", () => {
-  it("빈 검색은 생략하고 빠르게 바뀐 마지막 검색어만 300ms 후 검색한다", async () => {
-    const { result, rerender } = renderHook(
-      ({ keyword }) => useExhibitionPlaceSearch(keyword),
-      { initialProps: { keyword: " " } },
-    );
+  it("명시적으로 시작할 때만 정규화된 검색어를 요청하고 같은 검색어도 새로 요청한다", async () => {
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
     await advance();
     expect(mockedSearch).not.toHaveBeenCalled();
-    rerender({ keyword: "동" });
     await act(async () => {
-      await vi.advanceTimersByTimeAsync(200);
+      result.current.startSearch("   ");
     });
-    rerender({ keyword: " 동대문 " });
-    await advance();
-    expect(mockedSearch).toHaveBeenCalledExactlyOnceWith(
-      { keyword: "동대문", page: 1 },
-      { signal: expect.any(AbortSignal) },
-    );
-    expect(result.current.places).toEqual([]);
+    expect(result.current.hasSearched).toBe(false);
+    expect(mockedSearch).not.toHaveBeenCalled();
+    await act(async () => {
+      result.current.startSearch(" 전시 ");
+    });
+    expect(result.current.hasSearched).toBe(true);
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
+    expect(mockedSearch.mock.calls.map(([params]) => params)).toEqual([
+      { keyword: "전시", page: 1 },
+      { keyword: "전시", page: 1 },
+    ]);
   });
 
-  it("검색어 변경은 이전 요청을 취소하고 늦은 응답을 무시한다", async () => {
+  it("새 명시적 검색은 이전 요청을 취소하고 늦은 응답을 무시한다", async () => {
     const old = deferred();
     mockedSearch
       .mockReturnValueOnce(old.promise)
       .mockResolvedValueOnce(response([place("new")]));
-    const { result, rerender } = renderHook(
-      ({ keyword }) => useExhibitionPlaceSearch(keyword),
-      { initialProps: { keyword: "이전" } },
-    );
-    await advance();
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    act(() => result.current.startSearch("이전"));
     const signal = mockedSearch.mock.calls[0]?.[1]?.signal;
-    rerender({ keyword: "새 검색" });
+    await act(async () => {
+      result.current.startSearch("새 검색");
+    });
     expect(signal?.aborted).toBe(true);
-    expect(result.current.places).toEqual([]);
-    await advance();
     await act(async () => {
       old.resolve(response([place("old")]));
     });
@@ -89,8 +88,10 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch
       .mockResolvedValueOnce(response([place("1")], true))
       .mockReturnValueOnce(next.promise);
-    const { result } = renderHook(() => useExhibitionPlaceSearch("전시"));
-    await advance();
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
     act(() => {
       result.current.loadMore();
       result.current.loadMore();
@@ -115,8 +116,10 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch.mockImplementation(async (params) =>
       response([place(String(params.page))], true),
     );
-    const { result } = renderHook(() => useExhibitionPlaceSearch("전시"));
-    await advance();
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
     for (let page = 2; page <= 46; page++)
       await act(async () => {
         result.current.loadMore();
@@ -130,8 +133,10 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch
       .mockRejectedValueOnce(new Error("offline"))
       .mockResolvedValueOnce(response([place("1")]));
-    const { result } = renderHook(() => useExhibitionPlaceSearch("전시"));
-    await advance();
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
     expect(result.current.error).toBeTruthy();
     expect(result.current.isLoading).toBe(false);
     await act(async () => {
@@ -149,8 +154,10 @@ describe("useExhibitionPlaceSearch", () => {
       .mockResolvedValueOnce(response([place("1")], true))
       .mockRejectedValueOnce(new Error("offline"))
       .mockResolvedValueOnce(response([place("2")]));
-    const { result } = renderHook(() => useExhibitionPlaceSearch("전시"));
-    await advance();
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
     await act(async () => {
       result.current.loadMore();
     });
@@ -170,13 +177,42 @@ describe("useExhibitionPlaceSearch", () => {
     ]);
   });
 
+  it("같은 검색어를 다시 실행해도 누적 페이지와 실패 상태를 첫 페이지로 초기화한다", async () => {
+    mockedSearch
+      .mockResolvedValueOnce(response([place("1")], true))
+      .mockRejectedValueOnce(new Error("offline"))
+      .mockResolvedValueOnce(response([place("fresh")]));
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
+    await act(async () => {
+      result.current.loadMore();
+    });
+    expect(result.current.error).toBeTruthy();
+    await act(async () => {
+      result.current.startSearch(" 전시 ");
+    });
+    expect(result.current.places).toEqual([place("fresh")]);
+    expect(result.current.error).toBeNull();
+    expect(result.current.hasNext).toBe(false);
+    act(() => result.current.retry());
+    expect(mockedSearch.mock.calls.map(([params]) => params)).toEqual([
+      { keyword: "전시", page: 1 },
+      { keyword: "전시", page: 2 },
+      { keyword: "전시", page: 1 },
+    ]);
+  });
+
   it("화면 종료는 요청을 취소하고 결과를 폐기한다", async () => {
     const next = deferred();
     mockedSearch
       .mockResolvedValueOnce(response([place("1")], true))
       .mockReturnValueOnce(next.promise);
-    const { result } = renderHook(() => useExhibitionPlaceSearch("전시"));
-    await advance();
+    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    await act(async () => {
+      result.current.startSearch("전시");
+    });
     act(() => result.current.loadMore());
     const signal = mockedSearch.mock.calls[1]?.[1]?.signal;
     act(() => result.current.cancel());
@@ -188,16 +224,17 @@ describe("useExhibitionPlaceSearch", () => {
     expect(result.current.places).toEqual([]);
   });
 
-  it("언마운트는 진행 중 요청과 예약된 디바운스를 취소한다", async () => {
-    mockedSearch.mockReturnValueOnce(deferred().promise);
-    const first = renderHook(() => useExhibitionPlaceSearch("전시"));
-    await advance();
+  it("언마운트는 진행 중 요청을 취소하고 늦은 응답을 무시한다", async () => {
+    const pending = deferred();
+    mockedSearch.mockReturnValueOnce(pending.promise);
+    const { result, unmount } = renderHook(() => useExhibitionPlaceSearch());
+    act(() => result.current.startSearch("전시"));
     const signal = mockedSearch.mock.calls[0]?.[1]?.signal;
-    first.unmount();
+    unmount();
     expect(signal?.aborted).toBe(true);
-    const second = renderHook(() => useExhibitionPlaceSearch("다른 검색"));
-    second.unmount();
-    await advance();
-    expect(mockedSearch).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      pending.resolve(response([place("late")]));
+    });
+    expect(result.current.places).toEqual([]);
   });
 });

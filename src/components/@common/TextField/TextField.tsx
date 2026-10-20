@@ -32,6 +32,8 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   variant?: TextFieldVariant;
   /** clear 버튼 클릭 시 호출. 미지정 시 onChange("")로 값을 비움 */
   onClear?: () => void;
+  /** search variant의 돋보기를 검색 실행 버튼으로 사용 */
+  onSearchClick?: () => void;
   /** 에러 메시지 — link, count variant에서 에러 상태로 표시됨 */
   errorMessage?: string;
   /** 최대 글자 수 — count variant에서 사용. 설정 시 `{현재} / {maxCount}자` 카운터 표시 */
@@ -64,6 +66,7 @@ const TextField = ({
   onChange,
   variant = "default",
   onClear,
+  onSearchClick,
   errorMessage,
   maxCount,
   placeholder,
@@ -135,9 +138,18 @@ const TextField = ({
           </>
         ) : (
           <>
-            {variant === "search" && (
-              <SearchIcon aria-hidden width={20} height={20} />
-            )}
+            {variant === "search" &&
+              (onSearchClick ? (
+                <S.SearchButton
+                  type="button"
+                  aria-label="검색 실행"
+                  onClick={onSearchClick}
+                >
+                  <SearchIcon aria-hidden width={20} height={20} />
+                </S.SearchButton>
+              ) : (
+                <SearchIcon aria-hidden width={20} height={20} />
+              ))}
             {variant === "link" && (
               <S.LinkIconWrapper>
                 <LinkIcon aria-hidden width={20} height={20} />

@@ -4,6 +4,7 @@ import type { ApiResponsePlaceSearchResponse } from "@/api/model/apiResponsePlac
 import type { PlaceResult } from "@/api/model/placeResult";
 
 interface SearchState {
+  hasSearched: boolean;
   places: PlaceResult[];
   isLoading: boolean;
   isLoadingMore: boolean;
@@ -16,10 +17,10 @@ interface SearchSession {
   hasNext: boolean;
   failedPage: number | null;
   controller: AbortController | null;
-  timer: ReturnType<typeof setTimeout> | null;
   disposed: boolean;
 }
 const emptyState: SearchState = {
+  hasSearched: false,
   places: [],
   isLoading: false,
   isLoadingMore: false,
@@ -29,14 +30,12 @@ const emptyState: SearchState = {
 const dispose = (session: SearchSession | null) => {
   if (!session) return;
   session.disposed = true;
-  if (session.timer !== null) clearTimeout(session.timer);
   session.controller?.abort();
 };
 
-const useExhibitionPlaceSearch = (keyword: string) => {
+const useExhibitionPlaceSearch = () => {
   const [state, setState] = useState<SearchState>(emptyState);
   const sessionRef = useRef<SearchSession | null>(null);
-  const trimmedKeyword = keyword.trim();
 
   const requestPage = useCallback(
     async (session: SearchSession, page: number) => {
@@ -71,6 +70,7 @@ const useExhibitionPlaceSearch = (keyword: string) => {
             places.push(place);
           }
           return {
+            hasSearched: true,
             places,
             error: null,
             hasNext: session.hasNext,
@@ -94,24 +94,27 @@ const useExhibitionPlaceSearch = (keyword: string) => {
     [],
   );
 
-  useEffect(() => {
-    const session: SearchSession = {
-      keyword: trimmedKeyword,
-      page: 0,
-      hasNext: false,
-      failedPage: null,
-      controller: null,
-      timer: null,
-      disposed: false,
-    };
-    sessionRef.current = session;
-    setState({ ...emptyState, isLoading: Boolean(trimmedKeyword) });
-    if (trimmedKeyword)
-      session.timer = setTimeout(() => {
-        void requestPage(session, 1);
-      }, 300);
-    return () => dispose(session);
-  }, [trimmedKeyword, requestPage]);
+  const startSearch = useCallback(
+    (keyword: string) => {
+      const trimmedKeyword = keyword.trim();
+      if (!trimmedKeyword) return;
+      dispose(sessionRef.current);
+      const session: SearchSession = {
+        keyword: trimmedKeyword,
+        page: 0,
+        hasNext: false,
+        failedPage: null,
+        controller: null,
+        disposed: false,
+      };
+      sessionRef.current = session;
+      setState({ ...emptyState, hasSearched: true, isLoading: true });
+      void requestPage(session, 1);
+    },
+    [requestPage],
+  );
+
+  useEffect(() => () => dispose(sessionRef.current), []);
 
   const loadMore = useCallback(() => {
     const session = sessionRef.current;
@@ -128,7 +131,7 @@ const useExhibitionPlaceSearch = (keyword: string) => {
     setState(emptyState);
   }, []);
 
-  return { ...state, loadMore, retry, cancel };
+  return { ...state, startSearch, loadMore, retry, cancel };
 };
 
 export default useExhibitionPlaceSearch;
