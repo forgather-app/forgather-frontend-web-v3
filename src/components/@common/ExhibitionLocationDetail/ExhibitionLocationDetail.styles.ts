@@ -5,7 +5,7 @@ export const Row = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 12px;
 `;
 
 export const Label = styled.span`

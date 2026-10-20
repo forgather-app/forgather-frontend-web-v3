@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import CloseIcon from "@/assets/icons/ic_close_12.svg?react";
-import TextArea from "@/components/@common/TextArea/TextArea";
+import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "./ExhibitionLocationField.styles";
 import ExhibitionPlaceSearch from "./ExhibitionPlaceSearch";
@@ -32,24 +32,23 @@ const ExhibitionLocationField = ({
 
   return (
     <S.Wrapper>
-      <S.NameField $hasError={Boolean(errorMessage)}>
+      <S.NameField>
         <S.LabelRow $hasError={Boolean(errorMessage)}>
           <S.Label htmlFor={nameId}>전시 장소명</S.Label>
           {isLinked && errorMessage ? (
             <S.RequiredDot aria-hidden="true" />
           ) : null}
         </S.LabelRow>
-        <TextArea
+        <TextField
           id={nameId}
-          size="medium"
-          rows={1}
+          variant="count"
           value={value.placeName}
           placeholder={
             errorMessage
               ? "장소명을 입력해주세요."
               : "예) 홍익대학교 홍문관 4층"
           }
-          maxLength={CONSTRAINTS.CREATE_SPACE.PLACE_NAME_MAX_LENGTH}
+          maxCount={CONSTRAINTS.CREATE_SPACE.PLACE_NAME_MAX_LENGTH}
           errorMessage={errorMessage}
           onChange={(event) =>
             onChange({ ...value, placeName: event.target.value })
