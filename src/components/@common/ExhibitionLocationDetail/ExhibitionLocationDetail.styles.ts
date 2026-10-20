@@ -10,7 +10,6 @@ export const Row = styled.div`
 
 export const Label = styled.span`
   flex-shrink: 0;
-  width: 60px;
   ${({ theme }) => ({ ...theme.typography.subBody })};
   font-weight: 400;
   color: ${({ theme }) => theme.colors.gray.gray300};
