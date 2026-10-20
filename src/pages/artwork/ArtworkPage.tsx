@@ -24,6 +24,7 @@ import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import Button from "@/components/@common/Button/Button";
 import Divider from "@/components/@common/Divider/Divider";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
+import ExhibitionLocationDetail from "@/components/@common/ExhibitionLocationDetail/ExhibitionLocationDetail";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import Modal from "@/components/UI/Modal/Modal";
@@ -318,6 +319,11 @@ const ArtworkPage = ({
             : EXHIBITION_SCHEDULE_EMPTY_TEXT}
         </S.PeriodValue>
       </S.PeriodRow>
+
+      <ExhibitionLocationDetail
+        placeName={space.placeName}
+        placeUrl={space.placeUrl}
+      />
 
       {space.linkUrl && (
         <S.SpaceLink
