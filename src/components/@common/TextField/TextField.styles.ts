@@ -109,3 +109,16 @@ export const ErrorMessage = styled.span`
   ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.semantic.alertRed};
 `;
+
+export const SearchButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 4px;
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.main.purple};
+    outline-offset: 4px;
+  }
+`;

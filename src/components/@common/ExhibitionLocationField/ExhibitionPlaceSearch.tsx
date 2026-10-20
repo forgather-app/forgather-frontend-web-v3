@@ -23,6 +23,8 @@ const ExhibitionPlaceSearch = ({
   const closedRef = useRef(false);
   const openerRef = useRef<HTMLElement | null>(null);
   const {
+    hasSearched,
+    startSearch,
     places,
     isLoading,
     isLoadingMore,
@@ -31,7 +33,7 @@ const ExhibitionPlaceSearch = ({
     loadMore,
     retry,
     cancel,
-  } = useExhibitionPlaceSearch(isComposing ? "" : keyword);
+  } = useExhibitionPlaceSearch();
   const { targetRef } = useInfiniteScroll({
     hasNextPage: hasNext && !error,
     isFetchingNextPage: isLoadingMore,
@@ -90,16 +92,25 @@ const ExhibitionPlaceSearch = ({
         <TextField
           variant="search"
           aria-label="장소 검색어"
+          // Keep native IME confirmation independent of the create/edit form.
+          form=""
+          enterKeyHint="search"
+          onSearchClick={() => {
+            if (!isComposing) startSearch(keyword);
+          }}
           autoFocus
           value={keyword}
           onChange={(event) => setKeyword(event.target.value)}
           onKeyDown={(event) => {
+            if (event.key !== "Enter") return;
             if (
-              event.key === "Enter" &&
-              !isComposing &&
-              !event.nativeEvent.isComposing
+              isComposing ||
+              event.nativeEvent.isComposing ||
+              event.keyCode === 229
             )
-              event.preventDefault();
+              return;
+            event.preventDefault();
+            startSearch(keyword);
           }}
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={(event) => {
@@ -150,11 +161,7 @@ const ExhibitionPlaceSearch = ({
             </S.RetryButton>
           </>
         )}
-        {!isComposing &&
-        keyword.trim() &&
-        !isLoading &&
-        !error &&
-        places.length === 0 ? (
+        {hasSearched && !isLoading && !error && places.length === 0 ? (
           <S.Caption role="status">검색 결과가 없습니다.</S.Caption>
         ) : null}
         <S.Caption>검색 결과에서 장소를 선택해주세요.</S.Caption>

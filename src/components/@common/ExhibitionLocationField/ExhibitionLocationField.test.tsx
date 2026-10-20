@@ -103,6 +103,7 @@ describe("ExhibitionLocationField", () => {
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "전시" },
     });
+    fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
     fireEvent.click(
       await screen.findByRole("button", { name: "검색 제공자 이름 선택" }),
     );
@@ -131,6 +132,7 @@ describe("ExhibitionLocationField", () => {
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "전시" },
     });
+    fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
     const button = await screen.findByRole("button", {
       name: "검색 제공자 이름 선택",
     });
@@ -160,6 +162,7 @@ describe("ExhibitionLocationField", () => {
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "전시" },
     });
+    fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
     fireEvent.click(
       await screen.findByRole("button", { name: "검색 제공자 이름 선택" }),
     );

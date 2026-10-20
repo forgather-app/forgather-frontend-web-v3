@@ -37,7 +37,7 @@ const response = (places: PlaceResult[] = [first], hasNext = false) =>
 let intersect: IntersectionObserverCallback;
 const advance = async () => {
   await act(async () => {
-    await vi.advanceTimersByTimeAsync(300);
+    await vi.advanceTimersByTimeAsync(600);
   });
 };
 const renderSearch = (onSelect = vi.fn(), onClose = vi.fn()) => ({
@@ -130,45 +130,107 @@ afterEach(() => {
 });
 
 describe("ExhibitionPlaceSearch", () => {
-  it.each([true, false])("조합 확인 Enter는 IME 기본 동작을 유지한다 (native isComposing: %s)", async (nativeIsComposing) => {
-    const { onClose } = renderSearch();
+  it("입력, 대기, 포커스 변경과 지우기는 검색하지 않고 빈 결과도 표시하지 않는다", async () => {
+    renderSearch();
+    const input = screen.getByRole("searchbox");
+    enterKeyword();
+    await advance();
+    fireEvent.blur(input);
+    fireEvent.focus(input);
+    expect(mockedSearch).not.toHaveBeenCalled();
+    expect(screen.queryByText("검색 결과가 없습니다.")).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "입력 내용 지우기" }));
+    await advance();
+    expect(mockedSearch).not.toHaveBeenCalled();
+  });
+
+  it("돋보기와 Enter만 정규화된 첫 페이지를 검색하고 같은 검색어도 다시 요청한다", async () => {
+    renderSearch();
+    const input = screen.getByRole("searchbox");
+    expect(input).toHaveAttribute("enterkeyhint", "search");
+    fireEvent.change(input, { target: { value: " 전시 " } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
+    });
+    expect(screen.getByText("디자인플라자")).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "Enter" });
+    });
+    expect(mockedSearch.mock.calls.map(([params]) => params)).toEqual([
+      { keyword: "전시", page: 1 },
+      { keyword: "전시", page: 1 },
+    ]);
+    fireEvent.change(input, { target: { value: "   " } });
+    fireEvent.keyDown(input, { key: "Enter" });
+    fireEvent.click(screen.getByRole("button", { name: "검색 실행" }));
+    expect(mockedSearch).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    true,
+    false,
+  ])("IME 확인 Enter와 조합 종료는 검색하지 않는다 (native isComposing: %s)", async (nativeIsComposing) => {
+    renderSearch();
     const input = screen.getByRole("searchbox");
     fireEvent.compositionStart(input);
-    fireEvent.change(input, { target: { value: "전시" } });
+    enterKeyword();
     expect(
       fireEvent.keyDown(input, {
         key: "Enter",
         isComposing: nativeIsComposing,
       }),
     ).toBe(true);
-    expect(input).toHaveValue("전시");
-    expect(onClose).not.toHaveBeenCalled();
     await advance();
-    expect(mockedSearch).not.toHaveBeenCalled();
     fireEvent.compositionEnd(input, { data: "전시" });
     await advance();
+    expect(mockedSearch).not.toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.keyDown(input, { key: "Enter" });
+    });
     expect(screen.getByText("디자인플라자")).toBeInTheDocument();
   });
 
-  it("빈 검색어로 열리고 한글 조합 중 검색하지 않다가 조합 종료 300ms 후 검색한다", async () => {
+  it("초안을 바꾸거나 지워도 다음 페이지와 재시도는 제출한 검색어를 사용한다", async () => {
+    mockedSearch
+      .mockResolvedValueOnce(response([first], true))
+      .mockRejectedValueOnce(new Error("offline"))
+      .mockResolvedValueOnce(response([second]));
     renderSearch();
-    const input = screen.getByRole("searchbox");
-    expect(input).toHaveValue("");
+    enterKeyword();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
+    fireEvent.change(screen.getByRole("searchbox"), {
+      target: { value: "다른 초안" },
+    });
     await advance();
-    expect(mockedSearch).not.toHaveBeenCalled();
-    fireEvent.compositionStart(input);
-    fireEvent.change(input, { target: { value: "전시" } });
-    await advance();
-    expect(mockedSearch).not.toHaveBeenCalled();
-    fireEvent.compositionEnd(input, { data: "전시" });
-    await advance();
+    expect(mockedSearch).toHaveBeenCalledTimes(1);
     expect(screen.getByText("디자인플라자")).toBeInTheDocument();
+    await act(async () => {
+      intersect(
+        [{ isIntersecting: true } as IntersectionObserverEntry],
+        {} as IntersectionObserver,
+      );
+    });
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "" } });
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: "다시 시도" }));
+    });
+    expect(screen.getByText("아트홀")).toBeInTheDocument();
+    expect(mockedSearch.mock.calls.map(([params]) => params)).toEqual([
+      { keyword: "전시", page: 1 },
+      { keyword: "전시", page: 2 },
+      { keyword: "전시", page: 2 },
+    ]);
   });
 
   it("이름과 도로명 주소를 보여주고 선택 시 원본 ID와 URL만 전달한다", async () => {
     const { onSelect, onClose } = renderSearch();
     enterKeyword();
-    await advance();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
     expect(screen.getByText("서울 중구 도로명")).toBeInTheDocument();
     expect(screen.queryByText("서울 중구 지번")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "디자인플라자 선택" }));
@@ -186,7 +248,9 @@ describe("ExhibitionPlaceSearch", () => {
     );
     renderSearch();
     enterKeyword();
-    await advance();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
     expect(screen.getByText("서울 중구 지번")).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
     expect(
@@ -198,7 +262,9 @@ describe("ExhibitionPlaceSearch", () => {
     mockedSearch.mockResolvedValueOnce(response([]));
     renderSearch();
     enterKeyword();
-    await advance();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
     expect(screen.getByText("검색 결과가 없습니다.")).toBeInTheDocument();
   });
 
@@ -210,7 +276,9 @@ describe("ExhibitionPlaceSearch", () => {
       .mockResolvedValueOnce(response([second]));
     renderSearch();
     enterKeyword();
-    await advance();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
     expect(screen.getByRole("alert")).toBeInTheDocument();
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: "다시 시도" }));
@@ -240,7 +308,9 @@ describe("ExhibitionPlaceSearch", () => {
     mockedSearch.mockReturnValueOnce(new Promise(() => {}));
     const { onClose } = renderSearch();
     enterKeyword();
-    await advance();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
     const signal = mockedSearch.mock.calls[0]?.[1]?.signal;
     if (closeMethod === "back")
       fireEvent.click(screen.getByRole("button", { name: "뒤로 가기" }));
@@ -255,7 +325,9 @@ describe("ExhibitionPlaceSearch", () => {
   it("검색어 입력 상태의 Escape도 검색창 기본 동작보다 먼저 화면을 닫는다", async () => {
     const { onClose } = renderSearch();
     enterKeyword();
-    await advance();
+    await act(async () => {
+      fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
+    });
     fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Escape" });
     expect(onClose).toHaveBeenCalledTimes(1);
   });
@@ -276,7 +348,7 @@ describe("ExhibitionPlaceSearch", () => {
     ]);
     renderSearch();
     enterKeyword();
-    await advance();
+    fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
     await tick(20);
     await tick(1);
     await tick(20);
@@ -293,7 +365,7 @@ describe("ExhibitionPlaceSearch", () => {
     ]);
     renderSearch();
     enterKeyword();
-    await advance();
+    fireEvent.keyDown(screen.getByRole("searchbox"), { key: "Enter" });
     await tick(20);
     await tick(1);
     await tick(20);
