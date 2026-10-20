@@ -97,7 +97,7 @@ afterEach(() => {
 describe("ExhibitionLocationField", () => {
   it("장소를 선택하면 입력칸 대신 등록된 장소 영역으로 포커스를 옮긴다", async () => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
-    const opener = screen.getByRole("button", { name: "장소 등록" });
+    const opener = screen.getByRole("button", { name: "장소 검색" });
     opener.focus();
     fireEvent.click(opener);
     fireEvent.change(screen.getByRole("searchbox"), {
@@ -117,7 +117,7 @@ describe("ExhibitionLocationField", () => {
     "escape",
   ])("%s로 검색을 취소하면 등록 버튼으로 포커스를 돌린다", (method) => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
-    const opener = screen.getByRole("button", { name: "장소 등록" });
+    const opener = screen.getByRole("button", { name: "장소 검색" });
     opener.focus();
     fireEvent.click(opener);
     expect(screen.getByRole("searchbox")).toHaveFocus();
@@ -129,7 +129,7 @@ describe("ExhibitionLocationField", () => {
   });
   it("검색 결과의 이름과 주소를 PostHog 자동 수집에서 제외한다", async () => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
-    fireEvent.click(screen.getByRole("button", { name: "장소 등록" }));
+    fireEvent.click(screen.getByRole("button", { name: "장소 검색" }));
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "전시" },
     });
@@ -151,15 +151,15 @@ describe("ExhibitionLocationField", () => {
     "   ",
   ])("장소명이 %j이면 검색을 비활성하고 입력 후 활성한다", (placeName) => {
     renderField({ ...empty, placeName });
-    expect(screen.getByRole("button", { name: "장소 등록" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "장소 검색" })).toBeDisabled();
     fireEvent.change(screen.getByRole("textbox", { name: "전시 장소명" }), {
       target: { value: "직접 입력" },
     });
-    expect(screen.getByRole("button", { name: "장소 등록" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "장소 검색" })).toBeEnabled();
   });
   it("선택과 이름 편집은 직접 입력한 이름과 연결만 보관하며 검색 결과를 폐기한다", async () => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
-    fireEvent.click(screen.getByRole("button", { name: "장소 등록" }));
+    fireEvent.click(screen.getByRole("button", { name: "장소 검색" }));
     fireEvent.change(screen.getByRole("searchbox"), {
       target: { value: "전시" },
     });
