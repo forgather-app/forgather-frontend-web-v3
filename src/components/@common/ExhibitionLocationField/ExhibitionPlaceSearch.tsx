@@ -149,7 +149,9 @@ const ExhibitionPlaceSearch = ({
           <S.Caption role="status">검색 결과가 없습니다.</S.Caption>
         ) : null}
         <S.Caption>검색 결과에서 장소를 선택해주세요.</S.Caption>
-        <S.Sentinel ref={targetRef} aria-hidden="true" />
+        {hasNext && !isLoading && !isLoadingMore && !error ? (
+          <S.Sentinel ref={targetRef} aria-hidden="true" />
+        ) : null}
       </S.Content>
     </S.Dialog>
   );

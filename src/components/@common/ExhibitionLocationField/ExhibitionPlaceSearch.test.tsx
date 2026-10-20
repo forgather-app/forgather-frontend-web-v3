@@ -54,6 +54,47 @@ const enterKeyword = () =>
     target: { value: "전시" },
   });
 
+// A visible target emits once on observe, then only on another observation or visibility change.
+const observeVisibleTargets = () => {
+  vi.stubGlobal(
+    "IntersectionObserver",
+    class {
+      callback: IntersectionObserverCallback;
+      timer: ReturnType<typeof setTimeout> | undefined;
+      constructor(callback: IntersectionObserverCallback) {
+        this.callback = callback;
+      }
+      observe() {
+        this.timer = setTimeout(
+          () =>
+            this.callback(
+              [{ isIntersecting: true } as IntersectionObserverEntry],
+              this as unknown as IntersectionObserver,
+            ),
+          0,
+        );
+      }
+      disconnect() {
+        clearTimeout(this.timer);
+      }
+    },
+  );
+};
+const delayedPages = (pages: { places: PlaceResult[]; hasNext: boolean }[]) => {
+  for (const page of pages)
+    mockedSearch.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => resolve(response(page.places, page.hasNext)), 20);
+        }),
+    );
+};
+const tick = async (milliseconds: number) => {
+  await act(async () => {
+    await vi.advanceTimersByTimeAsync(milliseconds);
+  });
+};
+
 beforeEach(() => {
   vi.useFakeTimers();
   // jsdom does not implement the native dialog methods; exercise our handlers with its open state.
@@ -206,5 +247,42 @@ describe("ExhibitionPlaceSearch", () => {
     dialog.open = false;
     fireEvent(dialog, new Event("close"));
     expect(onClose).toHaveBeenCalledTimes(1);
+  });
+  it("첫 페이지가 짧아 감지 요소가 계속 보일 때도 다음 페이지를 불러온다", async () => {
+    observeVisibleTargets();
+    delayedPages([
+      { places: [first], hasNext: true },
+      { places: [second], hasNext: false },
+    ]);
+    renderSearch();
+    enterKeyword();
+    await advance();
+    await tick(20);
+    await tick(1);
+    await tick(20);
+    expect(screen.getByText("디자인플라자")).toBeInTheDocument();
+    expect(screen.getByText("아트홀")).toBeInTheDocument();
+  });
+
+  it("중복 결과뿐인 페이지 뒤에도 감지 요소를 재관찰해 다음 페이지를 불러온다", async () => {
+    observeVisibleTargets();
+    delayedPages([
+      { places: [first], hasNext: true },
+      { places: [first], hasNext: true },
+      { places: [second], hasNext: false },
+    ]);
+    renderSearch();
+    enterKeyword();
+    await advance();
+    await tick(20);
+    await tick(1);
+    await tick(20);
+    await tick(1);
+    await tick(20);
+    expect(screen.getAllByRole("listitem")).toHaveLength(2);
+    expect(screen.getByText("아트홀")).toBeInTheDocument();
+    expect(mockedSearch.mock.calls.map(([params]) => params.page)).toEqual([
+      1, 2, 3,
+    ]);
   });
 });
