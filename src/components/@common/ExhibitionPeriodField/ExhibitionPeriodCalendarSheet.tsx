@@ -7,6 +7,7 @@ import * as S from "./ExhibitionPeriodCalendarSheet.styles";
 
 interface ExhibitionPeriodCalendarSheetProps {
   /** 시트가 열릴 때 초기 선택값으로 사용할 시작일 */
+  onClear: () => void;
   initialStartDate: Date | null;
   /** 시트가 열릴 때 초기 선택값으로 사용할 종료일 */
   initialEndDate: Date | null;
@@ -18,6 +19,7 @@ const ExhibitionPeriodCalendarSheet = ({
   initialStartDate,
   initialEndDate,
   onConfirm,
+  onClear,
 }: ExhibitionPeriodCalendarSheetProps) => {
   const [range, setRange] = useState<DateRange | undefined>(
     initialStartDate
@@ -48,6 +50,13 @@ const ExhibitionPeriodCalendarSheet = ({
         />
       </S.CalendarWrapper>
       <S.Footer>
+        {(initialStartDate || initialEndDate) && (
+          <Button
+            text="전시 기간 삭제"
+            variant="underlined"
+            onClick={onClear}
+          />
+        )}
         <Button text="확인" onClick={handleConfirm} disabled={!canConfirm} />
       </S.Footer>
     </>

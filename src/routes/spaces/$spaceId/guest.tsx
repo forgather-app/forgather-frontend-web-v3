@@ -5,8 +5,7 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
-import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
+import { useGuestBookWritingAvailability } from "@/hooks/@common/useGuestBookWritingAvailability";
 import GuestSpaceLayout from "@/pages/guestSpace/GuestSpaceLayout";
 import NotFoundPage from "@/pages/notFound/NotFoundPage";
 import { trackEvent } from "@/utils/analytics";
@@ -23,12 +22,7 @@ function RouteComponent() {
   const { spaceId } = Route.useParams();
   const navigate = useNavigate();
   const matches = useMatches();
-  const { data: space } = useGetSpaceInformation<SpaceResponse>(spaceId, {
-    query: {
-      select: (response) =>
-        (response as unknown as ApiResponseSpaceResponse).data ?? {},
-    },
-  });
+  const { space, isWritable } = useGuestBookWritingAvailability(spaceId);
 
   useEffect(() => {
     if (!space?.name) return;
@@ -55,6 +49,7 @@ function RouteComponent() {
 
   return (
     <GuestSpaceLayout
+      isWritable={isWritable}
       activeTab={isGuestBookTab ? "right" : "left"}
       onArtworkTabClick={() =>
         navigate({

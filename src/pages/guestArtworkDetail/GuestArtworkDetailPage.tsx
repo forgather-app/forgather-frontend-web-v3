@@ -6,9 +6,11 @@ import Button from "@/components/@common/Button/Button";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
+import { useGuestBookWritingAvailability } from "@/hooks/@common/useGuestBookWritingAvailability";
 import { trackEvent } from "@/utils/analytics";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { getYoutubeEmbedUrl } from "@/utils/getYoutubeEmbedUrl";
+import { GUEST_BOOK_PERIOD_MESSAGE } from "@/utils/guestBookWritingPolicy";
 import { linkifyText } from "@/utils/linkifyText";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./GuestArtworkDetailPage.styles";
@@ -30,6 +32,7 @@ const GuestArtworkDetailPage = ({
   onBack,
   onWriteClick,
 }: GuestArtworkDetailPageProps) => {
+  const { isWritable } = useGuestBookWritingAvailability(spaceId);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0);
 
@@ -170,7 +173,8 @@ const GuestArtworkDetailPage = ({
 
       <S.WriteCtaWrapper>
         <Button
-          text="방명록 작성하기"
+          text={isWritable ? "방명록 작성하기" : GUEST_BOOK_PERIOD_MESSAGE}
+          disabled={!isWritable}
           onClick={onWriteClick}
           variant="tertiary"
         />

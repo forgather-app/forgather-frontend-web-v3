@@ -6,6 +6,8 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { useGuestBookWritingAvailability } from "@/hooks/@common/useGuestBookWritingAvailability";
+import { GUEST_BOOK_PERIOD_MESSAGE } from "@/utils/guestBookWritingPolicy";
 import GuestBookConfirmModal from "./components/GuestBookConfirmModal/GuestBookConfirmModal";
 import * as S from "./GuestBookWritePage.styles";
 import { useGuestBookSubmit } from "./hooks/useGuestBookSubmit";
@@ -39,9 +41,15 @@ const GuestBookWritePage = ({
     openConfirm,
     closeConfirm,
   } = useGuestBookWriteForm();
-  const { submit, isSubmitting } = useGuestBookSubmit();
+  const { isWritable, checkAvailability } =
+    useGuestBookWritingAvailability(spaceCode);
+  const { submit, isSubmitting } = useGuestBookSubmit(checkAvailability);
 
   const handleConfirm = () => {
+    if (!isWritable) {
+      closeConfirm();
+      return;
+    }
     submit(
       {
         spaceCode,
@@ -55,7 +63,16 @@ const GuestBookWritePage = ({
 
   return (
     <NavigationBarLayout title="방명록 남기기" onBackClick={onBack}>
-      <S.PageWrapper onSubmit={openConfirm} noValidate>
+      <S.PageWrapper
+        onSubmit={(event) => {
+          if (!isWritable) {
+            event.preventDefault();
+            return;
+          }
+          void openConfirm(event);
+        }}
+        noValidate
+      >
         <S.FieldsWrapper>
           <S.FieldGroup>
             <S.LabelRow>
@@ -129,11 +146,15 @@ const GuestBookWritePage = ({
         </S.FieldsWrapper>
 
         <S.Footer>
-          <Button text="작성하기" type="submit" disabled={!isValid} />
+          <Button
+            text={isWritable ? "작성하기" : GUEST_BOOK_PERIOD_MESSAGE}
+            type="submit"
+            disabled={!isValid || !isWritable || isSubmitting}
+          />
         </S.Footer>
       </S.PageWrapper>
       <GuestBookConfirmModal
-        isOpen={isConfirmOpen}
+        isOpen={isConfirmOpen && isWritable}
         onClose={closeConfirm}
         onConfirm={handleConfirm}
         isSubmitting={isSubmitting}

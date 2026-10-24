@@ -15,7 +15,7 @@ interface ExhibitionPeriodFieldProps {
   /** 선택된 전시 시작일 · 종료일 */
   value: ExhibitionPeriodValue;
   /** 시작일 · 종료일을 모두 선택하고 확인을 누르면 호출됩니다 */
-  onChange: (value: { startDate: Date; endDate: Date }) => void;
+  onChange: (value: ExhibitionPeriodValue) => void;
   /** 에러 메시지 */
   errorMessage?: string;
 }
@@ -85,6 +85,10 @@ const ExhibitionPeriodField = ({
             initialStartDate={value.startDate}
             initialEndDate={value.endDate}
             onConfirm={handleConfirm}
+            onClear={() => {
+              onChange({ startDate: null, endDate: null });
+              setIsSheetOpen(false);
+            }}
           />
         </BottomSheet>
       )}

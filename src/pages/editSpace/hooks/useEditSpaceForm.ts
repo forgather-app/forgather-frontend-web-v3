@@ -1,11 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   getGetSpaceInformationQueryKey,
   useUpdate,
 } from "@/api/generated/space-스페이스";
-import type { SpaceResponse } from "@/api/model";
+import type { GuestBookWritingPolicy, SpaceResponse } from "@/api/model";
 import {
   type ExhibitionLocationValue,
   toExhibitionLocationPayload,
@@ -23,12 +23,15 @@ import {
 } from "@/pages/createSpace/utils/createSpaceValidation";
 import { parseDateOnlyString, toDateOnlyString } from "@/utils/date";
 
+import { validateGuestBookWritingPeriod } from "@/utils/guestBookWritingPolicy";
+
 interface EditSpaceFormValues {
   spaceName: string;
   description: string;
   linkUrl: string;
   linkName: string;
   exhibitionPeriod: ExhibitionPeriodValue;
+  guestBookWritingPolicy: GuestBookWritingPolicy;
   exhibitionLocation: ExhibitionLocationValue;
 }
 
@@ -55,11 +58,13 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
   const {
     control,
     handleSubmit,
+    getValues,
     trigger,
     formState: { errors, touchedFields, isValid },
   } = useForm<EditSpaceFormValues>({
     mode: "onChange",
     defaultValues: {
+      guestBookWritingPolicy: space.guestBookWritingPolicy ?? "ALWAYS",
       spaceName: space.name ?? "",
       description: space.description ?? "",
       linkUrl: space.linkUrl ?? "",
@@ -84,6 +89,10 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
   useEffect(() => {
     trigger();
   }, [trigger]);
+
+  const policy = useWatch({ control, name: "guestBookWritingPolicy" });
+  const period = useWatch({ control, name: "exhibitionPeriod" });
+  const periodValidation = validateGuestBookWritingPeriod(policy, period);
 
   const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(
     !(space.isPublic ?? true),
@@ -122,6 +131,10 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
           spaceCode: spaceId,
           data: {
             ...toExhibitionLocationPayload(values.exhibitionLocation),
+            ...(values.guestBookWritingPolicy !==
+            (space.guestBookWritingPolicy ?? "ALWAYS")
+              ? { guestBookWritingPolicy: values.guestBookWritingPolicy }
+              : {}),
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
@@ -132,7 +145,9 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
                   exhibitionStartDate: toDateOnlyString(startDate),
                   exhibitionEndDate: toDateOnlyString(endDate),
                 }
-              : {}),
+              : space.exhibitionStartDate || space.exhibitionEndDate
+                ? { isDeleteExhibitionPeriod: true }
+                : {}),
           },
         },
         {
@@ -153,6 +168,22 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    exhibitionPeriodRules: {
+      validate: (value: ExhibitionPeriodValue) =>
+        validateGuestBookWritingPeriod(
+          getValues("guestBookWritingPolicy"),
+          value,
+        ),
+      deps: "guestBookWritingPolicy" as const,
+    },
+    guestBookWritingPolicyRules: {
+      validate: (value: GuestBookWritingPolicy) =>
+        validateGuestBookWritingPeriod(value, getValues("exhibitionPeriod")),
+      deps: "exhibitionPeriod" as const,
+    },
+    isExhibitionPeriodComplete: !!period.startDate && !!period.endDate,
+    exhibitionPeriodError:
+      periodValidation === true ? undefined : periodValidation,
     exhibitionLocationRules: { validate: validateExhibitionLocation },
     exhibitionLocationError: errors.exhibitionLocation?.message,
     spaceNameError,
@@ -160,7 +191,7 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
     linkNameError,
     linkUrlError,
     handleLinkUrlBlur,
-    isValid,
+    isValid: isValid && periodValidation === true,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
     isSubmitting: isPending,

@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 import Button from "@/components/@common/Button/Button";
 import GuestHeader from "@/components/@common/GuestHeader/GuestHeader";
 import TabMenu from "@/components/@common/TabMenu/TabMenu";
+import { GUEST_BOOK_PERIOD_MESSAGE } from "@/utils/guestBookWritingPolicy";
 import * as S from "./GuestSpaceLayout.styles";
 
 interface GuestSpaceLayoutProps {
   /** 작품/방명록 탭 콘텐츠 (라우트 Outlet) */
   children: ReactNode;
+  isWritable?: boolean;
   /** 현재 활성 탭 */
   activeTab: "left" | "right";
   /** 작품 탭 클릭 핸들러 */
@@ -19,6 +21,7 @@ interface GuestSpaceLayoutProps {
 
 const GuestSpaceLayout = ({
   children,
+  isWritable = true,
   activeTab,
   onArtworkTabClick,
   onGuestBookTabClick,
@@ -38,7 +41,8 @@ const GuestSpaceLayout = ({
       <S.ContentArea>{children}</S.ContentArea>
       <S.WriteCtaWrapper>
         <Button
-          text="방명록 작성하기"
+          text={isWritable ? "방명록 작성하기" : GUEST_BOOK_PERIOD_MESSAGE}
+          disabled={!isWritable}
           onClick={onWriteClick}
           variant="tertiary"
         />
