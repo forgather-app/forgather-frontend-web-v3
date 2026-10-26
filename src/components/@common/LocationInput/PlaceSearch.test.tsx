@@ -10,7 +10,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { search } from "@/api/generated/space-스페이스";
 import type { PlaceResult } from "@/api/model/placeResult";
 import { theme } from "@/styles/theme";
-import ExhibitionPlaceSearch from "./ExhibitionPlaceSearch";
+import PlaceSearch from "./PlaceSearch";
 
 vi.mock("@/api/generated/space-스페이스", () => ({ search: vi.fn() }));
 const mockedSearch = vi.mocked(search);
@@ -43,7 +43,7 @@ const advance = async () => {
 const renderSearch = (onSelect = vi.fn(), onClose = vi.fn()) => ({
   ...render(
     <ThemeProvider theme={theme}>
-      <ExhibitionPlaceSearch onSelect={onSelect} onClose={onClose} />
+      <PlaceSearch onSelect={onSelect} onClose={onClose} />
     </ThemeProvider>,
   ),
   onSelect,
@@ -129,7 +129,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("ExhibitionPlaceSearch", () => {
+describe("PlaceSearch", () => {
   it("입력, 대기, 포커스 변경과 지우기는 검색하지 않고 빈 결과도 표시하지 않는다", async () => {
     renderSearch();
     const input = screen.getByRole("searchbox");

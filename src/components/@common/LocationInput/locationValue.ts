@@ -1,17 +1,17 @@
 import { CONSTRAINTS } from "@/constants/constraints";
 import { getGraphemeLength } from "@/utils/getGraphemeLength";
 
-export interface ExhibitionLocationValue {
+export interface LocationInputValue {
   placeName: string;
   placeId: string;
   placeUrl: string;
 }
 
-export const validateExhibitionLocation = ({
+export const validateLocationInput = ({
   placeName,
   placeId,
   placeUrl,
-}: ExhibitionLocationValue): true | string => {
+}: LocationInputValue): true | string => {
   if (
     getGraphemeLength(placeName) >
     CONSTRAINTS.CREATE_SPACE.PLACE_NAME_MAX_LENGTH
@@ -30,11 +30,11 @@ export const validateExhibitionLocation = ({
   return true;
 };
 
-export const toExhibitionLocationPayload = ({
+export const toLocationInputPayload = ({
   placeName,
   placeId,
   placeUrl,
-}: ExhibitionLocationValue): ExhibitionLocationValue => ({
+}: LocationInputValue): LocationInputValue => ({
   placeName: placeName.trim() ? placeName : "",
   placeId,
   placeUrl,

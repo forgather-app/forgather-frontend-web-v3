@@ -2,21 +2,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextField from "@/components/@common/TextField/TextField";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
-import * as S from "./ExhibitionPlaceSearch.styles";
-import type { ExhibitionLocationValue } from "./exhibitionLocation";
-import useExhibitionPlaceSearch from "./useExhibitionPlaceSearch";
+import type { LocationInputValue } from "./locationValue";
+import * as S from "./PlaceSearch.styles";
+import usePlaceSearch from "./usePlaceSearch";
 
-interface ExhibitionPlaceSearchProps {
-  onSelect: (
-    place: Pick<ExhibitionLocationValue, "placeId" | "placeUrl">,
-  ) => void;
+interface PlaceSearchProps {
+  onSelect: (place: Pick<LocationInputValue, "placeId" | "placeUrl">) => void;
   onClose: () => void;
 }
 
-const ExhibitionPlaceSearch = ({
-  onSelect,
-  onClose,
-}: ExhibitionPlaceSearchProps) => {
+const PlaceSearch = ({ onSelect, onClose }: PlaceSearchProps) => {
   const [keyword, setKeyword] = useState("");
   const [isComposing, setIsComposing] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -33,7 +28,7 @@ const ExhibitionPlaceSearch = ({
     loadMore,
     retry,
     cancel,
-  } = useExhibitionPlaceSearch();
+  } = usePlaceSearch();
   const { targetRef } = useInfiniteScroll({
     hasNextPage: hasNext && !error,
     isFetchingNextPage: isLoadingMore,
@@ -172,4 +167,4 @@ const ExhibitionPlaceSearch = ({
     </S.Dialog>
   );
 };
-export default ExhibitionPlaceSearch;
+export default PlaceSearch;

@@ -4,10 +4,10 @@ import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
-import ExhibitionLocationField from "@/components/@common/ExhibitionLocationField/ExhibitionLocationField";
-import ExhibitionPeriodField from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import GuestBookWritingPolicyField from "@/components/@common/GuestBookWritingPolicyField/GuestBookWritingPolicyField";
+import LocationInput from "@/components/@common/LocationInput/LocationInput";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
+import PeriodInput from "@/components/@common/PeriodInput/PeriodInput";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
@@ -146,10 +146,11 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
             name="exhibitionPeriod"
             rules={exhibitionPeriodRules}
             render={({ field }) => (
-              <ExhibitionPeriodField
+              <PeriodInput
                 errorMessage={exhibitionPeriodError}
                 value={field.value}
                 onChange={field.onChange}
+                highlightToday={true}
               />
             )}
           />
@@ -160,7 +161,7 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
           name="exhibitionLocation"
           rules={exhibitionLocationRules}
           render={({ field }) => (
-            <ExhibitionLocationField
+            <LocationInput
               value={field.value}
               onChange={field.onChange}
               onBlur={field.onBlur}

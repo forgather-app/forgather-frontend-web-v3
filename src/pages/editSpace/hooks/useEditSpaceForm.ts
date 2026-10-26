@@ -7,11 +7,11 @@ import {
 } from "@/api/generated/space-스페이스";
 import type { GuestBookWritingPolicy, SpaceResponse } from "@/api/model";
 import {
-  type ExhibitionLocationValue,
-  toExhibitionLocationPayload,
-  validateExhibitionLocation,
-} from "@/components/@common/ExhibitionLocationField/exhibitionLocation";
-import type { ExhibitionPeriodValue } from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
+  type LocationInputValue,
+  toLocationInputPayload,
+  validateLocationInput,
+} from "@/components/@common/LocationInput/locationValue";
+import type { PeriodInputValue } from "@/components/@common/PeriodInput/PeriodInput";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
@@ -29,9 +29,9 @@ interface EditSpaceFormValues {
   description: string;
   linkUrl: string;
   linkName: string;
-  exhibitionPeriod: ExhibitionPeriodValue;
+  exhibitionPeriod: PeriodInputValue;
   guestBookWritingPolicy: GuestBookWritingPolicy;
-  exhibitionLocation: ExhibitionLocationValue;
+  exhibitionLocation: LocationInputValue;
 }
 
 const spaceNameRules = {
@@ -129,7 +129,7 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
         {
           spaceCode: spaceId,
           data: {
-            ...toExhibitionLocationPayload(values.exhibitionLocation),
+            ...toLocationInputPayload(values.exhibitionLocation),
             ...(values.guestBookWritingPolicy !==
             (space.guestBookWritingPolicy ?? "ALWAYS")
               ? { guestBookWritingPolicy: values.guestBookWritingPolicy }
@@ -168,7 +168,7 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
     descriptionRules,
     linkNameRules,
     exhibitionPeriodRules: {
-      validate: (value: ExhibitionPeriodValue) =>
+      validate: (value: PeriodInputValue) =>
         validateGuestBookWritingPeriod(
           getValues("guestBookWritingPolicy"),
           value,
@@ -183,7 +183,7 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
     isExhibitionPeriodComplete: !!period.startDate && !!period.endDate,
     exhibitionPeriodError:
       periodValidation === true ? undefined : periodValidation,
-    exhibitionLocationRules: { validate: validateExhibitionLocation },
+    exhibitionLocationRules: { validate: validateLocationInput },
     exhibitionLocationError: errors.exhibitionLocation?.message,
     spaceNameError,
     descriptionError,

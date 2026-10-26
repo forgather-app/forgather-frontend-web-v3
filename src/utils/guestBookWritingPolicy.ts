@@ -1,11 +1,11 @@
 import type { GuestBookWritingPolicy, SpaceResponse } from "@/api/model";
-import type { ExhibitionPeriodValue } from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
+import type { PeriodInputValue } from "@/components/@common/PeriodInput/PeriodInput";
 
 export const GUEST_BOOK_PERIOD_MESSAGE =
   "전시 기간에만 방명록을 남길 수 있어요";
 export const validateGuestBookWritingPeriod = (
   policy: GuestBookWritingPolicy,
-  period: ExhibitionPeriodValue,
+  period: PeriodInputValue,
 ): true | string =>
   policy === "EXHIBITION_PERIOD" && (!period.startDate || !period.endDate)
     ? "전시 기간에만 작성하도록 설정하려면 전시 기간을 입력해주세요."

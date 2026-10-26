@@ -33,7 +33,7 @@ const dispose = (session: SearchSession | null) => {
   session.controller?.abort();
 };
 
-const useExhibitionPlaceSearch = () => {
+const usePlaceSearch = () => {
   const [state, setState] = useState<SearchState>(emptyState);
   const sessionRef = useRef<SearchSession | null>(null);
 
@@ -134,4 +134,4 @@ const useExhibitionPlaceSearch = () => {
   return { ...state, startSearch, loadMore, retry, cancel };
 };
 
-export default useExhibitionPlaceSearch;
+export default usePlaceSearch;

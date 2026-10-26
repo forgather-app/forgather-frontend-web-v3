@@ -5,23 +5,19 @@ import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { apiClient } from "@/api/apiClient";
 import { theme } from "@/styles/theme";
-import ExhibitionLocationField from "./ExhibitionLocationField";
+import LocationInput from "./LocationInput";
 import {
-  type ExhibitionLocationValue,
-  validateExhibitionLocation,
-} from "./exhibitionLocation";
+  type LocationInputValue,
+  validateLocationInput,
+} from "./locationValue";
 
 const empty = { placeName: "", placeId: "", placeUrl: "" };
-const Harness = ({
-  initial = empty,
-}: {
-  initial?: ExhibitionLocationValue;
-}) => {
+const Harness = ({ initial = empty }: { initial?: LocationInputValue }) => {
   const [value, setValue] = useState(initial);
-  const validation = validateExhibitionLocation(value);
+  const validation = validateLocationInput(value);
   return (
     <>
-      <ExhibitionLocationField
+      <LocationInput
         value={value}
         onChange={setValue}
         errorMessage={validation === true ? undefined : validation}
@@ -94,7 +90,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("ExhibitionLocationField", () => {
+describe("LocationInput", () => {
   it("장소를 선택하면 입력칸 대신 등록된 장소 영역으로 포커스를 옮긴다", async () => {
     renderField({ ...empty, placeName: "직접 입력한 장소" });
     const opener = screen.getByRole("button", { name: "장소 검색" });
