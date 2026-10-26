@@ -2,6 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCreate } from "@/api/generated/space-스페이스";
 import type { ApiResponseCreateSpaceResponse } from "@/api/model";
+import {
+  type ExhibitionLocationValue,
+  toExhibitionLocationPayload,
+  validateExhibitionLocation,
+} from "@/components/@common/ExhibitionLocationField/exhibitionLocation";
 import type { ExhibitionPeriodValue } from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
@@ -20,6 +25,7 @@ interface CreateSpaceFormValues {
   linkUrl: string;
   linkName: string;
   exhibitionPeriod: ExhibitionPeriodValue;
+  exhibitionLocation: ExhibitionLocationValue;
 }
 
 const spaceNameRules = {
@@ -53,6 +59,7 @@ export const useCreateSpaceForm = () => {
       linkUrl: "",
       linkName: "",
       exhibitionPeriod: { startDate: null, endDate: null },
+      exhibitionLocation: { placeName: "", placeId: "", placeUrl: "" },
     },
   });
 
@@ -89,6 +96,7 @@ export const useCreateSpaceForm = () => {
       createSpace(
         {
           data: {
+            ...toExhibitionLocationPayload(values.exhibitionLocation),
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
@@ -128,6 +136,8 @@ export const useCreateSpaceForm = () => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    exhibitionLocationRules: { validate: validateExhibitionLocation },
+    exhibitionLocationError: errors.exhibitionLocation?.message,
     spaceNameError,
     descriptionError,
     linkNameError,
