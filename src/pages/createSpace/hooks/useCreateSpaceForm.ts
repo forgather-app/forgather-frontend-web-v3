@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useCreate } from "@/api/generated/space-스페이스";
-import type { ApiResponseCreateSpaceResponse } from "@/api/model";
+import type {
+  ApiResponseCreateSpaceResponse,
+  GuestBookWritingPolicy,
+} from "@/api/model";
 import {
   type ExhibitionLocationValue,
   toExhibitionLocationPayload,
@@ -18,6 +21,7 @@ import {
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
 import { toDateOnlyString } from "@/utils/date";
+import { validateGuestBookWritingPeriod } from "@/utils/guestBookWritingPolicy";
 
 interface CreateSpaceFormValues {
   spaceName: string;
@@ -25,6 +29,7 @@ interface CreateSpaceFormValues {
   linkUrl: string;
   linkName: string;
   exhibitionPeriod: ExhibitionPeriodValue;
+  guestBookWritingPolicy: GuestBookWritingPolicy;
   exhibitionLocation: ExhibitionLocationValue;
 }
 
@@ -50,10 +55,12 @@ export const useCreateSpaceForm = () => {
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors, touchedFields, isValid },
   } = useForm<CreateSpaceFormValues>({
     mode: "onChange",
     defaultValues: {
+      guestBookWritingPolicy: "ALWAYS",
       spaceName: "",
       description: "",
       linkUrl: "",
@@ -62,6 +69,10 @@ export const useCreateSpaceForm = () => {
       exhibitionLocation: { placeName: "", placeId: "", placeUrl: "" },
     },
   });
+
+  const policy = useWatch({ control, name: "guestBookWritingPolicy" });
+  const period = useWatch({ control, name: "exhibitionPeriod" });
+  const periodValidation = validateGuestBookWritingPeriod(policy, period);
 
   const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(false);
   const [linkUrlFormatError, setLinkUrlFormatError] = useState<
@@ -97,6 +108,7 @@ export const useCreateSpaceForm = () => {
         {
           data: {
             ...toExhibitionLocationPayload(values.exhibitionLocation),
+            guestBookWritingPolicy: values.guestBookWritingPolicy,
             name: values.spaceName,
             description: values.description,
             isPublic: !isGuestBookPrivate,
@@ -136,6 +148,22 @@ export const useCreateSpaceForm = () => {
     spaceNameRules,
     descriptionRules,
     linkNameRules,
+    exhibitionPeriodRules: {
+      validate: (value: ExhibitionPeriodValue) =>
+        validateGuestBookWritingPeriod(
+          getValues("guestBookWritingPolicy"),
+          value,
+        ),
+      deps: "guestBookWritingPolicy" as const,
+    },
+    guestBookWritingPolicyRules: {
+      validate: (value: GuestBookWritingPolicy) =>
+        validateGuestBookWritingPeriod(value, getValues("exhibitionPeriod")),
+      deps: "exhibitionPeriod" as const,
+    },
+    isExhibitionPeriodComplete: !!period.startDate && !!period.endDate,
+    exhibitionPeriodError:
+      periodValidation === true ? undefined : periodValidation,
     exhibitionLocationRules: { validate: validateExhibitionLocation },
     exhibitionLocationError: errors.exhibitionLocation?.message,
     spaceNameError,
@@ -143,7 +171,7 @@ export const useCreateSpaceForm = () => {
     linkNameError,
     linkUrlError,
     handleLinkUrlBlur,
-    isValid,
+    isValid: isValid && periodValidation === true,
     isGuestBookPrivate,
     setIsGuestBookPrivate,
     isSubmitting: isPending,

@@ -208,6 +208,7 @@ describe("CreateSpacePage 장소 연결", () => {
     await choosePlace();
     const payload = await submit();
     expect(payload).toEqual({
+      guestBookWritingPolicy: "ALWAYS",
       name: "새 스페이스",
       description: "",
       isPublic: true,
@@ -294,6 +295,73 @@ describe("CreateSpacePage 장소 연결", () => {
       placeName: "직접 입력한 장소",
       placeId: "",
       placeUrl: "",
+    });
+  });
+});
+
+describe("CreateSpacePage 작성 정책", () => {
+  it("기본 정책을 전송한다", async () => {
+    renderPage();
+    expect(screen.getByRole("radio", { name: "항상 작성 가능" })).toBeChecked();
+    change("스페이스명", "새 전시");
+    expect(await submit()).toMatchObject({ guestBookWritingPolicy: "ALWAYS" });
+  });
+  it("날짜 없는 제한을 유지하고 저장을 차단하며 상시로 바꾸면 해제한다", async () => {
+    const scroll = vi.fn();
+    Element.prototype.scrollIntoView = scroll;
+    renderPage();
+    change("스페이스명", "새 전시");
+    fireEvent.click(
+      screen.getByRole("radio", { name: "전시 기간에만 작성 가능" }),
+    );
+    expect(
+      screen.getByRole("radio", { name: "전시 기간에만 작성 가능" }),
+    ).toBeChecked();
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "전시 기간에만 작성하도록 설정하려면 전시 기간을 입력해주세요.",
+    );
+    expect(screen.getByRole("button", { name: "시작일" })).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+    expect(screen.getByRole("button", { name: "완료" })).toBeDisabled();
+    expect(scroll).toHaveBeenCalled();
+    await act(async () => {
+      fireEvent.submit(
+        screen.getByRole("button", { name: "완료" }).closest("form")!,
+      );
+    });
+    expect(mutationCalls()).toHaveLength(0);
+    fireEvent.click(screen.getByRole("radio", { name: "항상 작성 가능" }));
+    await waitFor(() =>
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument(),
+    );
+    expect(await submit()).toMatchObject({ guestBookWritingPolicy: "ALWAYS" });
+  });
+  it("제한 정책에서 날짜를 삭제하고 다시 입력할 수 있다", async () => {
+    renderPage();
+    await fillForm();
+    fireEvent.click(
+      screen.getByRole("radio", { name: "전시 기간에만 작성 가능" }),
+    );
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "시작일" }));
+    fireEvent.click(screen.getByRole("button", { name: "전시 기간 삭제" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "전시 기간에만 작성하도록 설정하려면 전시 기간을 입력해주세요.",
+    );
+    expect(
+      screen.getByRole("radio", { name: "전시 기간에만 작성 가능" }),
+    ).toBeChecked();
+    expect(screen.getByRole("button", { name: "완료" })).toBeDisabled();
+    await fillForm();
+    await waitFor(() =>
+      expect(screen.queryByRole("alert")).not.toBeInTheDocument(),
+    );
+    expect(await submit()).toMatchObject({
+      guestBookWritingPolicy: "EXHIBITION_PERIOD",
     });
   });
 });

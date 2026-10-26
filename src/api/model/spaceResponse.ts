@@ -5,9 +5,14 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
+import type { GuestBookWritingPolicy } from "./guestBookWritingPolicy";
 import type { SpaceHostInfoResponse } from './spaceHostInfoResponse';
 
 export interface SpaceResponse {
+  /** Backend GuestBookWritingPolicy contract; pending deployed OpenAPI refresh. */
+  guestBookWritingPolicy?: GuestBookWritingPolicy | null;
+  isGuestBookWritable?: boolean;
+
   /** 스페이스 ID */
   id?: number;
   /** 스페이스 코드 */

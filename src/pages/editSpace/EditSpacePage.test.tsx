@@ -34,6 +34,7 @@ const original = {
   placeUrl: providerPlace.placeUrl,
 };
 let failSearch = false;
+let savedPolicy: "ALWAYS" | "EXHIBITION_PERIOD" = "ALWAYS";
 const spyRequest = () => vi.spyOn(apiClient, "request");
 let request: ReturnType<typeof spyRequest>;
 const renderPage = () => {
@@ -81,6 +82,7 @@ const choosePlace = async () => {
 };
 beforeEach(() => {
   failSearch = false;
+  savedPolicy = "ALWAYS";
   Object.defineProperty(HTMLDialogElement.prototype, "showModal", {
     configurable: true,
     value: function (this: HTMLDialogElement) {
@@ -105,7 +107,10 @@ beforeEach(() => {
       if (failSearch) throw new Error("offline");
       return { data: { data: { places: [providerPlace], hasNext: false } } };
     }
-    if (config.method === "GET") return { data: { data: original } };
+    if (config.method === "GET")
+      return {
+        data: { data: { ...original, guestBookWritingPolicy: savedPolicy } },
+      };
     return { data: { data: { spaceCode: "created-space" } } };
   });
 });
@@ -335,6 +340,43 @@ describe("EditSpacePage 장소 연결", () => {
       placeName: "직접 입력한 장소",
       placeId: "",
       placeUrl: "",
+    });
+  });
+});
+
+describe("EditSpacePage 작성 정책", () => {
+  it("저장된 제한 정책을 복원하고 변경하지 않으면 생략한다", async () => {
+    savedPolicy = "EXHIBITION_PERIOD";
+    renderPage();
+    expect(
+      await screen.findByRole("radio", { name: "전시 기간에만 작성 가능" }),
+    ).toBeChecked();
+    expect(await submit()).not.toHaveProperty("guestBookWritingPolicy");
+  });
+  it("정책 변경과 기간 삭제를 함께 전송한다", async () => {
+    savedPolicy = "EXHIBITION_PERIOD";
+    renderPage();
+    await screen.findByRole("radio", { name: "전시 기간에만 작성 가능" });
+    fireEvent.click(screen.getByRole("button", { name: "시작일" }));
+    fireEvent.click(screen.getByRole("button", { name: "전시 기간 삭제" }));
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "완료" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("radio", { name: "항상 작성 가능" }));
+    const payload = await submit();
+    expect(payload).toMatchObject({
+      guestBookWritingPolicy: "ALWAYS",
+      isDeleteExhibitionPeriod: true,
+    });
+    expect(payload).not.toHaveProperty("exhibitionStartDate");
+    expect(payload).not.toHaveProperty("exhibitionEndDate");
+  });
+  it("제한 정책으로 변경한 경우 값을 전송한다", async () => {
+    renderPage();
+    fireEvent.click(
+      await screen.findByRole("radio", { name: "전시 기간에만 작성 가능" }),
+    );
+    expect(await submit()).toMatchObject({
+      guestBookWritingPolicy: "EXHIBITION_PERIOD",
     });
   });
 });

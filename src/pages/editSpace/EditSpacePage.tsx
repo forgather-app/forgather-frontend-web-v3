@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { Controller } from "react-hook-form";
 import { useGetSpaceInformation } from "@/api/generated/space-스페이스";
 import type { ApiResponseSpaceResponse, SpaceResponse } from "@/api/model";
@@ -5,6 +6,7 @@ import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
 import ExhibitionLocationField from "@/components/@common/ExhibitionLocationField/ExhibitionLocationField";
 import ExhibitionPeriodField from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
+import GuestBookWritingPolicyField from "@/components/@common/GuestBookWritingPolicyField/GuestBookWritingPolicyField";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
@@ -60,6 +62,10 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
     descriptionRules,
     linkNameRules,
     exhibitionLocationRules,
+    exhibitionPeriodRules,
+    guestBookWritingPolicyRules,
+    exhibitionPeriodError,
+    isExhibitionPeriodComplete,
     exhibitionLocationError,
     spaceNameError,
     descriptionError,
@@ -72,6 +78,8 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
     isSubmitting,
     getSubmitHandler,
   } = useEditSpaceForm(spaceId, space);
+
+  const periodRef = useRef<HTMLDivElement>(null);
 
   return (
     <S.Container onSubmit={getSubmitHandler(onSuccess)} noValidate>
@@ -129,15 +137,17 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
           />
         </S.FieldGroup>
 
-        <S.FieldGroup>
+        <S.FieldGroup ref={periodRef}>
           <S.FieldLabelRow>
             <S.Label>전시 기간</S.Label>
           </S.FieldLabelRow>
           <Controller
             control={control}
             name="exhibitionPeriod"
+            rules={exhibitionPeriodRules}
             render={({ field }) => (
               <ExhibitionPeriodField
+                errorMessage={exhibitionPeriodError}
                 value={field.value}
                 onChange={field.onChange}
               />
@@ -200,17 +210,44 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
           />
         </S.FieldGroup>
 
-        <S.ToggleRow>
-          <S.ToggleLabelGroup>
-            <IcLock aria-hidden="true" width={20} height={20} />
-            <S.ToggleLabel>방명록 나만 보기</S.ToggleLabel>
-          </S.ToggleLabelGroup>
-          <Toggle
-            checked={isGuestBookPrivate}
-            onChange={setIsGuestBookPrivate}
-            ariaLabel="방명록 나만 보기"
-          />
-        </S.ToggleRow>
+        <Controller
+          control={control}
+          name="guestBookWritingPolicy"
+          rules={guestBookWritingPolicyRules}
+          render={({ field }) => (
+            <GuestBookWritingPolicyField
+              value={field.value}
+              onChange={(policy) => {
+                field.onChange(policy);
+                if (
+                  policy === "EXHIBITION_PERIOD" &&
+                  !isExhibitionPeriodComplete
+                ) {
+                  periodRef.current?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                  });
+                }
+              }}
+            />
+          )}
+        />
+        <S.FieldGroup>
+          <S.FieldLabelRow>
+            <S.Label>방명록 공개 설정</S.Label>
+          </S.FieldLabelRow>
+          <S.ToggleRow>
+            <S.ToggleLabelGroup>
+              <IcLock aria-hidden="true" width={20} height={20} />
+              <S.ToggleLabel>방명록 나만 보기</S.ToggleLabel>
+            </S.ToggleLabelGroup>
+            <Toggle
+              checked={isGuestBookPrivate}
+              onChange={setIsGuestBookPrivate}
+              ariaLabel="방명록 나만 보기"
+            />
+          </S.ToggleRow>
+        </S.FieldGroup>
       </S.Main>
 
       <S.Footer>

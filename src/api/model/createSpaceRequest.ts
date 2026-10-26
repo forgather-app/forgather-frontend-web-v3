@@ -5,8 +5,12 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
+import type { GuestBookWritingPolicy } from "./guestBookWritingPolicy";
 
 export interface CreateSpaceRequest {
+  /** Backend GuestBookWritingPolicy contract; pending deployed OpenAPI refresh. */
+  guestBookWritingPolicy?: GuestBookWritingPolicy | null;
+
   /**
    * 스페이스 이름
    * @maxLength 30
