@@ -22,7 +22,6 @@ import {
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
 import { parseDateOnlyString, toDateOnlyString } from "@/utils/date";
-
 import { validateGuestBookWritingPeriod } from "@/utils/guestBookWritingPolicy";
 
 interface EditSpaceFormValues {

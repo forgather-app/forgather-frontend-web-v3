@@ -164,5 +164,4 @@ export * from './placeResult';
 export * from './placeSearchResponse';
 export * from './apiResponsePlaceSearchResponse';
 export * from './apiResponsePlaceSearchResponseCode';
-
 export * from "./guestBookWritingPolicy";
