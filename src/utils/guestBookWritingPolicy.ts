@@ -6,10 +6,15 @@ export const GUEST_BOOK_PERIOD_MESSAGE =
 export const validateGuestBookWritingPeriod = (
   policy: GuestBookWritingPolicy,
   period: PeriodInputValue,
-): true | string =>
-  policy === "EXHIBITION_PERIOD" && (!period.startDate || !period.endDate)
-    ? "전시 기간에만 작성하도록 설정하려면 전시 기간을 입력해주세요."
-    : true;
+): true | string => {
+  if (policy === "EXHIBITION_PERIOD" && (!period.startDate || !period.endDate))
+    return "전시 기간에만 작성하도록 설정하려면 전시 기간을 입력해주세요.";
+
+  if (!!period.startDate !== !!period.endDate)
+    return "전시 기간은 시작과 종료 기간 모두 입력해주세요.";
+
+  return true;
+};
 
 export const isWithinGuestBookWritingPeriod = (
   space: SpaceResponse,

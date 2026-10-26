@@ -25,6 +25,20 @@ describe("guestbook writing policy", () => {
       }),
     ).toBe(true);
   });
+  it("rejects a half-cleared period regardless of policy", () => {
+    expect(
+      validateGuestBookWritingPeriod("ALWAYS", {
+        startDate: new Date(),
+        endDate: null,
+      }),
+    ).toBe("전시 기간은 시작과 종료 기간 모두 입력해주세요.");
+    expect(
+      validateGuestBookWritingPeriod("ALWAYS", {
+        startDate: null,
+        endDate: new Date(),
+      }),
+    ).toBe("전시 기간은 시작과 종료 기간 모두 입력해주세요.");
+  });
   it.each([
     ["2026-10-19T14:59:59.999Z", false],
     ["2026-10-19T15:00:00.000Z", true],

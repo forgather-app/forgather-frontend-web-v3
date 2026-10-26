@@ -1,4 +1,5 @@
 import { useId, useState } from "react";
+import ClearIcon from "@/assets/icons/ic_clear.svg?react";
 import BottomSheet from "@/components/@common/BottomSheet/BottomSheet";
 import { formatPeriodDate } from "@/utils/date";
 import PeriodCalendarSheet from "./PeriodCalendarSheet";
@@ -52,29 +53,53 @@ const PeriodInput = ({
       <S.Row>
         <S.FieldColumn>
           <S.FieldLabel id={startLabelId}>시작일</S.FieldLabel>
-          <S.DateButton
-            type="button"
-            $state={toDateButtonState(!!value.startDate, hasError)}
-            onClick={() => setIsSheetOpen(true)}
-            aria-labelledby={startLabelId}
-            aria-haspopup="dialog"
-            aria-invalid={hasError || undefined}
-          >
-            {value.startDate ? formatPeriodDate(value.startDate) : "YYYY.MM.DD"}
-          </S.DateButton>
+          <S.DateButtonWrapper>
+            <S.DateButton
+              type="button"
+              $state={toDateButtonState(!!value.startDate, hasError)}
+              onClick={() => setIsSheetOpen(true)}
+              aria-labelledby={startLabelId}
+              aria-haspopup="dialog"
+              aria-invalid={hasError || undefined}
+            >
+              {value.startDate
+                ? formatPeriodDate(value.startDate)
+                : "YYYY.MM.DD"}
+            </S.DateButton>
+            {value.startDate && (
+              <S.ClearButton
+                type="button"
+                aria-label="시작일 삭제"
+                onClick={() => onChange({ ...value, startDate: null })}
+              >
+                <ClearIcon aria-hidden width={20} height={20} />
+              </S.ClearButton>
+            )}
+          </S.DateButtonWrapper>
         </S.FieldColumn>
         <S.FieldColumn>
           <S.FieldLabel id={endLabelId}>종료일</S.FieldLabel>
-          <S.DateButton
-            type="button"
-            $state={toDateButtonState(!!value.endDate, hasError)}
-            onClick={() => setIsSheetOpen(true)}
-            aria-labelledby={endLabelId}
-            aria-haspopup="dialog"
-            aria-invalid={hasError || undefined}
-          >
-            {value.endDate ? formatPeriodDate(value.endDate) : "YYYY.MM.DD"}
-          </S.DateButton>
+          <S.DateButtonWrapper>
+            <S.DateButton
+              type="button"
+              $state={toDateButtonState(!!value.endDate, hasError)}
+              onClick={() => setIsSheetOpen(true)}
+              aria-labelledby={endLabelId}
+              aria-haspopup="dialog"
+              aria-invalid={hasError || undefined}
+            >
+              {value.endDate ? formatPeriodDate(value.endDate) : "YYYY.MM.DD"}
+            </S.DateButton>
+            {value.endDate && (
+              <S.ClearButton
+                type="button"
+                aria-label="종료일 삭제"
+                onClick={() => onChange({ ...value, endDate: null })}
+              >
+                <ClearIcon aria-hidden width={20} height={20} />
+              </S.ClearButton>
+            )}
+          </S.DateButtonWrapper>
         </S.FieldColumn>
       </S.Row>
       {hasError && <S.ErrorMessage role="alert">{errorMessage}</S.ErrorMessage>}
@@ -88,10 +113,6 @@ const PeriodInput = ({
             initialStartDate={value.startDate}
             initialEndDate={value.endDate}
             onConfirm={handleConfirm}
-            onClear={() => {
-              onChange({ startDate: null, endDate: null });
-              setIsSheetOpen(false);
-            }}
             highlightToday={highlightToday}
           />
         </BottomSheet>

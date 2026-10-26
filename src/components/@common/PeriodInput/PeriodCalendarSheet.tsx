@@ -6,8 +6,6 @@ import Button from "@/components/@common/Button/Button";
 import * as S from "./PeriodCalendarSheet.styles";
 
 interface PeriodCalendarSheetProps {
-  /** 시트가 열릴 때 초기 선택값으로 사용할 시작일 */
-  onClear: () => void;
   initialStartDate: Date | null;
   highlightToday?: boolean;
   /** 시트가 열릴 때 초기 선택값으로 사용할 종료일 */
@@ -21,7 +19,6 @@ const PeriodCalendarSheet = ({
   initialEndDate,
   highlightToday = false,
   onConfirm,
-  onClear,
 }: PeriodCalendarSheetProps) => {
   const [range, setRange] = useState<DateRange | undefined>(
     initialStartDate
@@ -52,13 +49,6 @@ const PeriodCalendarSheet = ({
         />
       </S.CalendarWrapper>
       <S.Footer>
-        {(initialStartDate || initialEndDate) && (
-          <Button
-            text="전시 기간 삭제"
-            variant="underlined"
-            onClick={onClear}
-          />
-        )}
         <Button text="확인" onClick={handleConfirm} disabled={!canConfirm} />
       </S.Footer>
     </>

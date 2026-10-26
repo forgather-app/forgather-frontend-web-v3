@@ -347,8 +347,7 @@ describe("CreateSpacePage 작성 정책", () => {
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
     );
-    fireEvent.click(screen.getByRole("button", { name: "시작일" }));
-    fireEvent.click(screen.getByRole("button", { name: "전시 기간 삭제" }));
+    fireEvent.click(screen.getByRole("button", { name: "시작일 삭제" }));
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "전시 기간에만 작성하도록 설정하려면 전시 기간을 입력해주세요.",
     );

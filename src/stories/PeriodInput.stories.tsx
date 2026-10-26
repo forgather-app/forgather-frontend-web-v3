@@ -54,7 +54,8 @@ export const Filled: Story = {
   parameters: {
     docs: {
       description: {
-        story: "시작일 · 종료일이 모두 선택된 상태입니다.",
+        story:
+          "시작일 · 종료일이 모두 선택된 상태입니다. 각 입력창 오른쪽의 X 버튼으로 해당 날짜만 따로 지울 수 있습니다.",
       },
     },
   },

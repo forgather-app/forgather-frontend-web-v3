@@ -357,8 +357,8 @@ describe("EditSpacePage 작성 정책", () => {
     savedPolicy = "EXHIBITION_PERIOD";
     renderPage();
     await screen.findByRole("radio", { name: "전시 기간에만 작성 가능" });
-    fireEvent.click(screen.getByRole("button", { name: "시작일" }));
-    fireEvent.click(screen.getByRole("button", { name: "전시 기간 삭제" }));
+    fireEvent.click(screen.getByRole("button", { name: "시작일 삭제" }));
+    fireEvent.click(screen.getByRole("button", { name: "종료일 삭제" }));
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "완료" })).toBeDisabled();
     fireEvent.click(screen.getByRole("radio", { name: "항상 작성 가능" }));
