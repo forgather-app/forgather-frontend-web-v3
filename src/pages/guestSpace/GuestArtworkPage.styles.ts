@@ -61,6 +61,28 @@ export const Title = styled.h1`
   ${selectableText};
 `;
 
+export const PeriodRow = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+`;
+
+export const PeriodLabel = styled.span`
+  flex-shrink: 0;
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  font-weight: 400; /* TODO: 토큰 없음 - fontSize 14 / fontWeight 400 조합, subBody는 500 */
+  color: ${({ theme }) => theme.colors.gray.gray300};
+`;
+
+export const PeriodValue = styled.span`
+  flex: 1;
+  min-width: 0;
+  ${({ theme }) => ({ ...theme.typography.subBody })};
+  font-weight: 400; /* TODO: 토큰 없음 - fontSize 14 / fontWeight 400 조합, subBody는 500 */
+  color: ${({ theme }) => theme.colors.gray.gray100};
+  ${selectableText};
+`;
+
 export const SpaceLink = styled.a`
   display: flex;
   align-items: center;

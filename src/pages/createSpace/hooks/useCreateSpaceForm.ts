@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCreate } from "@/api/generated/space-스페이스";
 import type { ApiResponseCreateSpaceResponse } from "@/api/model";
+import type { ExhibitionPeriodValue } from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import { ERROR_MESSAGES } from "@/constants/error";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import {
@@ -11,12 +12,14 @@ import {
   validateSpaceNameMaxLength,
   validateSpaceNameRequired,
 } from "@/pages/createSpace/utils/createSpaceValidation";
+import { toDateOnlyString } from "@/utils/date";
 
 interface CreateSpaceFormValues {
   spaceName: string;
   description: string;
   linkUrl: string;
   linkName: string;
+  exhibitionPeriod: ExhibitionPeriodValue;
 }
 
 const spaceNameRules = {
@@ -49,6 +52,7 @@ export const useCreateSpaceForm = () => {
       description: "",
       linkUrl: "",
       linkName: "",
+      exhibitionPeriod: { startDate: null, endDate: null },
     },
   });
 
@@ -80,6 +84,8 @@ export const useCreateSpaceForm = () => {
         return;
       }
 
+      const { startDate, endDate } = values.exhibitionPeriod;
+
       createSpace(
         {
           data: {
@@ -88,6 +94,12 @@ export const useCreateSpaceForm = () => {
             isPublic: !isGuestBookPrivate,
             linkUrl: values.linkUrl.trim(),
             linkName: values.linkName.trim(),
+            ...(startDate && endDate
+              ? {
+                  exhibitionStartDate: toDateOnlyString(startDate),
+                  exhibitionEndDate: toDateOnlyString(endDate),
+                }
+              : {}),
           },
         },
         {

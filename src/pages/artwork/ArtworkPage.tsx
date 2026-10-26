@@ -31,10 +31,13 @@ import { ERROR_MESSAGES } from "@/constants/error";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
 import useSnackBar from "@/hooks/@common/useSnackBar";
+import { formatExhibitionSchedule, parseDateOnlyString } from "@/utils/date";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { linkifyText } from "@/utils/linkifyText";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./ArtworkPage.styles";
+
+const EXHIBITION_SCHEDULE_EMPTY_TEXT = "등록된 일정이 없어요";
 
 /** 섹션 구분선 색상 */
 const SECTION_DIVIDER_COLOR = "rgba(17, 17, 17, 0.7)";
@@ -303,6 +306,18 @@ const ArtworkPage = ({
       <S.TitleRow>
         <S.Title>{space.name}</S.Title>
       </S.TitleRow>
+
+      <S.PeriodRow>
+        <S.PeriodLabel>전시 일정</S.PeriodLabel>
+        <S.PeriodValue>
+          {space.exhibitionStartDate && space.exhibitionEndDate
+            ? formatExhibitionSchedule(
+                parseDateOnlyString(space.exhibitionStartDate),
+                parseDateOnlyString(space.exhibitionEndDate),
+              )
+            : EXHIBITION_SCHEDULE_EMPTY_TEXT}
+        </S.PeriodValue>
+      </S.PeriodRow>
 
       {space.linkUrl && (
         <S.SpaceLink

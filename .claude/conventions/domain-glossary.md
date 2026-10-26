@@ -12,6 +12,7 @@ PR 본문, 이슈, 커밋, 문서처럼 사람이 읽는 글에서는 **화면 �
 | --- | --- | --- |
 | 스페이스 | `Space`, `space-스페이스` API | 작가가 자기 전시·작품을 모아 두는 공간. 스페이스명, 스페이스 소개 |
 | 전시 | `Exhibition`, `exhibition-전시` API | 스페이스에 속한 전시 정보 |
+| 전시 기간 / 전시 일정 | `space.exhibitionStartDate`/`exhibitionEndDate`, `ExhibitionPeriodField` | 스페이스 생성·수정 폼에서는 "전시 기간", 스페이스 홈 표시에서는 "전시 일정"으로 부른다. 별도 도메인인 "전시"(`Exhibition` API)와는 다른, `Space`에 직접 달린 필드 |
 | 작품 | API는 `Product`(`product-전시-작품`), 페이지·라우트는 `artwork` | 같은 대상을 코드에서 두 이름으로 부른다. 글에서는 항상 "작품" |
 | 방명록 | `GuestBook`, `GuestBookCard`, `guestbook-방명록` API | 방문자가 스페이스에 남기는 카드 |
 | 작가 / 작가님 | `Host`, `host-호스트` API | 화면에서는 "작가(님)"으로 부른다. "호스트"는 코드·API에서만 |

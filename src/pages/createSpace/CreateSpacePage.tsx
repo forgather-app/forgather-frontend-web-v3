@@ -1,6 +1,7 @@
 import { Controller } from "react-hook-form";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
+import ExhibitionPeriodField from "@/components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
@@ -81,6 +82,22 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 aria-label="스페이스 소개"
+              />
+            )}
+          />
+        </S.FieldGroup>
+
+        <S.FieldGroup>
+          <S.FieldLabelRow>
+            <S.Label>전시 기간</S.Label>
+          </S.FieldLabelRow>
+          <Controller
+            control={control}
+            name="exhibitionPeriod"
+            render={({ field }) => (
+              <ExhibitionPeriodField
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
           />
