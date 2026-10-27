@@ -1,9 +1,11 @@
 import axios, { isAxiosError } from "axios";
 import { resetAnalyticsUser } from "@/utils/analytics";
 import { captureSentryError } from "@/utils/captureSentryError";
+import { getClientHeaders } from "@/utils/getClientHeaders";
 import { markNotFoundError } from "@/utils/markNotFoundError";
 import { notifyNativeLogout } from "@/utils/nativeBridge";
 import { clearSentryUser } from "@/utils/sentry";
+import { updateRequiredStore } from "@/utils/updateRequiredStore";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL ?? "";
 
@@ -11,6 +13,9 @@ export const apiClient = axios.create({
   baseURL: BASE_URL,
   // NOTE: 인증 토큰은 서버가 쿠키로 내려주므로, withCredentials로 요청마다 자동 전송됨
   withCredentials: true,
+  // NOTE: User-Agent는 요청 중 바뀌지 않으므로 인스턴스 생성 시 한 번만 계산해 기본
+  // 헤더로 둔다 (X-Client-Type: WEB|IOS|ANDROID, 앱이면 X-App-Version 추가)
+  headers: getClientHeaders(navigator.userAgent),
 });
 
 // NOTE: /auth/me의 401은 accessToken(1시간)만 만료되고 refreshToken(90일)은
@@ -62,6 +67,14 @@ apiClient.interceptors.response.use(
     const isNotFound = isAxiosError(error) && error.response?.status === 404;
     if (isNotFound) {
       markNotFoundError(error);
+    }
+
+    // NOTE: 426(UPGRADE_REQUIRED)은 X-Client-Type/X-App-Version이 최소 지원 버전에
+    // 못 미칠 때 서버가 돌려준다 — 구버전 앱의 정상적인 플로우라 Sentry에 남기지
+    // 않고, 강제 업데이트 모달만 띄운다(forgather-backend#209).
+    if (error.response?.status === 426) {
+      updateRequiredStore.open();
+      return Promise.reject(error);
     }
 
     const isUnauthorized = error.response?.status === 401;
