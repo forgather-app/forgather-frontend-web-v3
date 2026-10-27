@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import ExhibitionPeriodField, {
-  type ExhibitionPeriodValue,
-} from "../components/@common/ExhibitionPeriodField/ExhibitionPeriodField";
+import PeriodInput, {
+  type PeriodInputValue,
+} from "../components/@common/PeriodInput/PeriodInput";
 
-const meta: Meta<typeof ExhibitionPeriodField> = {
-  title: "Common/ExhibitionPeriodField",
-  component: ExhibitionPeriodField,
+const meta: Meta<typeof PeriodInput> = {
+  title: "Common/PeriodInput",
+  component: PeriodInput,
   tags: ["autodocs"],
   parameters: {
     docs: {
@@ -31,7 +31,7 @@ const meta: Meta<typeof ExhibitionPeriodField> = {
 
 export default meta;
 
-type Story = StoryObj<typeof ExhibitionPeriodField>;
+type Story = StoryObj<typeof PeriodInput>;
 
 export const Empty: Story = {
   parameters: {
@@ -42,13 +42,11 @@ export const Empty: Story = {
     },
   },
   render: (args) => {
-    const [value, setValue] = useState<ExhibitionPeriodValue>({
+    const [value, setValue] = useState<PeriodInputValue>({
       startDate: null,
       endDate: null,
     });
-    return (
-      <ExhibitionPeriodField {...args} value={value} onChange={setValue} />
-    );
+    return <PeriodInput {...args} value={value} onChange={setValue} />;
   },
 };
 
@@ -56,18 +54,17 @@ export const Filled: Story = {
   parameters: {
     docs: {
       description: {
-        story: "시작일 · 종료일이 모두 선택된 상태입니다.",
+        story:
+          "시작일 · 종료일이 모두 선택된 상태입니다. 각 입력창 오른쪽의 X 버튼으로 해당 날짜만 따로 지울 수 있습니다.",
       },
     },
   },
   render: (args) => {
-    const [value, setValue] = useState<ExhibitionPeriodValue>({
+    const [value, setValue] = useState<PeriodInputValue>({
       startDate: new Date(2026, 2, 1),
       endDate: new Date(2026, 2, 14),
     });
-    return (
-      <ExhibitionPeriodField {...args} value={value} onChange={setValue} />
-    );
+    return <PeriodInput {...args} value={value} onChange={setValue} />;
   },
 };
 
@@ -80,12 +77,12 @@ export const ErrorState: Story = {
     },
   },
   render: (args) => {
-    const [value, setValue] = useState<ExhibitionPeriodValue>({
+    const [value, setValue] = useState<PeriodInputValue>({
       startDate: null,
       endDate: null,
     });
     return (
-      <ExhibitionPeriodField
+      <PeriodInput
         {...args}
         value={value}
         onChange={setValue}

@@ -10,7 +10,7 @@ export const Title = styled.h2`
   color: ${({ theme }) => theme.colors.gray.gray100};
 `;
 
-export const CalendarWrapper = styled.div`
+export const CalendarWrapper = styled.div<{ $highlightToday: boolean }>`
   display: flex;
   justify-content: center;
   padding: 0 16px 8px;
@@ -51,6 +51,11 @@ export const CalendarWrapper = styled.div`
 
   .rdp-chevron {
     fill: ${({ theme }) => theme.colors.gray.gray200};
+  }
+
+  .rdp-today:not(.rdp-outside) .rdp-day_button {
+    color: ${({ $highlightToday, theme }) =>
+      $highlightToday ? theme.colors.main.purple : "inherit"};
   }
 `;
 

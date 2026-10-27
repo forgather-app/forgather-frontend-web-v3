@@ -2,7 +2,7 @@ import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { search } from "@/api/generated/space-스페이스";
 import type { PlaceResult } from "@/api/model/placeResult";
-import useExhibitionPlaceSearch from "./useExhibitionPlaceSearch";
+import usePlaceSearch from "./usePlaceSearch";
 
 vi.mock("@/api/generated/space-스페이스", () => ({ search: vi.fn() }));
 const mockedSearch = vi.mocked(search);
@@ -42,9 +42,9 @@ afterEach(() => {
   vi.useRealTimers();
 });
 
-describe("useExhibitionPlaceSearch", () => {
+describe("usePlaceSearch", () => {
   it("명시적으로 시작할 때만 정규화된 검색어를 요청하고 같은 검색어도 새로 요청한다", async () => {
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await advance();
     expect(mockedSearch).not.toHaveBeenCalled();
     await act(async () => {
@@ -70,7 +70,7 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch
       .mockReturnValueOnce(old.promise)
       .mockResolvedValueOnce(response([place("new")]));
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     act(() => result.current.startSearch("이전"));
     const signal = mockedSearch.mock.calls[0]?.[1]?.signal;
     await act(async () => {
@@ -88,7 +88,7 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch
       .mockResolvedValueOnce(response([place("1")], true))
       .mockReturnValueOnce(next.promise);
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await act(async () => {
       result.current.startSearch("전시");
     });
@@ -116,7 +116,7 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch.mockImplementation(async (params) =>
       response([place(String(params.page))], true),
     );
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await act(async () => {
       result.current.startSearch("전시");
     });
@@ -133,7 +133,7 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch
       .mockRejectedValueOnce(new Error("offline"))
       .mockResolvedValueOnce(response([place("1")]));
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await act(async () => {
       result.current.startSearch("전시");
     });
@@ -154,7 +154,7 @@ describe("useExhibitionPlaceSearch", () => {
       .mockResolvedValueOnce(response([place("1")], true))
       .mockRejectedValueOnce(new Error("offline"))
       .mockResolvedValueOnce(response([place("2")]));
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await act(async () => {
       result.current.startSearch("전시");
     });
@@ -182,7 +182,7 @@ describe("useExhibitionPlaceSearch", () => {
       .mockResolvedValueOnce(response([place("1")], true))
       .mockRejectedValueOnce(new Error("offline"))
       .mockResolvedValueOnce(response([place("fresh")]));
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await act(async () => {
       result.current.startSearch("전시");
     });
@@ -209,7 +209,7 @@ describe("useExhibitionPlaceSearch", () => {
     mockedSearch
       .mockResolvedValueOnce(response([place("1")], true))
       .mockReturnValueOnce(next.promise);
-    const { result } = renderHook(() => useExhibitionPlaceSearch());
+    const { result } = renderHook(() => usePlaceSearch());
     await act(async () => {
       result.current.startSearch("전시");
     });
@@ -227,7 +227,7 @@ describe("useExhibitionPlaceSearch", () => {
   it("언마운트는 진행 중 요청을 취소하고 늦은 응답을 무시한다", async () => {
     const pending = deferred();
     mockedSearch.mockReturnValueOnce(pending.promise);
-    const { result, unmount } = renderHook(() => useExhibitionPlaceSearch());
+    const { result, unmount } = renderHook(() => usePlaceSearch());
     act(() => result.current.startSearch("전시"));
     const signal = mockedSearch.mock.calls[0]?.[1]?.signal;
     unmount();

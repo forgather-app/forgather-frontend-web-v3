@@ -2,23 +2,23 @@ import { useEffect, useId, useRef, useState } from "react";
 import CloseIcon from "@/assets/icons/ic_close_12.svg?react";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
-import * as S from "./ExhibitionLocationField.styles";
-import ExhibitionPlaceSearch from "./ExhibitionPlaceSearch";
-import type { ExhibitionLocationValue } from "./exhibitionLocation";
+import * as S from "./LocationInput.styles";
+import type { LocationInputValue } from "./locationValue";
+import PlaceSearch from "./PlaceSearch";
 
-interface ExhibitionLocationFieldProps {
-  value: ExhibitionLocationValue;
-  onChange: (value: ExhibitionLocationValue) => void;
+interface LocationInputProps {
+  value: LocationInputValue;
+  onChange: (value: LocationInputValue) => void;
   onBlur?: () => void;
   errorMessage?: string;
 }
 
-const ExhibitionLocationField = ({
+const LocationInput = ({
   value,
   onChange,
   onBlur,
   errorMessage,
-}: ExhibitionLocationFieldProps) => {
+}: LocationInputProps) => {
   const nameId = useId();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const linkedPlaceRef = useRef<HTMLDivElement>(null);
@@ -87,7 +87,7 @@ const ExhibitionLocationField = ({
         )}
       </S.ConnectionField>
       {isSearchOpen ? (
-        <ExhibitionPlaceSearch
+        <PlaceSearch
           onSelect={({ placeId, placeUrl }) => {
             focusLinkedPlaceAfterSelectionRef.current = true;
             onChange({ ...value, placeId, placeUrl });
@@ -98,4 +98,4 @@ const ExhibitionLocationField = ({
     </S.Wrapper>
   );
 };
-export default ExhibitionLocationField;
+export default LocationInput;
