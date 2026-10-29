@@ -11,6 +11,12 @@ interface ConvertImageToWebpOptions {
 const DEFAULT_QUALITY = 0.92;
 // jSquash(@jsquash/webp)의 quality 옵션은 0~100 스케일이라, 이 유틸의 0~1 스케일과 맞추기 위한 배율
 const JSQUASH_QUALITY_SCALE = 100;
+// createImageBitmap(source)로 원본을 무조건 풀 해상도로 디코드하면, 1만px대 초고해상도
+// 원본에서 getImageData가 순간적으로 수백MB~1GB대 픽셀 버퍼를 요구해 (모바일) WebView
+// 프로세스가 OOM으로 강제 종료되는 문제가 있었다(크래시로 흰 화면만 남고 try/catch도 못 잡음).
+// 이 값을 넘는 원본은 디코드 자체를 먼저 줄여(createImageBitmap의 resizeWidth/Height) 안전한
+// 범위로 묶는다. 실제 최종 크기(options.maxSize)로의 정밀 축소는 그 이후 기존 로직이 맡는다.
+const DECODE_SAFETY_MAX_DIMENSION = 4096;
 
 /**
  * 이미지를 webp Blob으로 변환한다. presigned URL 업로드 스펙이 webp로 고정 서명되어 있어
@@ -26,13 +32,28 @@ const JSQUASH_QUALITY_SCALE = 100;
  * 리사이즈도 canvas.drawImage(브라우저 범용 스무딩)가 아니라 @jsquash/resize(기본값
  * lanczos3)로 한다 — 실기 비교(라플라시안 분산: canvas 443.95 vs jsquash/resize 629.66,
  * macOS sips 참고값 400.84)로 canvas의 imageSmoothingQuality="high"보다 디테일을
- * 뚜렷하게 더 보존한다는 걸 확인했다.
+ * 뚜렷하게 더 보존한다는 걸 확인했다. 단, DECODE_SAFETY_MAX_DIMENSION을 넘는 초고해상도
+ * 원본은 이 lanczos3 리사이즈 전에 디코드 자체를 1차로 줄인다(OOM 크래시 방지).
  */
 export const convertImageToWebp = async (
   source: Blob,
   options?: ConvertImageToWebpOptions,
 ): Promise<Blob> => {
-  const bitmap = await createImageBitmap(source);
+  const probe = await createImageBitmap(source);
+  const longerEdge = Math.max(probe.width, probe.height);
+
+  let bitmap = probe;
+  if (longerEdge > DECODE_SAFETY_MAX_DIMENSION) {
+    const decodeScale = DECODE_SAFETY_MAX_DIMENSION / longerEdge;
+    const resizeWidth = Math.round(probe.width * decodeScale);
+    const resizeHeight = Math.round(probe.height * decodeScale);
+    probe.close();
+    bitmap = await createImageBitmap(source, {
+      resizeWidth,
+      resizeHeight,
+      resizeQuality: "high",
+    });
+  }
 
   const canvas = document.createElement("canvas");
   canvas.width = bitmap.width;

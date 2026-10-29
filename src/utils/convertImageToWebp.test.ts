@@ -114,4 +114,42 @@ describe("convertImageToWebp", () => {
       "캔버스 컨텍스트를 생성하지 못했습니다.",
     );
   });
+
+  it("원본이 DECODE_SAFETY_MAX_DIMENSION(4096px)보다 크면 디코드 단계에서 먼저 줄인 뒤 처리한다 (OOM 방지)", async () => {
+    stubCanvas();
+    const probeBitmap = { width: 11416, height: 8562, close: vi.fn() };
+    const resizedBitmap = { width: 4096, height: 3072, close: vi.fn() };
+    const createImageBitmapMock = vi
+      .fn()
+      .mockResolvedValueOnce(probeBitmap)
+      .mockResolvedValueOnce(resizedBitmap);
+    vi.stubGlobal("createImageBitmap", createImageBitmapMock);
+
+    const result = await convertImageToWebp(blobOf("image/jpeg"), {
+      maxSize: 1920,
+    });
+
+    expect(result.type).toBe("image/webp");
+    expect(createImageBitmapMock).toHaveBeenCalledTimes(2);
+    expect(createImageBitmapMock).toHaveBeenNthCalledWith(
+      2,
+      expect.anything(),
+      expect.objectContaining({
+        resizeWidth: 4096,
+        resizeHeight: 3072,
+        resizeQuality: "high",
+      }),
+    );
+    // 풀 해상도로 디코드된 probe 비트맵은 재디코드 전에 닫혀야 한다
+    expect(probeBitmap.close).toHaveBeenCalled();
+  });
+
+  it("원본이 DECODE_SAFETY_MAX_DIMENSION 이하면 createImageBitmap을 한 번만 호출한다", async () => {
+    stubCanvas();
+
+    await convertImageToWebp(blobOf("image/jpeg"), { maxSize: 1920 });
+
+    // beforeEach 기본 stub: 4032x2268 (DECODE_SAFETY_MAX_DIMENSION 이하)
+    expect(createImageBitmap).toHaveBeenCalledTimes(1);
+  });
 });
