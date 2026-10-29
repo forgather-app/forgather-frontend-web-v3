@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import { withApiVersion } from "@/api/apiVersion";
 import { useGet } from "@/api/generated/product-전시-작품";
@@ -97,6 +98,7 @@ const EditArtworkForm = ({
     isSubmitting,
     getSubmitHandler,
   } = useEditArtworkForm(spaceId, artworkId, product);
+  const [isAttachingPhotos, setIsAttachingPhotos] = useState(false);
 
   return (
     <S.PageWrapper onSubmit={getSubmitHandler(onSuccess)} noValidate>
@@ -205,6 +207,7 @@ const EditArtworkForm = ({
             showCoverBadge
             addButtonAriaLabel="작품 사진 추가"
             listAriaLabel="첨부한 작품 사진"
+            onConvertingChange={setIsAttachingPhotos}
           />
         </S.FieldGroup>
       </S.ScrollArea>
@@ -212,7 +215,7 @@ const EditArtworkForm = ({
         <Button
           text="등록하기"
           type="submit"
-          disabled={!isValid || isSubmitting}
+          disabled={!isValid || isSubmitting || isAttachingPhotos}
         />
       </S.Footer>
     </S.PageWrapper>
