@@ -19,6 +19,13 @@ export const getAppClientType = (userAgent: string): "IOS" | "ANDROID" => {
 };
 
 /**
+ * 앱 WebView의 userAgent에서 네이티브 빌드 버전을 읽는다.
+ * 마이페이지의 "앱 버전" 표시에도 같은 기준을 써야 하므로 별도로 export한다.
+ */
+export const getAppVersion = (userAgent: string): string | undefined =>
+  userAgent.match(APP_VERSION_PATTERN)?.[1];
+
+/**
  * User-Agent로부터 서버에 보낼 X-Client-Type / X-App-Version 헤더를 만든다.
  *
  * 앱(iOS/Android)은 WebView의 userAgent에 `ForgatherWebview/{네이티브 빌드 버전}
@@ -34,7 +41,7 @@ export const getClientHeaders = (userAgent: string): Record<string, string> => {
     "X-Client-Type": getAppClientType(userAgent),
   };
 
-  const appVersion = userAgent.match(APP_VERSION_PATTERN)?.[1];
+  const appVersion = getAppVersion(userAgent);
   if (appVersion) {
     headers["X-App-Version"] = appVersion;
   }

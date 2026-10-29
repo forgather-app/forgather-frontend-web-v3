@@ -11,14 +11,12 @@ import Divider from "@/components/@common/Divider/Divider";
 import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import NavigationBarLayout from "@/components/layout/NavigationBarLayout/NavigationBarLayout";
 import useFlowBack from "@/hooks/@common/useFlowBack";
+import { getAppVersion } from "@/utils/getClientHeaders";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { linkifyText } from "@/utils/linkifyText";
 import LogoutModal from "./components/LogoutModal/LogoutModal";
 import WithdrawModal from "./components/WithdrawModal/WithdrawModal";
 import * as S from "./MyPage.styles";
-
-// TODO: 버전 관리 방식 확정 시 대체
-const APP_VERSION = "v1.0.2";
 
 const MyPage = () => {
   const theme = useTheme();
@@ -26,6 +24,9 @@ const MyPage = () => {
   const flowBack = useFlowBack();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  // 이 페이지는 _appOnly 라우트 하위라 항상 앱 WebView UA를 통해 접근되므로
+  // getClientHeaders와 동일한 방식으로 네이티브 빌드 버전을 읽을 수 있다.
+  const appVersion = getAppVersion(navigator.userAgent);
   const { data: profile } = useGetProfileSuspense({
     query: {
       select: (response) =>
@@ -89,7 +90,7 @@ const MyPage = () => {
         <li>
           <S.MenuRow>
             <span>앱 버전</span>
-            <span>{APP_VERSION}</span>
+            <span>{appVersion ? `v${appVersion}` : "-"}</span>
           </S.MenuRow>
         </li>
         <li>
