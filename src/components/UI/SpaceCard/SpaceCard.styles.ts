@@ -5,8 +5,7 @@ export const Card = styled.button<{ $hasGuestBookCount: boolean }>`
   align-items: center;
   gap: 12px;
   width: 100%;
-  padding: ${({ $hasGuestBookCount }) =>
-    $hasGuestBookCount ? "4px 8px 4px 4px" : "4px 16px 4px 4px"};
+  padding: 4px 16px 4px 4px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.gray.gray600};
   text-align: left;
