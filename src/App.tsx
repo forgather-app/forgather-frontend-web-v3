@@ -4,6 +4,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import ErrorModalProvider from "./components/@common/ErrorModal/ErrorModalProvider";
 import RootErrorBoundary from "./components/@common/RootErrorBoundary/RootErrorBoundary";
 import SnackBarProvider from "./components/@common/SnackBar/SnackBarProvider";
+import UpdateRequiredModal from "./components/@common/UpdateRequiredModal/UpdateRequiredModal";
 import { routeTree } from "./routeTree.gen";
 import GlobalStyle from "./styles/GlobalStyle";
 import { theme } from "./styles/theme";
@@ -28,6 +29,7 @@ function App() {
           <ErrorModalProvider>
             <GlobalStyle />
             <RouterProvider router={router} />
+            <UpdateRequiredModal />
           </ErrorModalProvider>
         </SnackBarProvider>
       </ThemeProvider>

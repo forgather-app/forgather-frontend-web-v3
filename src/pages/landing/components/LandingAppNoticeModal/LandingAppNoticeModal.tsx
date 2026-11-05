@@ -3,10 +3,8 @@ import IcCheckmark from "@/assets/icons/ic_checkmark.svg?react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
-import {
-  LANDING_APP_STORE_URL,
-  LANDING_KAKAO_CHANNEL_URL,
-} from "@/pages/landing/LandingPage.constants";
+import { APP_STORE_URL, PLAY_STORE_URL } from "@/constants/appLinks";
+import { LANDING_KAKAO_CHANNEL_URL } from "@/pages/landing/LandingPage.constants";
 import { dismissToday } from "@/utils/dailyDismiss";
 import * as S from "./LandingAppNoticeModal.styles";
 
@@ -43,7 +41,9 @@ const LandingAppNoticeModal = ({
           </S.CloseButton>
           <S.Title>포게더가 앱으로 새로워졌어요</S.Title>
           <S.Description>
-            <p>앱 출시 및 서비스 리뉴얼에 따라 이용 방식이 변경되었습니다.</p>
+            <p>
+              이제 App Store와 Google Play에서 포게더 앱을 만나보실 수 있어요.
+            </p>
             <S.BulletList>
               <li>
                 작가님: 포게더 앱에서 이용해 주세요. (기존/신규 작가님 모두)
@@ -51,29 +51,27 @@ const LandingAppNoticeModal = ({
               <li>방문객: 기존처럼 웹에서 이용하실 수 있어요.</li>
             </S.BulletList>
             <p>
-              현재 앱은 App Store(iOS)에서 만나보실 수 있으며, 안드로이드 버전은
-              10월 중 출시 예정입니다.
-            </p>
-            <p>이용에 불편을 드려 죄송합니다.</p>
-            <p>
               문의 및 건의 사항은 아래 '문의하기' 버튼을 눌러 카카오톡 채널로
               남겨 주세요. 감사합니다.
             </p>
           </S.Description>
           <S.ButtonRow>
             <Button
-              variant="primary"
+              variant="tertiary"
               text="App Store에서 다운로드"
               onClick={() => {
-                window.open(
-                  LANDING_APP_STORE_URL,
-                  "_blank",
-                  "noopener,noreferrer",
-                );
+                window.open(APP_STORE_URL, "_blank", "noopener,noreferrer");
               }}
             />
             <Button
               variant="tertiary"
+              text="Google Play에서 다운로드"
+              onClick={() => {
+                window.open(PLAY_STORE_URL, "_blank", "noopener,noreferrer");
+              }}
+            />
+            <Button
+              variant="primary"
               text="문의하기"
               onClick={() => {
                 window.open(

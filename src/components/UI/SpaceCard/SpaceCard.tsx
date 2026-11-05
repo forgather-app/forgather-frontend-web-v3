@@ -1,4 +1,3 @@
-import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcSmallLogo from "@/assets/icons/logos/logo_small.svg?react";
 import { EXHIBITION_LIST_FALLBACK_IMAGE } from "@/constants/routes";
 import { handleImageError } from "@/utils/handleImageError";
@@ -54,11 +53,6 @@ const SpaceCard = ({
             </S.MetaRow>
           )}
         </S.Content>
-        {hasGuestBookCount && (
-          <S.ChevronWrapper>
-            <IcChevronRight width={24} height={24} />
-          </S.ChevronWrapper>
-        )}
       </S.InfoRow>
     </S.Card>
   );

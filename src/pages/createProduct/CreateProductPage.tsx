@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Controller } from "react-hook-form";
 import IcPhoto from "@/assets/icons/ic_photo.svg?react";
 import Button from "@/components/@common/Button/Button";
@@ -39,6 +40,7 @@ const CreateProductPage = ({
     isSubmitting,
     getSubmitHandler,
   } = useCreateProductForm(spaceCode);
+  const [isAttachingPhotos, setIsAttachingPhotos] = useState(false);
 
   return (
     <S.PageWrapper onSubmit={getSubmitHandler(onSuccess)} noValidate>
@@ -142,11 +144,16 @@ const CreateProductPage = ({
             showCoverBadge
             addButtonAriaLabel="작품 사진 추가"
             listAriaLabel="첨부한 작품 사진"
+            onConvertingChange={setIsAttachingPhotos}
           />
         </S.FieldGroup>
       </S.ScrollArea>
       <S.Footer>
-        <Button text="다음" type="submit" disabled={!isValid || isSubmitting} />
+        <Button
+          text="등록하기"
+          type="submit"
+          disabled={!isValid || isSubmitting || isAttachingPhotos}
+        />
       </S.Footer>
     </S.PageWrapper>
   );

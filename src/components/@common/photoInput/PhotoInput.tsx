@@ -37,6 +37,8 @@ interface PhotoInputProps {
   addButtonAriaLabel?: string;
   /** 목록 전체의 접근성 레이블 */
   listAriaLabel?: string;
+  /** 사진 선택·변환(HEIC 정규화 등) 진행 여부 변경 시 호출. 상위 폼의 제출 버튼 비활성화 등에 사용 */
+  onConvertingChange?: (isConverting: boolean) => void;
 }
 
 const PhotoInput = ({
@@ -49,12 +51,18 @@ const PhotoInput = ({
   showCoverBadge = false,
   addButtonAriaLabel = "사진 추가",
   listAriaLabel = "첨부한 사진",
+  onConvertingChange,
 }: PhotoInputProps) => {
   const inputId = useId();
   const { showSnackBar } = useSnackBar();
   const { requestPhotoPicker, isNativeAvailable } =
     useNativePhotoPickerBridge();
   const [isConverting, setIsConverting] = useState(false);
+
+  const updateConverting = (value: boolean) => {
+    setIsConverting(value);
+    onConvertingChange?.(value);
+  };
   const totalCount = existingPhotos.length + photos.length;
   const canAddMore = totalCount < maxCount;
 
@@ -84,7 +92,7 @@ const PhotoInput = ({
     e.target.value = "";
     if (selected.length === 0 || isConverting) return;
 
-    setIsConverting(true);
+    updateConverting(true);
     try {
       const settled = await Promise.allSettled(
         selected.map((file) => normalizeImageForWeb(file, file.name)),
@@ -105,7 +113,7 @@ const PhotoInput = ({
         showSnackBar(ERROR_MESSAGES.IMAGE_CONVERT_FAILED, "error");
       }
     } finally {
-      setIsConverting(false);
+      updateConverting(false);
     }
   };
 
@@ -113,7 +121,7 @@ const PhotoInput = ({
   const handleNativeAdd = async () => {
     if (isConverting) return;
 
-    setIsConverting(true);
+    updateConverting(true);
     try {
       const picked = await requestPhotoPicker(maxCount - totalCount);
       appendFiles(
@@ -123,7 +131,7 @@ const PhotoInput = ({
         ),
       );
     } finally {
-      setIsConverting(false);
+      updateConverting(false);
     }
   };
 

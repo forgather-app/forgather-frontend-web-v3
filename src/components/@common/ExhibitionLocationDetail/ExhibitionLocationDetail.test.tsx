@@ -47,6 +47,18 @@ describe("전시 장소 상세", () => {
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
 
+  it("서버 지도 URL이 http이면 경로는 그대로 두고 https로 바꿔 표시한다", () => {
+    renderDetail(
+      "직접 입력한 전시장",
+      "http://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
+    );
+    const link = screen.getByRole("link", { name: "카카오맵으로 열기 ↗" });
+    expect(link).toHaveAttribute(
+      "href",
+      "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
+    );
+  });
+
   it("긴 장소명을 자르지 않고 좁은 화면에서도 줄바꿈할 수 있다", () => {
     const name = "공백없는아주긴전시장소명".repeat(5);
     renderDetail(name);
