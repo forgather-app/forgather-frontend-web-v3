@@ -40,14 +40,4 @@ export const AppStoreButton = styled.a`
   text-decoration: none;
 `;
 
-/** 플레이스토어 출시 전 안내용 비활성 버튼 - 출시 후 실제 링크가 생기면 AppStoreButton과 동일하게 활성화한다 */
-export const PlayStoreButton = styled.button`
-  ${appButtonBase};
-  ${({ theme }) => ({ ...theme.typography.body1 })};
-  background-color: ${({ theme }) => theme.colors.gray.gray600};
-  color: ${({ theme }) => theme.colors.gray.gray400};
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-`;
+export const PlayStoreButton = AppStoreButton;
