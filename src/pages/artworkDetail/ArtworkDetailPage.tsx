@@ -237,7 +237,6 @@ const ArtworkDetailPage = ({
 
       {images.length > 0 && (
         <ImageLightbox
-          key={lightboxStartIndex}
           isOpen={isLightboxOpen}
           onClose={() => setIsLightboxOpen(false)}
           images={images}

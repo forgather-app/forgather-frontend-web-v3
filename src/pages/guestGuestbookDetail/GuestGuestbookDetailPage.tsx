@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { notFound } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { customFetcher } from "@/api/customFetcher";
 import { useReadCard } from "@/api/generated/spaceguestbook-스페이스-방명록";
 import type {
@@ -56,9 +56,7 @@ const GuestGuestbookDetailPage = ({
   onNavigate,
 }: GuestGuestbookDetailPageProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const lightboxOpenIdRef = useRef(0);
   const [lightboxCard, setLightboxCard] = useState<{
-    openId: number;
     startIndex: number;
     images: LightboxImage[];
   } | null>(null);
@@ -221,9 +219,7 @@ const GuestGuestbookDetailPage = ({
                         key={photo.path}
                         imageUrl={getImageUrl(photo.path)}
                         onClick={() => {
-                          lightboxOpenIdRef.current += 1;
                           setLightboxCard({
-                            openId: lightboxOpenIdRef.current,
                             startIndex: index,
                             images: validPhotos.map((p) => ({
                               url: getImageUrl(p.path),
@@ -250,7 +246,6 @@ const GuestGuestbookDetailPage = ({
       </S.BottomBar>
 
       <ImageLightbox
-        key={lightboxCard?.openId}
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
         images={lightboxCard?.images ?? []}
