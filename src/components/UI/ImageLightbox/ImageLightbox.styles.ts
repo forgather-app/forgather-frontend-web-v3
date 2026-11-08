@@ -96,6 +96,12 @@ export const DownloadButtonWrapper = styled.div`
   bottom: 13px;
 `;
 
+export const DeleteButtonWrapper = styled.div`
+  position: absolute;
+  left: 13px;
+  bottom: 13px;
+`;
+
 export const FooterPanel = styled.div`
   position: absolute;
   left: 0;
