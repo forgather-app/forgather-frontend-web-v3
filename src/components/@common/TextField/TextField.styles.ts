@@ -1,8 +1,12 @@
 import type { Theme } from "@emotion/react";
 import styled from "@emotion/styled";
-import type { FieldRowStyleVariant, TextFieldVariant } from "./TextField";
+import type {
+  FieldRowStyleVariant,
+  TextFieldSize,
+  TextFieldVariant,
+} from "./TextField";
 
-type InputProps = { $variant: TextFieldVariant };
+type InputProps = { $variant: TextFieldVariant; $size: TextFieldSize };
 
 const countBase = (theme: Theme) => `
   background-color: ${theme.colors.gray.gray600};
@@ -42,11 +46,17 @@ export const Wrapper = styled.div`
   width: 100%;
 `;
 
-export const FieldRow = styled.div<{ $styleVariant: FieldRowStyleVariant }>`
+export const FieldRow = styled.div<{
+  $styleVariant: FieldRowStyleVariant;
+  $size: TextFieldSize;
+}>`
   display: flex;
   align-items: center;
   gap: 8px;
   ${({ $styleVariant, theme }) => fieldRowVariants[$styleVariant](theme)}
+  ${({ $size, $styleVariant }) =>
+    $size === "large" &&
+    `min-height: 50px; padding: 11px ${$styleVariant.startsWith("count") ? "11px" : "4px"};`}
 `;
 
 export const HashPrefix = styled.span`
@@ -66,7 +76,10 @@ export const Input = styled.input<InputProps>`
   min-width: 0;
   background: transparent;
   border: none;
-  ${({ theme }) => ({ ...theme.typography.body3 })};
+  ${({ theme, $size }) => ({
+    ...($size === "large" ? theme.typography.body4 : theme.typography.body3),
+  })};
+  ${({ $size }) => $size === "large" && "padding: 0;"}
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 

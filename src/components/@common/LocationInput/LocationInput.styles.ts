@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
 `;
 
 export const NameField = styled.div`
@@ -12,11 +12,11 @@ export const NameField = styled.div`
   gap: 8px;
 `;
 
-export const LabelRow = styled.div<{ $hasError: boolean }>`
+export const LabelRow = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 4px;
-  padding-left: ${({ $hasError }) => ($hasError ? "4px" : "0")};
+  padding-left: 4px;
 `;
 
 export const RequiredDot = styled.span`
@@ -28,58 +28,49 @@ export const RequiredDot = styled.span`
 `;
 
 export const Label = styled.label`
-  ${({ theme }) => ({ ...theme.typography.label, fontWeight: 700 })};
+  ${({ theme }) => ({ ...theme.typography.label })};
   color: ${({ theme }) => theme.colors.gray.gray100};
 `;
 
-export const ConnectionField = styled.div`
+export const ConnectionRow = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   gap: 8px;
 `;
 
-export const ConnectionLabel = styled.span`
-  ${({ theme }) => ({ ...theme.typography.label, fontWeight: 700 })};
-  color: ${({ theme }) => theme.colors.gray.gray100};
-`;
-
-export const RegisterButton = styled.button`
-  height: 48px;
-  padding: 13px 16px;
-  border: 0;
+export const ConnectionButton = styled.button`
+  flex-shrink: 0;
+  min-height: 50px;
+  padding: 0 16px;
   border-radius: 8px;
-  background: ${({ theme }) => theme.colors.gray.gray600};
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.white};
-  cursor: pointer;
+  background-color: ${({ theme }) => theme.colors.gray.gray500};
+  ${({ theme }) => ({ ...theme.typography.button })};
+  color: ${({ theme }) => theme.colors.gray.gray50};
+
   &:disabled {
     color: ${({ theme }) => theme.colors.gray.gray400};
-    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.main.purple};
+    outline-offset: 2px;
   }
 `;
 
-export const Chip = styled.div`
+export const ConnectedStatus = styled.div`
   display: flex;
+  flex: 1;
+  min-width: 0;
   align-items: center;
   gap: 8px;
-  height: 48px;
-  box-sizing: border-box;
-  padding: 12px 10px 12px 16px;
+  min-height: 50px;
+  padding: 12px;
   border-radius: 8px;
-  background: ${({ theme }) => theme.colors.gray.gray600};
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  color: ${({ theme }) => theme.colors.gray.white};
-`;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
+  ${({ theme }) => ({ ...theme.typography.body4 })};
+  color: ${({ theme }) => theme.colors.gray.gray50};
+  word-break: keep-all;
 
-export const RemoveButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
+  svg {
+    flex-shrink: 0;
+  }
 `;

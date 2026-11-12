@@ -69,7 +69,7 @@ const submit = async () => {
   return JSON.parse(mutationCalls()[0].data as string);
 };
 const choosePlace = async () => {
-  fireEvent.click(screen.getByRole("button", { name: "장소 검색" }));
+  fireEvent.click(screen.getByRole("button", { name: "카카오맵 연동하기" }));
   fireEvent.change(screen.getByRole("searchbox"), {
     target: { value: "검색어" },
   });
@@ -120,16 +120,32 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+it("저장된 입력을 진행률 없는 수정 폼에 표시한다", async () => {
+  renderPage();
+  expect(
+    await screen.findByRole("textbox", { name: "스페이스명" }),
+  ).toHaveValue("기존 스페이스");
+  expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
+  expect(screen.getByRole("textbox", { name: "링크 URL" })).toHaveAttribute(
+    "placeholder",
+    "관련된 링크를 첨부해주세요.",
+  );
+  expect(screen.getByRole("textbox", { name: "전시 장소" })).toHaveAttribute(
+    "placeholder",
+    "장소명을 입력해주세요",
+  );
+});
+
 describe("EditSpacePage 장소 연결", () => {
   it("조합 확인 Enter는 IME 기본 동작을 유지하며 바깥 폼을 저장하지 않는다", async () => {
     const user = userEvent.setup();
     renderPage();
-    await screen.findByRole("textbox", { name: "전시 장소명" });
-    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
+    await screen.findByRole("textbox", { name: "전시 장소" });
+    fireEvent.click(screen.getByRole("button", { name: "해제하기" }));
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
     );
-    await user.click(screen.getByRole("button", { name: "장소 검색" }));
+    await user.click(screen.getByRole("button", { name: "카카오맵 연동하기" }));
     const input = screen.getByRole("searchbox");
     fireEvent.compositionStart(input);
     await user.type(input, "한글");
@@ -150,12 +166,12 @@ describe("EditSpacePage 장소 연결", () => {
   ])("검색 입력 Enter는 %s 검색어에서도 저장하지 않고 결과 버튼 Enter는 선택한다", async (keyword) => {
     const user = userEvent.setup();
     renderPage();
-    await screen.findByRole("textbox", { name: "전시 장소명" });
-    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
+    await screen.findByRole("textbox", { name: "전시 장소" });
+    fireEvent.click(screen.getByRole("button", { name: "해제하기" }));
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "완료" })).toBeEnabled(),
     );
-    await user.click(screen.getByRole("button", { name: "장소 검색" }));
+    await user.click(screen.getByRole("button", { name: "카카오맵 연동하기" }));
     const input = screen.getByRole("searchbox");
     if (keyword) await user.type(input, keyword);
     await user.keyboard("{Enter}");
@@ -176,10 +192,12 @@ describe("EditSpacePage 장소 연결", () => {
     select.focus();
     await user.keyboard("{Enter}");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveValue(
+    expect(screen.getByRole("textbox", { name: "전시 장소" })).toHaveValue(
       "직접 입력한 장소",
     );
-    expect(screen.getByRole("group", { name: "등록된 장소" })).toHaveFocus();
+    expect(
+      screen.getByRole("group", { name: "카카오맵 연동 완료" }),
+    ).toHaveFocus();
     expect(mutationCalls()).toHaveLength(0);
     expect(await submit()).toMatchObject({
       placeName: "직접 입력한 장소",
@@ -205,15 +223,13 @@ describe("EditSpacePage 장소 연결", () => {
     ["전체 삭제", "", "", ""],
   ])("기존 세 값을 초기화하고 %s 요청을 정확히 전송한다", async (action, placeName, placeId, placeUrl) => {
     const { onSuccess, invalidate } = renderPage();
-    const input = await screen.findByRole("textbox", { name: "전시 장소명" });
+    const input = await screen.findByRole("textbox", { name: "전시 장소" });
     expect(input).toHaveValue("직접 입력한 장소");
-    expect(screen.getByText("등록된 장소")).toBeInTheDocument();
-    if (action === "이름만 변경") change("전시 장소명", "바꾼 장소");
+    expect(screen.getByText("카카오맵 연동 완료")).toBeInTheDocument();
+    if (action === "이름만 변경") change("전시 장소", "바꾼 장소");
     if (action === "연결만 해제" || action === "전체 삭제")
-      fireEvent.click(
-        screen.getByRole("button", { name: "카카오맵 연결 해제" }),
-      );
-    if (action === "전체 삭제") change("전시 장소명", "   ");
+      fireEvent.click(screen.getByRole("button", { name: "해제하기" }));
+    if (action === "전체 삭제") change("전시 장소", "   ");
     const payload = await submit();
     expect(payload).toEqual({
       name: "기존 스페이스",
@@ -233,9 +249,9 @@ describe("EditSpacePage 장소 연결", () => {
   });
   it("검색 선택은 직접 입력한 장소명을 덮어쓰거나 주소를 수정 요청에 넣지 않는다", async () => {
     renderPage();
-    await screen.findByRole("textbox", { name: "전시 장소명" });
-    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
-    change("전시 장소명", "새로 직접 입력한 장소");
+    await screen.findByRole("textbox", { name: "전시 장소" });
+    fireEvent.click(screen.getByRole("button", { name: "해제하기" }));
+    change("전시 장소", "새로 직접 입력한 장소");
     await choosePlace();
     const payload = await submit();
     expect(payload).toMatchObject({
@@ -261,8 +277,8 @@ describe("EditSpacePage 장소 연결", () => {
   });
   it("연결 후 빈 이름은 수정 요청을 막고 연결 해제 시 이름을 보존하며 오류를 해제한다", async () => {
     renderPage();
-    await screen.findByRole("textbox", { name: "전시 장소명" });
-    change("전시 장소명", "   ");
+    await screen.findByRole("textbox", { name: "전시 장소" });
+    change("전시 장소", "   ");
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "장소명을 입력하거나 등록된 장소를 제거해주세요.",
     );
@@ -273,8 +289,8 @@ describe("EditSpacePage 장소 연결", () => {
       fireEvent.submit(form);
     });
     expect(mutationCalls()).toHaveLength(0);
-    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
-    expect(screen.getByRole("textbox", { name: "전시 장소명" })).toHaveValue(
+    fireEvent.click(screen.getByRole("button", { name: "해제하기" }));
+    expect(screen.getByRole("textbox", { name: "전시 장소" })).toHaveValue(
       "   ",
     );
     await waitFor(() =>
@@ -291,14 +307,14 @@ describe("EditSpacePage 장소 연결", () => {
     true,
   ])("검색 종료 후 작성 중인 수정 폼을 보존한다 (검색 실패: %s)", async (failure) => {
     renderPage();
-    await screen.findByRole("textbox", { name: "전시 장소명" });
+    await screen.findByRole("textbox", { name: "전시 장소" });
     change("스페이스명", "수정 중인 스페이스");
     change("스페이스 소개", "수정 중인 소개");
     change("링크 URL", "https://example.com/draft");
     change("링크 제목", "수정 중인 링크");
     fireEvent.click(screen.getByRole("switch"));
-    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연결 해제" }));
-    fireEvent.click(screen.getByRole("button", { name: "장소 검색" }));
+    fireEvent.click(screen.getByRole("button", { name: "해제하기" }));
+    fireEvent.click(screen.getByRole("button", { name: "카카오맵 연동하기" }));
     if (failure) {
       failSearch = true;
       fireEvent.change(screen.getByRole("searchbox"), {
@@ -324,10 +340,10 @@ describe("EditSpacePage 장소 연결", () => {
     );
     expect(screen.getByRole("switch")).toHaveAttribute("aria-checked", "true");
     expect(screen.getByRole("button", { name: "시작일" })).toHaveTextContent(
-      "2026.10.20",
+      "2026. 10. 20 (화)",
     );
     expect(screen.getByRole("button", { name: "종료일" })).toHaveTextContent(
-      "2026.10.22",
+      "2026. 10. 22 (목)",
     );
     expect(await submit()).toMatchObject({
       name: "수정 중인 스페이스",

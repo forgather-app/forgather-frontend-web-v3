@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
-import CloseIcon from "@/assets/icons/ic_close_12.svg?react";
+import CheckIcon from "@/assets/icons/ic_location_connected.svg?react";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "./LocationInput.styles";
@@ -20,6 +20,7 @@ const LocationInput = ({
   errorMessage,
 }: LocationInputProps) => {
   const nameId = useId();
+  const linkedStatusId = useId();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const linkedPlaceRef = useRef<HTMLDivElement>(null);
   const focusLinkedPlaceAfterSelectionRef = useRef(false);
@@ -34,8 +35,8 @@ const LocationInput = ({
   return (
     <S.Wrapper>
       <S.NameField>
-        <S.LabelRow $hasError={Boolean(errorMessage)}>
-          <S.Label htmlFor={nameId}>전시 장소명</S.Label>
+        <S.LabelRow>
+          <S.Label htmlFor={nameId}>전시 장소</S.Label>
           {isLinked && errorMessage ? (
             <S.RequiredDot aria-hidden="true" />
           ) : null}
@@ -43,12 +44,9 @@ const LocationInput = ({
         <TextField
           id={nameId}
           variant="count"
+          size="large"
           value={value.placeName}
-          placeholder={
-            errorMessage
-              ? "장소명을 입력해주세요."
-              : "예) 홍익대학교 홍문관 4층"
-          }
+          placeholder="장소명을 입력해주세요"
           maxCount={CONSTRAINTS.CREATE_SPACE.PLACE_NAME_MAX_LENGTH}
           errorMessage={errorMessage}
           onChange={(event) =>
@@ -57,35 +55,34 @@ const LocationInput = ({
           onBlur={onBlur}
         />
       </S.NameField>
-      <S.ConnectionField>
-        <S.ConnectionLabel>카카오맵 연결</S.ConnectionLabel>
-        {isLinked ? (
-          <S.Chip
+      {isLinked ? (
+        <S.ConnectionRow>
+          <S.ConnectedStatus
             ref={linkedPlaceRef}
             role="group"
-            aria-label="등록된 장소"
+            aria-labelledby={linkedStatusId}
             tabIndex={-1}
           >
-            등록된 장소
-            <S.RemoveButton
-              type="button"
-              aria-label="카카오맵 연결 해제"
-              onClick={() => onChange({ ...value, placeId: "", placeUrl: "" })}
-            >
-              <CloseIcon aria-hidden="true" />
-            </S.RemoveButton>
-          </S.Chip>
-        ) : (
-          <S.RegisterButton
+            <CheckIcon aria-hidden="true" />
+            <span id={linkedStatusId}>카카오맵 연동 완료</span>
+          </S.ConnectedStatus>
+          <S.ConnectionButton
             type="button"
-            disabled={!value.placeName.trim()}
-            aria-haspopup="dialog"
-            onClick={() => setIsSearchOpen(true)}
+            onClick={() => onChange({ ...value, placeId: "", placeUrl: "" })}
           >
-            장소 검색
-          </S.RegisterButton>
-        )}
-      </S.ConnectionField>
+            해제하기
+          </S.ConnectionButton>
+        </S.ConnectionRow>
+      ) : (
+        <S.ConnectionButton
+          type="button"
+          disabled={!value.placeName.trim()}
+          aria-haspopup="dialog"
+          onClick={() => setIsSearchOpen(true)}
+        >
+          카카오맵 연동하기
+        </S.ConnectionButton>
+      )}
       {isSearchOpen ? (
         <PlaceSearch
           onSelect={({ placeId, placeUrl }) => {

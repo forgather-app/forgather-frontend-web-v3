@@ -123,6 +123,7 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
             rules={descriptionRules}
             render={({ field }) => (
               <TextArea
+                size="extraLarge"
                 value={field.value}
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
                 placeholder={
@@ -180,8 +181,9 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
             render={({ field }) => (
               <TextField
                 variant="link"
+                size="large"
                 value={field.value}
-                placeholder="전시와 관련된 링크를 첨부해주세요."
+                placeholder="관련된 링크를 첨부해주세요."
                 errorMessage={linkUrlError}
                 onChange={field.onChange}
                 onBlur={() => {
@@ -200,6 +202,7 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
               <TextField
                 variant="count"
                 value={field.value}
+                size="large"
                 maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
                 placeholder="링크 제목을 작성해주세요."
                 errorMessage={linkNameError}
@@ -211,32 +214,29 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
           />
         </S.FieldGroup>
 
-        <Controller
-          control={control}
-          name="guestBookWritingPolicy"
-          rules={guestBookWritingPolicyRules}
-          render={({ field }) => (
-            <GuestBookWritingPolicyField
-              value={field.value}
-              onChange={(policy) => {
-                field.onChange(policy);
-                if (
-                  policy === "EXHIBITION_PERIOD" &&
-                  !isExhibitionPeriodComplete
-                ) {
-                  periodRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                }
-              }}
-            />
-          )}
-        />
-        <S.FieldGroup>
-          <S.FieldLabelRow>
-            <S.Label>방명록 공개 설정</S.Label>
-          </S.FieldLabelRow>
+        <S.GuestBookSettings>
+          <Controller
+            control={control}
+            name="guestBookWritingPolicy"
+            rules={guestBookWritingPolicyRules}
+            render={({ field }) => (
+              <GuestBookWritingPolicyField
+                value={field.value}
+                onChange={(policy) => {
+                  field.onChange(policy);
+                  if (
+                    policy === "EXHIBITION_PERIOD" &&
+                    !isExhibitionPeriodComplete
+                  ) {
+                    periodRef.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }
+                }}
+              />
+            )}
+          />
           <S.ToggleRow>
             <S.ToggleLabelGroup>
               <IcLock aria-hidden="true" width={20} height={20} />
@@ -248,7 +248,7 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
               ariaLabel="방명록 나만 보기"
             />
           </S.ToggleRow>
-        </S.FieldGroup>
+        </S.GuestBookSettings>
       </S.Main>
 
       <S.Footer>

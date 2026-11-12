@@ -21,7 +21,12 @@ export type FieldRowStyleVariant =
   | "base-idle"
   | "category";
 
-interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export type TextFieldSize = "medium" | "large";
+
+interface TextFieldProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+  /** large: 최소 50px 높이, 16px Regular 입력 스타일 */
+  size?: TextFieldSize;
   /**
    * 컴포넌트 변형
    * - `default`: 기본 텍스트 입력 (아이콘 없음)
@@ -65,6 +70,7 @@ const TextField = ({
   value,
   onChange,
   variant = "default",
+  size = "medium",
   onClear,
   onSearchClick,
   errorMessage,
@@ -100,6 +106,7 @@ const TextField = ({
     <S.Input
       {...rest}
       $variant={variant}
+      $size={size}
       type={variant === "search" ? "search" : "text"}
       value={value}
       placeholder={placeholder ?? DEFAULT_PLACEHOLDER[variant]}
@@ -119,7 +126,7 @@ const TextField = ({
 
   return (
     <S.Wrapper>
-      <S.FieldRow $styleVariant={styleVariant}>
+      <S.FieldRow $styleVariant={styleVariant} $size={size}>
         {variant === "count" ? (
           <>
             <S.CountRow>

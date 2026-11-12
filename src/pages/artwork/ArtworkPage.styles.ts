@@ -1,7 +1,6 @@
 import styled from "@emotion/styled";
 import { gradientSweep } from "@/styles/animations";
 import { selectableText } from "@/styles/mixins";
-import { shouldForwardProp } from "@/utils/shouldForwardProp";
 
 export const ScrollArea = styled.div`
   flex: 1;
@@ -72,82 +71,6 @@ export const Title = styled.h1`
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   ${selectableText};
-`;
-
-export const PeriodRow = styled.div`
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-`;
-
-export const PeriodLabel = styled.span`
-  flex-shrink: 0;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  font-weight: 400; /* TODO: 토큰 없음 - fontSize 14 / fontWeight 400 조합, subBody는 500 */
-  color: ${({ theme }) => theme.colors.gray.gray300};
-`;
-
-export const PeriodValue = styled.span`
-  flex: 1;
-  min-width: 0;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  font-weight: 400; /* TODO: 토큰 없음 - fontSize 14 / fontWeight 400 조합, subBody는 500 */
-  color: ${({ theme }) => theme.colors.gray.gray100};
-  ${selectableText};
-`;
-
-export const SpaceLink = styled.a`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 8px;
-  color: ${({ theme }) => theme.colors.gray.gray300};
-
-  svg {
-    flex-shrink: 0;
-  }
-`;
-
-export const SpaceLinkText = styled.span`
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-decoration: underline;
-  ${selectableText};
-`;
-
-export const DescriptionRow = styled("div", { shouldForwardProp })<{
-  $isExpanded: boolean;
-}>`
-  display: flex;
-  flex-direction: ${({ $isExpanded }) => ($isExpanded ? "column" : "row")};
-  align-items: flex-end;
-  gap: 4px;
-  margin-top: 24px;
-`;
-
-export const Description = styled("p", { shouldForwardProp })<{
-  $isExpanded: boolean;
-}>`
-  flex: 1;
-  width: 100%;
-  min-width: 0;
-  ${({ theme }) => ({ ...theme.typography.body4 })};
-  color: ${({ theme }) => theme.colors.gray.gray100};
-  white-space: pre-wrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: ${({ $isExpanded }) => ($isExpanded ? "unset" : 2)};
-  -webkit-box-orient: vertical;
-  ${selectableText};
-`;
-
-export const MoreButton = styled.button`
-  flex-shrink: 0;
-  ${({ theme }) => ({ ...theme.typography.body4 })};
-  color: ${({ theme }) => theme.colors.gray.gray300};
 `;
 
 export const SectionHeader = styled.div`

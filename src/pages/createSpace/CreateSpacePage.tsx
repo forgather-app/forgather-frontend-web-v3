@@ -122,6 +122,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               </S.FieldLabelRow>
               <TextArea
                 {...description}
+                size="extraLarge"
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
                 placeholder={
                   "전시 소개나 관람 안내를 자유롭게 적어주세요.\n운영 시간, 작가 상주 시간, 환영 인사도 좋아요."
@@ -138,7 +139,8 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               <TextField
                 {...linkUrl}
                 variant="link"
-                placeholder="전시와 관련된 링크를 첨부해주세요."
+                size="large"
+                placeholder="관련된 링크를 첨부해주세요."
                 errorMessage={linkUrlError}
                 onBlur={(event) => {
                   linkUrl.onBlur();
@@ -149,6 +151,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               <TextField
                 {...linkName}
                 variant="count"
+                size="large"
                 maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
                 placeholder="링크 제목을 작성해주세요."
                 errorMessage={linkNameError}
@@ -177,26 +180,22 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               errorMessage={exhibitionLocationError}
             />
 
-            <GuestBookWritingPolicyField
-              value={guestBookWritingPolicy.value}
-              onChange={(policy) => {
-                guestBookWritingPolicy.onChange(policy);
-                if (
-                  policy === "EXHIBITION_PERIOD" &&
-                  !isExhibitionPeriodComplete
-                ) {
-                  periodRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                }
-              }}
-            />
-
-            <S.FieldGroup>
-              <S.FieldLabelRow>
-                <S.Label>방명록 공개 설정</S.Label>
-              </S.FieldLabelRow>
+            <S.GuestBookSettings>
+              <GuestBookWritingPolicyField
+                value={guestBookWritingPolicy.value}
+                onChange={(policy) => {
+                  guestBookWritingPolicy.onChange(policy);
+                  if (
+                    policy === "EXHIBITION_PERIOD" &&
+                    !isExhibitionPeriodComplete
+                  ) {
+                    periodRef.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }
+                }}
+              />
               <S.ToggleRow>
                 <S.ToggleLabelGroup>
                   <IcLock aria-hidden="true" width={20} height={20} />
@@ -208,7 +207,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                   ariaLabel="방명록 나만 보기"
                 />
               </S.ToggleRow>
-            </S.FieldGroup>
+            </S.GuestBookSettings>
           </>
         )}
       </S.Main>
