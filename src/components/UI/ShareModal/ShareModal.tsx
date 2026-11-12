@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import IcClose from "@/assets/icons/ic_close.svg?react";
 import IcLink from "@/assets/icons/ic_link.svg?react";
 import IcQr from "@/assets/icons/ic_qr.svg?react";
@@ -9,6 +10,10 @@ interface ShareModalProps {
   isOpen: boolean;
   /** 모달을 닫을 때 호출되는 콜백 */
   onClose: () => void;
+  /** 제목 (기본값: "초대장 보내기") */
+  title?: string;
+  /** 부제목 (기본값: 스페이스 초대 안내 문구) */
+  subtitle?: ReactNode;
   /** 카카오톡으로 보내기 클릭 핸들러 */
   onKakaoShare: () => void;
   /** 클립보드에 복사하기 클릭 핸들러 */
@@ -20,6 +25,14 @@ interface ShareModalProps {
 const ShareModal = ({
   isOpen,
   onClose,
+  title = "초대장 보내기",
+  subtitle = (
+    <>
+      방명록을 남길 수 있도록
+      <br />
+      스페이스를 공유해보세요
+    </>
+  ),
   onKakaoShare,
   onCopyLink,
   onSaveQr,
@@ -36,12 +49,8 @@ const ShareModal = ({
             </S.GraphicHeader>
 
             <S.TextGroup>
-              <S.Title>초대장 보내기</S.Title>
-              <S.Subtitle>
-                방명록을 남길 수 있도록
-                <br />
-                스페이스를 공유해보세요
-              </S.Subtitle>
+              <S.Title>{title}</S.Title>
+              <S.Subtitle>{subtitle}</S.Subtitle>
             </S.TextGroup>
 
             <S.ActionList>

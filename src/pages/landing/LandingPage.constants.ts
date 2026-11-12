@@ -6,10 +6,6 @@ export const LANDING_DESKTOP_QUERY = `@media (min-width: ${LANDING_DESKTOP_MIN_W
 /** 포게더 카카오톡 채널 - 헤더 "문의하기"와 푸터 카카오톡 아이콘이 공유한다 */
 export const LANDING_KAKAO_CHANNEL_URL = "https://pf.kakao.com/_rHNtn";
 
-/** 오늘 하루 보지 않기 상태를 저장하는 localStorage 키 */
-export const LANDING_APP_NOTICE_DISMISS_KEY =
-  "forgather:landing-app-notice-dismissed";
-
 export interface LandingStat {
   id: string;
   value: string;

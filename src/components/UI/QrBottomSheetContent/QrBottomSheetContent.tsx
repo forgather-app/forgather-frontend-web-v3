@@ -33,7 +33,7 @@ const generateQrImage = async (value: string) => {
   const qrCanvas = await QRCode.toCanvas(value, {
     width: QR_CONTENT_SIZE,
     margin: 0,
-    color: { dark: `${theme.colors.gray.gray200}FF`, light: "#00000000" },
+    color: { dark: `${theme.colors.semantic.black}FF`, light: "#00000000" },
   });
 
   const canvas = document.createElement("canvas");
@@ -45,7 +45,7 @@ const generateQrImage = async (value: string) => {
   ctx.save();
   drawRoundedRectPath(ctx, 0, 0, QR_CANVAS_SIZE, QR_CANVAS_SIZE, QR_RADIUS);
   ctx.clip();
-  ctx.fillStyle = theme.colors.gray.gray700;
+  ctx.fillStyle = theme.colors.gray.white;
   ctx.fillRect(0, 0, QR_CANVAS_SIZE, QR_CANVAS_SIZE);
   ctx.drawImage(qrCanvas, QR_PADDING, QR_PADDING);
   ctx.restore();

@@ -14,7 +14,10 @@ import Button from "@/components/@common/Button/Button";
 import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import ImageLightbox from "@/components/UI/ImageLightbox/ImageLightbox";
 import Modal from "@/components/UI/Modal/Modal";
+import QrBottomSheetContent from "@/components/UI/QrBottomSheetContent/QrBottomSheetContent";
+import ShareModal from "@/components/UI/ShareModal/ShareModal";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
+import useKakaoShareBridge from "@/hooks/@common/useKakaoShareBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { trackEvent } from "@/utils/analytics";
 import { getImageUrl } from "@/utils/getImageUrl";
@@ -47,7 +50,10 @@ const ArtworkDetailPage = ({
   const [lightboxStartIndex, setLightboxStartIndex] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isQrSheetOpen, setIsQrSheetOpen] = useState(false);
   const { showSnackBar } = useSnackBar();
+  const { requestKakaoShare } = useKakaoShareBridge();
   const queryClient = useQueryClient();
   const { mutate: deleteArtwork } = useDeleteV2({
     request: withApiVersion(1),
@@ -152,6 +158,7 @@ const ArtworkDetailPage = ({
   const embedUrl = artwork.videoUrl
     ? getYoutubeEmbedUrl(artwork.videoUrl)
     : null;
+  const writeUrl = `${import.meta.env.VITE_DOMAIN}/spaces/${spaceId}/guest/artworks/${artworkId}`;
   // isVideoAfterPhoto가 false면 영상을 사진보다 먼저 보여준다 (필드 없으면 기존 기본 순서인 사진 → 영상 유지)
   const isVideoFirst = artwork.isVideoAfterPhoto === false;
 
@@ -204,6 +211,7 @@ const ArtworkDetailPage = ({
             isOpen={isMenuOpen}
             onClose={() => setIsMenuOpen(false)}
             items={[
+              { label: "공유하기", onClick: () => setIsShareModalOpen(true) },
               { label: "수정하기", onClick: onEditClick },
               {
                 label: "삭제하기",
@@ -237,7 +245,6 @@ const ArtworkDetailPage = ({
 
       {images.length > 0 && (
         <ImageLightbox
-          key={lightboxStartIndex}
           isOpen={isLightboxOpen}
           onClose={() => setIsLightboxOpen(false)}
           images={images}
@@ -273,6 +280,62 @@ const ArtworkDetailPage = ({
           </S.ConfirmBody>
         </Modal.Content>
       </Modal>
+
+      <ShareModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        title="작품 공유하기"
+        subtitle={
+          <>
+            다른 사람들에게
+            <br />이 작품을 공유해보세요
+          </>
+        }
+        onKakaoShare={() => {
+          requestKakaoShare({
+            title: `${title} | Forgather`,
+            description: `${artistName}의 작품을 감상해보세요`,
+            imageUrl:
+              "https://dysvfn6jyq7o7.cloudfront.net/images/og-image-artwork.png",
+            link: writeUrl,
+            buttonTitle: "작품 보러가기",
+          });
+          trackEvent("artwork_shared", {
+            artwork_id: artworkId,
+            space_id: spaceId,
+            share_channel: "kakao",
+          });
+          setIsShareModalOpen(false);
+        }}
+        onCopyLink={async () => {
+          await navigator.clipboard.writeText(writeUrl);
+          trackEvent("artwork_shared", {
+            artwork_id: artworkId,
+            space_id: spaceId,
+            share_channel: "link",
+          });
+          showSnackBar("링크가 클립보드에 복사되었습니다.", "default");
+          setIsShareModalOpen(false);
+        }}
+        onSaveQr={() => {
+          setIsShareModalOpen(false);
+          setIsQrSheetOpen(true);
+        }}
+      />
+
+      {isQrSheetOpen && (
+        <QrBottomSheetContent
+          isOpen={isQrSheetOpen}
+          onClose={() => setIsQrSheetOpen(false)}
+          qrValue={writeUrl}
+          onSaveSuccess={() =>
+            trackEvent("artwork_qr_saved", {
+              artwork_id: artworkId,
+              space_id: spaceId,
+            })
+          }
+        />
+      )}
     </S.ScrollArea>
   );
 };
