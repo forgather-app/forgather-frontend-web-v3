@@ -46,7 +46,7 @@ const LocationInput = ({
           variant="count"
           size="large"
           value={value.placeName}
-          placeholder="장소명을 입력해주세요"
+          placeholder="장소명을 입력해주세요."
           maxCount={CONSTRAINTS.CREATE_SPACE.PLACE_NAME_MAX_LENGTH}
           errorMessage={errorMessage}
           onChange={(event) =>

@@ -217,7 +217,7 @@ describe("CreateSpacePage 생성 단계", () => {
     );
     expect(screen.getByRole("textbox", { name: "전시 장소" })).toHaveAttribute(
       "placeholder",
-      "장소명을 입력해주세요",
+      "장소명을 입력해주세요.",
     );
     expect(
       screen.getByRole("button", { name: "카카오맵 연동하기" }),

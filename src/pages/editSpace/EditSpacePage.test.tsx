@@ -132,7 +132,7 @@ it("저장된 입력을 진행률 없는 수정 폼에 표시한다", async () =
   );
   expect(screen.getByRole("textbox", { name: "전시 장소" })).toHaveAttribute(
     "placeholder",
-    "장소명을 입력해주세요",
+    "장소명을 입력해주세요.",
   );
 });
 
