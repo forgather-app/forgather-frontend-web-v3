@@ -47,6 +47,7 @@ export const useCreateSpaceForm = () => {
     control,
     handleSubmit,
     getValues,
+    setValue,
     trigger,
     formState: { errors, touchedFields, isValid, isSubmitting },
   } = useForm<CreateSpaceFormValues>({
@@ -138,9 +139,10 @@ export const useCreateSpaceForm = () => {
   };
 
   const validateIntroduction = async () => {
-    const areFieldsValid = await trigger(introductionFields, {
-      shouldTouch: true,
-    });
+    for (const field of introductionFields) {
+      setValue(field, getValues(field), { shouldTouch: true });
+    }
+    const areFieldsValid = await trigger(introductionFields);
     const isLinkValid = validateLinkUrl(getValues("linkUrl"));
     return areFieldsValid && isLinkValid;
   };
