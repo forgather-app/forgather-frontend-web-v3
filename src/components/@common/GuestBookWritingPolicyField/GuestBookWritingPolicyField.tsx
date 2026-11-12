@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import type { GuestBookWritingPolicy } from "@/api/model";
+import radioActive from "@/assets/icons/ic_radio_active.svg";
+import radioInactive from "@/assets/icons/ic_radio_inactive.svg";
 
 const Group = styled.fieldset`
   min-width: 0;
@@ -19,40 +21,30 @@ const Group = styled.fieldset`
 const Option = styled.label<{ $selected: boolean }>`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 14px;
+  padding: 12px 16px;
   border: 1px solid ${({ theme, $selected }) =>
     $selected ? theme.colors.main.purple50 : theme.colors.gray.gray500};
   border-radius: 8px;
-  background-color: ${({ theme, $selected }) =>
-    $selected ? "rgba(98, 71, 255, 0.1)" : theme.colors.gray.gray600};
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  font-weight: ${({ $selected }) => ($selected ? 700 : 400)};
+  /* TODO: 토큰 없음 - 선택 항목 배경 */
+  background-color: ${({ $selected }) =>
+    $selected ? "rgba(98, 71, 255, 0.2)" : "transparent"};
+  ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   cursor: pointer;
 `;
 
 const Radio = styled.input<{ $selected: boolean }>`
-  appearance: none;
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   margin: 0;
-  border-radius: 50%;
   cursor: pointer;
-  &&,
-  &&:focus {
-    border: ${({ $selected }) => ($selected ? 2 : 1)}px solid
-      ${({ theme, $selected }) =>
-        $selected ? theme.colors.main.purple50 : theme.colors.gray.gray300};
-    background-color: transparent;
-    background-image: ${({ theme, $selected }) =>
-      $selected
-        ? `radial-gradient(circle, ${theme.colors.main.purple50} 0 5px, transparent 5px)`
-        : "none"};
-  }
+  background: url("${({ $selected }) => ($selected ? radioActive : radioInactive)}")
+    center no-repeat;
   &&:focus-visible {
+    border-radius: 50%;
     outline: 2px solid ${({ theme }) => theme.colors.main.purple50};
     outline-offset: 4px;
   }
@@ -75,6 +67,7 @@ export default function GuestBookWritingPolicyField({
         ] as const
       ).map(([policy, label]) => (
         <Option key={policy} $selected={value === policy}>
+          {label}
           <Radio
             $selected={value === policy}
             type="radio"
@@ -83,7 +76,6 @@ export default function GuestBookWritingPolicyField({
             checked={value === policy}
             onChange={() => onChange(policy)}
           />
-          {label}
         </Option>
       ))}
     </Group>

@@ -12,7 +12,7 @@ import GuestArtworkPage from "./GuestArtworkPage";
 const spaceResponse = {
   data: {
     name: "테스트 스페이스",
-    description: "소개 1줄\n소개 2줄\n소개 3줄",
+    description: "소개 1줄\n소개 2줄\n소개 3줄\n소개 4줄",
     host: { nickname: "테스트 작가" },
   },
 };
@@ -49,14 +49,14 @@ describe("스페이스 소개 더보기", () => {
     vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockReturnValue(
       scrollHeight,
     );
-    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(40);
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockReturnValue(77);
   };
 
   it.each([
     "space",
     "products",
   ])("%s 응답이 먼저 와도 잘린 소개에 더보기를 표시한다", async (first) => {
-    mockMeasurements(60);
+    mockMeasurements(103);
     const space = deferred();
     const products = deferred();
     vi.spyOn(apiClient, "request").mockImplementation(
@@ -90,7 +90,7 @@ describe("스페이스 소개 더보기", () => {
   });
 
   it.each([
-    60, 40,
+    103, 77,
   ])("캐시된 소개의 전체 높이가 %spx일 때 잘림에 맞춰 표시한다", (scrollHeight) => {
     mockMeasurements(scrollHeight);
     const queryClient = new QueryClient({
@@ -101,7 +101,7 @@ describe("스페이스 소개 더보기", () => {
     renderPage(queryClient);
 
     expect(Boolean(screen.queryByRole("button", { name: "더보기" }))).toBe(
-      scrollHeight > 40,
+      scrollHeight > 77,
     );
   });
 });
@@ -134,22 +134,24 @@ describe("게스트 전시 장소 상세", () => {
     undefined,
     "",
   ])("장소명이 %s이면 URL이 있어도 장소 행을 숨긴다", async (placeName) => {
-    renderLocationPage({
-      placeName,
-      placeUrl: "https://place.map.kakao.com/123",
-    });
+    const placeUrl = "https://place.map.kakao.com/123";
+    renderLocationPage({ placeName, placeUrl });
     await screen.findByRole("heading", { name: "테스트 스페이스" });
     expect(screen.queryByText("전시 장소")).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "링크 열기" })).toHaveAttribute(
+      "href",
+      "https://example.com/exhibition",
+    );
     expect(
-      screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
-    ).not.toBeInTheDocument();
+      screen.getAllByRole("link").map((link) => link.getAttribute("href")),
+    ).not.toContain(placeUrl);
   });
 
   it("직접 입력한 장소명만 있으면 지도 링크 없이 표시한다", async () => {
     renderLocationPage({ placeName: "직접 입력한 전시장" });
     expect(await screen.findByText("직접 입력한 전시장")).toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
+      screen.queryByRole("link", { name: "직접 입력한 전시장" }),
     ).not.toBeInTheDocument();
   });
 
@@ -159,7 +161,11 @@ describe("게스트 전시 장소 상세", () => {
       placeUrl: "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
     });
     const name = await screen.findByText("직접 입력한 전시장");
-    const map = screen.getByRole("link", { name: "카카오맵으로 열기 ↗" });
+    const map = screen.getByRole("link", { name: "직접 입력한 전시장" });
+    expect(screen.getByText("링크", { exact: true })).toBeInTheDocument();
+    expect(
+      screen.getByText("2026. 10. 20(화) - 10. 30(금)"),
+    ).toBeInTheDocument();
     expect(map).toHaveAttribute(
       "href",
       "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",

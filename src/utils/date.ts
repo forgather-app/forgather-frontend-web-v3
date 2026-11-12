@@ -20,8 +20,8 @@ export const formatShortDate = (date: Date): string => {
 };
 
 export const formatPeriodDate = (date: Date): string => {
-  const { year, month, day } = parseDateParts(date);
-  return `${year}.${month}.${day}`;
+  const { year, month, day, weekday } = parseDateParts(date);
+  return `${year}. ${month}. ${day} (${weekday})`;
 };
 
 export const formatExhibitionPeriod = (
@@ -51,18 +51,15 @@ export const parseDateOnlyString = (value: string): Date => {
   return new Date(year, month - 1, day);
 };
 
-/** 스페이스 상세의 "전시 일정"에 표시하는 형식입니다 (예: "2026.11.06 (금) — 11.09 (월)"). */
+/** 스페이스 상세에 표시하는 전시 일정입니다. 종료 연도는 시작 연도와 다를 때만 표시합니다. */
 export const formatExhibitionSchedule = (
   startDate: Date,
   endDate: Date,
 ): string => {
   const start = parseDateParts(startDate);
   const end = parseDateParts(endDate);
-  const startText = `${start.year}.${start.month}.${start.day} (${start.weekday})`;
-  const endText =
-    start.year === end.year
-      ? `${end.month}.${end.day} (${end.weekday})`
-      : `${end.year}.${end.month}.${end.day} (${end.weekday})`;
-
-  return `${startText} — ${endText}`;
+  const startText = `${start.year}. ${start.month}. ${start.day}(${start.weekday})`;
+  const endYear = start.year === end.year ? "" : `${end.year}. `;
+  const endText = `${endYear}${end.month}. ${end.day}(${end.weekday})`;
+  return `${startText} - ${endText}`;
 };

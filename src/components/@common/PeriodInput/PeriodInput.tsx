@@ -39,8 +39,8 @@ const PeriodInput = ({
 }: PeriodInputProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const idPrefix = useId();
-  const startLabelId = `${idPrefix}-start-label`;
-  const endLabelId = `${idPrefix}-end-label`;
+  const startValueId = `${idPrefix}-start-value`;
+  const endValueId = `${idPrefix}-end-value`;
   const hasError = !!errorMessage;
 
   const handleConfirm = (range: { startDate: Date; endDate: Date }) => {
@@ -51,56 +51,55 @@ const PeriodInput = ({
   return (
     <S.Wrapper>
       <S.Row>
-        <S.FieldColumn>
-          <S.FieldLabel id={startLabelId}>시작일</S.FieldLabel>
-          <S.DateButtonWrapper>
-            <S.DateButton
+        <S.DateButtonWrapper $hasError={hasError}>
+          <S.DateButton
+            type="button"
+            $state={toDateButtonState(!!value.startDate, hasError)}
+            onClick={() => setIsSheetOpen(true)}
+            aria-label="시작일"
+            aria-describedby={value.startDate ? startValueId : undefined}
+            aria-haspopup="dialog"
+            aria-invalid={hasError || undefined}
+          >
+            <span id={startValueId}>
+              {value.startDate ? formatPeriodDate(value.startDate) : "시작일"}
+            </span>
+          </S.DateButton>
+          {value.startDate && (
+            <S.ClearButton
               type="button"
-              $state={toDateButtonState(!!value.startDate, hasError)}
-              onClick={() => setIsSheetOpen(true)}
-              aria-labelledby={startLabelId}
-              aria-haspopup="dialog"
-              aria-invalid={hasError || undefined}
+              aria-label="시작일 삭제"
+              onClick={() => onChange({ ...value, startDate: null })}
             >
-              {value.startDate
-                ? formatPeriodDate(value.startDate)
-                : "YYYY.MM.DD"}
-            </S.DateButton>
-            {value.startDate && (
-              <S.ClearButton
-                type="button"
-                aria-label="시작일 삭제"
-                onClick={() => onChange({ ...value, startDate: null })}
-              >
-                <ClearIcon aria-hidden width={20} height={20} />
-              </S.ClearButton>
-            )}
-          </S.DateButtonWrapper>
-        </S.FieldColumn>
-        <S.FieldColumn>
-          <S.FieldLabel id={endLabelId}>종료일</S.FieldLabel>
-          <S.DateButtonWrapper>
-            <S.DateButton
+              <ClearIcon aria-hidden width={20} height={20} />
+            </S.ClearButton>
+          )}
+        </S.DateButtonWrapper>
+        <S.Separator aria-hidden="true">-</S.Separator>
+        <S.DateButtonWrapper $hasError={hasError}>
+          <S.DateButton
+            type="button"
+            $state={toDateButtonState(!!value.endDate, hasError)}
+            onClick={() => setIsSheetOpen(true)}
+            aria-label="종료일"
+            aria-describedby={value.endDate ? endValueId : undefined}
+            aria-haspopup="dialog"
+            aria-invalid={hasError || undefined}
+          >
+            <span id={endValueId}>
+              {value.endDate ? formatPeriodDate(value.endDate) : "종료일"}
+            </span>
+          </S.DateButton>
+          {value.endDate && (
+            <S.ClearButton
               type="button"
-              $state={toDateButtonState(!!value.endDate, hasError)}
-              onClick={() => setIsSheetOpen(true)}
-              aria-labelledby={endLabelId}
-              aria-haspopup="dialog"
-              aria-invalid={hasError || undefined}
+              aria-label="종료일 삭제"
+              onClick={() => onChange({ ...value, endDate: null })}
             >
-              {value.endDate ? formatPeriodDate(value.endDate) : "YYYY.MM.DD"}
-            </S.DateButton>
-            {value.endDate && (
-              <S.ClearButton
-                type="button"
-                aria-label="종료일 삭제"
-                onClick={() => onChange({ ...value, endDate: null })}
-              >
-                <ClearIcon aria-hidden width={20} height={20} />
-              </S.ClearButton>
-            )}
-          </S.DateButtonWrapper>
-        </S.FieldColumn>
+              <ClearIcon aria-hidden width={20} height={20} />
+            </S.ClearButton>
+          )}
+        </S.DateButtonWrapper>
       </S.Row>
       {hasError && <S.ErrorMessage role="alert">{errorMessage}</S.ErrorMessage>}
       {isSheetOpen && (
