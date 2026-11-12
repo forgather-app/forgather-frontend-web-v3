@@ -9,6 +9,23 @@ export const Container = styled.form`
   overflow: hidden;
 `;
 
+export const Navigation = styled.fieldset`
+  flex-shrink: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  & button:disabled {
+    opacity: 0.5;
+  }
+`;
+
+export const Progress = styled.div`
+  flex-shrink: 0;
+  margin-top: ${({ theme }) => theme.layout.sidePadding}px;
+`;
+
 export const Title = styled.h1`
   flex-shrink: 0;
   margin-top: 32px;

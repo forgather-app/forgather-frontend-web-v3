@@ -1,11 +1,11 @@
-import { useRef } from "react";
-import { Controller } from "react-hook-form";
+import { type FormEvent, useLayoutEffect, useRef, useState } from "react";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
 import GuestBookWritingPolicyField from "@/components/@common/GuestBookWritingPolicyField/GuestBookWritingPolicyField";
 import LocationInput from "@/components/@common/LocationInput/LocationInput";
 import NavigationBar from "@/components/@common/NavigationBar/NavigationBar";
 import PeriodInput from "@/components/@common/PeriodInput/PeriodInput";
+import ProgressBar from "@/components/@common/ProgressBar/ProgressBar";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
@@ -20,169 +20,167 @@ interface CreateSpacePageProps {
 
 const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
   const {
-    control,
-    spaceNameRules,
-    descriptionRules,
-    linkNameRules,
-    exhibitionLocationRules,
-    exhibitionPeriodRules,
-    guestBookWritingPolicyRules,
+    spaceName,
+    description,
+    linkUrl,
+    linkName,
+    exhibitionPeriod,
+    exhibitionLocation,
+    guestBookWritingPolicy,
+    guestBookPrivate,
     exhibitionPeriodError,
     isExhibitionPeriodComplete,
     exhibitionLocationError,
+    isSpaceNameValid,
     spaceNameError,
     descriptionError,
     linkNameError,
     linkUrlError,
-    handleLinkUrlBlur,
+    validateLinkUrl,
+    validateIntroduction,
     isValid,
-    isGuestBookPrivate,
-    setIsGuestBookPrivate,
     isSubmitting,
     getSubmitHandler,
   } = useCreateSpaceForm();
 
+  const [step, setStep] = useState<"introduction" | "exhibition">(
+    "introduction",
+  );
+  const isIntroduction = step === "introduction";
+  const previousStep = useRef(step);
+  const mainRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const periodRef = useRef<HTMLDivElement>(null);
+  const isHandlingSubmit = useRef(false);
+
+  useLayoutEffect(() => {
+    if (previousStep.current === step) return;
+    previousStep.current = step;
+    if (mainRef.current) mainRef.current.scrollTop = 0;
+    titleRef.current?.focus({ preventScroll: true });
+  }, [step]);
+
+  const handleBack = () => {
+    if (isIntroduction) {
+      window.history.back();
+    } else if (!isHandlingSubmit.current) {
+      setStep("introduction");
+    }
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isHandlingSubmit.current) return;
+    isHandlingSubmit.current = true;
+
+    try {
+      if (isIntroduction) {
+        if (await validateIntroduction()) setStep("exhibition");
+        return;
+      }
+
+      await getSubmitHandler(onSuccess)();
+    } finally {
+      isHandlingSubmit.current = false;
+    }
+  };
 
   return (
-    <S.Container onSubmit={getSubmitHandler(onSuccess)} noValidate>
-      <NavigationBar
-        title="새 스페이스"
-        onBackClick={() => window.history.back()}
-      />
-      <S.Main>
-        <S.Title>스페이스를 소개해주세요!</S.Title>
-        <S.FieldGroup>
-          <S.FieldLabelRow>
-            <S.Label>스페이스명</S.Label>
-            <S.RequiredDot aria-hidden="true" />
-          </S.FieldLabelRow>
-          <Controller
-            control={control}
-            name="spaceName"
-            rules={spaceNameRules}
-            render={({ field }) => (
+    <S.Container onSubmit={handleSubmit} noValidate>
+      <S.Navigation disabled={isSubmitting}>
+        <NavigationBar title="새 스페이스" onBackClick={handleBack} />
+      </S.Navigation>
+      <S.Progress>
+        <ProgressBar value={isIntroduction ? 50 : 100} />
+      </S.Progress>
+      <S.Main ref={mainRef}>
+        <S.Title ref={titleRef} tabIndex={-1}>
+          {isIntroduction
+            ? "스페이스를 소개해주세요!"
+            : "기간과 장소를 추가해주세요."}
+        </S.Title>
+        {isIntroduction ? (
+          <>
+            <S.FieldGroup>
+              <S.FieldLabelRow>
+                <S.Label>스페이스명</S.Label>
+                <S.RequiredDot aria-hidden="true" />
+              </S.FieldLabelRow>
               <TextField
+                {...spaceName}
                 variant="count"
-                value={field.value}
                 maxCount={CONSTRAINTS.CREATE_SPACE.NAME_MAX_LENGTH}
                 placeholder="예) 2026 졸업전시, 나의 여름"
                 errorMessage={spaceNameError}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
                 aria-label="스페이스명"
               />
-            )}
-          />
-        </S.FieldGroup>
+            </S.FieldGroup>
 
-        <S.FieldGroup>
-          <S.FieldLabelRow>
-            <S.Label>스페이스 소개</S.Label>
-          </S.FieldLabelRow>
-          <Controller
-            control={control}
-            name="description"
-            rules={descriptionRules}
-            render={({ field }) => (
+            <S.FieldGroup>
+              <S.FieldLabelRow>
+                <S.Label>스페이스 소개</S.Label>
+              </S.FieldLabelRow>
               <TextArea
-                value={field.value}
+                {...description}
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
                 placeholder={
                   "전시 소개나 관람 안내를 자유롭게 적어주세요.\n운영 시간, 작가 상주 시간, 환영 인사도 좋아요."
                 }
                 errorMessage={descriptionError}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
                 aria-label="스페이스 소개"
               />
-            )}
-          />
-        </S.FieldGroup>
+            </S.FieldGroup>
 
-        <S.FieldGroup ref={periodRef}>
-          <S.FieldLabelRow>
-            <S.Label>전시 기간</S.Label>
-          </S.FieldLabelRow>
-          <Controller
-            control={control}
-            name="exhibitionPeriod"
-            rules={exhibitionPeriodRules}
-            render={({ field }) => (
-              <PeriodInput
-                errorMessage={exhibitionPeriodError}
-                value={field.value}
-                onChange={field.onChange}
-                highlightToday={true}
-              />
-            )}
-          />
-        </S.FieldGroup>
-
-        <Controller
-          control={control}
-          name="exhibitionLocation"
-          rules={exhibitionLocationRules}
-          render={({ field }) => (
-            <LocationInput
-              value={field.value}
-              onChange={field.onChange}
-              onBlur={field.onBlur}
-              errorMessage={exhibitionLocationError}
-            />
-          )}
-        />
-
-        <S.FieldGroup>
-          <S.FieldLabelRow>
-            <S.Label>링크</S.Label>
-          </S.FieldLabelRow>
-          <Controller
-            control={control}
-            name="linkUrl"
-            render={({ field }) => (
+            <S.FieldGroup>
+              <S.FieldLabelRow>
+                <S.Label>링크</S.Label>
+              </S.FieldLabelRow>
               <TextField
+                {...linkUrl}
                 variant="link"
-                value={field.value}
                 placeholder="전시와 관련된 링크를 첨부해주세요."
                 errorMessage={linkUrlError}
-                onChange={field.onChange}
-                onBlur={() => {
-                  field.onBlur();
-                  handleLinkUrlBlur(field.value);
+                onBlur={(event) => {
+                  linkUrl.onBlur();
+                  validateLinkUrl(event.currentTarget.value);
                 }}
                 aria-label="링크 URL"
               />
-            )}
-          />
-          <Controller
-            control={control}
-            name="linkName"
-            rules={linkNameRules}
-            render={({ field }) => (
               <TextField
+                {...linkName}
                 variant="count"
-                value={field.value}
                 maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
                 placeholder="링크 제목을 작성해주세요."
                 errorMessage={linkNameError}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
                 aria-label="링크 제목"
               />
-            )}
-          />
-        </S.FieldGroup>
+            </S.FieldGroup>
+          </>
+        ) : (
+          <>
+            <S.FieldGroup ref={periodRef}>
+              <S.FieldLabelRow>
+                <S.Label>전시 기간</S.Label>
+              </S.FieldLabelRow>
+              <PeriodInput
+                errorMessage={exhibitionPeriodError}
+                value={exhibitionPeriod.value}
+                onChange={exhibitionPeriod.onChange}
+                highlightToday={true}
+              />
+            </S.FieldGroup>
 
-        <Controller
-          control={control}
-          name="guestBookWritingPolicy"
-          rules={guestBookWritingPolicyRules}
-          render={({ field }) => (
+            <LocationInput
+              value={exhibitionLocation.value}
+              onChange={exhibitionLocation.onChange}
+              onBlur={exhibitionLocation.onBlur}
+              errorMessage={exhibitionLocationError}
+            />
+
             <GuestBookWritingPolicyField
-              value={field.value}
+              value={guestBookWritingPolicy.value}
               onChange={(policy) => {
-                field.onChange(policy);
+                guestBookWritingPolicy.onChange(policy);
                 if (
                   policy === "EXHIBITION_PERIOD" &&
                   !isExhibitionPeriodComplete
@@ -194,28 +192,39 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                 }
               }}
             />
-          )}
-        />
-        <S.FieldGroup>
-          <S.FieldLabelRow>
-            <S.Label>방명록 공개 설정</S.Label>
-          </S.FieldLabelRow>
-          <S.ToggleRow>
-            <S.ToggleLabelGroup>
-              <IcLock aria-hidden="true" width={20} height={20} />
-              <S.ToggleLabel>방명록 나만 보기</S.ToggleLabel>
-            </S.ToggleLabelGroup>
-            <Toggle
-              checked={isGuestBookPrivate}
-              onChange={setIsGuestBookPrivate}
-              ariaLabel="방명록 나만 보기"
-            />
-          </S.ToggleRow>
-        </S.FieldGroup>
+
+            <S.FieldGroup>
+              <S.FieldLabelRow>
+                <S.Label>방명록 공개 설정</S.Label>
+              </S.FieldLabelRow>
+              <S.ToggleRow>
+                <S.ToggleLabelGroup>
+                  <IcLock aria-hidden="true" width={20} height={20} />
+                  <S.ToggleLabel>방명록 나만 보기</S.ToggleLabel>
+                </S.ToggleLabelGroup>
+                <Toggle
+                  checked={guestBookPrivate.value}
+                  onChange={guestBookPrivate.onChange}
+                  ariaLabel="방명록 나만 보기"
+                />
+              </S.ToggleRow>
+            </S.FieldGroup>
+          </>
+        )}
       </S.Main>
 
       <S.Footer>
-        <Button text="완료" type="submit" disabled={!isValid || isSubmitting} />
+        <Button
+          text={isIntroduction ? "다음" : "완료"}
+          type="submit"
+          disabled={
+            isIntroduction ? !isSpaceNameValid : !isValid || isSubmitting
+          }
+          onClick={(event) => {
+            // 다음을 누른 다중 클릭이 같은 버튼의 완료까지 실행하지 않도록 한다.
+            if (!isIntroduction && event.detail > 1) event.preventDefault();
+          }}
+        />
       </S.Footer>
     </S.Container>
   );
