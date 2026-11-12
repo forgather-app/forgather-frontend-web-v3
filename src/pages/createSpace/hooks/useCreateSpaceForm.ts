@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useController, useForm } from "react-hook-form";
 import { useCreate } from "@/api/generated/space-스페이스";
 import type {
   ApiResponseCreateSpaceResponse,
@@ -31,24 +31,15 @@ interface CreateSpaceFormValues {
   exhibitionPeriod: PeriodInputValue;
   guestBookWritingPolicy: GuestBookWritingPolicy;
   exhibitionLocation: LocationInputValue;
+  isGuestBookPrivate: boolean;
 }
 
-const spaceNameRules = {
-  validate: {
-    required: validateSpaceNameRequired,
-    maxLength: validateSpaceNameMaxLength,
-  },
-};
-
-const descriptionRules = {
-  validate: validateSpaceDescriptionMaxLength,
-};
-
-const linkNameRules = {
-  validate: {
-    maxLength: validateSpaceLinkNameMaxLength,
-  },
-};
+const introductionFields = [
+  "spaceName",
+  "description",
+  "linkUrl",
+  "linkName",
+] as const;
 
 export const useCreateSpaceForm = () => {
   const { showSnackBar } = useSnackBar();
@@ -56,7 +47,8 @@ export const useCreateSpaceForm = () => {
     control,
     handleSubmit,
     getValues,
-    formState: { errors, touchedFields, isValid },
+    trigger,
+    formState: { errors, touchedFields, isValid, isSubmitting },
   } = useForm<CreateSpaceFormValues>({
     mode: "onChange",
     defaultValues: {
@@ -67,51 +59,106 @@ export const useCreateSpaceForm = () => {
       linkName: "",
       exhibitionPeriod: { startDate: null, endDate: null },
       exhibitionLocation: { placeName: "", placeId: "", placeUrl: "" },
+      isGuestBookPrivate: false,
     },
   });
 
-  const policy = useWatch({ control, name: "guestBookWritingPolicy" });
-  const period = useWatch({ control, name: "exhibitionPeriod" });
+  // 단계가 바뀌어도 등록을 유지해 최종 제출에서 화면에 없는 필드까지 검증한다.
+  const { field: spaceName } = useController({
+    control,
+    name: "spaceName",
+    rules: {
+      validate: {
+        required: validateSpaceNameRequired,
+        maxLength: validateSpaceNameMaxLength,
+      },
+    },
+  });
+  const { field: description } = useController({
+    control,
+    name: "description",
+    rules: { validate: validateSpaceDescriptionMaxLength },
+  });
+  const { field: linkUrl } = useController({ control, name: "linkUrl" });
+  const { field: linkName } = useController({
+    control,
+    name: "linkName",
+    rules: { validate: validateSpaceLinkNameMaxLength },
+  });
+  const { field: exhibitionPeriod } = useController({
+    control,
+    name: "exhibitionPeriod",
+    rules: {
+      validate: (value) =>
+        validateGuestBookWritingPeriod(
+          getValues("guestBookWritingPolicy"),
+          value,
+        ),
+      deps: "guestBookWritingPolicy",
+    },
+  });
+  const { field: guestBookWritingPolicy } = useController({
+    control,
+    name: "guestBookWritingPolicy",
+    rules: {
+      validate: (value) =>
+        validateGuestBookWritingPeriod(value, getValues("exhibitionPeriod")),
+      deps: "exhibitionPeriod",
+    },
+  });
+  const { field: exhibitionLocation } = useController({
+    control,
+    name: "exhibitionLocation",
+    rules: { validate: validateLocationInput },
+  });
+  const { field: guestBookPrivate } = useController({
+    control,
+    name: "isGuestBookPrivate",
+  });
+  const policy = guestBookWritingPolicy.value;
+  const period = exhibitionPeriod.value;
   const periodValidation = validateGuestBookWritingPeriod(policy, period);
 
-  const [isGuestBookPrivate, setIsGuestBookPrivate] = useState(false);
-  const [linkUrlFormatError, setLinkUrlFormatError] = useState<
-    string | undefined
-  >(undefined);
-  const { mutate: createSpace, isPending } = useCreate();
+  const [linkUrlError, setLinkUrlError] = useState<string>();
+  const { mutateAsync: createSpace, isPending } = useCreate();
 
+  const isSpaceNameValid =
+    validateSpaceNameRequired(spaceName.value) === true &&
+    validateSpaceNameMaxLength(spaceName.value) === true;
   const spaceNameError =
     errors.spaceName?.type === "required" && !touchedFields.spaceName
       ? undefined
       : errors.spaceName?.message;
-  const descriptionError = errors.description?.message;
-  const linkUrlError = linkUrlFormatError;
-  const linkNameError = errors.linkName?.message;
 
   // linkUrl은 onChange마다 형식을 검증하지 않고, blur 시점에만 검증해 에러를 노출함
-  const handleLinkUrlBlur = (value: string) => {
+  const validateLinkUrl = (value: string) => {
     const result = validateSpaceLinkUrlFormat(value);
-    setLinkUrlFormatError(result === true ? undefined : result);
+    setLinkUrlError(result === true ? undefined : result);
+    return result === true;
+  };
+
+  const validateIntroduction = async () => {
+    const areFieldsValid = await trigger(introductionFields, {
+      shouldTouch: true,
+    });
+    const isLinkValid = validateLinkUrl(getValues("linkUrl"));
+    return areFieldsValid && isLinkValid;
   };
 
   const getSubmitHandler = (onSuccess: (spaceCode: string) => void) =>
-    handleSubmit((values) => {
-      const linkUrlValidation = validateSpaceLinkUrlFormat(values.linkUrl);
-      if (linkUrlValidation !== true) {
-        setLinkUrlFormatError(linkUrlValidation);
-        return;
-      }
+    handleSubmit(async (values) => {
+      if (!validateLinkUrl(values.linkUrl)) return;
 
       const { startDate, endDate } = values.exhibitionPeriod;
 
-      createSpace(
+      await createSpace(
         {
           data: {
             ...toLocationInputPayload(values.exhibitionLocation),
             guestBookWritingPolicy: values.guestBookWritingPolicy,
             name: values.spaceName,
             description: values.description,
-            isPublic: !isGuestBookPrivate,
+            isPublic: !values.isGuestBookPrivate,
             linkUrl: values.linkUrl.trim(),
             linkName: values.linkName.trim(),
             ...(startDate && endDate
@@ -140,41 +187,33 @@ export const useCreateSpaceForm = () => {
           onError: () =>
             showSnackBar(ERROR_MESSAGES.SPACE_CREATE_FAILED, "error"),
         },
-      );
+      ).catch(() => {
+        // 요청 실패 안내는 mutation의 onError에서 처리한다.
+      });
     });
 
   return {
-    control,
-    spaceNameRules,
-    descriptionRules,
-    linkNameRules,
-    exhibitionPeriodRules: {
-      validate: (value: PeriodInputValue) =>
-        validateGuestBookWritingPeriod(
-          getValues("guestBookWritingPolicy"),
-          value,
-        ),
-      deps: "guestBookWritingPolicy" as const,
-    },
-    guestBookWritingPolicyRules: {
-      validate: (value: GuestBookWritingPolicy) =>
-        validateGuestBookWritingPeriod(value, getValues("exhibitionPeriod")),
-      deps: "exhibitionPeriod" as const,
-    },
+    spaceName,
+    description,
+    linkUrl,
+    linkName,
+    exhibitionPeriod,
+    exhibitionLocation,
+    guestBookWritingPolicy,
+    guestBookPrivate,
     isExhibitionPeriodComplete: !!period.startDate && !!period.endDate,
     exhibitionPeriodError:
       periodValidation === true ? undefined : periodValidation,
-    exhibitionLocationRules: { validate: validateLocationInput },
     exhibitionLocationError: errors.exhibitionLocation?.message,
+    isSpaceNameValid,
     spaceNameError,
-    descriptionError,
-    linkNameError,
+    descriptionError: errors.description?.message,
+    linkNameError: errors.linkName?.message,
     linkUrlError,
-    handleLinkUrlBlur,
+    validateLinkUrl,
+    validateIntroduction,
     isValid: isValid && periodValidation === true,
-    isGuestBookPrivate,
-    setIsGuestBookPrivate,
-    isSubmitting: isPending,
+    isSubmitting: isSubmitting || isPending,
     getSubmitHandler,
   };
 };
