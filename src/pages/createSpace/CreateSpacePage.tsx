@@ -11,6 +11,7 @@ import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
 import { CONSTRAINTS } from "@/constants/constraints";
 import useFunnel from "@/shared/funnel/useFunnel";
+import { preventEnterSubmit } from "@/utils/preventEnterSubmit";
 import * as S from "./CreateSpacePage.styles";
 import { useCreateSpaceForm } from "./hooks/useCreateSpaceForm";
 
@@ -105,7 +106,11 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
   };
 
   return (
-    <S.Container onSubmit={handleSubmit} noValidate>
+    <S.Container
+      onSubmit={handleSubmit}
+      onKeyDown={preventEnterSubmit}
+      noValidate
+    >
       <S.Navigation disabled={isSubmitting}>
         <NavigationBar title="새 스페이스" onBackClick={handleBack} />
       </S.Navigation>

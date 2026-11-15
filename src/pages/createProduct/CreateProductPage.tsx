@@ -7,6 +7,7 @@ import PhotoInput from "@/components/@common/photoInput/PhotoInput";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { preventEnterSubmit } from "@/utils/preventEnterSubmit";
 import * as S from "./CreateProductPage.styles";
 import { useCreateProductForm } from "./hooks/useCreateProductForm";
 
@@ -43,7 +44,11 @@ const CreateProductPage = ({
   const [isAttachingPhotos, setIsAttachingPhotos] = useState(false);
 
   return (
-    <S.PageWrapper onSubmit={getSubmitHandler(onSuccess)} noValidate>
+    <S.PageWrapper
+      onSubmit={getSubmitHandler(onSuccess)}
+      onKeyDown={preventEnterSubmit}
+      noValidate
+    >
       <NavigationBar title="작품 등록하기" onBackClick={onBack} />
       <S.ScrollArea>
         <S.Title>{"작품 정보를\n입력해 주세요!"}</S.Title>

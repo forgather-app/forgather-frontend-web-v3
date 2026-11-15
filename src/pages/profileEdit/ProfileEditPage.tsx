@@ -21,6 +21,7 @@ import useFlowBack from "@/hooks/@common/useFlowBack";
 import useNativePhotoPickerBridge from "@/hooks/@common/useNativePhotoPickerBridge";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { preventEnterSubmit } from "@/utils/preventEnterSubmit";
 import ImageCropper from "./components/imageCropper/ImageCropper";
 import {
   type ProfileEditFormData,
@@ -107,7 +108,11 @@ const ProfileEditPage = () => {
   };
 
   return (
-    <S.PageWrapper onSubmit={getSubmitHandler(handleSave)} noValidate>
+    <S.PageWrapper
+      onSubmit={getSubmitHandler(handleSave)}
+      onKeyDown={preventEnterSubmit}
+      noValidate
+    >
       <NavigationBar
         title="프로필 설정"
         onBackClick={() => flowBack({ to: "/my-page" })}

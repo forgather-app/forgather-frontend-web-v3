@@ -13,6 +13,7 @@ import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
 import { CONSTRAINTS } from "@/constants/constraints";
 import * as S from "@/pages/createSpace/CreateSpacePage.styles";
+import { preventEnterSubmit } from "@/utils/preventEnterSubmit";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import { useEditSpaceForm } from "./hooks/useEditSpaceForm";
 
@@ -82,7 +83,11 @@ const EditSpaceForm = ({ spaceId, space, onSuccess }: EditSpaceFormProps) => {
   const periodRef = useRef<HTMLDivElement>(null);
 
   return (
-    <S.Container onSubmit={getSubmitHandler(onSuccess)} noValidate>
+    <S.Container
+      onSubmit={getSubmitHandler(onSuccess)}
+      onKeyDown={preventEnterSubmit}
+      noValidate
+    >
       <NavigationBar
         title="스페이스 수정"
         onBackClick={() => window.history.back()}

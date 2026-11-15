@@ -313,16 +313,15 @@ describe("CreateSpacePage 생성 단계", () => {
     expect(mutationCalls()).toHaveLength(0);
   });
 
-  it("1단계에서 Enter를 눌러도 생성 요청을 보내지 않는다", async () => {
+  it("입력 필드에서 Enter를 눌러도 다음 단계로 넘어가거나 생성 요청을 보내지 않는다", async () => {
     const user = userEvent.setup();
     renderPage();
     const name = screen.getByRole("textbox", { name: "스페이스명" });
     await user.type(name, "새 전시{Enter}");
     expect(
-      await screen.findByRole("heading", {
-        name: "기간과 장소를 추가해주세요.",
-      }),
-    ).toHaveFocus();
+      screen.getByRole("heading", { name: "스페이스를 소개해주세요!" }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "다음" })).toBeEnabled();
     expect(mutationCalls()).toHaveLength(0);
   });
 
