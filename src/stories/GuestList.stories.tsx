@@ -17,7 +17,7 @@ const meta: Meta<typeof GuestList> = {
       description: {
         component:
           "방명록 목록의 카드 아이템 컴포넌트입니다. Figma 컴포넌트명: **Guest_List**\n\n" +
-          "닉네임, 메시지 내용(최대 2줄), 작성 일시, '자세히보기' 링크를 표시합니다. " +
+          "닉네임, 메시지 내용(최대 3줄, 고정 높이), 작성 일시를 표시합니다. " +
           "`hasPhoto=true`이면 닉네임 우측에 사진 첨부 아이콘이 함께 표시됩니다. " +
           "`isNew=true`이면 닉네임 좌측에 NEW 배지가 표시되어 읽지 않은 방명록임을 나타냅니다. " +
           "카드 전체가 클릭 가능하며 클릭 시 방명록 상세로 이동합니다.",
@@ -30,7 +30,7 @@ const meta: Meta<typeof GuestList> = {
       table: { type: { summary: "string" } },
     },
     message: {
-      description: "방명록 메시지 내용. 2줄을 초과하면 말줄임 처리됩니다.",
+      description: "방명록 메시지 내용. 3줄을 초과하면 말줄임 처리됩니다.",
       table: { type: { summary: "string" } },
     },
     createdAt: {
@@ -55,7 +55,7 @@ const meta: Meta<typeof GuestList> = {
       },
     },
     onClick: {
-      description: "카드(자세히보기) 클릭 핸들러",
+      description: "카드 클릭 핸들러 (방명록 상세로 이동)",
     },
   },
 };
@@ -122,7 +122,7 @@ export const LongMessage: Story = {
   parameters: {
     docs: {
       description: {
-        story: "메시지가 2줄을 초과할 때 말줄임 처리를 확인하는 카드입니다.",
+        story: "메시지가 3줄을 초과할 때 말줄임 처리를 확인하는 카드입니다.",
       },
     },
   },
@@ -132,6 +132,24 @@ export const LongMessage: Story = {
       "졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업 전시 축하해 전시 축하해 졸업 전시 축하해졸업 전시 축하해졸업 전시 축하해 졸업 전시 축하해 전시 축하해 졸업 전시 축하해 전시 축하해",
     createdAt: new Date(2024, 4, 12, 14, 30),
     hasPhoto: true,
+    onClick: () => {},
+  },
+};
+
+export const MultilineMessage: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "메시지에 줄바꿈 문자(\\n)가 포함된 카드입니다. 개행이 그대로 반영되며, 3줄을 초과하는 부분은 말줄임 처리됩니다.",
+      },
+    },
+  },
+  args: {
+    nickname: "방문객 닉네임",
+    message: "첫째 줄\n둘째 줄\n셋째 줄\n넷째 줄은 보이지 않아요",
+    createdAt: new Date(2024, 4, 12, 14, 30),
+    hasPhoto: false,
     onClick: () => {},
   },
 };

@@ -13,12 +13,7 @@ export const Card = styled("button", { shouldForwardProp })<{
   padding: 16px 20px;
   border-radius: 8px;
   text-align: left;
-  /* TODO: 토큰 없음 - #292D32 (gray600 근사값) */
-  background: linear-gradient(
-    161deg,
-    #292d32 0%,
-    ${({ theme }) => theme.colors.gray.gray600} 61%
-  );
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 export const HeaderRow = styled.div`
@@ -33,21 +28,19 @@ export const HeaderRow = styled.div`
 export const NicknameGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex: 1;
   min-width: 0;
 `;
 
 export const NewBadge = styled.span`
-  ${({ theme }) => ({ ...theme.typography.subBody2 })};
+  ${({ theme }) => ({ ...theme.typography.label })};
   color: ${({ theme }) => theme.colors.main.purple50};
   flex-shrink: 0;
 `;
 
 export const Nickname = styled.p`
-  ${({ theme }) => ({ ...theme.typography.body2 })};
-  /* TODO: 토큰 없음 - Figma Heading 16/SB (line-height 140%) */
-  line-height: 140%;
+  ${({ theme }) => ({ ...theme.typography.body3 })};
   color: ${({ theme }) => theme.colors.gray.gray50};
   flex: 1;
   min-width: 0;
@@ -75,54 +68,19 @@ export const Message = styled.p`
   ${({ theme }) => ({ ...theme.typography.body4 })};
   color: ${({ theme }) => theme.colors.gray.gray100};
   width: 100%;
+  white-space: pre-line;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-`;
-
-export const MetaRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
 `;
 
 export const DateTimeGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  /* TODO: 토큰 없음 - Figma Body 14/R (Regular 400, line-height 150%) */
-  font-weight: 400;
-  line-height: 150%;
+  ${({ theme }) => ({ ...theme.typography.caption })};
   color: ${({ theme }) => theme.colors.gray.gray400};
   white-space: nowrap;
-`;
-
-export const DetailLink = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  ${({ theme }) => ({ ...theme.typography.subBody })};
-  /* TODO: 토큰 없음 - Figma Body 14/R (Regular 400, line-height 150%) */
-  font-weight: 400;
-  line-height: 150%;
-  color: ${({ theme }) => theme.colors.gray.gray300};
-  white-space: nowrap;
-`;
-
-export const ChevronWrapper = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-
-  & path {
-    stroke: ${({ theme }) => theme.colors.gray.gray400};
-  }
 `;
