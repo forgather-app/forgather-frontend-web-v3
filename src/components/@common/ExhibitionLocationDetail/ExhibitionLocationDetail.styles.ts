@@ -26,7 +26,8 @@ export const PlaceName = styled.span`
   line-height: 1.5;
   color: ${({ theme }) => theme.colors.gray.gray50};
   white-space: normal;
-  overflow-wrap: anywhere;
+  word-break: keep-all;
+  overflow-wrap: break-word;
   ${selectableText};
 `;
 
