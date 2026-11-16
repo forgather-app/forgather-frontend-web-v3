@@ -12,11 +12,35 @@ export const ScrollArea = styled.div`
   }
 `;
 
+export const HeaderBar = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 24px;
+`;
+
 export const TitleRow = styled.div`
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  padding-top: 24px;
+`;
+
+export const KebabButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 8px;
+  margin-right: -8px;
+  color: ${({ theme }) => theme.colors.gray.gray100};
+
+  &:focus-visible {
+    outline: 2px solid ${({ theme }) => theme.colors.main.purple};
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
 `;
 
 export const Title = styled.h1`
