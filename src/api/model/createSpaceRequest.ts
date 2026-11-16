@@ -5,12 +5,9 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
-import type { GuestBookWritingPolicy } from "./guestBookWritingPolicy";
+import type { CreateSpaceRequestGuestBookWritingPolicy } from './createSpaceRequestGuestBookWritingPolicy';
 
 export interface CreateSpaceRequest {
-  /** Backend GuestBookWritingPolicy contract; pending deployed OpenAPI refresh. */
-  guestBookWritingPolicy?: GuestBookWritingPolicy | null;
-
   /**
    * 스페이스 이름
    * @maxLength 30
@@ -64,4 +61,9 @@ export interface CreateSpaceRequest {
    * @nullable
    */
   placeUrl?: string | null;
+  /**
+   * 방명록 작성 정책. ALWAYS는 항상 허용, EXHIBITION_PERIOD는 한국 날짜 기준 전시 기간에만 허용. 기간 제한에는 전시 기간이 필요하며, 생략/null이면 ALWAYS를 적용한다.
+   * @nullable
+   */
+  guestBookWritingPolicy?: CreateSpaceRequestGuestBookWritingPolicy;
 }
