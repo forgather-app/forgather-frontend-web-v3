@@ -1,3 +1,4 @@
+import IcLink from "@/assets/icons/ic_link_16.svg?react";
 import * as S from "./ExhibitionLocationDetail.styles";
 
 interface ExhibitionLocationDetailProps {
@@ -22,16 +23,18 @@ const ExhibitionLocationDetail = ({
     <S.Row>
       <S.Label>전시 장소</S.Label>
       <S.Content>
-        <S.PlaceName>{placeName || emptyMessage}</S.PlaceName>
         {placeName && placeUrl ? (
           <S.MapLink
             href={toHttpsUrl(placeUrl)}
             target="_blank"
             rel="noopener noreferrer"
           >
-            카카오맵으로 열기 ↗
+            <IcLink aria-hidden="true" />
+            <S.PlaceName>{placeName}</S.PlaceName>
           </S.MapLink>
-        ) : null}
+        ) : (
+          <S.PlaceName>{placeName || emptyMessage}</S.PlaceName>
+        )}
       </S.Content>
     </S.Row>
   );

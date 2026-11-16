@@ -1,5 +1,23 @@
 import { describe, expect, it } from "vitest";
-import { parseDateOnlyString, toDateOnlyString } from "./date";
+import {
+  formatExhibitionSchedule,
+  parseDateOnlyString,
+  toDateOnlyString,
+} from "./date";
+
+describe("formatExhibitionSchedule", () => {
+  it.each([
+    ["2026-11-10", "2026-11-28", "2026. 11. 10(화) - 11. 28(토)"],
+    ["2026-12-31", "2027-01-01", "2026. 12. 31(목) - 2027. 01. 01(금)"],
+  ])("%s부터 %s까지의 기간을 표시한다", (start, end, expected) => {
+    expect(
+      formatExhibitionSchedule(
+        parseDateOnlyString(start),
+        parseDateOnlyString(end),
+      ),
+    ).toBe(expected);
+  });
+});
 
 describe("toDateOnlyString", () => {
   it("YYYY-MM-DD 형식으로 변환한다", () => {

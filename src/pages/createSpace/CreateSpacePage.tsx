@@ -1,4 +1,4 @@
-import { type FormEvent, useLayoutEffect, useRef, useState } from "react";
+import { type FormEvent, useLayoutEffect, useRef } from "react";
 import IcLock from "@/assets/icons/ic_lock.svg?react";
 import Button from "@/components/@common/Button/Button";
 import GuestBookWritingPolicyField from "@/components/@common/GuestBookWritingPolicyField/GuestBookWritingPolicyField";
@@ -10,8 +10,24 @@ import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import Toggle from "@/components/@common/Toggle/Toggle";
 import { CONSTRAINTS } from "@/constants/constraints";
+import useFunnel from "@/shared/funnel/useFunnel";
+import { preventEnterSubmit } from "@/utils/preventEnterSubmit";
 import * as S from "./CreateSpacePage.styles";
 import { useCreateSpaceForm } from "./hooks/useCreateSpaceForm";
+
+const STEPS = ["introduction", "exhibition"] as const;
+type StepType = typeof STEPS;
+
+// NOTE: 실제 필드 값은 useCreateSpaceForm의 react-hook-form이 단계와 무관하게 관리하므로,
+// useFunnel은 단계 이동(progress, 뒤로가기)만 담당하고 step별 데이터는 사용하지 않는다.
+interface CreateSpaceStepData extends Record<StepType[number], unknown> {
+  introduction: Record<string, never>;
+  exhibition: Record<string, never>;
+}
+const INITIAL_STEP_DATA: CreateSpaceStepData = {
+  introduction: {},
+  exhibition: {},
+};
 
 interface CreateSpacePageProps {
   /** 스페이스 생성 성공 시 호출되는 핸들러 (생성된 스페이스 코드 전달) */
@@ -43,28 +59,32 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
     getSubmitHandler,
   } = useCreateSpaceForm();
 
-  const [step, setStep] = useState<"introduction" | "exhibition">(
-    "introduction",
-  );
-  const isIntroduction = step === "introduction";
-  const previousStep = useRef(step);
+  const { currentStepIndex, onNext, onPrev } = useFunnel<
+    StepType,
+    CreateSpaceStepData
+  >({
+    steps: STEPS,
+    initialData: INITIAL_STEP_DATA,
+  });
+  const isIntroduction = currentStepIndex === 0;
+  const previousStepIndex = useRef(currentStepIndex);
   const mainRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const periodRef = useRef<HTMLDivElement>(null);
   const isHandlingSubmit = useRef(false);
 
   useLayoutEffect(() => {
-    if (previousStep.current === step) return;
-    previousStep.current = step;
+    if (previousStepIndex.current === currentStepIndex) return;
+    previousStepIndex.current = currentStepIndex;
     if (mainRef.current) mainRef.current.scrollTop = 0;
     titleRef.current?.focus({ preventScroll: true });
-  }, [step]);
+  }, [currentStepIndex]);
 
   const handleBack = () => {
     if (isIntroduction) {
       window.history.back();
     } else if (!isHandlingSubmit.current) {
-      setStep("introduction");
+      onPrev();
     }
   };
 
@@ -75,7 +95,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
 
     try {
       if (isIntroduction) {
-        if (await validateIntroduction()) setStep("exhibition");
+        if (await validateIntroduction()) onNext({});
         return;
       }
 
@@ -86,12 +106,16 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
   };
 
   return (
-    <S.Container onSubmit={handleSubmit} noValidate>
+    <S.Container
+      onSubmit={handleSubmit}
+      onKeyDown={preventEnterSubmit}
+      noValidate
+    >
       <S.Navigation disabled={isSubmitting}>
         <NavigationBar title="새 스페이스" onBackClick={handleBack} />
       </S.Navigation>
       <S.Progress>
-        <ProgressBar value={isIntroduction ? 50 : 100} />
+        <ProgressBar value={((currentStepIndex + 1) / STEPS.length) * 100} />
       </S.Progress>
       <S.Main ref={mainRef}>
         <S.Title ref={titleRef} tabIndex={-1}>
@@ -122,6 +146,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               </S.FieldLabelRow>
               <TextArea
                 {...description}
+                size="extraLarge"
                 maxLength={CONSTRAINTS.CREATE_SPACE.DESCRIPTION_MAX_LENGTH}
                 placeholder={
                   "전시 소개나 관람 안내를 자유롭게 적어주세요.\n운영 시간, 작가 상주 시간, 환영 인사도 좋아요."
@@ -138,7 +163,8 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               <TextField
                 {...linkUrl}
                 variant="link"
-                placeholder="전시와 관련된 링크를 첨부해주세요."
+                size="large"
+                placeholder="관련된 링크를 첨부해주세요."
                 errorMessage={linkUrlError}
                 onBlur={(event) => {
                   linkUrl.onBlur();
@@ -149,6 +175,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               <TextField
                 {...linkName}
                 variant="count"
+                size="large"
                 maxCount={CONSTRAINTS.CREATE_SPACE.LINK_NAME_MAX_LENGTH}
                 placeholder="링크 제목을 작성해주세요."
                 errorMessage={linkNameError}
@@ -177,26 +204,22 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
               errorMessage={exhibitionLocationError}
             />
 
-            <GuestBookWritingPolicyField
-              value={guestBookWritingPolicy.value}
-              onChange={(policy) => {
-                guestBookWritingPolicy.onChange(policy);
-                if (
-                  policy === "EXHIBITION_PERIOD" &&
-                  !isExhibitionPeriodComplete
-                ) {
-                  periodRef.current?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                }
-              }}
-            />
-
-            <S.FieldGroup>
-              <S.FieldLabelRow>
-                <S.Label>방명록 공개 설정</S.Label>
-              </S.FieldLabelRow>
+            <S.GuestBookSettings>
+              <GuestBookWritingPolicyField
+                value={guestBookWritingPolicy.value}
+                onChange={(policy) => {
+                  guestBookWritingPolicy.onChange(policy);
+                  if (
+                    policy === "EXHIBITION_PERIOD" &&
+                    !isExhibitionPeriodComplete
+                  ) {
+                    periodRef.current?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
+                  }
+                }}
+              />
               <S.ToggleRow>
                 <S.ToggleLabelGroup>
                   <IcLock aria-hidden="true" width={20} height={20} />
@@ -208,7 +231,7 @@ const CreateSpacePage = ({ onSuccess }: CreateSpacePageProps) => {
                   ariaLabel="방명록 나만 보기"
                 />
               </S.ToggleRow>
-            </S.FieldGroup>
+            </S.GuestBookSettings>
           </>
         )}
       </S.Main>

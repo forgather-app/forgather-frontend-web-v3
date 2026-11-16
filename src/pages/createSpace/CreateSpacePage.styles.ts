@@ -28,9 +28,9 @@ export const Progress = styled.div`
 
 export const Title = styled.h1`
   flex-shrink: 0;
-  margin-top: 32px;
-  margin-bottom: 8px;
+  margin-top: 40px;
   ${({ theme }) => ({ ...theme.typography.title1 })};
+  line-height: 1.3;
   color: ${({ theme }) => theme.colors.gray.white};
 `;
 
@@ -39,7 +39,7 @@ export const Main = styled.main`
   min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   padding-bottom: 50px;
   overflow-y: auto;
   scrollbar-width: none;
@@ -53,6 +53,12 @@ export const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+`;
+
+export const GuestBookSettings = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export const FieldLabelRow = styled.div`
@@ -81,8 +87,8 @@ export const ToggleRow = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 14px 12px;
-  border: 1px solid ${({ theme }) => theme.colors.gray.gray500};
   border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.gray.gray600};
 `;
 
 export const ToggleLabelGroup = styled.div`

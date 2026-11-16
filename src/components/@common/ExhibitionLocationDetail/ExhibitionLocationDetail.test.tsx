@@ -38,7 +38,7 @@ describe("전시 장소 상세", () => {
       "직접 입력한 전시장",
       "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
     );
-    const link = screen.getByRole("link", { name: "카카오맵으로 열기 ↗" });
+    const link = screen.getByRole("link", { name: "직접 입력한 전시장" });
     expect(link).toHaveAttribute(
       "href",
       "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
@@ -52,7 +52,7 @@ describe("전시 장소 상세", () => {
       "직접 입력한 전시장",
       "http://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
     );
-    const link = screen.getByRole("link", { name: "카카오맵으로 열기 ↗" });
+    const link = screen.getByRole("link", { name: "직접 입력한 전시장" });
     expect(link).toHaveAttribute(
       "href",
       "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",

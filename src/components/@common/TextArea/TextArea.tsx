@@ -1,11 +1,12 @@
 import { useId } from "react";
-import { getGraphemeLength } from "../../../utils/getGraphemeLength";
+import { getGraphemeLength } from "@/utils/getGraphemeLength";
+import type { TextAreaSize } from "./TextArea.styles";
 import * as S from "./TextArea.styles";
 
 interface TextAreaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
-  /** 높이 크기 (medium: 높이 auto, large: 높이 179px 고정) */
-  size?: "medium" | "large";
+  /** 높이 크기 (medium: auto, large: 179px, extraLarge: 229px) */
+  size?: TextAreaSize;
   /** 최대 입력 가능 글자 수 (Counter 표시용) */
   maxLength?: number;
   /** 에러 메시지 (설정 시 에러 상태로 표시) */
@@ -28,6 +29,7 @@ const TextArea = ({
   return (
     <S.Wrapper $hasError={hasError} $size={size}>
       <S.Textarea
+        $size={size}
         {...rest}
         value={value}
         onChange={onChange}

@@ -10,6 +10,7 @@ import PhotoInput from "@/components/@common/photoInput/PhotoInput";
 import TextArea from "@/components/@common/TextArea/TextArea";
 import TextField from "@/components/@common/TextField/TextField";
 import { CONSTRAINTS } from "@/constants/constraints";
+import { preventEnterSubmit } from "@/utils/preventEnterSubmit";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
 import * as S from "./EditArtworkPage.styles";
 import { useEditArtworkForm } from "./hooks/useEditArtworkForm";
@@ -101,7 +102,11 @@ const EditArtworkForm = ({
   const [isAttachingPhotos, setIsAttachingPhotos] = useState(false);
 
   return (
-    <S.PageWrapper onSubmit={getSubmitHandler(onSuccess)} noValidate>
+    <S.PageWrapper
+      onSubmit={getSubmitHandler(onSuccess)}
+      onKeyDown={preventEnterSubmit}
+      noValidate
+    >
       <NavigationBar title="작품 수정하기" onBackClick={onBack} />
       <S.ScrollArea>
         <S.TitleGroup>

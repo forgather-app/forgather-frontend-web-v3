@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import LocationInput from "../components/@common/LocationInput/LocationInput";
-import type { LocationInputValue } from "../components/@common/LocationInput/locationValue";
+import LocationInput from "@/components/@common/LocationInput/LocationInput";
+import type { LocationInputValue } from "@/components/@common/LocationInput/locationValue";
 
 const meta: Meta<typeof LocationInput> = {
   title: "Common/LocationInput",
@@ -11,7 +11,7 @@ const meta: Meta<typeof LocationInput> = {
     docs: {
       description: {
         component:
-          "전시 장소명을 입력하고 카카오맵 장소를 연결하는 필드입니다. 장소명을 입력한 뒤 '장소 검색' 버튼을 누르면 카카오맵 장소 검색 다이얼로그가 열리고, 장소를 선택하면 연결된 장소 칩으로 표시됩니다.",
+          "전시 장소명을 입력하고 카카오맵 장소를 연결하는 필드입니다. 장소명을 입력한 뒤 '카카오맵 연동하기' 버튼을 누르면 카카오맵 장소 검색 다이얼로그가 열립니다.",
       },
     },
   },
@@ -41,7 +41,7 @@ export const Empty: Story = {
     docs: {
       description: {
         story:
-          "아직 장소명을 입력하지 않은 기본 상태입니다. 장소 검색 버튼은 비활성화됩니다.",
+          "아직 장소명을 입력하지 않은 기본 상태입니다. '카카오맵 연동하기' 버튼은 비활성화됩니다.",
       },
     },
   },
@@ -78,7 +78,7 @@ export const Linked: Story = {
     docs: {
       description: {
         story:
-          "카카오맵 장소가 연결되어 '등록된 장소' 칩이 표시됩니다. 칩의 X 버튼으로 연결을 해제할 수 있습니다.",
+          "카카오맵 장소가 연결되어 '카카오맵 연동 완료'가 표시됩니다. '해제하기' 버튼으로 연결을 해제할 수 있습니다.",
       },
     },
   },

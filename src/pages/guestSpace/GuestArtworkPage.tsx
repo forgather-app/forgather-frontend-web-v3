@@ -8,7 +8,7 @@ import type {
   ProductsResponse,
   SpaceResponse,
 } from "@/api/model";
-import IcLink from "@/assets/icons/ic_link.svg?react";
+import IcLink from "@/assets/icons/ic_link_16.svg?react";
 import ArtworkPlaceholderGraphic from "@/assets/images/artwork_card_placeholder.svg?react";
 import Divider from "@/components/@common/Divider/Divider";
 import ExhibitionLocationDetail from "@/components/@common/ExhibitionLocationDetail/ExhibitionLocationDetail";
@@ -16,6 +16,7 @@ import ProfileImage from "@/components/@common/ProfileImage/ProfileImage";
 import ArtworkCard from "@/components/UI/ArtworkCard/ArtworkCard";
 import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import { useIsTruncated } from "@/hooks/@common/useIsTruncated";
+import * as D from "@/pages/space/SpaceDetails.styles";
 import { formatExhibitionSchedule, parseDateOnlyString } from "@/utils/date";
 import { getImageUrl } from "@/utils/getImageUrl";
 import { linkifyText } from "@/utils/linkifyText";
@@ -132,48 +133,55 @@ const GuestArtworkPage = ({
         <S.Title>{space.name}</S.Title>
       </S.TitleRow>
 
-      {space.exhibitionStartDate && space.exhibitionEndDate && (
-        <S.PeriodRow>
-          <S.PeriodLabel>전시 일정</S.PeriodLabel>
-          <S.PeriodValue>
-            {formatExhibitionSchedule(
-              parseDateOnlyString(space.exhibitionStartDate),
-              parseDateOnlyString(space.exhibitionEndDate),
-            )}
-          </S.PeriodValue>
-        </S.PeriodRow>
-      )}
+      <D.InfoRows>
+        {space.exhibitionStartDate && space.exhibitionEndDate && (
+          <D.InfoRow>
+            <D.InfoLabel>전시 일정</D.InfoLabel>
+            <D.PeriodValue>
+              {formatExhibitionSchedule(
+                parseDateOnlyString(space.exhibitionStartDate),
+                parseDateOnlyString(space.exhibitionEndDate),
+              )}
+            </D.PeriodValue>
+          </D.InfoRow>
+        )}
 
-      <ExhibitionLocationDetail
-        placeName={space.placeName}
-        placeUrl={space.placeUrl}
-      />
+        <ExhibitionLocationDetail
+          placeName={space.placeName}
+          placeUrl={space.placeUrl}
+        />
 
-      {space.linkUrl && (
-        <S.SpaceLink
-          href={space.linkUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="링크 열기"
-        >
-          <IcLink width={16} height={16} aria-hidden="true" />
-          <S.SpaceLinkText>{space.linkName || space.linkUrl}</S.SpaceLinkText>
-        </S.SpaceLink>
-      )}
+        {space.linkUrl && (
+          <D.InfoRow>
+            <D.InfoLabel>링크</D.InfoLabel>
+            <D.SpaceLink
+              href={space.linkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="링크 열기"
+            >
+              <IcLink aria-hidden="true" />
+              <D.SpaceLinkText>
+                {space.linkName || space.linkUrl}
+              </D.SpaceLinkText>
+            </D.SpaceLink>
+          </D.InfoRow>
+        )}
+      </D.InfoRows>
 
-      <S.DescriptionRow $isExpanded={isDescriptionExpanded}>
-        <S.Description ref={descriptionRef} $isExpanded={isDescriptionExpanded}>
+      <D.DescriptionRow $isExpanded={isDescriptionExpanded}>
+        <D.Description ref={descriptionRef} $isExpanded={isDescriptionExpanded}>
           {linkifyText(space.description)}
-        </S.Description>
+        </D.Description>
         {isDescriptionTruncated && (
-          <S.MoreButton
+          <D.MoreButton
             type="button"
             onClick={() => setIsDescriptionExpanded((prev) => !prev)}
           >
             {isDescriptionExpanded ? "접기" : "더보기"}
-          </S.MoreButton>
+          </D.MoreButton>
         )}
-      </S.DescriptionRow>
+      </D.DescriptionRow>
 
       <Divider color={SECTION_DIVIDER_COLOR} height={8} marginTop={24} />
 

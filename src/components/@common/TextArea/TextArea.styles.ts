@@ -1,8 +1,16 @@
 import styled from "@emotion/styled";
 
+const heights = {
+  medium: "auto",
+  large: "179px",
+  extraLarge: "229px",
+};
+
+export type TextAreaSize = keyof typeof heights;
+
 interface WrapperProps {
   $hasError: boolean;
-  $size: "medium" | "large";
+  $size: TextAreaSize;
 }
 
 interface BottomRowProps {
@@ -17,14 +25,19 @@ export const Wrapper = styled.div<WrapperProps>`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 12px;
+  gap: ${({ $size }) => ($size === "extraLarge" ? "8px" : "12px")};
   background-color: ${({ theme }) => theme.colors.gray.gray600};
   border-radius: 8px;
   border: 1px solid
     ${({ $hasError, theme }) =>
       $hasError ? theme.colors.semantic.alertRed : "transparent"};
-  height: ${({ $size }) => ($size === "large" ? "179px" : "auto")};
-  padding: ${({ $size }) => ($size === "medium" ? "8px 12px" : "12px")};
+  height: ${({ $size }) => heights[$size]};
+  padding: ${({ $size }) =>
+    $size === "extraLarge"
+      ? "11px 11px 7px"
+      : $size === "medium"
+        ? "8px 12px"
+        : "12px"};
   width: 100%;
   box-sizing: border-box;
   --counter-color: ${({ theme }) => theme.colors.gray.gray300};
@@ -36,14 +49,19 @@ export const Wrapper = styled.div<WrapperProps>`
   }
 `;
 
-export const Textarea = styled.textarea`
+export const Textarea = styled.textarea<{ $size: TextAreaSize }>`
   flex: 1;
   background: transparent;
   border: none;
   outline: none;
   resize: none;
   width: 100%;
-  ${({ theme }) => ({ ...theme.typography.body3 })};
+  ${({ theme, $size }) => ({
+    ...($size === "extraLarge"
+      ? theme.typography.body4
+      : theme.typography.body3),
+  })};
+  ${({ $size }) => $size === "extraLarge" && "padding: 0;"}
   color: ${({ theme }) => theme.colors.gray.white};
   caret-color: ${({ theme }) => theme.colors.main.purple};
 

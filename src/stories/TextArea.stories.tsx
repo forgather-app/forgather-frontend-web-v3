@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { type ComponentProps, useState } from "react";
-import TextArea from "../components/@common/TextArea/TextArea";
+import TextArea from "@/components/@common/TextArea/TextArea";
 
 const meta: Meta<typeof TextArea> = {
   title: "Common/TextArea",
@@ -19,10 +19,10 @@ const meta: Meta<typeof TextArea> = {
     size: {
       description: "높이 크기",
       control: "radio",
-      options: ["medium", "large"],
+      options: ["medium", "large", "extraLarge"],
       table: {
         defaultValue: { summary: "large" },
-        type: { summary: '"medium" | "large"' },
+        type: { summary: '"medium" | "large" | "extraLarge"' },
       },
     },
     maxLength: {

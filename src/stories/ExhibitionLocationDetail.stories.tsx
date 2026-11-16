@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import ExhibitionLocationDetail from "../components/@common/ExhibitionLocationDetail/ExhibitionLocationDetail";
+import ExhibitionLocationDetail from "@/components/@common/ExhibitionLocationDetail/ExhibitionLocationDetail";
 
 const meta: Meta<typeof ExhibitionLocationDetail> = {
   title: "Common/ExhibitionLocationDetail",
@@ -9,7 +9,7 @@ const meta: Meta<typeof ExhibitionLocationDetail> = {
     docs: {
       description: {
         component:
-          "전시 장소를 읽기 전용으로 보여주는 행입니다. placeName과 placeUrl이 모두 있으면 카카오맵 링크가 함께 표시되고, placeName과 emptyMessage가 모두 없으면 아무것도 렌더링하지 않습니다.",
+          "전시 장소를 읽기 전용으로 보여주는 행입니다. placeName과 placeUrl이 모두 있으면 장소명이 카카오맵 링크로 표시되고, placeName과 emptyMessage가 모두 없으면 아무것도 렌더링하지 않습니다.",
       },
     },
   },
@@ -35,8 +35,7 @@ export const WithMapLink: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "장소명과 카카오맵 URL이 모두 있어 '카카오맵으로 열기' 링크가 표시됩니다.",
+        story: "장소명과 카카오맵 URL이 모두 있어 장소명이 링크로 표시됩니다.",
       },
     },
   },

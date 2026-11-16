@@ -20,10 +20,11 @@ it("기본 라디오 모양이 없어도 옵션 테두리와 선택 표시를 �
   const periodOption = period.closest("label");
   if (!alwaysOption || !periodOption) throw new Error("옵션 라벨이 없습니다");
   expect(getComputedStyle(alwaysOption).borderTopWidth).toBe("1px");
-  expect(getComputedStyle(always).borderTopStyle).toBe("solid");
-  expect(getComputedStyle(always).backgroundImage).not.toBe(
-    getComputedStyle(period).backgroundImage,
-  );
+  const selectedIcon = getComputedStyle(always).backgroundImage;
+  const unselectedIcon = getComputedStyle(period).backgroundImage;
+  expect(selectedIcon).toContain("url(");
+  expect(unselectedIcon).toContain("url(");
+  expect(selectedIcon).not.toBe(unselectedIcon);
   const selectedBackground = getComputedStyle(alwaysOption).backgroundColor;
   rerender(
     <ThemeProvider theme={theme}>

@@ -51,20 +51,25 @@ describe("호스트 전시 장소 상세", () => {
     undefined,
     "",
   ])("장소명이 %s이면 미등록 안내를 표시하고 지도 링크는 숨긴다", async (placeName) => {
-    renderPage({ placeName, placeUrl: "https://place.map.kakao.com/123" });
+    const placeUrl = "https://place.map.kakao.com/123";
+    renderPage({ placeName, placeUrl });
     await screen.findByRole("heading", { name: "테스트 스페이스" });
     expect(screen.getByText("전시 장소")).toBeInTheDocument();
     expect(screen.getByText("등록된 장소가 없어요")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "링크 열기" })).toHaveAttribute(
+      "href",
+      "https://example.com/exhibition",
+    );
     expect(
-      screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
-    ).not.toBeInTheDocument();
+      screen.getAllByRole("link").map((link) => link.getAttribute("href")),
+    ).not.toContain(placeUrl);
   });
 
   it("직접 입력한 장소명만 있으면 지도 링크 없이 표시한다", async () => {
     renderPage({ placeName: "직접 입력한 전시장" });
     expect(await screen.findByText("직접 입력한 전시장")).toBeInTheDocument();
     expect(
-      screen.queryByRole("link", { name: "카카오맵으로 열기 ↗" }),
+      screen.queryByRole("link", { name: "직접 입력한 전시장" }),
     ).not.toBeInTheDocument();
   });
 
@@ -74,7 +79,11 @@ describe("호스트 전시 장소 상세", () => {
       placeUrl: "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
     });
     const name = await screen.findByText("직접 입력한 전시장");
-    const map = screen.getByRole("link", { name: "카카오맵으로 열기 ↗" });
+    const map = screen.getByRole("link", { name: "직접 입력한 전시장" });
+    expect(screen.getByText("링크", { exact: true })).toBeInTheDocument();
+    expect(
+      screen.getByText("2026. 10. 20(화) - 10. 30(금)"),
+    ).toBeInTheDocument();
     expect(map).toHaveAttribute(
       "href",
       "https://place.map.kakao.com/123?from=share&name=%EA%B0%80#map",
