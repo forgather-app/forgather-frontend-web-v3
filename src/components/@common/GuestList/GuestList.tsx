@@ -1,4 +1,3 @@
-import IcChevronRight from "@/assets/icons/ic_chevron_right.svg?react";
 import IcPhoto from "@/assets/icons/ic_photo.svg?react";
 import { formatCardDate, formatCardTime } from "@/utils/date";
 import * as S from "./GuestList.styles";
@@ -46,22 +45,14 @@ const GuestList = ({
       </S.HeaderRow>
       <S.Body>
         {message && <S.Message aria-hidden>{message}</S.Message>}
-        <S.MetaRow>
-          <S.DateTimeGroup aria-hidden>
-            {createdAt && (
-              <>
-                <span>{formatCardDate(createdAt)}</span>
-                <span>{formatCardTime(createdAt)}</span>
-              </>
-            )}
-          </S.DateTimeGroup>
-          <S.DetailLink aria-hidden>
-            자세히보기
-            <S.ChevronWrapper>
-              <IcChevronRight width={20} height={20} />
-            </S.ChevronWrapper>
-          </S.DetailLink>
-        </S.MetaRow>
+        <S.DateTimeGroup aria-hidden>
+          {createdAt && (
+            <>
+              <span>{formatCardDate(createdAt)}</span>
+              <span>{formatCardTime(createdAt)}</span>
+            </>
+          )}
+        </S.DateTimeGroup>
       </S.Body>
     </S.Card>
   );

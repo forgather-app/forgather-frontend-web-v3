@@ -5,14 +5,10 @@
  * 당신을 위한 순간, 흩어지지 않게. Forgather
  * OpenAPI spec version: 2.0.0
  */
-import type { GuestBookWritingPolicy } from "./guestBookWritingPolicy";
 import type { SpaceHostInfoResponse } from './spaceHostInfoResponse';
+import type { SpaceResponseGuestBookWritingPolicy } from './spaceResponseGuestBookWritingPolicy';
 
 export interface SpaceResponse {
-  /** Backend GuestBookWritingPolicy contract; pending deployed OpenAPI refresh. */
-  guestBookWritingPolicy?: GuestBookWritingPolicy | null;
-  isGuestBookWritable?: boolean;
-
   /** 스페이스 ID */
   id?: number;
   /** 스페이스 코드 */
@@ -56,4 +52,8 @@ export interface SpaceResponse {
   placeId?: string;
   /** 장소 URL (장소 정보가 없으면 빈 문자열) */
   placeUrl?: string;
+  /** 방명록 작성 정책. ALWAYS: 항상 허용, EXHIBITION_PERIOD: 한국 날짜 기준 전시 기간에만 허용 */
+  guestBookWritingPolicy?: SpaceResponseGuestBookWritingPolicy;
+  /** 조회 시점의 정책과 한국 날짜 기준 방명록 작성 가능 여부. 실제 작성 요청에서도 재검증한다. */
+  isGuestBookWritable?: boolean;
 }

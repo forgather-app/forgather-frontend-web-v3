@@ -30,7 +30,7 @@ interface SnackBarProps {
 }
 
 const ICON: Partial<Record<IconType, JSX.Element>> = {
-  alert: <IcCheck width={24} height={24} color={theme.colors.main.purple100} />,
+  alert: <IcCheck width={24} height={24} color={theme.colors.icon.point} />,
   error: (
     <IcAlert width={24} height={24} color={theme.colors.semantic.alertRed} />
   ),

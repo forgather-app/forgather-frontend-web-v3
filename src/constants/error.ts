@@ -42,4 +42,6 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 약관 동의를 철회하지 못했어요. 잠시 후 다시 시도해 주세요",
   GUEST_BOOK_PHOTO_DELETE_FAILED:
     "일시적인 오류로 사진을 삭제하지 못했어요. 잠시 후 다시 시도해 주세요",
+  GUEST_BOOK_EXPORT_FAILED:
+    "일시적인 오류로 방명록을 전송하지 못했어요. 잠시 후 다시 시도해 주세요",
 } as const;
