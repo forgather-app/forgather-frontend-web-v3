@@ -1,6 +1,15 @@
+import { isAxiosError } from "axios";
 import { useState } from "react";
 // 백엔드 스펙의 operationId가 "request"로 너무 일반적이라 이름 없이 생성되어 use 시점에 별칭을 준다
-import { useRequest as useExportSpacePdf } from "@/api/generated/space-스페이스";
+import {
+  useRequest as useExportSpacePdf,
+  useGetUsage,
+} from "@/api/generated/space-스페이스";
+import {
+  type ApiResponseExportSpacePdfResponse,
+  ApiResponseExportSpacePdfResponseCode,
+  type ApiResponseSpacePdfExportUsageResponse,
+} from "@/api/model";
 import Button from "@/components/@common/Button/Button";
 import Modal from "@/components/UI/Modal/Modal";
 import { ERROR_MESSAGES } from "@/constants/error";
@@ -25,6 +34,14 @@ const GuestbookExportModal = ({
   const { showSnackBar } = useSnackBar();
   const [email, setEmail] = useState("");
   const { mutate: exportSpacePdf, isPending } = useExportSpacePdf();
+  const { data: usage } = useGetUsage({
+    query: {
+      enabled: isOpen,
+      select: (response) =>
+        // TODO: 응답 content-type이 `*/*`로 내려와 orval이 실제 스키마 대신 Blob으로 추론함 — 백엔드가 application/json으로 명시하면 캐스팅 제거 가능
+        (response as unknown as ApiResponseSpacePdfExportUsageResponse).data,
+    },
+  });
 
   const handleClose = () => {
     setEmail("");
@@ -33,7 +50,12 @@ const GuestbookExportModal = ({
 
   const trimmedEmail = email.trim();
   const hasError = trimmedEmail.length > 0 && !isValidEmail(trimmedEmail);
-  const isSendDisabled = trimmedEmail.length === 0 || hasError || isPending;
+  const isLimitReached =
+    usage?.count !== undefined &&
+    usage?.limit !== undefined &&
+    usage.count >= usage.limit;
+  const isSendDisabled =
+    trimmedEmail.length === 0 || hasError || isPending || isLimitReached;
 
   const handleSubmit = () => {
     if (isSendDisabled) return;
@@ -45,7 +67,20 @@ const GuestbookExportModal = ({
           handleClose();
           showSnackBar("방명록이 전송되었습니다.", "alert");
         },
-        onError: () => {
+        onError: (error) => {
+          const code =
+            isAxiosError(error) && error.response?.status === 400
+              ? (error.response.data as ApiResponseExportSpacePdfResponse).code
+              : undefined;
+
+          if (code === ApiResponseExportSpacePdfResponseCode.BAD_REQUEST) {
+            showSnackBar(
+              ERROR_MESSAGES.GUEST_BOOK_EXPORT_LIMIT_EXCEEDED,
+              "error",
+            );
+            return;
+          }
+
           showSnackBar(ERROR_MESSAGES.GUEST_BOOK_EXPORT_FAILED, "error");
         },
       },
@@ -65,6 +100,11 @@ const GuestbookExportModal = ({
                   "현재까지 쌓인 방명록을 하나의 pdf로 내보내요.\n3분 내외의 시간이 소요될 수 있어요."
                 }
               </S.Description>
+              {usage && (
+                <S.UsageText>
+                  오늘 {usage.count ?? 0}/{usage.limit ?? 0}번 내보냈어요.
+                </S.UsageText>
+              )}
             </S.HeaderGroup>
             <S.FieldGroup>
               <S.FieldBox $hasError={hasError}>

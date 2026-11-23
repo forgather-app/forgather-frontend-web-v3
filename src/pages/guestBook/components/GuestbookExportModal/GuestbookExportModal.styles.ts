@@ -37,6 +37,15 @@ export const Description = styled.p`
   white-space: pre-line;
 `;
 
+export const UsageText = styled.p`
+  /* TODO: 토큰 없음 - Body 14/R(14px/400/150%/-2%) */
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.02em;
+  color: ${({ theme }) => theme.colors.gray.gray100};
+`;
+
 export const FieldGroup = styled.div`
   display: flex;
   flex-direction: column;
