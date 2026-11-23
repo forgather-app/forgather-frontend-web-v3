@@ -294,7 +294,7 @@ export const useCreate = <TError = unknown,
       return useMutation(getCreateMutationOptions(options), queryClient);
     }
     /**
- * 스페이스 호스트가 PDF 추출 및 이메일 발송 작업을 요청합니다.
+ * 스페이스 호스트가 PDF 추출 및 이메일 발송 작업을 요청합니다. 한국 시간 자정 기준 사용자당 하루 5회까지 접수하며, 한도 도달 시 400을 반환합니다.
  * @summary 스페이스 PDF 추출 요청
  */
 export type requestResponse200 = {
@@ -1361,6 +1361,170 @@ export function useGetPublicHostSpacesSuspense<TData = Awaited<ReturnType<typeof
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetPublicHostSpacesSuspenseQueryOptions(hostCode,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * 로그인한 사용자의 한국 시간 기준 오늘 접수 횟수와 하루 한도를 반환합니다. 접수 이후 처리에 실패한 요청도 포함합니다.
+ * @summary 오늘 PDF 추출 사용 횟수 조회
+ */
+export type getUsageResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type getUsageResponseSuccess = (getUsageResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUsageResponse = (getUsageResponseSuccess)
+
+export const getGetUsageUrl = () => {
+
+
+  
+
+  return `/hosts/me/exports/pdf/usage`
+}
+
+export const getUsage = async ( options?: RequestInit): Promise<getUsageResponse> => {
+  
+  return customFetcher<getUsageResponse>(getGetUsageUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetUsageQueryKey = () => {
+    return [
+    `/hosts/me/exports/pdf/usage`
+    ] as const;
+    }
+
+    
+export const getGetUsageQueryOptions = <TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUsageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsage>>> = ({ signal }) => getUsage({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUsageQueryResult = NonNullable<Awaited<ReturnType<typeof getUsage>>>
+export type GetUsageQueryError = unknown
+
+
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUsage>>,
+          TError,
+          Awaited<ReturnType<typeof getUsage>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUsage>>,
+          TError,
+          Awaited<ReturnType<typeof getUsage>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 오늘 PDF 추출 사용 횟수 조회
+ */
+
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUsageQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetUsageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUsageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsage>>> = ({ signal }) => getUsage({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUsageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getUsage>>>
+export type GetUsageSuspenseQueryError = unknown
+
+
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 오늘 PDF 추출 사용 횟수 조회
+ */
+
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUsageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
