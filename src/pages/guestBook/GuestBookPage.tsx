@@ -118,6 +118,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
               {
                 label: "방명록 내보내기",
                 onClick: () => setIsExportModalOpen(true),
+                disabled: true,
               },
             ]}
           />
@@ -162,6 +163,7 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
             {
               label: "방명록 내보내기",
               onClick: () => setIsExportModalOpen(true),
+              disabled: totalCount === 0,
             },
           ]}
         />
