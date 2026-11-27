@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import {
   getGetSpaceInformationQueryKey,
-  useUpdate,
+  useUpdate1,
 } from "@/api/generated/space-스페이스";
 import type { GuestBookWritingPolicy, SpaceResponse } from "@/api/model";
 import {
@@ -99,7 +99,7 @@ export const useEditSpaceForm = (spaceId: string, space: SpaceResponse) => {
   const [linkUrlFormatError, setLinkUrlFormatError] = useState<
     string | undefined
   >(undefined);
-  const { mutate: updateSpace, isPending } = useUpdate();
+  const { mutate: updateSpace, isPending } = useUpdate1();
 
   const spaceNameError =
     errors.spaceName?.type === "required" && !touchedFields.spaceName

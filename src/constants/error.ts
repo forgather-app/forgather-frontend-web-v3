@@ -42,4 +42,8 @@ export const ERROR_MESSAGES = {
     "일시적인 오류로 약관 동의를 철회하지 못했어요. 잠시 후 다시 시도해 주세요",
   GUEST_BOOK_PHOTO_DELETE_FAILED:
     "일시적인 오류로 사진을 삭제하지 못했어요. 잠시 후 다시 시도해 주세요",
+  GUEST_BOOK_EXPORT_FAILED:
+    "일시적인 오류로 방명록을 전송하지 못했어요. 잠시 후 다시 시도해 주세요",
+  GUEST_BOOK_EXPORT_LIMIT_EXCEEDED:
+    "오늘 PDF 추출 요청 횟수를 모두 사용했습니다. 하루 최대 5회 요청할 수 있습니다.",
 } as const;

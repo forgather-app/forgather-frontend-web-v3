@@ -6,7 +6,7 @@ import { useGetV3 } from "@/api/generated/product-전시-작품";
 import {
   getGetSpaceInformationQueryKey,
   getGetSpacesInformationQueryKey,
-  useDelete,
+  useDelete1,
   useFeatureSpaces,
   useGetSpaceInformation,
   useUnfeatureSpaces,
@@ -69,7 +69,7 @@ const ArtworkPage = ({
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const { showSnackBar } = useSnackBar();
   const queryClient = useQueryClient();
-  const { mutate: deleteSpace } = useDelete();
+  const { mutate: deleteSpace } = useDelete1();
   const { mutate: featureSpace } = useFeatureSpaces();
   const { mutate: unfeatureSpace } = useUnfeatureSpaces();
 

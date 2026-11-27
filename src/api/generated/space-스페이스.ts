@@ -29,6 +29,7 @@ import type {
 
 import type {
   CreateSpaceRequest,
+  ExportSpacePdfRequest,
   FeatureSpacesRequest,
   SearchParams,
   UnfeatureSpacesRequest,
@@ -293,6 +294,90 @@ export const useCreate = <TError = unknown,
       return useMutation(getCreateMutationOptions(options), queryClient);
     }
     /**
+ * 스페이스 호스트가 PDF 추출 및 이메일 발송 작업을 요청합니다. 한국 시간 자정 기준 사용자당 하루 5회까지 접수하며, 한도 도달 시 400을 반환합니다.
+ * @summary 스페이스 PDF 추출 요청
+ */
+export type requestResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type requestResponseSuccess = (requestResponse200) & {
+  headers: Headers;
+};
+;
+
+export type requestResponse = (requestResponseSuccess)
+
+export const getRequestUrl = (spaceCode: string,) => {
+
+
+  
+
+  return `/spaces/${spaceCode}/exports/pdf`
+}
+
+export const request = async (spaceCode: string,
+    exportSpacePdfRequest: ExportSpacePdfRequest, options?: RequestInit): Promise<requestResponse> => {
+  
+  return customFetcher<requestResponse>(getRequestUrl(spaceCode),
+  {      
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      exportSpacePdfRequest,)
+  }
+);}
+  
+
+
+
+export const getRequestMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof request>>, TError,{spaceCode: string;data: ExportSpacePdfRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof request>>, TError,{spaceCode: string;data: ExportSpacePdfRequest}, TContext> => {
+
+const mutationKey = ['request'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof request>>, {spaceCode: string;data: ExportSpacePdfRequest}> = (props) => {
+          const {spaceCode,data} = props ?? {};
+
+          return  request(spaceCode,data,requestOptions)
+        }
+
+
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RequestMutationResult = NonNullable<Awaited<ReturnType<typeof request>>>
+    export type RequestMutationBody = ExportSpacePdfRequest
+    export type RequestMutationError = unknown
+
+    /**
+ * @summary 스페이스 PDF 추출 요청
+ */
+export const useRequest = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof request>>, TError,{spaceCode: string;data: ExportSpacePdfRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof request>>,
+        TError,
+        {spaceCode: string;data: ExportSpacePdfRequest},
+        TContext
+      > => {
+      return useMutation(getRequestMutationOptions(options), queryClient);
+    }
+    /**
  * 스페이스 코드를 통해 스페이스 정보를 조회합니다. 비공개 스페이스의 방명록 개수는 해당 스페이스의 호스트에게만 실제 값을 응답하고, 비로그인 사용자거나 호스트가 아니면 null(개수 비공개)로 응답합니다.
  * @summary 스페이스 조회
  */
@@ -460,19 +545,19 @@ export function useGetSpaceInformationSuspense<TData = Awaited<ReturnType<typeof
  * 스페이스를 삭제합니다.
  * @summary 스페이스 삭제
  */
-export type _deleteResponse200 = {
+export type delete1Response200 = {
   data: void
   status: 200
 }
 
-export type _deleteResponseSuccess = (_deleteResponse200) & {
+export type delete1ResponseSuccess = (delete1Response200) & {
   headers: Headers;
 };
 ;
 
-export type _deleteResponse = (_deleteResponseSuccess)
+export type delete1Response = (delete1ResponseSuccess)
 
-export const getDeleteUrl = (spaceCode: string,) => {
+export const getDelete1Url = (spaceCode: string,) => {
 
 
   
@@ -480,9 +565,9 @@ export const getDeleteUrl = (spaceCode: string,) => {
   return `/spaces/${spaceCode}`
 }
 
-export const _delete = async (spaceCode: string, options?: RequestInit): Promise<_deleteResponse> => {
+export const delete1 = async (spaceCode: string, options?: RequestInit): Promise<delete1Response> => {
   
-  return customFetcher<_deleteResponse>(getDeleteUrl(spaceCode),
+  return customFetcher<delete1Response>(getDelete1Url(spaceCode),
   {      
     ...options,
     method: 'DELETE'
@@ -494,11 +579,11 @@ export const _delete = async (spaceCode: string, options?: RequestInit): Promise
 
 
 
-export const getDeleteMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof _delete>>, TError,{spaceCode: string}, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof _delete>>, TError,{spaceCode: string}, TContext> => {
+export const getDelete1MutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof delete1>>, TError,{spaceCode: string}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof delete1>>, TError,{spaceCode: string}, TContext> => {
 
-const mutationKey = ['_delete'];
+const mutationKey = ['delete1'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -508,10 +593,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof _delete>>, {spaceCode: string}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof delete1>>, {spaceCode: string}> = (props) => {
           const {spaceCode} = props ?? {};
 
-          return  _delete(spaceCode,requestOptions)
+          return  delete1(spaceCode,requestOptions)
         }
 
 
@@ -521,40 +606,40 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type _DeleteMutationResult = NonNullable<Awaited<ReturnType<typeof _delete>>>
+    export type Delete1MutationResult = NonNullable<Awaited<ReturnType<typeof delete1>>>
     
-    export type _DeleteMutationError = unknown
+    export type Delete1MutationError = unknown
 
     /**
  * @summary 스페이스 삭제
  */
-export const useDelete = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof _delete>>, TError,{spaceCode: string}, TContext>, request?: SecondParameter<typeof customFetcher>}
+export const useDelete1 = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof delete1>>, TError,{spaceCode: string}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof _delete>>,
+        Awaited<ReturnType<typeof delete1>>,
         TError,
         {spaceCode: string},
         TContext
       > => {
-      return useMutation(getDeleteMutationOptions(options), queryClient);
+      return useMutation(getDelete1MutationOptions(options), queryClient);
     }
     /**
  * 해당 스페이스 코드의 정보를 수정합니다.
  * @summary 스페이스 정보 수정
  */
-export type updateResponse200 = {
+export type update1Response200 = {
   data: Blob
   status: 200
 }
 
-export type updateResponseSuccess = (updateResponse200) & {
+export type update1ResponseSuccess = (update1Response200) & {
   headers: Headers;
 };
 ;
 
-export type updateResponse = (updateResponseSuccess)
+export type update1Response = (update1ResponseSuccess)
 
-export const getUpdateUrl = (spaceCode: string,) => {
+export const getUpdate1Url = (spaceCode: string,) => {
 
 
   
@@ -562,10 +647,10 @@ export const getUpdateUrl = (spaceCode: string,) => {
   return `/spaces/${spaceCode}`
 }
 
-export const update = async (spaceCode: string,
-    updateSpaceRequest: UpdateSpaceRequest, options?: RequestInit): Promise<updateResponse> => {
+export const update1 = async (spaceCode: string,
+    updateSpaceRequest: UpdateSpaceRequest, options?: RequestInit): Promise<update1Response> => {
   
-  return customFetcher<updateResponse>(getUpdateUrl(spaceCode),
+  return customFetcher<update1Response>(getUpdate1Url(spaceCode),
   {      
     ...options,
     method: 'PATCH',
@@ -578,11 +663,11 @@ export const update = async (spaceCode: string,
 
 
 
-export const getUpdateMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{spaceCode: string;data: UpdateSpaceRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
-): UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{spaceCode: string;data: UpdateSpaceRequest}, TContext> => {
+export const getUpdate1MutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update1>>, TError,{spaceCode: string;data: UpdateSpaceRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+): UseMutationOptions<Awaited<ReturnType<typeof update1>>, TError,{spaceCode: string;data: UpdateSpaceRequest}, TContext> => {
 
-const mutationKey = ['update'];
+const mutationKey = ['update1'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
@@ -592,10 +677,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof update>>, {spaceCode: string;data: UpdateSpaceRequest}> = (props) => {
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof update1>>, {spaceCode: string;data: UpdateSpaceRequest}> = (props) => {
           const {spaceCode,data} = props ?? {};
 
-          return  update(spaceCode,data,requestOptions)
+          return  update1(spaceCode,data,requestOptions)
         }
 
 
@@ -605,22 +690,22 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
   return  { mutationFn, ...mutationOptions }}
 
-    export type UpdateMutationResult = NonNullable<Awaited<ReturnType<typeof update>>>
-    export type UpdateMutationBody = UpdateSpaceRequest
-    export type UpdateMutationError = unknown
+    export type Update1MutationResult = NonNullable<Awaited<ReturnType<typeof update1>>>
+    export type Update1MutationBody = UpdateSpaceRequest
+    export type Update1MutationError = unknown
 
     /**
  * @summary 스페이스 정보 수정
  */
-export const useUpdate = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update>>, TError,{spaceCode: string;data: UpdateSpaceRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
+export const useUpdate1 = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof update1>>, TError,{spaceCode: string;data: UpdateSpaceRequest}, TContext>, request?: SecondParameter<typeof customFetcher>}
  , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof update>>,
+        Awaited<ReturnType<typeof update1>>,
         TError,
         {spaceCode: string;data: UpdateSpaceRequest},
         TContext
       > => {
-      return useMutation(getUpdateMutationOptions(options), queryClient);
+      return useMutation(getUpdate1MutationOptions(options), queryClient);
     }
     /**
  * 로그인한 호스트의 스페이스 호스트 여부를 조회합니다.
@@ -806,7 +891,7 @@ export const getSearchUrl = (params: SearchParams,) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-
+    
     if (value !== undefined) {
       normalizedParams.append(key, value === null ? 'null' : value.toString())
     }
@@ -818,16 +903,16 @@ export const getSearchUrl = (params: SearchParams,) => {
 }
 
 export const search = async (params: SearchParams, options?: RequestInit): Promise<searchResponse> => {
-
+  
   return customFetcher<searchResponse>(getSearchUrl(params),
-  {
+  {      
     ...options,
     method: 'GET'
-
-
+    
+    
   }
 );}
-
+  
 
 
 
@@ -838,7 +923,7 @@ export const getSearchQueryKey = (params?: SearchParams,) => {
     ] as const;
     }
 
-
+    
 export const getSearchQueryOptions = <TData = Awaited<ReturnType<typeof search>>, TError = unknown>(params: SearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof search>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
 ) => {
 
@@ -846,13 +931,13 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchQueryKey(params);
 
-
+  
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof search>>> = ({ signal }) => search(params, { signal, ...requestOptions });
 
+      
 
-
-
+      
 
    return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof search>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
@@ -891,7 +976,7 @@ export function useSearch<TData = Awaited<ReturnType<typeof search>>, TError = u
 
 export function useSearch<TData = Awaited<ReturnType<typeof search>>, TError = unknown>(
  params: SearchParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof search>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
+ , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getSearchQueryOptions(params,options)
@@ -911,13 +996,13 @@ const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getSearchQueryKey(params);
 
-
+  
 
     const queryFn: QueryFunction<Awaited<ReturnType<typeof search>>> = ({ signal }) => search(params, { signal, ...requestOptions });
 
+      
 
-
-
+      
 
    return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof search>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
@@ -944,7 +1029,7 @@ export function useSearchSuspense<TData = Awaited<ReturnType<typeof search>>, TE
 
 export function useSearchSuspense<TData = Awaited<ReturnType<typeof search>>, TError = unknown>(
  params: SearchParams, options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof search>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
- , queryClient?: QueryClient
+ , queryClient?: QueryClient 
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getSearchSuspenseQueryOptions(params,options)
@@ -1276,6 +1361,170 @@ export function useGetPublicHostSpacesSuspense<TData = Awaited<ReturnType<typeof
  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetPublicHostSpacesSuspenseQueryOptions(hostCode,options)
+
+  const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * 로그인한 사용자의 한국 시간 기준 오늘 접수 횟수와 하루 한도를 반환합니다. 접수 이후 처리에 실패한 요청도 포함합니다.
+ * @summary 오늘 PDF 추출 사용 횟수 조회
+ */
+export type getUsageResponse200 = {
+  data: Blob
+  status: 200
+}
+
+export type getUsageResponseSuccess = (getUsageResponse200) & {
+  headers: Headers;
+};
+;
+
+export type getUsageResponse = (getUsageResponseSuccess)
+
+export const getGetUsageUrl = () => {
+
+
+  
+
+  return `/hosts/me/exports/pdf/usage`
+}
+
+export const getUsage = async ( options?: RequestInit): Promise<getUsageResponse> => {
+  
+  return customFetcher<getUsageResponse>(getGetUsageUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getGetUsageQueryKey = () => {
+    return [
+    `/hosts/me/exports/pdf/usage`
+    ] as const;
+    }
+
+    
+export const getGetUsageQueryOptions = <TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUsageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsage>>> = ({ signal }) => getUsage({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUsageQueryResult = NonNullable<Awaited<ReturnType<typeof getUsage>>>
+export type GetUsageQueryError = unknown
+
+
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUsage>>,
+          TError,
+          Awaited<ReturnType<typeof getUsage>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getUsage>>,
+          TError,
+          Awaited<ReturnType<typeof getUsage>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 오늘 PDF 추출 사용 횟수 조회
+ */
+
+export function useGetUsage<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUsageQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+export const getGetUsageSuspenseQueryOptions = <TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>( options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetUsageQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsage>>> = ({ signal }) => getUsage({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetUsageSuspenseQueryResult = NonNullable<Awaited<ReturnType<typeof getUsage>>>
+export type GetUsageSuspenseQueryError = unknown
+
+
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options: { query:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient
+  ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary 오늘 PDF 추출 사용 횟수 조회
+ */
+
+export function useGetUsageSuspense<TData = Awaited<ReturnType<typeof getUsage>>, TError = unknown>(
+  options?: { query?:Partial<UseSuspenseQueryOptions<Awaited<ReturnType<typeof getUsage>>, TError, TData>>, request?: SecondParameter<typeof customFetcher>}
+ , queryClient?: QueryClient 
+ ):  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetUsageSuspenseQueryOptions(options)
 
   const query = useSuspenseQuery(queryOptions, queryClient) as  UseSuspenseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

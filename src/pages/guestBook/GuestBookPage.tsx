@@ -1,10 +1,13 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { customFetcher } from "@/api/customFetcher";
 import type {
   ApiResponseGuestBookResponse,
   GuestBookCardSimpleResponse,
 } from "@/api/model";
+import IcVerticalDots from "@/assets/icons/ic_vertical_dots.svg?react";
 import GuestBookEmptyGraphic from "@/assets/images/guestbook_empty_placeholder.svg?react";
+import Dropdown from "@/components/@common/Dropdown/Dropdown";
 import GuestList from "@/components/@common/GuestList/GuestList";
 import { CONSTRAINTS } from "@/constants/constraints";
 import { ERROR_MESSAGES } from "@/constants/error";
@@ -12,6 +15,7 @@ import useDelayedLoading from "@/hooks/@common/useDelayedLoading";
 import useInfiniteScroll from "@/hooks/@common/useInfiniteScroll";
 import useSnackBar from "@/hooks/@common/useSnackBar";
 import { throwIfRoutableError } from "@/utils/throwIfRoutableError";
+import GuestbookExportModal from "./components/GuestbookExportModal/GuestbookExportModal";
 import * as S from "./GuestBookPage.styles";
 
 const SKELETON_CARD_COUNT = 4;
@@ -32,6 +36,8 @@ const fetchGuestBookPage = (spaceId: string, page: number) =>
 
 const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
   const { showSnackBar } = useSnackBar();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   const {
     data,
@@ -93,10 +99,30 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
 
     return (
       <S.ScrollArea>
-        <S.TitleRow>
-          <S.Title>방명록</S.Title>
-          <S.CountSkeleton aria-hidden />
-        </S.TitleRow>
+        <S.HeaderBar>
+          <S.TitleRow>
+            <S.Title>방명록</S.Title>
+            <S.CountSkeleton aria-hidden />
+          </S.TitleRow>
+          <S.KebabButton
+            type="button"
+            aria-label="더보기"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+          >
+            <IcVerticalDots width={24} height={24} aria-hidden="true" />
+          </S.KebabButton>
+          <Dropdown
+            isOpen={isMenuOpen}
+            onClose={() => setIsMenuOpen(false)}
+            items={[
+              {
+                label: "방명록 내보내기",
+                onClick: () => setIsExportModalOpen(true),
+                disabled: true,
+              },
+            ]}
+          />
+        </S.HeaderBar>
 
         <S.GuestListContainer>
           {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
@@ -105,18 +131,43 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
           ))}
         </S.GuestListContainer>
         <S.BottomSpacer />
+        <GuestbookExportModal
+          isOpen={isExportModalOpen}
+          onClose={() => setIsExportModalOpen(false)}
+          spaceId={spaceId}
+        />
       </S.ScrollArea>
     );
   }
 
   return (
     <S.ScrollArea>
-      <S.TitleRow>
-        <S.Title>방명록</S.Title>
-        <S.CountGroup>
-          총 <S.CountNumber>{totalCount}</S.CountNumber>개의 방명록
-        </S.CountGroup>
-      </S.TitleRow>
+      <S.HeaderBar>
+        <S.TitleRow>
+          <S.Title>방명록</S.Title>
+          <S.CountGroup>
+            총 <S.CountNumber>{totalCount}</S.CountNumber>개의 방명록
+          </S.CountGroup>
+        </S.TitleRow>
+        <S.KebabButton
+          type="button"
+          aria-label="더보기"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+        >
+          <IcVerticalDots width={24} height={24} aria-hidden="true" />
+        </S.KebabButton>
+        <Dropdown
+          isOpen={isMenuOpen}
+          onClose={() => setIsMenuOpen(false)}
+          items={[
+            {
+              label: "방명록 내보내기",
+              onClick: () => setIsExportModalOpen(true),
+              disabled: totalCount === 0,
+            },
+          ]}
+        />
+      </S.HeaderBar>
 
       {guestBookCards.length === 0 ? (
         <S.EmptyState>
@@ -142,6 +193,11 @@ const GuestBookPage = ({ spaceId, onCardClick }: GuestBookPageProps) => {
         </S.GuestListContainer>
       )}
       <S.BottomSpacer />
+      <GuestbookExportModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        spaceId={spaceId}
+      />
     </S.ScrollArea>
   );
 };
